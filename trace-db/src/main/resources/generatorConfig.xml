@@ -14,6 +14,7 @@
         <!-- 为生成的Java模型创建一个toString方法 -->
         <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
         <commentGenerator type="com.zsl.tracedb.CommentGenerator">
+       <!-- <commentGenerator >-->
             <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
             <property name="suppressAllComments" value="true"/>
             <property name="suppressDate" value="true"/>
@@ -35,8 +36,89 @@
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.zsl.tracedb.mapper"
                              targetProject="trace-db\src\main\java"/>
         <!--生成全部表tableName设为%-->
-        <table tableName="%">
+        <table tableName="administration_first">
+            <generatedKey column="nation_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="administration_fourth">
+            <generatedKey column="fourth_administration_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="administration_second">
+            <generatedKey column="second_administration_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="administration_third">
+            <generatedKey column="third_administration_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="alliance_business">
+            <generatedKey column="alliance_business_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="alliance_businessl_site">
+            <generatedKey column="alliance_businessl_site_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="brand">
+            <generatedKey column="brand_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="category">
+            <generatedKey column="category_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="goods">
+            <generatedKey column="goods_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="goods_image">
+            <generatedKey column="image_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="goods_introduction">
+            <generatedKey column="introduction_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="integral_log">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="merchant">
+            <generatedKey column="merchant_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="merchant_agent">
+            <generatedKey column="merchant_agent_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="merchant_auth">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="merchant_image">
+            <generatedKey column="merchant_image_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="merchant_papers_group">
+            <generatedKey column="papers_group_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="merchant_stall">
+            <generatedKey column="stall_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="middle_category_property">
+            <generatedKey column="category_property_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="middle_goods_property_value">
+            <generatedKey column="goods_property_value_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="middle_stall_goods">
+            <generatedKey column="stall_goods_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="pay_order">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="property">
+            <generatedKey column="property_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="property_value">
+            <generatedKey column="property_value_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="voucher_integral">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="zsl_trace">
+            <generatedKey column="trace_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="zsl_trace_point">
+            <generatedKey column="trace_point_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="zsl_trace_record">
+            <generatedKey column="trace_record_id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>
 </generatorConfiguration>

@@ -1,0 +1,74 @@
+package com.zsl.tracedb.model;
+
+import io.swagger.annotations.ApiModelProperty;
+import java.io.Serializable;
+
+public class Category implements Serializable {
+    private Integer categoryId;
+
+    private String categoryName;
+
+    private Integer categorySuperId;
+
+    private Integer categoryLevel;
+
+    private Byte includeBrand;
+
+    private static final long serialVersionUID = 1L;
+
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public Integer getCategorySuperId() {
+        return categorySuperId;
+    }
+
+    public void setCategorySuperId(Integer categorySuperId) {
+        this.categorySuperId = categorySuperId;
+    }
+
+    public Integer getCategoryLevel() {
+        return categoryLevel;
+    }
+
+    public void setCategoryLevel(Integer categoryLevel) {
+        this.categoryLevel = categoryLevel;
+    }
+
+    public Byte getIncludeBrand() {
+        return includeBrand;
+    }
+
+    public void setIncludeBrand(Byte includeBrand) {
+        this.includeBrand = includeBrand;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+        sb.append(", categoryId=").append(categoryId);
+        sb.append(", categoryName=").append(categoryName);
+        sb.append(", categorySuperId=").append(categorySuperId);
+        sb.append(", categoryLevel=").append(categoryLevel);
+        sb.append(", includeBrand=").append(includeBrand);
+        sb.append(", serialVersionUID=").append(serialVersionUID);
+        sb.append("]");
+        return sb.toString();
+    }
+}
