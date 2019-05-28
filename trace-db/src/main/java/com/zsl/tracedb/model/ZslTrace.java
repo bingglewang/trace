@@ -20,8 +20,8 @@ public class ZslTrace implements Serializable {
     @ApiModelProperty(value = "处理状态（1：已通过，2：待审核，3：已撤回）")
     private Integer traceHandleStatus;
 
-    @ApiModelProperty(value = "关联公司id")
-    private Integer traceCompanyId;
+    @ApiModelProperty(value = "所属公司名称")
+    private String traceCompanyName;
 
     @ApiModelProperty(value = "申请日期")
     private Date traceApplyDate;
@@ -95,12 +95,12 @@ public class ZslTrace implements Serializable {
         this.traceHandleStatus = traceHandleStatus;
     }
 
-    public Integer getTraceCompanyId() {
-        return traceCompanyId;
+    public String getTraceCompanyName() {
+        return traceCompanyName;
     }
 
-    public void setTraceCompanyId(Integer traceCompanyId) {
-        this.traceCompanyId = traceCompanyId;
+    public void setTraceCompanyName(String traceCompanyName) {
+        this.traceCompanyName = traceCompanyName;
     }
 
     public Date getTraceApplyDate() {
@@ -194,7 +194,7 @@ public class ZslTrace implements Serializable {
         sb.append(", traceBusinessId=").append(traceBusinessId);
         sb.append(", traceApplyType=").append(traceApplyType);
         sb.append(", traceHandleStatus=").append(traceHandleStatus);
-        sb.append(", traceCompanyId=").append(traceCompanyId);
+        sb.append(", traceCompanyName=").append(traceCompanyName);
         sb.append(", traceApplyDate=").append(traceApplyDate);
         sb.append(", traceReviewDate=").append(traceReviewDate);
         sb.append(", traceApplyCount=").append(traceApplyCount);

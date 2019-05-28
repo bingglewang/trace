@@ -10,6 +10,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @Configuration
 @EnableTransactionManagement
-@MapperScan({"com.zsl.tracedb.mapper","com.macro.mall.dao"})
+@MapperScan({"com.zsl.tracedb.mapper","com.zsl.traceapi.dao"})
 public class MyBatisConfig {
 }

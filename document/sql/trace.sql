@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost_3306
+Source Server         : cdb-puhlb3l3.gz.tencentcdb.com_10076
 Source Server Version : 50718
-Source Host           : localhost:3306
-Source Database       : trace
+Source Host           : cdb-puhlb3l3.gz.tencentcdb.com:10076
+Source Database       : traceability_platform
 
 Target Server Type    : MYSQL
 Target Server Version : 50718
 File Encoding         : 65001
 
-Date: 2019-05-27 18:06:26
+Date: 2019-05-28 14:59:14
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -25,9 +25,9 @@ CREATE TABLE `zsl_trace` (
   `trace_business_id` int(11) DEFAULT NULL COMMENT '关联商家id',
   `trace_apply_type` int(11) DEFAULT NULL COMMENT '申请类型（1：纸质标签，2：电子标签）',
   `trace_handle_status` int(11) DEFAULT NULL COMMENT '处理状态（1：已通过，2：待审核，3：已撤回）',
-  `trace_company_id` int(11) DEFAULT NULL COMMENT '关联公司id',
+  `trace_company_name` varchar(100) DEFAULT NULL COMMENT '所属公司名称',
   `trace_apply_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '申请日期',
-  `trace_review_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '审批日期',
+  `trace_review_date` timestamp NULL DEFAULT NULL COMMENT '审批日期',
   `trace_apply_count` bigint(20) DEFAULT NULL COMMENT '申请数量',
   `trace_enable_count` int(11) DEFAULT NULL COMMENT '可用数量',
   `trace_refuse_remark` varchar(255) DEFAULT NULL COMMENT '拒绝申请原因',
@@ -37,7 +37,7 @@ CREATE TABLE `zsl_trace` (
   `trace_back4` varchar(100) DEFAULT NULL COMMENT '备用字段4',
   `trace_back5` varchar(100) DEFAULT NULL COMMENT '备用字段5',
   PRIMARY KEY (`trace_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of zsl_trace

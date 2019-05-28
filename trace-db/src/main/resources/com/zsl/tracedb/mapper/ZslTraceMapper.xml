@@ -7,7 +7,7 @@
     <result column="trace_business_id" jdbcType="INTEGER" property="traceBusinessId" />
     <result column="trace_apply_type" jdbcType="INTEGER" property="traceApplyType" />
     <result column="trace_handle_status" jdbcType="INTEGER" property="traceHandleStatus" />
-    <result column="trace_company_id" jdbcType="INTEGER" property="traceCompanyId" />
+    <result column="trace_company_name" jdbcType="VARCHAR" property="traceCompanyName" />
     <result column="trace_apply_date" jdbcType="TIMESTAMP" property="traceApplyDate" />
     <result column="trace_review_date" jdbcType="TIMESTAMP" property="traceReviewDate" />
     <result column="trace_apply_count" jdbcType="BIGINT" property="traceApplyCount" />
@@ -79,7 +79,7 @@
   </sql>
   <sql id="Base_Column_List">
     trace_id, trace_code_number, trace_business_id, trace_apply_type, trace_handle_status, 
-    trace_company_id, trace_apply_date, trace_review_date, trace_apply_count, trace_enable_count, 
+    trace_company_name, trace_apply_date, trace_review_date, trace_apply_count, trace_enable_count, 
     trace_refuse_remark, trace_back1, trace_back2, trace_back3, trace_back4, trace_back5
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.ZslTraceExample" resultMap="BaseResultMap">
@@ -117,13 +117,13 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into zsl_trace (trace_code_number, trace_business_id, 
-      trace_apply_type, trace_handle_status, trace_company_id, 
+      trace_apply_type, trace_handle_status, trace_company_name, 
       trace_apply_date, trace_review_date, trace_apply_count, 
       trace_enable_count, trace_refuse_remark, trace_back1, 
       trace_back2, trace_back3, trace_back4, 
       trace_back5)
     values (#{traceCodeNumber,jdbcType=VARCHAR}, #{traceBusinessId,jdbcType=INTEGER}, 
-      #{traceApplyType,jdbcType=INTEGER}, #{traceHandleStatus,jdbcType=INTEGER}, #{traceCompanyId,jdbcType=INTEGER}, 
+      #{traceApplyType,jdbcType=INTEGER}, #{traceHandleStatus,jdbcType=INTEGER}, #{traceCompanyName,jdbcType=VARCHAR}, 
       #{traceApplyDate,jdbcType=TIMESTAMP}, #{traceReviewDate,jdbcType=TIMESTAMP}, #{traceApplyCount,jdbcType=BIGINT}, 
       #{traceEnableCount,jdbcType=INTEGER}, #{traceRefuseRemark,jdbcType=VARCHAR}, #{traceBack1,jdbcType=INTEGER}, 
       #{traceBack2,jdbcType=INTEGER}, #{traceBack3,jdbcType=VARCHAR}, #{traceBack4,jdbcType=VARCHAR}, 
@@ -147,8 +147,8 @@
       <if test="traceHandleStatus != null">
         trace_handle_status,
       </if>
-      <if test="traceCompanyId != null">
-        trace_company_id,
+      <if test="traceCompanyName != null">
+        trace_company_name,
       </if>
       <if test="traceApplyDate != null">
         trace_apply_date,
@@ -194,8 +194,8 @@
       <if test="traceHandleStatus != null">
         #{traceHandleStatus,jdbcType=INTEGER},
       </if>
-      <if test="traceCompanyId != null">
-        #{traceCompanyId,jdbcType=INTEGER},
+      <if test="traceCompanyName != null">
+        #{traceCompanyName,jdbcType=VARCHAR},
       </if>
       <if test="traceApplyDate != null">
         #{traceApplyDate,jdbcType=TIMESTAMP},
@@ -253,8 +253,8 @@
       <if test="record.traceHandleStatus != null">
         trace_handle_status = #{record.traceHandleStatus,jdbcType=INTEGER},
       </if>
-      <if test="record.traceCompanyId != null">
-        trace_company_id = #{record.traceCompanyId,jdbcType=INTEGER},
+      <if test="record.traceCompanyName != null">
+        trace_company_name = #{record.traceCompanyName,jdbcType=VARCHAR},
       </if>
       <if test="record.traceApplyDate != null">
         trace_apply_date = #{record.traceApplyDate,jdbcType=TIMESTAMP},
@@ -298,7 +298,7 @@
       trace_business_id = #{record.traceBusinessId,jdbcType=INTEGER},
       trace_apply_type = #{record.traceApplyType,jdbcType=INTEGER},
       trace_handle_status = #{record.traceHandleStatus,jdbcType=INTEGER},
-      trace_company_id = #{record.traceCompanyId,jdbcType=INTEGER},
+      trace_company_name = #{record.traceCompanyName,jdbcType=VARCHAR},
       trace_apply_date = #{record.traceApplyDate,jdbcType=TIMESTAMP},
       trace_review_date = #{record.traceReviewDate,jdbcType=TIMESTAMP},
       trace_apply_count = #{record.traceApplyCount,jdbcType=BIGINT},
@@ -328,8 +328,8 @@
       <if test="traceHandleStatus != null">
         trace_handle_status = #{traceHandleStatus,jdbcType=INTEGER},
       </if>
-      <if test="traceCompanyId != null">
-        trace_company_id = #{traceCompanyId,jdbcType=INTEGER},
+      <if test="traceCompanyName != null">
+        trace_company_name = #{traceCompanyName,jdbcType=VARCHAR},
       </if>
       <if test="traceApplyDate != null">
         trace_apply_date = #{traceApplyDate,jdbcType=TIMESTAMP},
@@ -370,7 +370,7 @@
       trace_business_id = #{traceBusinessId,jdbcType=INTEGER},
       trace_apply_type = #{traceApplyType,jdbcType=INTEGER},
       trace_handle_status = #{traceHandleStatus,jdbcType=INTEGER},
-      trace_company_id = #{traceCompanyId,jdbcType=INTEGER},
+      trace_company_name = #{traceCompanyName,jdbcType=VARCHAR},
       trace_apply_date = #{traceApplyDate,jdbcType=TIMESTAMP},
       trace_review_date = #{traceReviewDate,jdbcType=TIMESTAMP},
       trace_apply_count = #{traceApplyCount,jdbcType=BIGINT},

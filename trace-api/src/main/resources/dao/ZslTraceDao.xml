@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsl.traceapi.dao.ZslTraceDao">
+    <resultMap id="zslTraceIDetailResultMap" type="com.zsl.traceapi.vo.ZslTraceVo">
+        <id column="trace_id" jdbcType="INTEGER" property="traceId"></id>
+        <result column="trace_code_number" jdbcType="VARCHAR" property="traceCodeNumber"></result>
+        <result column="trace_company_name" jdbcType="VARCHAR" property="companyName"></result>
+        <result column="trace_apply_type" jdbcType="INTEGER" property="traceApplyType"></result>
+        <result column="trace_handle_status" jdbcType="INTEGER" property="traceHandleStatus"></result>
+        <result column="trace_apply_date" jdbcType="TIMESTAMP" property="traceApplyDate"></result>
+        <result column="trace_review_date" jdbcType="TIMESTAMP" property="traceReviewDate"></result>
+        <result column="trace_enable_count" jdbcType="BIGINT" property="traceApplyCount"></result>
+        <result column="trace_refuse_remark" jdbcType="VARCHAR" property="traceRefuseRemark"></result>
+        <association property="merchant" resultMap="com.zsl.tracedb.mapper.MerchantMapper.BaseResultMap"></association>
+    </resultMap>
+
+    <select id="getZslTraceDetailById" resultMap="zslTraceIDetailResultMap">
+        select
+            z.trace_id,
+            z.trace_code_number,
+            z.trace_company_name,
+            z.trace_apply_type,
+            z.trace_handle_status,
+            z.trace_apply_date,
+            z.trace_review_date,
+            z.trace_enable_count,
+            z.trace_refuse_remark,
+            m.*
+        from
+            zsl_trace z
+            left join merchant m on m.merchant_id = z.trace_business_id
+        where
+            m.merchant_status = 0 and z.trace_id = #{id}
+
+    </select>
+
+    <select id="getListByPage" resultMap="zslTraceIDetailResultMap">
+         select
+            z.trace_id,
+            z.trace_code_number,
+            z.trace_company_name,
+            z.trace_apply_type,
+            z.trace_handle_status,
+            z.trace_apply_date,
+            z.trace_review_date,
+            z.trace_enable_count,
+            z.trace_refuse_remark,
+            m.*
+        from
+            zsl_trace z
+            left join merchant m on m.merchant_id = z.trace_business_id
+        where
+            m.merchant_status = 0
+        <if test="queryParam.traceCodeNumber!=null and queryParam.traceCodeNumber!=''">
+            AND z.trace_code_number like concat("%",#{queryParam.traceCodeNumber},"%")
+        </if>
+        <if test="queryParam.traceCompanyName!=null and queryParam.traceCompanyName!=''">
+            AND z.trace_company_name like concat("%",#{queryParam.traceCompanyName},"%")
+        </if>
+        <if test="queryParam.traceHandleStatus!=null and queryParam.traceHandleStatus!=''">
+            AND z.trace_handle_status = #{queryParam.traceHandleStatus
+        </if>
+        <if test="queryParam.merchantName!=null and queryParam.merchantName!=''">
+            AND m.merchant_name like concat("%",#{queryParam.merchantName},"%")
+        </if>
+        <if test="queryParam.traceApplyStartDate!=null and queryParam.traceApplyEndDate!=null and queryParam.traceApplyStartDate!='' and queryParam.traceApplyEndDate!=''">
+            AND  date_format(z.trace_apply_date,'%Y-%m-%d') &gt;= date_format(#{queryParam.traceApplyStartDate},'%Y-%m-%d')
+            AND  date_format(z.trace_apply_date,'%Y-%m-%d') &lt;= date_format(#{queryParam.traceApplyEndDate},'%Y-%m-%d')
+        </if>
+    </select>
+</mapper>

@@ -7,6 +7,7 @@
     <result column="get_integral" jdbcType="INTEGER" property="getIntegral" />
     <result column="ip_site" jdbcType="VARCHAR" property="ipSite" />
     <result column="merchant_id" jdbcType="INTEGER" property="merchantId" />
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, is_accept_protocol, get_integral, ip_site, merchant_id, create_time
+    id, is_accept_protocol, get_integral, ip_site, merchant_id, order_id, create_time
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.MerchantAuthExample" resultMap="BaseResultMap">
     select
@@ -105,9 +106,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into merchant_auth (is_accept_protocol, get_integral, ip_site, 
-      merchant_id, create_time)
+      merchant_id, order_id, create_time
+      )
     values (#{isAcceptProtocol,jdbcType=INTEGER}, #{getIntegral,jdbcType=INTEGER}, #{ipSite,jdbcType=VARCHAR}, 
-      #{merchantId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+      #{merchantId,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.MerchantAuth">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -127,6 +130,9 @@
       <if test="merchantId != null">
         merchant_id,
       </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
       <if test="createTime != null">
         create_time,
       </if>
@@ -143,6 +149,9 @@
       </if>
       <if test="merchantId != null">
         #{merchantId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -173,6 +182,9 @@
       <if test="record.merchantId != null">
         merchant_id = #{record.merchantId,jdbcType=INTEGER},
       </if>
+      <if test="record.orderId != null">
+        order_id = #{record.orderId,jdbcType=INTEGER},
+      </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
@@ -188,6 +200,7 @@
       get_integral = #{record.getIntegral,jdbcType=INTEGER},
       ip_site = #{record.ipSite,jdbcType=VARCHAR},
       merchant_id = #{record.merchantId,jdbcType=INTEGER},
+      order_id = #{record.orderId,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -208,6 +221,9 @@
       <if test="merchantId != null">
         merchant_id = #{merchantId,jdbcType=INTEGER},
       </if>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -220,6 +236,7 @@
       get_integral = #{getIntegral,jdbcType=INTEGER},
       ip_site = #{ipSite,jdbcType=VARCHAR},
       merchant_id = #{merchantId,jdbcType=INTEGER},
+      order_id = #{orderId,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>

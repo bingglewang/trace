@@ -7,20 +7,20 @@ import java.util.Date;
 public class PayOrder implements Serializable {
     private Integer id;
 
-    @ApiModelProperty(value = "支付单号")
-    private String payOrderNum;
-
-    @ApiModelProperty(value = "订单类型：1认证支付、2积分充值")
-    private Integer orderType;
-
-    @ApiModelProperty(value = "订单类型主键ID  例如：商家认证表、积分充值表")
-    private Integer orderTypeId;
+    @ApiModelProperty(value = "支付订单号")
+    private String orderNum;
 
     @ApiModelProperty(value = "支付方式：1用户转账、2支付宝、3微信支付")
     private Integer payType;
 
     @ApiModelProperty(value = "支付证明（用户转账时需要）")
     private String payCertify;
+
+    @ApiModelProperty(value = "订单类型：1商家认证、2积分充值")
+    private Integer orderType;
+
+    @ApiModelProperty(value = "订单类型主键id")
+    private Integer orderTypeId;
 
     @ApiModelProperty(value = "支付金额")
     private Float paySum;
@@ -41,28 +41,12 @@ public class PayOrder implements Serializable {
         this.id = id;
     }
 
-    public String getPayOrderNum() {
-        return payOrderNum;
+    public String getOrderNum() {
+        return orderNum;
     }
 
-    public void setPayOrderNum(String payOrderNum) {
-        this.payOrderNum = payOrderNum;
-    }
-
-    public Integer getOrderType() {
-        return orderType;
-    }
-
-    public void setOrderType(Integer orderType) {
-        this.orderType = orderType;
-    }
-
-    public Integer getOrderTypeId() {
-        return orderTypeId;
-    }
-
-    public void setOrderTypeId(Integer orderTypeId) {
-        this.orderTypeId = orderTypeId;
+    public void setOrderNum(String orderNum) {
+        this.orderNum = orderNum;
     }
 
     public Integer getPayType() {
@@ -79,6 +63,22 @@ public class PayOrder implements Serializable {
 
     public void setPayCertify(String payCertify) {
         this.payCertify = payCertify;
+    }
+
+    public Integer getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(Integer orderType) {
+        this.orderType = orderType;
+    }
+
+    public Integer getOrderTypeId() {
+        return orderTypeId;
+    }
+
+    public void setOrderTypeId(Integer orderTypeId) {
+        this.orderTypeId = orderTypeId;
     }
 
     public Float getPaySum() {
@@ -112,11 +112,11 @@ public class PayOrder implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", payOrderNum=").append(payOrderNum);
-        sb.append(", orderType=").append(orderType);
-        sb.append(", orderTypeId=").append(orderTypeId);
+        sb.append(", orderNum=").append(orderNum);
         sb.append(", payType=").append(payType);
         sb.append(", payCertify=").append(payCertify);
+        sb.append(", orderType=").append(orderType);
+        sb.append(", orderTypeId=").append(orderTypeId);
         sb.append(", paySum=").append(paySum);
         sb.append(", payStatus=").append(payStatus);
         sb.append(", createTime=").append(createTime);

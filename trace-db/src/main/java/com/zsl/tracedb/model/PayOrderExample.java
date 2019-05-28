@@ -165,193 +165,73 @@ public class PayOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andPayOrderNumIsNull() {
-            addCriterion("pay_order_num is null");
+        public Criteria andOrderNumIsNull() {
+            addCriterion("order_num is null");
             return (Criteria) this;
         }
 
-        public Criteria andPayOrderNumIsNotNull() {
-            addCriterion("pay_order_num is not null");
+        public Criteria andOrderNumIsNotNull() {
+            addCriterion("order_num is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPayOrderNumEqualTo(String value) {
-            addCriterion("pay_order_num =", value, "payOrderNum");
+        public Criteria andOrderNumEqualTo(String value) {
+            addCriterion("order_num =", value, "orderNum");
             return (Criteria) this;
         }
 
-        public Criteria andPayOrderNumNotEqualTo(String value) {
-            addCriterion("pay_order_num <>", value, "payOrderNum");
+        public Criteria andOrderNumNotEqualTo(String value) {
+            addCriterion("order_num <>", value, "orderNum");
             return (Criteria) this;
         }
 
-        public Criteria andPayOrderNumGreaterThan(String value) {
-            addCriterion("pay_order_num >", value, "payOrderNum");
+        public Criteria andOrderNumGreaterThan(String value) {
+            addCriterion("order_num >", value, "orderNum");
             return (Criteria) this;
         }
 
-        public Criteria andPayOrderNumGreaterThanOrEqualTo(String value) {
-            addCriterion("pay_order_num >=", value, "payOrderNum");
+        public Criteria andOrderNumGreaterThanOrEqualTo(String value) {
+            addCriterion("order_num >=", value, "orderNum");
             return (Criteria) this;
         }
 
-        public Criteria andPayOrderNumLessThan(String value) {
-            addCriterion("pay_order_num <", value, "payOrderNum");
+        public Criteria andOrderNumLessThan(String value) {
+            addCriterion("order_num <", value, "orderNum");
             return (Criteria) this;
         }
 
-        public Criteria andPayOrderNumLessThanOrEqualTo(String value) {
-            addCriterion("pay_order_num <=", value, "payOrderNum");
+        public Criteria andOrderNumLessThanOrEqualTo(String value) {
+            addCriterion("order_num <=", value, "orderNum");
             return (Criteria) this;
         }
 
-        public Criteria andPayOrderNumLike(String value) {
-            addCriterion("pay_order_num like", value, "payOrderNum");
+        public Criteria andOrderNumLike(String value) {
+            addCriterion("order_num like", value, "orderNum");
             return (Criteria) this;
         }
 
-        public Criteria andPayOrderNumNotLike(String value) {
-            addCriterion("pay_order_num not like", value, "payOrderNum");
+        public Criteria andOrderNumNotLike(String value) {
+            addCriterion("order_num not like", value, "orderNum");
             return (Criteria) this;
         }
 
-        public Criteria andPayOrderNumIn(List<String> values) {
-            addCriterion("pay_order_num in", values, "payOrderNum");
+        public Criteria andOrderNumIn(List<String> values) {
+            addCriterion("order_num in", values, "orderNum");
             return (Criteria) this;
         }
 
-        public Criteria andPayOrderNumNotIn(List<String> values) {
-            addCriterion("pay_order_num not in", values, "payOrderNum");
+        public Criteria andOrderNumNotIn(List<String> values) {
+            addCriterion("order_num not in", values, "orderNum");
             return (Criteria) this;
         }
 
-        public Criteria andPayOrderNumBetween(String value1, String value2) {
-            addCriterion("pay_order_num between", value1, value2, "payOrderNum");
+        public Criteria andOrderNumBetween(String value1, String value2) {
+            addCriterion("order_num between", value1, value2, "orderNum");
             return (Criteria) this;
         }
 
-        public Criteria andPayOrderNumNotBetween(String value1, String value2) {
-            addCriterion("pay_order_num not between", value1, value2, "payOrderNum");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderTypeIsNull() {
-            addCriterion("order_type is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderTypeIsNotNull() {
-            addCriterion("order_type is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderTypeEqualTo(Integer value) {
-            addCriterion("order_type =", value, "orderType");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderTypeNotEqualTo(Integer value) {
-            addCriterion("order_type <>", value, "orderType");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderTypeGreaterThan(Integer value) {
-            addCriterion("order_type >", value, "orderType");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderTypeGreaterThanOrEqualTo(Integer value) {
-            addCriterion("order_type >=", value, "orderType");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderTypeLessThan(Integer value) {
-            addCriterion("order_type <", value, "orderType");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderTypeLessThanOrEqualTo(Integer value) {
-            addCriterion("order_type <=", value, "orderType");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderTypeIn(List<Integer> values) {
-            addCriterion("order_type in", values, "orderType");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderTypeNotIn(List<Integer> values) {
-            addCriterion("order_type not in", values, "orderType");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderTypeBetween(Integer value1, Integer value2) {
-            addCriterion("order_type between", value1, value2, "orderType");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderTypeNotBetween(Integer value1, Integer value2) {
-            addCriterion("order_type not between", value1, value2, "orderType");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderTypeIdIsNull() {
-            addCriterion("order_type_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderTypeIdIsNotNull() {
-            addCriterion("order_type_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderTypeIdEqualTo(Integer value) {
-            addCriterion("order_type_id =", value, "orderTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderTypeIdNotEqualTo(Integer value) {
-            addCriterion("order_type_id <>", value, "orderTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderTypeIdGreaterThan(Integer value) {
-            addCriterion("order_type_id >", value, "orderTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderTypeIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("order_type_id >=", value, "orderTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderTypeIdLessThan(Integer value) {
-            addCriterion("order_type_id <", value, "orderTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderTypeIdLessThanOrEqualTo(Integer value) {
-            addCriterion("order_type_id <=", value, "orderTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderTypeIdIn(List<Integer> values) {
-            addCriterion("order_type_id in", values, "orderTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderTypeIdNotIn(List<Integer> values) {
-            addCriterion("order_type_id not in", values, "orderTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderTypeIdBetween(Integer value1, Integer value2) {
-            addCriterion("order_type_id between", value1, value2, "orderTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderTypeIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("order_type_id not between", value1, value2, "orderTypeId");
+        public Criteria andOrderNumNotBetween(String value1, String value2) {
+            addCriterion("order_num not between", value1, value2, "orderNum");
             return (Criteria) this;
         }
 
@@ -482,6 +362,126 @@ public class PayOrderExample {
 
         public Criteria andPayCertifyNotBetween(String value1, String value2) {
             addCriterion("pay_certify not between", value1, value2, "payCertify");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeIsNull() {
+            addCriterion("order_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeIsNotNull() {
+            addCriterion("order_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeEqualTo(Integer value) {
+            addCriterion("order_type =", value, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeNotEqualTo(Integer value) {
+            addCriterion("order_type <>", value, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeGreaterThan(Integer value) {
+            addCriterion("order_type >", value, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("order_type >=", value, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeLessThan(Integer value) {
+            addCriterion("order_type <", value, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeLessThanOrEqualTo(Integer value) {
+            addCriterion("order_type <=", value, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeIn(List<Integer> values) {
+            addCriterion("order_type in", values, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeNotIn(List<Integer> values) {
+            addCriterion("order_type not in", values, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeBetween(Integer value1, Integer value2) {
+            addCriterion("order_type between", value1, value2, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeNotBetween(Integer value1, Integer value2) {
+            addCriterion("order_type not between", value1, value2, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeIdIsNull() {
+            addCriterion("order_type_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeIdIsNotNull() {
+            addCriterion("order_type_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeIdEqualTo(Integer value) {
+            addCriterion("order_type_id =", value, "orderTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeIdNotEqualTo(Integer value) {
+            addCriterion("order_type_id <>", value, "orderTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeIdGreaterThan(Integer value) {
+            addCriterion("order_type_id >", value, "orderTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("order_type_id >=", value, "orderTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeIdLessThan(Integer value) {
+            addCriterion("order_type_id <", value, "orderTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeIdLessThanOrEqualTo(Integer value) {
+            addCriterion("order_type_id <=", value, "orderTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeIdIn(List<Integer> values) {
+            addCriterion("order_type_id in", values, "orderTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeIdNotIn(List<Integer> values) {
+            addCriterion("order_type_id not in", values, "orderTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeIdBetween(Integer value1, Integer value2) {
+            addCriterion("order_type_id between", value1, value2, "orderTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("order_type_id not between", value1, value2, "orderTypeId");
             return (Criteria) this;
         }
 

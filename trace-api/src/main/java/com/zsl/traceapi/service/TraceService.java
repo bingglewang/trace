@@ -1,7 +1,12 @@
 package com.zsl.traceapi.service;
 
+import com.zsl.traceapi.dto.PageParams;
+import com.zsl.traceapi.dto.QueryParam;
+import com.zsl.traceapi.vo.ZslTraceVo;
 import com.zsl.tracedb.model.ZslTrace;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 public interface TraceService {
     /**
@@ -9,13 +14,47 @@ public interface TraceService {
      * @param id
      * @return
      */
-    ZslTrace getZslTraceById(Integer id);
+    ZslTraceVo getZslTraceById(Integer id);
 
     /**
-     * 新增追溯
+     * 分页查询追溯信息
+     * @param queryParam
+     * @param pageParams
+     * @return
+     */
+    List<ZslTraceVo> getZslTraceByPage(QueryParam queryParam, PageParams pageParams);
+
+    /**
+     * 新增追溯信息
      * @param zslTrace
      * @return
      */
     @Transactional
     ZslTrace insert(ZslTrace zslTrace);
+
+    /**
+     *更新追溯信息
+     * @param zslTrace
+     * @return
+     */
+    @Transactional
+    int update(ZslTrace zslTrace);
+
+    /**
+     * 通过申请
+     * @param id
+     * @return
+     */
+    @Transactional
+    int pass(Integer id);
+
+    /**
+     * 拒绝申请
+     * @param id
+     * @param remark
+     * @return
+     */
+    @Transactional
+    int refuse(Integer id,String remark);
+
 }

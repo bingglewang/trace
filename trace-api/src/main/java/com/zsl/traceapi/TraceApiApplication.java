@@ -9,5 +9,4 @@ public class TraceApiApplication {
     public static void main(String[] args) {
         SpringApplication.run(TraceApiApplication.class, args);
     }
-
 }

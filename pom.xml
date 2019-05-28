@@ -6,6 +6,7 @@
     <groupId>com.zsl</groupId>
     <artifactId>trace</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>trace</name>
     <description>追溯模块</description>
 
@@ -44,6 +45,13 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+       <!-- 字符串处理-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.4</version>
+        </dependency>
+
         <!--MyBatis分页插件-->
         <dependency>
             <groupId>com.github.pagehelper</groupId>

@@ -3,11 +3,11 @@
 <mapper namespace="com.zsl.tracedb.mapper.PayOrderMapper">
   <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.PayOrder">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="pay_order_num" jdbcType="VARCHAR" property="payOrderNum" />
-    <result column="order_type" jdbcType="INTEGER" property="orderType" />
-    <result column="order_type_id" jdbcType="INTEGER" property="orderTypeId" />
+    <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
     <result column="pay_type" jdbcType="INTEGER" property="payType" />
     <result column="pay_certify" jdbcType="VARCHAR" property="payCertify" />
+    <result column="order_type" jdbcType="INTEGER" property="orderType" />
+    <result column="order_type_id" jdbcType="INTEGER" property="orderTypeId" />
     <result column="pay_sum" jdbcType="REAL" property="paySum" />
     <result column="pay_status" jdbcType="INTEGER" property="payStatus" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -71,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, pay_order_num, order_type, order_type_id, pay_type, pay_certify, pay_sum, pay_status, 
+    id, order_num, pay_type, pay_certify, order_type, order_type_id, pay_sum, pay_status, 
     create_time
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.PayOrderExample" resultMap="BaseResultMap">
@@ -108,11 +108,11 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into pay_order (pay_order_num, order_type, order_type_id, 
-      pay_type, pay_certify, pay_sum, 
+    insert into pay_order (order_num, pay_type, pay_certify, 
+      order_type, order_type_id, pay_sum, 
       pay_status, create_time)
-    values (#{payOrderNum,jdbcType=VARCHAR}, #{orderType,jdbcType=INTEGER}, #{orderTypeId,jdbcType=INTEGER}, 
-      #{payType,jdbcType=INTEGER}, #{payCertify,jdbcType=VARCHAR}, #{paySum,jdbcType=REAL}, 
+    values (#{orderNum,jdbcType=VARCHAR}, #{payType,jdbcType=INTEGER}, #{payCertify,jdbcType=VARCHAR}, 
+      #{orderType,jdbcType=INTEGER}, #{orderTypeId,jdbcType=INTEGER}, #{paySum,jdbcType=REAL}, 
       #{payStatus,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.PayOrder">
@@ -121,20 +121,20 @@
     </selectKey>
     insert into pay_order
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="payOrderNum != null">
-        pay_order_num,
-      </if>
-      <if test="orderType != null">
-        order_type,
-      </if>
-      <if test="orderTypeId != null">
-        order_type_id,
+      <if test="orderNum != null">
+        order_num,
       </if>
       <if test="payType != null">
         pay_type,
       </if>
       <if test="payCertify != null">
         pay_certify,
+      </if>
+      <if test="orderType != null">
+        order_type,
+      </if>
+      <if test="orderTypeId != null">
+        order_type_id,
       </if>
       <if test="paySum != null">
         pay_sum,
@@ -147,20 +147,20 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="payOrderNum != null">
-        #{payOrderNum,jdbcType=VARCHAR},
-      </if>
-      <if test="orderType != null">
-        #{orderType,jdbcType=INTEGER},
-      </if>
-      <if test="orderTypeId != null">
-        #{orderTypeId,jdbcType=INTEGER},
+      <if test="orderNum != null">
+        #{orderNum,jdbcType=VARCHAR},
       </if>
       <if test="payType != null">
         #{payType,jdbcType=INTEGER},
       </if>
       <if test="payCertify != null">
         #{payCertify,jdbcType=VARCHAR},
+      </if>
+      <if test="orderType != null">
+        #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="orderTypeId != null">
+        #{orderTypeId,jdbcType=INTEGER},
       </if>
       <if test="paySum != null">
         #{paySum,jdbcType=REAL},
@@ -185,20 +185,20 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.payOrderNum != null">
-        pay_order_num = #{record.payOrderNum,jdbcType=VARCHAR},
-      </if>
-      <if test="record.orderType != null">
-        order_type = #{record.orderType,jdbcType=INTEGER},
-      </if>
-      <if test="record.orderTypeId != null">
-        order_type_id = #{record.orderTypeId,jdbcType=INTEGER},
+      <if test="record.orderNum != null">
+        order_num = #{record.orderNum,jdbcType=VARCHAR},
       </if>
       <if test="record.payType != null">
         pay_type = #{record.payType,jdbcType=INTEGER},
       </if>
       <if test="record.payCertify != null">
         pay_certify = #{record.payCertify,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderType != null">
+        order_type = #{record.orderType,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderTypeId != null">
+        order_type_id = #{record.orderTypeId,jdbcType=INTEGER},
       </if>
       <if test="record.paySum != null">
         pay_sum = #{record.paySum,jdbcType=REAL},
@@ -217,11 +217,11 @@
   <update id="updateByExample" parameterType="map">
     update pay_order
     set id = #{record.id,jdbcType=INTEGER},
-      pay_order_num = #{record.payOrderNum,jdbcType=VARCHAR},
-      order_type = #{record.orderType,jdbcType=INTEGER},
-      order_type_id = #{record.orderTypeId,jdbcType=INTEGER},
+      order_num = #{record.orderNum,jdbcType=VARCHAR},
       pay_type = #{record.payType,jdbcType=INTEGER},
       pay_certify = #{record.payCertify,jdbcType=VARCHAR},
+      order_type = #{record.orderType,jdbcType=INTEGER},
+      order_type_id = #{record.orderTypeId,jdbcType=INTEGER},
       pay_sum = #{record.paySum,jdbcType=REAL},
       pay_status = #{record.payStatus,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
@@ -232,20 +232,20 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.PayOrder">
     update pay_order
     <set>
-      <if test="payOrderNum != null">
-        pay_order_num = #{payOrderNum,jdbcType=VARCHAR},
-      </if>
-      <if test="orderType != null">
-        order_type = #{orderType,jdbcType=INTEGER},
-      </if>
-      <if test="orderTypeId != null">
-        order_type_id = #{orderTypeId,jdbcType=INTEGER},
+      <if test="orderNum != null">
+        order_num = #{orderNum,jdbcType=VARCHAR},
       </if>
       <if test="payType != null">
         pay_type = #{payType,jdbcType=INTEGER},
       </if>
       <if test="payCertify != null">
         pay_certify = #{payCertify,jdbcType=VARCHAR},
+      </if>
+      <if test="orderType != null">
+        order_type = #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="orderTypeId != null">
+        order_type_id = #{orderTypeId,jdbcType=INTEGER},
       </if>
       <if test="paySum != null">
         pay_sum = #{paySum,jdbcType=REAL},
@@ -261,11 +261,11 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.PayOrder">
     update pay_order
-    set pay_order_num = #{payOrderNum,jdbcType=VARCHAR},
-      order_type = #{orderType,jdbcType=INTEGER},
-      order_type_id = #{orderTypeId,jdbcType=INTEGER},
+    set order_num = #{orderNum,jdbcType=VARCHAR},
       pay_type = #{payType,jdbcType=INTEGER},
       pay_certify = #{payCertify,jdbcType=VARCHAR},
+      order_type = #{orderType,jdbcType=INTEGER},
+      order_type_id = #{orderTypeId,jdbcType=INTEGER},
       pay_sum = #{paySum,jdbcType=REAL},
       pay_status = #{payStatus,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP}

@@ -6,6 +6,7 @@
     <groupId>com.zsl</groupId>
     <artifactId>trace-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
     <name>trace-api</name>
     <description>接口服务</description>
 

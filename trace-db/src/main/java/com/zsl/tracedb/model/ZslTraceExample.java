@@ -415,63 +415,73 @@ public class ZslTraceExample {
             return (Criteria) this;
         }
 
-        public Criteria andTraceCompanyIdIsNull() {
-            addCriterion("trace_company_id is null");
+        public Criteria andTraceCompanyNameIsNull() {
+            addCriterion("trace_company_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andTraceCompanyIdIsNotNull() {
-            addCriterion("trace_company_id is not null");
+        public Criteria andTraceCompanyNameIsNotNull() {
+            addCriterion("trace_company_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTraceCompanyIdEqualTo(Integer value) {
-            addCriterion("trace_company_id =", value, "traceCompanyId");
+        public Criteria andTraceCompanyNameEqualTo(String value) {
+            addCriterion("trace_company_name =", value, "traceCompanyName");
             return (Criteria) this;
         }
 
-        public Criteria andTraceCompanyIdNotEqualTo(Integer value) {
-            addCriterion("trace_company_id <>", value, "traceCompanyId");
+        public Criteria andTraceCompanyNameNotEqualTo(String value) {
+            addCriterion("trace_company_name <>", value, "traceCompanyName");
             return (Criteria) this;
         }
 
-        public Criteria andTraceCompanyIdGreaterThan(Integer value) {
-            addCriterion("trace_company_id >", value, "traceCompanyId");
+        public Criteria andTraceCompanyNameGreaterThan(String value) {
+            addCriterion("trace_company_name >", value, "traceCompanyName");
             return (Criteria) this;
         }
 
-        public Criteria andTraceCompanyIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("trace_company_id >=", value, "traceCompanyId");
+        public Criteria andTraceCompanyNameGreaterThanOrEqualTo(String value) {
+            addCriterion("trace_company_name >=", value, "traceCompanyName");
             return (Criteria) this;
         }
 
-        public Criteria andTraceCompanyIdLessThan(Integer value) {
-            addCriterion("trace_company_id <", value, "traceCompanyId");
+        public Criteria andTraceCompanyNameLessThan(String value) {
+            addCriterion("trace_company_name <", value, "traceCompanyName");
             return (Criteria) this;
         }
 
-        public Criteria andTraceCompanyIdLessThanOrEqualTo(Integer value) {
-            addCriterion("trace_company_id <=", value, "traceCompanyId");
+        public Criteria andTraceCompanyNameLessThanOrEqualTo(String value) {
+            addCriterion("trace_company_name <=", value, "traceCompanyName");
             return (Criteria) this;
         }
 
-        public Criteria andTraceCompanyIdIn(List<Integer> values) {
-            addCriterion("trace_company_id in", values, "traceCompanyId");
+        public Criteria andTraceCompanyNameLike(String value) {
+            addCriterion("trace_company_name like", value, "traceCompanyName");
             return (Criteria) this;
         }
 
-        public Criteria andTraceCompanyIdNotIn(List<Integer> values) {
-            addCriterion("trace_company_id not in", values, "traceCompanyId");
+        public Criteria andTraceCompanyNameNotLike(String value) {
+            addCriterion("trace_company_name not like", value, "traceCompanyName");
             return (Criteria) this;
         }
 
-        public Criteria andTraceCompanyIdBetween(Integer value1, Integer value2) {
-            addCriterion("trace_company_id between", value1, value2, "traceCompanyId");
+        public Criteria andTraceCompanyNameIn(List<String> values) {
+            addCriterion("trace_company_name in", values, "traceCompanyName");
             return (Criteria) this;
         }
 
-        public Criteria andTraceCompanyIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("trace_company_id not between", value1, value2, "traceCompanyId");
+        public Criteria andTraceCompanyNameNotIn(List<String> values) {
+            addCriterion("trace_company_name not in", values, "traceCompanyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceCompanyNameBetween(String value1, String value2) {
+            addCriterion("trace_company_name between", value1, value2, "traceCompanyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceCompanyNameNotBetween(String value1, String value2) {
+            addCriterion("trace_company_name not between", value1, value2, "traceCompanyName");
             return (Criteria) this;
         }
 
