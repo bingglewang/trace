@@ -1,8 +1,6 @@
 package com.zsl.traceapi.dto;
 
 
-import javafx.beans.DefaultProperty;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.validation.constraints.Min;
 
