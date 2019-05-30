@@ -2,16 +2,19 @@ package com.zsl.traceapi.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.zsl.traceapi.dao.ZslTraceDao;
+import com.zsl.traceapi.dao.ZslTraceRecordDao;
 import com.zsl.traceapi.dto.PageParams;
 import com.zsl.traceapi.dto.QueryParam;
+import com.zsl.traceapi.dto.TraceRecordInsertParam;
+import com.zsl.traceapi.dto.TraceRecordPointParam;
 import com.zsl.traceapi.service.TraceService;
 import com.zsl.traceapi.vo.ZslTraceVo;
-import com.zsl.tracedb.mapper.MerchantMapper;
-import com.zsl.tracedb.mapper.ZslTraceMapper;
-import com.zsl.tracedb.model.ZslTrace;
-import io.swagger.annotations.Api;
+import com.zsl.tracedb.mapper.*;
+import com.zsl.tracedb.model.*;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -23,6 +26,21 @@ public class TraceServiceImpl implements TraceService {
 
     @Autowired
     private ZslTraceDao zslTraceDao;
+
+    @Autowired
+    private ZslTraceRecordDao zslTraceRecordDao;
+
+    @Autowired
+    private ZslTracePointMapper zslTracePointMapper;
+
+    @Autowired
+    private GoodsMapper goodsMapper;
+
+    @Autowired
+    private MerchantMapper merchantMapper;
+
+    @Autowired
+    private MerchantStallMapper merchantStallMapper;
 
     @Override
     public ZslTraceVo getZslTraceById(Integer id) {
@@ -107,5 +125,55 @@ public class TraceServiceImpl implements TraceService {
         }else{
             return -2;//审核信息不存在
         }
+    }
+
+    @Override
+    public int traceRecordInsert(List<TraceRecordInsertParam> traceRecordInsertParamList) {
+
+        for(TraceRecordInsertParam item : traceRecordInsertParamList){
+            ZslTraceExample zslTraceExample = new ZslTraceExample();
+            ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
+            criteria.andTraceCodeNumberEqualTo(item.getTraceCodeNumber());
+            List<ZslTrace> zslTrace = zslTraceMapper.selectByExample(zslTraceExample);
+            if(CollectionUtils.isEmpty(zslTrace)){
+                return -2; //追溯码不存在
+            }
+            //查询商家名字（根据商品id）
+            Goods goods = goodsMapper.selectByPrimaryKey(item.getTraceGoodId());
+            if(goods != null){
+                int merchantId = goods.getMerchantId();
+                Merchant merchant = merchantMapper.selectByPrimaryKey(merchantId);
+                ZslTracePoint zslTracePoint = new ZslTracePoint();
+                zslTracePoint.setTraceParentId(null); //父节点id
+                zslTracePoint.setTracePointName(merchant.getMerchantName()); //商家名称
+                zslTracePoint.setTracePointToNumber(item.getTraceToNumber()); //起始编码
+                zslTracePoint.setTracePointFromNumber(item.getTraceFromNumber());  //结束编码
+                zslTracePoint.setTraceGoodsId(item.getTraceGoodId()); // 所属商品id
+                zslTracePointMapper.insert(zslTracePoint);
+            }else{
+                return -1;//商品不存在
+            }
+        }
+        return zslTraceRecordDao.insertList(traceRecordInsertParamList);
+    }
+
+    @Override
+    public int traceRecordPointInsert(TraceRecordPointParam traceRecordPointParam) {
+        Goods goods = goodsMapper.selectByPrimaryKey(traceRecordPointParam.getTraceGoodsId());
+        if(goods == null){
+            return -1; //商品不存在
+        }
+        ZslTracePoint zslTracePointDetail = zslTracePointMapper.selectByPrimaryKey(traceRecordPointParam.getTraceParentId());
+        if(zslTracePointDetail == null){
+            return -2; //父追溯点不存在
+        }
+        //摊位id，如果有则为摊位id，没有则为-1（代表非农贸）
+        MerchantStall merchantStall = merchantStallMapper.selectByPrimaryKey(traceRecordPointParam.getTraceStallId());
+        if(merchantStall == null){
+            traceRecordPointParam.setTraceStallId(-1);
+        }
+        ZslTracePoint zslTracePoint = new ZslTracePoint();
+        BeanUtils.copyProperties(traceRecordPointParam,zslTracePoint);
+        return zslTracePointMapper.insert(zslTracePoint);
     }
 }

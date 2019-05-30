@@ -34,7 +34,7 @@ public class Merchant implements Serializable {
     @ApiModelProperty(value = "归属加盟商ID")
     private Integer allianceBusinessId;
 
-    @ApiModelProperty(value = "商家类型：0个人（非企业） 1厂商2公司3农贸市场（企业）")
+    @ApiModelProperty(value = "商家类型（外键）")
     private Integer merchantType;
 
     @ApiModelProperty(value = "法人代表/个人 名称")

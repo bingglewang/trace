@@ -164,63 +164,63 @@ public class ZslTracePointExample {
             return (Criteria) this;
         }
 
-        public Criteria andTraceRecordIdIsNull() {
-            addCriterion("trace_record_id is null");
+        public Criteria andTraceGoodsIdIsNull() {
+            addCriterion("trace_goods_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andTraceRecordIdIsNotNull() {
-            addCriterion("trace_record_id is not null");
+        public Criteria andTraceGoodsIdIsNotNull() {
+            addCriterion("trace_goods_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTraceRecordIdEqualTo(Integer value) {
-            addCriterion("trace_record_id =", value, "traceRecordId");
+        public Criteria andTraceGoodsIdEqualTo(Integer value) {
+            addCriterion("trace_goods_id =", value, "traceGoodsId");
             return (Criteria) this;
         }
 
-        public Criteria andTraceRecordIdNotEqualTo(Integer value) {
-            addCriterion("trace_record_id <>", value, "traceRecordId");
+        public Criteria andTraceGoodsIdNotEqualTo(Integer value) {
+            addCriterion("trace_goods_id <>", value, "traceGoodsId");
             return (Criteria) this;
         }
 
-        public Criteria andTraceRecordIdGreaterThan(Integer value) {
-            addCriterion("trace_record_id >", value, "traceRecordId");
+        public Criteria andTraceGoodsIdGreaterThan(Integer value) {
+            addCriterion("trace_goods_id >", value, "traceGoodsId");
             return (Criteria) this;
         }
 
-        public Criteria andTraceRecordIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("trace_record_id >=", value, "traceRecordId");
+        public Criteria andTraceGoodsIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("trace_goods_id >=", value, "traceGoodsId");
             return (Criteria) this;
         }
 
-        public Criteria andTraceRecordIdLessThan(Integer value) {
-            addCriterion("trace_record_id <", value, "traceRecordId");
+        public Criteria andTraceGoodsIdLessThan(Integer value) {
+            addCriterion("trace_goods_id <", value, "traceGoodsId");
             return (Criteria) this;
         }
 
-        public Criteria andTraceRecordIdLessThanOrEqualTo(Integer value) {
-            addCriterion("trace_record_id <=", value, "traceRecordId");
+        public Criteria andTraceGoodsIdLessThanOrEqualTo(Integer value) {
+            addCriterion("trace_goods_id <=", value, "traceGoodsId");
             return (Criteria) this;
         }
 
-        public Criteria andTraceRecordIdIn(List<Integer> values) {
-            addCriterion("trace_record_id in", values, "traceRecordId");
+        public Criteria andTraceGoodsIdIn(List<Integer> values) {
+            addCriterion("trace_goods_id in", values, "traceGoodsId");
             return (Criteria) this;
         }
 
-        public Criteria andTraceRecordIdNotIn(List<Integer> values) {
-            addCriterion("trace_record_id not in", values, "traceRecordId");
+        public Criteria andTraceGoodsIdNotIn(List<Integer> values) {
+            addCriterion("trace_goods_id not in", values, "traceGoodsId");
             return (Criteria) this;
         }
 
-        public Criteria andTraceRecordIdBetween(Integer value1, Integer value2) {
-            addCriterion("trace_record_id between", value1, value2, "traceRecordId");
+        public Criteria andTraceGoodsIdBetween(Integer value1, Integer value2) {
+            addCriterion("trace_goods_id between", value1, value2, "traceGoodsId");
             return (Criteria) this;
         }
 
-        public Criteria andTraceRecordIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("trace_record_id not between", value1, value2, "traceRecordId");
+        public Criteria andTraceGoodsIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("trace_goods_id not between", value1, value2, "traceGoodsId");
             return (Criteria) this;
         }
 
@@ -411,6 +411,126 @@ public class ZslTracePointExample {
 
         public Criteria andTracePointFromNumberNotBetween(Integer value1, Integer value2) {
             addCriterion("trace_point_from_number not between", value1, value2, "tracePointFromNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceParentIdIsNull() {
+            addCriterion("trace_parent_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceParentIdIsNotNull() {
+            addCriterion("trace_parent_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceParentIdEqualTo(Integer value) {
+            addCriterion("trace_parent_id =", value, "traceParentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceParentIdNotEqualTo(Integer value) {
+            addCriterion("trace_parent_id <>", value, "traceParentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceParentIdGreaterThan(Integer value) {
+            addCriterion("trace_parent_id >", value, "traceParentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceParentIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("trace_parent_id >=", value, "traceParentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceParentIdLessThan(Integer value) {
+            addCriterion("trace_parent_id <", value, "traceParentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceParentIdLessThanOrEqualTo(Integer value) {
+            addCriterion("trace_parent_id <=", value, "traceParentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceParentIdIn(List<Integer> values) {
+            addCriterion("trace_parent_id in", values, "traceParentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceParentIdNotIn(List<Integer> values) {
+            addCriterion("trace_parent_id not in", values, "traceParentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceParentIdBetween(Integer value1, Integer value2) {
+            addCriterion("trace_parent_id between", value1, value2, "traceParentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceParentIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("trace_parent_id not between", value1, value2, "traceParentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceStallIdIsNull() {
+            addCriterion("trace_stall_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceStallIdIsNotNull() {
+            addCriterion("trace_stall_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceStallIdEqualTo(Integer value) {
+            addCriterion("trace_stall_id =", value, "traceStallId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceStallIdNotEqualTo(Integer value) {
+            addCriterion("trace_stall_id <>", value, "traceStallId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceStallIdGreaterThan(Integer value) {
+            addCriterion("trace_stall_id >", value, "traceStallId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceStallIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("trace_stall_id >=", value, "traceStallId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceStallIdLessThan(Integer value) {
+            addCriterion("trace_stall_id <", value, "traceStallId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceStallIdLessThanOrEqualTo(Integer value) {
+            addCriterion("trace_stall_id <=", value, "traceStallId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceStallIdIn(List<Integer> values) {
+            addCriterion("trace_stall_id in", values, "traceStallId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceStallIdNotIn(List<Integer> values) {
+            addCriterion("trace_stall_id not in", values, "traceStallId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceStallIdBetween(Integer value1, Integer value2) {
+            addCriterion("trace_stall_id between", value1, value2, "traceStallId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceStallIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("trace_stall_id not between", value1, value2, "traceStallId");
             return (Criteria) this;
         }
     }

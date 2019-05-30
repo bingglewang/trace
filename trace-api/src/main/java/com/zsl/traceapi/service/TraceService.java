@@ -2,6 +2,8 @@ package com.zsl.traceapi.service;
 
 import com.zsl.traceapi.dto.PageParams;
 import com.zsl.traceapi.dto.QueryParam;
+import com.zsl.traceapi.dto.TraceRecordInsertParam;
+import com.zsl.traceapi.dto.TraceRecordPointParam;
 import com.zsl.traceapi.vo.ZslTraceVo;
 import com.zsl.tracedb.model.ZslTrace;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,5 +58,22 @@ public interface TraceService {
      */
     @Transactional
     int refuse(Integer id,String remark);
+
+    /**
+     * 插入追溯记录(批量插入)
+     * @param traceRecordInsertParamList
+     * @return
+     */
+    @Transactional
+    int traceRecordInsert(List<TraceRecordInsertParam> traceRecordInsertParamList);
+
+    /**
+     * 新建追溯点
+     * @param traceRecordPointParam
+     * @return
+     */
+    @Transactional
+    int traceRecordPointInsert(TraceRecordPointParam traceRecordPointParam);
+
 
 }

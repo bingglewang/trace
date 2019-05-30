@@ -3,10 +3,12 @@
 <mapper namespace="com.zsl.tracedb.mapper.ZslTracePointMapper">
   <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.ZslTracePoint">
     <id column="trace_point_id" jdbcType="INTEGER" property="tracePointId" />
-    <result column="trace_record_id" jdbcType="INTEGER" property="traceRecordId" />
+    <result column="trace_goods_id" jdbcType="INTEGER" property="traceGoodsId" />
     <result column="trace_point_name" jdbcType="VARCHAR" property="tracePointName" />
     <result column="trace_point_to_number" jdbcType="INTEGER" property="tracePointToNumber" />
     <result column="trace_point_from_number" jdbcType="INTEGER" property="tracePointFromNumber" />
+    <result column="trace_parent_id" jdbcType="INTEGER" property="traceParentId" />
+    <result column="trace_stall_id" jdbcType="INTEGER" property="traceStallId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,7 +69,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    trace_point_id, trace_record_id, trace_point_name, trace_point_to_number, trace_point_from_number
+    trace_point_id, trace_goods_id, trace_point_name, trace_point_to_number, trace_point_from_number, 
+    trace_parent_id, trace_stall_id
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.ZslTracePointExample" resultMap="BaseResultMap">
     select
@@ -103,10 +106,12 @@
     <selectKey keyProperty="tracePointId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into zsl_trace_point (trace_record_id, trace_point_name, trace_point_to_number, 
-      trace_point_from_number)
-    values (#{traceRecordId,jdbcType=INTEGER}, #{tracePointName,jdbcType=VARCHAR}, #{tracePointToNumber,jdbcType=INTEGER}, 
-      #{tracePointFromNumber,jdbcType=INTEGER})
+    insert into zsl_trace_point (trace_goods_id, trace_point_name, trace_point_to_number, 
+      trace_point_from_number, trace_parent_id, trace_stall_id
+      )
+    values (#{traceGoodsId,jdbcType=INTEGER}, #{tracePointName,jdbcType=VARCHAR}, #{tracePointToNumber,jdbcType=INTEGER}, 
+      #{tracePointFromNumber,jdbcType=INTEGER}, #{traceParentId,jdbcType=INTEGER}, #{traceStallId,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.ZslTracePoint">
     <selectKey keyProperty="tracePointId" order="AFTER" resultType="java.lang.Integer">
@@ -114,8 +119,8 @@
     </selectKey>
     insert into zsl_trace_point
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="traceRecordId != null">
-        trace_record_id,
+      <if test="traceGoodsId != null">
+        trace_goods_id,
       </if>
       <if test="tracePointName != null">
         trace_point_name,
@@ -126,10 +131,16 @@
       <if test="tracePointFromNumber != null">
         trace_point_from_number,
       </if>
+      <if test="traceParentId != null">
+        trace_parent_id,
+      </if>
+      <if test="traceStallId != null">
+        trace_stall_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="traceRecordId != null">
-        #{traceRecordId,jdbcType=INTEGER},
+      <if test="traceGoodsId != null">
+        #{traceGoodsId,jdbcType=INTEGER},
       </if>
       <if test="tracePointName != null">
         #{tracePointName,jdbcType=VARCHAR},
@@ -139,6 +150,12 @@
       </if>
       <if test="tracePointFromNumber != null">
         #{tracePointFromNumber,jdbcType=INTEGER},
+      </if>
+      <if test="traceParentId != null">
+        #{traceParentId,jdbcType=INTEGER},
+      </if>
+      <if test="traceStallId != null">
+        #{traceStallId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -154,8 +171,8 @@
       <if test="record.tracePointId != null">
         trace_point_id = #{record.tracePointId,jdbcType=INTEGER},
       </if>
-      <if test="record.traceRecordId != null">
-        trace_record_id = #{record.traceRecordId,jdbcType=INTEGER},
+      <if test="record.traceGoodsId != null">
+        trace_goods_id = #{record.traceGoodsId,jdbcType=INTEGER},
       </if>
       <if test="record.tracePointName != null">
         trace_point_name = #{record.tracePointName,jdbcType=VARCHAR},
@@ -166,6 +183,12 @@
       <if test="record.tracePointFromNumber != null">
         trace_point_from_number = #{record.tracePointFromNumber,jdbcType=INTEGER},
       </if>
+      <if test="record.traceParentId != null">
+        trace_parent_id = #{record.traceParentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.traceStallId != null">
+        trace_stall_id = #{record.traceStallId,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -174,10 +197,12 @@
   <update id="updateByExample" parameterType="map">
     update zsl_trace_point
     set trace_point_id = #{record.tracePointId,jdbcType=INTEGER},
-      trace_record_id = #{record.traceRecordId,jdbcType=INTEGER},
+      trace_goods_id = #{record.traceGoodsId,jdbcType=INTEGER},
       trace_point_name = #{record.tracePointName,jdbcType=VARCHAR},
       trace_point_to_number = #{record.tracePointToNumber,jdbcType=INTEGER},
-      trace_point_from_number = #{record.tracePointFromNumber,jdbcType=INTEGER}
+      trace_point_from_number = #{record.tracePointFromNumber,jdbcType=INTEGER},
+      trace_parent_id = #{record.traceParentId,jdbcType=INTEGER},
+      trace_stall_id = #{record.traceStallId,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -185,8 +210,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.ZslTracePoint">
     update zsl_trace_point
     <set>
-      <if test="traceRecordId != null">
-        trace_record_id = #{traceRecordId,jdbcType=INTEGER},
+      <if test="traceGoodsId != null">
+        trace_goods_id = #{traceGoodsId,jdbcType=INTEGER},
       </if>
       <if test="tracePointName != null">
         trace_point_name = #{tracePointName,jdbcType=VARCHAR},
@@ -197,15 +222,23 @@
       <if test="tracePointFromNumber != null">
         trace_point_from_number = #{tracePointFromNumber,jdbcType=INTEGER},
       </if>
+      <if test="traceParentId != null">
+        trace_parent_id = #{traceParentId,jdbcType=INTEGER},
+      </if>
+      <if test="traceStallId != null">
+        trace_stall_id = #{traceStallId,jdbcType=INTEGER},
+      </if>
     </set>
     where trace_point_id = #{tracePointId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.ZslTracePoint">
     update zsl_trace_point
-    set trace_record_id = #{traceRecordId,jdbcType=INTEGER},
+    set trace_goods_id = #{traceGoodsId,jdbcType=INTEGER},
       trace_point_name = #{tracePointName,jdbcType=VARCHAR},
       trace_point_to_number = #{tracePointToNumber,jdbcType=INTEGER},
-      trace_point_from_number = #{tracePointFromNumber,jdbcType=INTEGER}
+      trace_point_from_number = #{tracePointFromNumber,jdbcType=INTEGER},
+      trace_parent_id = #{traceParentId,jdbcType=INTEGER},
+      trace_stall_id = #{traceStallId,jdbcType=INTEGER}
     where trace_point_id = #{tracePointId,jdbcType=INTEGER}
   </update>
 </mapper>

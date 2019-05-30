@@ -1,6 +1,5 @@
 package com.zsl.traceapi.dto;
 
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;

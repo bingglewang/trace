@@ -7,8 +7,8 @@ public class ZslTracePoint implements Serializable {
     @ApiModelProperty(value = "追溯点id")
     private Integer tracePointId;
 
-    @ApiModelProperty(value = "关联追溯记录id")
-    private Integer traceRecordId;
+    @ApiModelProperty(value = "关联商品id")
+    private Integer traceGoodsId;
 
     @ApiModelProperty(value = "追溯点其他信息")
     private String tracePointName;
@@ -18,6 +18,12 @@ public class ZslTracePoint implements Serializable {
 
     @ApiModelProperty(value = "追溯点结束编码")
     private Integer tracePointFromNumber;
+
+    @ApiModelProperty(value = "父节点id")
+    private Integer traceParentId;
+
+    @ApiModelProperty(value = "摊位id（非农贸则为-1）")
+    private Integer traceStallId;
 
     private static final long serialVersionUID = 1L;
 
@@ -29,12 +35,12 @@ public class ZslTracePoint implements Serializable {
         this.tracePointId = tracePointId;
     }
 
-    public Integer getTraceRecordId() {
-        return traceRecordId;
+    public Integer getTraceGoodsId() {
+        return traceGoodsId;
     }
 
-    public void setTraceRecordId(Integer traceRecordId) {
-        this.traceRecordId = traceRecordId;
+    public void setTraceGoodsId(Integer traceGoodsId) {
+        this.traceGoodsId = traceGoodsId;
     }
 
     public String getTracePointName() {
@@ -61,6 +67,22 @@ public class ZslTracePoint implements Serializable {
         this.tracePointFromNumber = tracePointFromNumber;
     }
 
+    public Integer getTraceParentId() {
+        return traceParentId;
+    }
+
+    public void setTraceParentId(Integer traceParentId) {
+        this.traceParentId = traceParentId;
+    }
+
+    public Integer getTraceStallId() {
+        return traceStallId;
+    }
+
+    public void setTraceStallId(Integer traceStallId) {
+        this.traceStallId = traceStallId;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -68,10 +90,12 @@ public class ZslTracePoint implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", tracePointId=").append(tracePointId);
-        sb.append(", traceRecordId=").append(traceRecordId);
+        sb.append(", traceGoodsId=").append(traceGoodsId);
         sb.append(", tracePointName=").append(tracePointName);
         sb.append(", tracePointToNumber=").append(tracePointToNumber);
         sb.append(", tracePointFromNumber=").append(tracePointFromNumber);
+        sb.append(", traceParentId=").append(traceParentId);
+        sb.append(", traceStallId=").append(traceStallId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

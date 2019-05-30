@@ -3,11 +3,14 @@
 <mapper namespace="com.zsl.tracedb.mapper.MerchantAuthMapper">
   <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.MerchantAuth">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="is_accept_protocol" jdbcType="INTEGER" property="isAcceptProtocol" />
-    <result column="get_integral" jdbcType="INTEGER" property="getIntegral" />
-    <result column="ip_site" jdbcType="VARCHAR" property="ipSite" />
+    <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
     <result column="merchant_id" jdbcType="INTEGER" property="merchantId" />
-    <result column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="is_accept_protocol" jdbcType="INTEGER" property="isAcceptProtocol" />
+    <result column="ip_site" jdbcType="VARCHAR" property="ipSite" />
+    <result column="pay_type" jdbcType="INTEGER" property="payType" />
+    <result column="auth_sum" jdbcType="REAL" property="authSum" />
+    <result column="pay_certify" jdbcType="VARCHAR" property="payCertify" />
+    <result column="pay_status" jdbcType="INTEGER" property="payStatus" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -69,7 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, is_accept_protocol, get_integral, ip_site, merchant_id, order_id, create_time
+    id, order_num, merchant_id, is_accept_protocol, ip_site, pay_type, auth_sum, pay_certify, 
+    pay_status, create_time
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.MerchantAuthExample" resultMap="BaseResultMap">
     select
@@ -105,11 +109,13 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into merchant_auth (is_accept_protocol, get_integral, ip_site, 
-      merchant_id, order_id, create_time
+    insert into merchant_auth (order_num, merchant_id, is_accept_protocol, 
+      ip_site, pay_type, auth_sum, 
+      pay_certify, pay_status, create_time
       )
-    values (#{isAcceptProtocol,jdbcType=INTEGER}, #{getIntegral,jdbcType=INTEGER}, #{ipSite,jdbcType=VARCHAR}, 
-      #{merchantId,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
+    values (#{orderNum,jdbcType=VARCHAR}, #{merchantId,jdbcType=INTEGER}, #{isAcceptProtocol,jdbcType=INTEGER}, 
+      #{ipSite,jdbcType=VARCHAR}, #{payType,jdbcType=INTEGER}, #{authSum,jdbcType=REAL}, 
+      #{payCertify,jdbcType=VARCHAR}, #{payStatus,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.MerchantAuth">
@@ -118,40 +124,58 @@
     </selectKey>
     insert into merchant_auth
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="isAcceptProtocol != null">
-        is_accept_protocol,
-      </if>
-      <if test="getIntegral != null">
-        get_integral,
-      </if>
-      <if test="ipSite != null">
-        ip_site,
+      <if test="orderNum != null">
+        order_num,
       </if>
       <if test="merchantId != null">
         merchant_id,
       </if>
-      <if test="orderId != null">
-        order_id,
+      <if test="isAcceptProtocol != null">
+        is_accept_protocol,
+      </if>
+      <if test="ipSite != null">
+        ip_site,
+      </if>
+      <if test="payType != null">
+        pay_type,
+      </if>
+      <if test="authSum != null">
+        auth_sum,
+      </if>
+      <if test="payCertify != null">
+        pay_certify,
+      </if>
+      <if test="payStatus != null">
+        pay_status,
       </if>
       <if test="createTime != null">
         create_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="isAcceptProtocol != null">
-        #{isAcceptProtocol,jdbcType=INTEGER},
-      </if>
-      <if test="getIntegral != null">
-        #{getIntegral,jdbcType=INTEGER},
-      </if>
-      <if test="ipSite != null">
-        #{ipSite,jdbcType=VARCHAR},
+      <if test="orderNum != null">
+        #{orderNum,jdbcType=VARCHAR},
       </if>
       <if test="merchantId != null">
         #{merchantId,jdbcType=INTEGER},
       </if>
-      <if test="orderId != null">
-        #{orderId,jdbcType=INTEGER},
+      <if test="isAcceptProtocol != null">
+        #{isAcceptProtocol,jdbcType=INTEGER},
+      </if>
+      <if test="ipSite != null">
+        #{ipSite,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null">
+        #{payType,jdbcType=INTEGER},
+      </if>
+      <if test="authSum != null">
+        #{authSum,jdbcType=REAL},
+      </if>
+      <if test="payCertify != null">
+        #{payCertify,jdbcType=VARCHAR},
+      </if>
+      <if test="payStatus != null">
+        #{payStatus,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -170,20 +194,29 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.isAcceptProtocol != null">
-        is_accept_protocol = #{record.isAcceptProtocol,jdbcType=INTEGER},
-      </if>
-      <if test="record.getIntegral != null">
-        get_integral = #{record.getIntegral,jdbcType=INTEGER},
-      </if>
-      <if test="record.ipSite != null">
-        ip_site = #{record.ipSite,jdbcType=VARCHAR},
+      <if test="record.orderNum != null">
+        order_num = #{record.orderNum,jdbcType=VARCHAR},
       </if>
       <if test="record.merchantId != null">
         merchant_id = #{record.merchantId,jdbcType=INTEGER},
       </if>
-      <if test="record.orderId != null">
-        order_id = #{record.orderId,jdbcType=INTEGER},
+      <if test="record.isAcceptProtocol != null">
+        is_accept_protocol = #{record.isAcceptProtocol,jdbcType=INTEGER},
+      </if>
+      <if test="record.ipSite != null">
+        ip_site = #{record.ipSite,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payType != null">
+        pay_type = #{record.payType,jdbcType=INTEGER},
+      </if>
+      <if test="record.authSum != null">
+        auth_sum = #{record.authSum,jdbcType=REAL},
+      </if>
+      <if test="record.payCertify != null">
+        pay_certify = #{record.payCertify,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payStatus != null">
+        pay_status = #{record.payStatus,jdbcType=INTEGER},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -196,11 +229,14 @@
   <update id="updateByExample" parameterType="map">
     update merchant_auth
     set id = #{record.id,jdbcType=INTEGER},
-      is_accept_protocol = #{record.isAcceptProtocol,jdbcType=INTEGER},
-      get_integral = #{record.getIntegral,jdbcType=INTEGER},
-      ip_site = #{record.ipSite,jdbcType=VARCHAR},
+      order_num = #{record.orderNum,jdbcType=VARCHAR},
       merchant_id = #{record.merchantId,jdbcType=INTEGER},
-      order_id = #{record.orderId,jdbcType=INTEGER},
+      is_accept_protocol = #{record.isAcceptProtocol,jdbcType=INTEGER},
+      ip_site = #{record.ipSite,jdbcType=VARCHAR},
+      pay_type = #{record.payType,jdbcType=INTEGER},
+      auth_sum = #{record.authSum,jdbcType=REAL},
+      pay_certify = #{record.payCertify,jdbcType=VARCHAR},
+      pay_status = #{record.payStatus,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -209,20 +245,29 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.MerchantAuth">
     update merchant_auth
     <set>
-      <if test="isAcceptProtocol != null">
-        is_accept_protocol = #{isAcceptProtocol,jdbcType=INTEGER},
-      </if>
-      <if test="getIntegral != null">
-        get_integral = #{getIntegral,jdbcType=INTEGER},
-      </if>
-      <if test="ipSite != null">
-        ip_site = #{ipSite,jdbcType=VARCHAR},
+      <if test="orderNum != null">
+        order_num = #{orderNum,jdbcType=VARCHAR},
       </if>
       <if test="merchantId != null">
         merchant_id = #{merchantId,jdbcType=INTEGER},
       </if>
-      <if test="orderId != null">
-        order_id = #{orderId,jdbcType=INTEGER},
+      <if test="isAcceptProtocol != null">
+        is_accept_protocol = #{isAcceptProtocol,jdbcType=INTEGER},
+      </if>
+      <if test="ipSite != null">
+        ip_site = #{ipSite,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null">
+        pay_type = #{payType,jdbcType=INTEGER},
+      </if>
+      <if test="authSum != null">
+        auth_sum = #{authSum,jdbcType=REAL},
+      </if>
+      <if test="payCertify != null">
+        pay_certify = #{payCertify,jdbcType=VARCHAR},
+      </if>
+      <if test="payStatus != null">
+        pay_status = #{payStatus,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -232,11 +277,14 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.MerchantAuth">
     update merchant_auth
-    set is_accept_protocol = #{isAcceptProtocol,jdbcType=INTEGER},
-      get_integral = #{getIntegral,jdbcType=INTEGER},
-      ip_site = #{ipSite,jdbcType=VARCHAR},
+    set order_num = #{orderNum,jdbcType=VARCHAR},
       merchant_id = #{merchantId,jdbcType=INTEGER},
-      order_id = #{orderId,jdbcType=INTEGER},
+      is_accept_protocol = #{isAcceptProtocol,jdbcType=INTEGER},
+      ip_site = #{ipSite,jdbcType=VARCHAR},
+      pay_type = #{payType,jdbcType=INTEGER},
+      auth_sum = #{authSum,jdbcType=REAL},
+      pay_certify = #{payCertify,jdbcType=VARCHAR},
+      pay_status = #{payStatus,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>

@@ -3,9 +3,13 @@
 <mapper namespace="com.zsl.tracedb.mapper.VoucherIntegralMapper">
   <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.VoucherIntegral">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="get_integral" jdbcType="INTEGER" property="getIntegral" />
+    <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
+    <result column="pay_type" jdbcType="INTEGER" property="payType" />
     <result column="merchant_id" jdbcType="INTEGER" property="merchantId" />
-    <result column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="pay_certify" jdbcType="VARCHAR" property="payCertify" />
+    <result column="pay_sum" jdbcType="REAL" property="paySum" />
+    <result column="pay_status" jdbcType="INTEGER" property="payStatus" />
+    <result column="get_integral" jdbcType="INTEGER" property="getIntegral" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -67,7 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, get_integral, merchant_id, order_id, create_time
+    id, order_num, pay_type, merchant_id, pay_certify, pay_sum, pay_status, get_integral, 
+    create_time
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.VoucherIntegralExample" resultMap="BaseResultMap">
     select
@@ -103,10 +108,12 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into voucher_integral (get_integral, merchant_id, order_id, 
-      create_time)
-    values (#{getIntegral,jdbcType=INTEGER}, #{merchantId,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP})
+    insert into voucher_integral (order_num, pay_type, merchant_id, 
+      pay_certify, pay_sum, pay_status, 
+      get_integral, create_time)
+    values (#{orderNum,jdbcType=VARCHAR}, #{payType,jdbcType=INTEGER}, #{merchantId,jdbcType=INTEGER}, 
+      #{payCertify,jdbcType=VARCHAR}, #{paySum,jdbcType=REAL}, #{payStatus,jdbcType=INTEGER}, 
+      #{getIntegral,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.VoucherIntegral">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -114,28 +121,52 @@
     </selectKey>
     insert into voucher_integral
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="getIntegral != null">
-        get_integral,
+      <if test="orderNum != null">
+        order_num,
+      </if>
+      <if test="payType != null">
+        pay_type,
       </if>
       <if test="merchantId != null">
         merchant_id,
       </if>
-      <if test="orderId != null">
-        order_id,
+      <if test="payCertify != null">
+        pay_certify,
+      </if>
+      <if test="paySum != null">
+        pay_sum,
+      </if>
+      <if test="payStatus != null">
+        pay_status,
+      </if>
+      <if test="getIntegral != null">
+        get_integral,
       </if>
       <if test="createTime != null">
         create_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="getIntegral != null">
-        #{getIntegral,jdbcType=INTEGER},
+      <if test="orderNum != null">
+        #{orderNum,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null">
+        #{payType,jdbcType=INTEGER},
       </if>
       <if test="merchantId != null">
         #{merchantId,jdbcType=INTEGER},
       </if>
-      <if test="orderId != null">
-        #{orderId,jdbcType=INTEGER},
+      <if test="payCertify != null">
+        #{payCertify,jdbcType=VARCHAR},
+      </if>
+      <if test="paySum != null">
+        #{paySum,jdbcType=REAL},
+      </if>
+      <if test="payStatus != null">
+        #{payStatus,jdbcType=INTEGER},
+      </if>
+      <if test="getIntegral != null">
+        #{getIntegral,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -154,14 +185,26 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.getIntegral != null">
-        get_integral = #{record.getIntegral,jdbcType=INTEGER},
+      <if test="record.orderNum != null">
+        order_num = #{record.orderNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payType != null">
+        pay_type = #{record.payType,jdbcType=INTEGER},
       </if>
       <if test="record.merchantId != null">
         merchant_id = #{record.merchantId,jdbcType=INTEGER},
       </if>
-      <if test="record.orderId != null">
-        order_id = #{record.orderId,jdbcType=INTEGER},
+      <if test="record.payCertify != null">
+        pay_certify = #{record.payCertify,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paySum != null">
+        pay_sum = #{record.paySum,jdbcType=REAL},
+      </if>
+      <if test="record.payStatus != null">
+        pay_status = #{record.payStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.getIntegral != null">
+        get_integral = #{record.getIntegral,jdbcType=INTEGER},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -174,9 +217,13 @@
   <update id="updateByExample" parameterType="map">
     update voucher_integral
     set id = #{record.id,jdbcType=INTEGER},
-      get_integral = #{record.getIntegral,jdbcType=INTEGER},
+      order_num = #{record.orderNum,jdbcType=VARCHAR},
+      pay_type = #{record.payType,jdbcType=INTEGER},
       merchant_id = #{record.merchantId,jdbcType=INTEGER},
-      order_id = #{record.orderId,jdbcType=INTEGER},
+      pay_certify = #{record.payCertify,jdbcType=VARCHAR},
+      pay_sum = #{record.paySum,jdbcType=REAL},
+      pay_status = #{record.payStatus,jdbcType=INTEGER},
+      get_integral = #{record.getIntegral,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -185,14 +232,26 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.VoucherIntegral">
     update voucher_integral
     <set>
-      <if test="getIntegral != null">
-        get_integral = #{getIntegral,jdbcType=INTEGER},
+      <if test="orderNum != null">
+        order_num = #{orderNum,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null">
+        pay_type = #{payType,jdbcType=INTEGER},
       </if>
       <if test="merchantId != null">
         merchant_id = #{merchantId,jdbcType=INTEGER},
       </if>
-      <if test="orderId != null">
-        order_id = #{orderId,jdbcType=INTEGER},
+      <if test="payCertify != null">
+        pay_certify = #{payCertify,jdbcType=VARCHAR},
+      </if>
+      <if test="paySum != null">
+        pay_sum = #{paySum,jdbcType=REAL},
+      </if>
+      <if test="payStatus != null">
+        pay_status = #{payStatus,jdbcType=INTEGER},
+      </if>
+      <if test="getIntegral != null">
+        get_integral = #{getIntegral,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -202,9 +261,13 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.VoucherIntegral">
     update voucher_integral
-    set get_integral = #{getIntegral,jdbcType=INTEGER},
+    set order_num = #{orderNum,jdbcType=VARCHAR},
+      pay_type = #{payType,jdbcType=INTEGER},
       merchant_id = #{merchantId,jdbcType=INTEGER},
-      order_id = #{orderId,jdbcType=INTEGER},
+      pay_certify = #{payCertify,jdbcType=VARCHAR},
+      pay_sum = #{paySum,jdbcType=REAL},
+      pay_status = #{payStatus,jdbcType=INTEGER},
+      get_integral = #{getIntegral,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>

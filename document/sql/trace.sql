@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50718
 File Encoding         : 65001
 
-Date: 2019-05-28 14:59:14
+Date: 2019-05-29 15:33:55
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -37,11 +37,12 @@ CREATE TABLE `zsl_trace` (
   `trace_back4` varchar(100) DEFAULT NULL COMMENT '备用字段4',
   `trace_back5` varchar(100) DEFAULT NULL COMMENT '备用字段5',
   PRIMARY KEY (`trace_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of zsl_trace
 -- ----------------------------
+INSERT INTO `zsl_trace` VALUES ('11', 'ZS1559114703777', '1', '1', '1', '总部', '2019-05-29 15:24:28', '2019-05-29 15:25:04', '0', null, null, null, null, null, null, null);
 
 -- ----------------------------
 -- Table structure for zsl_trace_point
@@ -49,12 +50,14 @@ CREATE TABLE `zsl_trace` (
 DROP TABLE IF EXISTS `zsl_trace_point`;
 CREATE TABLE `zsl_trace_point` (
   `trace_point_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '追溯点id',
-  `trace_record_id` int(11) DEFAULT NULL COMMENT '关联追溯记录id',
+  `trace_goods_id` int(11) DEFAULT NULL COMMENT '关联商品id',
   `trace_point_name` varchar(100) DEFAULT NULL COMMENT '追溯点其他信息',
   `trace_point_to_number` int(11) DEFAULT NULL COMMENT '追溯点起始编码',
   `trace_point_from_number` int(11) DEFAULT NULL COMMENT '追溯点结束编码',
+  `trace_parent_id` int(11) DEFAULT NULL COMMENT '父节点id',
+  `trace_stall_id` int(11) DEFAULT NULL COMMENT '摊位id（非农贸则为-1）',
   PRIMARY KEY (`trace_point_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of zsl_trace_point
@@ -66,12 +69,13 @@ CREATE TABLE `zsl_trace_point` (
 DROP TABLE IF EXISTS `zsl_trace_record`;
 CREATE TABLE `zsl_trace_record` (
   `trace_record_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '追溯记录id',
-  `trace_id` int(11) DEFAULT NULL COMMENT '记录所属追溯',
+  `trace_code_number` varchar(255) DEFAULT NULL COMMENT '关联追溯码批次号',
   `trace_good_id` int(11) DEFAULT NULL COMMENT '关联商品id',
   `trace_to_number` int(11) DEFAULT NULL COMMENT '商品起始编码',
   `trace_from_number` int(11) DEFAULT NULL COMMENT '商品结束编码',
+  `trace_stall_id` int(11) DEFAULT NULL COMMENT '关联摊位id（没有则为非农贸）',
   PRIMARY KEY (`trace_record_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of zsl_trace_record
