@@ -1,13 +1,11 @@
 package com.zsl.traceapi.service;
 
-import com.zsl.traceapi.dto.PageParams;
-import com.zsl.traceapi.dto.QueryParam;
-import com.zsl.traceapi.dto.TraceRecordInsertParam;
-import com.zsl.traceapi.dto.TraceRecordPointParam;
+import com.zsl.traceapi.dto.*;
 import com.zsl.traceapi.vo.ZslTraceVo;
 import com.zsl.tracedb.model.ZslTrace;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface TraceService {
@@ -75,5 +73,11 @@ public interface TraceService {
     @Transactional
     int traceRecordPointInsert(TraceRecordPointParam traceRecordPointParam);
 
+    /**
+     * 导出该追溯批次号申请的追溯码
+     * @param traceCode
+     * @return
+     */
+    FileInfo exportPointCode(String traceCode,HttpServletResponse response);
 
 }

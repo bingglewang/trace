@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -205,5 +206,22 @@ public class TraceController {
             return CommonResult.failed();
         }
     }
+
+    /**
+     * 追溯编码导出
+     * @param
+     * @return
+     */
+    @GetMapping("/point/export")
+    @ApiOperation(value = "追溯编码导出")
+    public CommonResult exportPointCode(@ApiParam("追溯码批次号") @RequestParam(required = true) String traceCode,HttpServletResponse response) {
+        FileInfo fileInfo = traceService.exportPointCode(traceCode,response);
+        if(fileInfo == null){
+            return CommonResult.failed( "追溯码不存在或申请数量为0");
+        }else{
+            return  CommonResult.success(fileInfo, "追溯编码导出成功");
+        }
+    }
+
 
 }

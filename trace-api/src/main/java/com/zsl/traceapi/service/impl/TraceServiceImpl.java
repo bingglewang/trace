@@ -1,21 +1,28 @@
 package com.zsl.traceapi.service.impl;
 
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
 import com.github.pagehelper.PageHelper;
 import com.zsl.traceapi.dao.ZslTraceDao;
 import com.zsl.traceapi.dao.ZslTraceRecordDao;
-import com.zsl.traceapi.dto.PageParams;
-import com.zsl.traceapi.dto.QueryParam;
-import com.zsl.traceapi.dto.TraceRecordInsertParam;
-import com.zsl.traceapi.dto.TraceRecordPointParam;
+import com.zsl.traceapi.dto.*;
 import com.zsl.traceapi.service.TraceService;
+import com.zsl.traceapi.util.ExcelStyleUtil;
+import com.zsl.traceapi.util.FilePathUtils;
+import com.zsl.traceapi.util.TraceCodeUtil;
 import com.zsl.traceapi.vo.ZslTraceVo;
 import com.zsl.tracedb.mapper.*;
 import com.zsl.tracedb.model.*;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -175,5 +182,68 @@ public class TraceServiceImpl implements TraceService {
         ZslTracePoint zslTracePoint = new ZslTracePoint();
         BeanUtils.copyProperties(traceRecordPointParam,zslTracePoint);
         return zslTracePointMapper.insert(zslTracePoint);
+    }
+
+    @Override
+    public FileInfo exportPointCode(String traceCode,HttpServletResponse response) {
+        //创建集合用于追溯码导出
+        List<ExcelTraceCode> excelTraceCodes = new ArrayList<>();
+        ZslTraceExample zslTraceExample = new ZslTraceExample();
+        ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
+        criteria.andTraceCodeNumberEqualTo(traceCode);
+        List<ZslTrace> zslTrace = zslTraceMapper.selectByExample(zslTraceExample);
+        if(CollectionUtils.isEmpty(zslTrace)){
+            return null; //追溯码不存在
+        }
+        List<String> codeList =  TraceCodeUtil.generateTraceCode(zslTrace.get(0).getTraceApplyCount());
+        if(CollectionUtils.isEmpty(codeList)){
+            return null;
+        }
+        for(int i = 0;i<codeList.size();i++){
+            ExcelTraceCode excelTraceCode = new ExcelTraceCode();
+            excelTraceCode.setIndex(i+1+"");
+            excelTraceCode.setCode(codeList.get(0));
+            excelTraceCodes.add(excelTraceCode);
+        }
+
+        // 设置导出配置
+        ExportParams params = new ExportParams("1、追溯码\n" +
+                "2、*****\n"
+                , traceCode+"的追溯码");
+        params.setStyle(ExcelStyleUtil.class);
+        Workbook workbook = ExcelExportUtil.exportExcel(params,
+                ExcelTraceCode.class, excelTraceCodes);
+        Row row = workbook.getSheetAt(0).getRow(0);
+        row.setHeight((short) 2000);
+        workbook.getSheetAt(0).setColumnWidth(1, 6000);
+        workbook.getSheetAt(0).setColumnWidth(2, 6000);
+
+        File localFile = null;
+        try{
+            localFile = File.createTempFile("temp",null);
+            response.setContentType("application/force-download");// 设置强制下载不打开
+            response.setContentType("multipart/form-data;charset=UTF-8");
+            //response.addHeader("Content-Disposition", "attachment;fileName=" + traceCode+"的追溯码.xls");// 设置文件名
+            response.setHeader("Content-Disposition", "attachment;fileName=" + new String((traceCode+"的追溯码.xls").getBytes("GB2312"),"ISO-8859-1"));
+            byte[] buffer = new byte[1024];
+            FileInputStream fis = null;
+            BufferedInputStream bis = null;
+            //写到临时文件
+            FileOutputStream fos = new FileOutputStream(localFile);
+            workbook.write(fos);
+            fos.close();
+            //
+            fis = new FileInputStream(localFile);
+            bis = new BufferedInputStream(fis);
+            OutputStream os = response.getOutputStream();
+            int i = bis.read(buffer);
+            while (i != -1) {
+                os.write(buffer, 0, i);
+                i = bis.read(buffer);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return new FileInfo();
     }
 }
