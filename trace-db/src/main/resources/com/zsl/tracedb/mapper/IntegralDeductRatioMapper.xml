@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsl.tracedb.mapper.IntegralDeductRatioMapper">
+  <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.IntegralDeductRatio">
+    <id column="integral_deduct_ratio_id" jdbcType="INTEGER" property="integralDeductRatioId" />
+    <result column="integral_deduct_ratio_type" jdbcType="INTEGER" property="integralDeductRatioType" />
+    <result column="integral_ratio" jdbcType="INTEGER" property="integralRatio" />
+    <result column="integral_deduct_ratio_desciption" jdbcType="VARCHAR" property="integralDeductRatioDesciption" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    integral_deduct_ratio_id, integral_deduct_ratio_type, integral_ratio, integral_deduct_ratio_desciption
+  </sql>
+  <select id="selectByExample" parameterType="com.zsl.tracedb.model.IntegralDeductRatioExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from integral_deduct_ratio
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from integral_deduct_ratio
+    where integral_deduct_ratio_id = #{integralDeductRatioId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from integral_deduct_ratio
+    where integral_deduct_ratio_id = #{integralDeductRatioId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zsl.tracedb.model.IntegralDeductRatioExample">
+    delete from integral_deduct_ratio
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zsl.tracedb.model.IntegralDeductRatio">
+    <selectKey keyProperty="integralDeductRatioId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into integral_deduct_ratio (integral_deduct_ratio_type, integral_ratio, 
+      integral_deduct_ratio_desciption)
+    values (#{integralDeductRatioType,jdbcType=INTEGER}, #{integralRatio,jdbcType=INTEGER}, 
+      #{integralDeductRatioDesciption,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zsl.tracedb.model.IntegralDeductRatio">
+    <selectKey keyProperty="integralDeductRatioId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into integral_deduct_ratio
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="integralDeductRatioType != null">
+        integral_deduct_ratio_type,
+      </if>
+      <if test="integralRatio != null">
+        integral_ratio,
+      </if>
+      <if test="integralDeductRatioDesciption != null">
+        integral_deduct_ratio_desciption,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="integralDeductRatioType != null">
+        #{integralDeductRatioType,jdbcType=INTEGER},
+      </if>
+      <if test="integralRatio != null">
+        #{integralRatio,jdbcType=INTEGER},
+      </if>
+      <if test="integralDeductRatioDesciption != null">
+        #{integralDeductRatioDesciption,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zsl.tracedb.model.IntegralDeductRatioExample" resultType="java.lang.Integer">
+    select count(*) from integral_deduct_ratio
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update integral_deduct_ratio
+    <set>
+      <if test="record.integralDeductRatioId != null">
+        integral_deduct_ratio_id = #{record.integralDeductRatioId,jdbcType=INTEGER},
+      </if>
+      <if test="record.integralDeductRatioType != null">
+        integral_deduct_ratio_type = #{record.integralDeductRatioType,jdbcType=INTEGER},
+      </if>
+      <if test="record.integralRatio != null">
+        integral_ratio = #{record.integralRatio,jdbcType=INTEGER},
+      </if>
+      <if test="record.integralDeductRatioDesciption != null">
+        integral_deduct_ratio_desciption = #{record.integralDeductRatioDesciption,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update integral_deduct_ratio
+    set integral_deduct_ratio_id = #{record.integralDeductRatioId,jdbcType=INTEGER},
+      integral_deduct_ratio_type = #{record.integralDeductRatioType,jdbcType=INTEGER},
+      integral_ratio = #{record.integralRatio,jdbcType=INTEGER},
+      integral_deduct_ratio_desciption = #{record.integralDeductRatioDesciption,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.IntegralDeductRatio">
+    update integral_deduct_ratio
+    <set>
+      <if test="integralDeductRatioType != null">
+        integral_deduct_ratio_type = #{integralDeductRatioType,jdbcType=INTEGER},
+      </if>
+      <if test="integralRatio != null">
+        integral_ratio = #{integralRatio,jdbcType=INTEGER},
+      </if>
+      <if test="integralDeductRatioDesciption != null">
+        integral_deduct_ratio_desciption = #{integralDeductRatioDesciption,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where integral_deduct_ratio_id = #{integralDeductRatioId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.IntegralDeductRatio">
+    update integral_deduct_ratio
+    set integral_deduct_ratio_type = #{integralDeductRatioType,jdbcType=INTEGER},
+      integral_ratio = #{integralRatio,jdbcType=INTEGER},
+      integral_deduct_ratio_desciption = #{integralDeductRatioDesciption,jdbcType=VARCHAR}
+    where integral_deduct_ratio_id = #{integralDeductRatioId,jdbcType=INTEGER}
+  </update>
+</mapper>
