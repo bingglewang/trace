@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50718
 File Encoding         : 65001
 
-Date: 2019-05-29 15:33:55
+Date: 2019-05-31 15:26:20
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -31,18 +31,17 @@ CREATE TABLE `zsl_trace` (
   `trace_apply_count` bigint(20) DEFAULT NULL COMMENT '申请数量',
   `trace_enable_count` int(11) DEFAULT NULL COMMENT '可用数量',
   `trace_refuse_remark` varchar(255) DEFAULT NULL COMMENT '拒绝申请原因',
-  `trace_back1` int(11) DEFAULT NULL COMMENT '备用字段1',
+  `trace_back1` int(11) DEFAULT NULL COMMENT '已经关联的数量',
   `trace_back2` int(11) DEFAULT NULL COMMENT '备用字段2',
   `trace_back3` varchar(100) DEFAULT NULL COMMENT '备用字段3',
   `trace_back4` varchar(100) DEFAULT NULL COMMENT '备用字段4',
   `trace_back5` varchar(100) DEFAULT NULL COMMENT '备用字段5',
   PRIMARY KEY (`trace_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of zsl_trace
 -- ----------------------------
-INSERT INTO `zsl_trace` VALUES ('11', 'ZS1559114703777', '1', '1', '1', '总部', '2019-05-29 15:24:28', '2019-05-29 15:25:04', '0', null, null, null, null, null, null, null);
 
 -- ----------------------------
 -- Table structure for zsl_trace_point
@@ -56,8 +55,9 @@ CREATE TABLE `zsl_trace_point` (
   `trace_point_from_number` int(11) DEFAULT NULL COMMENT '追溯点结束编码',
   `trace_parent_id` int(11) DEFAULT NULL COMMENT '父节点id',
   `trace_stall_id` int(11) DEFAULT NULL COMMENT '摊位id（非农贸则为-1）',
+  `trace_code_number` varchar(255) DEFAULT NULL COMMENT '追溯码批次号',
   PRIMARY KEY (`trace_point_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of zsl_trace_point
@@ -75,7 +75,7 @@ CREATE TABLE `zsl_trace_record` (
   `trace_from_number` int(11) DEFAULT NULL COMMENT '商品结束编码',
   `trace_stall_id` int(11) DEFAULT NULL COMMENT '关联摊位id（没有则为非农贸）',
   PRIMARY KEY (`trace_record_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of zsl_trace_record

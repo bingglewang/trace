@@ -305,63 +305,63 @@ public class MerchantExample {
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrativeDivisionIdIsNull() {
-            addCriterion("fourth_administrative_division_id is null");
+        public Criteria andAdminstrationIdIsNull() {
+            addCriterion("adminstration_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrativeDivisionIdIsNotNull() {
-            addCriterion("fourth_administrative_division_id is not null");
+        public Criteria andAdminstrationIdIsNotNull() {
+            addCriterion("adminstration_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrativeDivisionIdEqualTo(Integer value) {
-            addCriterion("fourth_administrative_division_id =", value, "fourthAdministrativeDivisionId");
+        public Criteria andAdminstrationIdEqualTo(Integer value) {
+            addCriterion("adminstration_id =", value, "adminstrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrativeDivisionIdNotEqualTo(Integer value) {
-            addCriterion("fourth_administrative_division_id <>", value, "fourthAdministrativeDivisionId");
+        public Criteria andAdminstrationIdNotEqualTo(Integer value) {
+            addCriterion("adminstration_id <>", value, "adminstrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrativeDivisionIdGreaterThan(Integer value) {
-            addCriterion("fourth_administrative_division_id >", value, "fourthAdministrativeDivisionId");
+        public Criteria andAdminstrationIdGreaterThan(Integer value) {
+            addCriterion("adminstration_id >", value, "adminstrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrativeDivisionIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("fourth_administrative_division_id >=", value, "fourthAdministrativeDivisionId");
+        public Criteria andAdminstrationIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("adminstration_id >=", value, "adminstrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrativeDivisionIdLessThan(Integer value) {
-            addCriterion("fourth_administrative_division_id <", value, "fourthAdministrativeDivisionId");
+        public Criteria andAdminstrationIdLessThan(Integer value) {
+            addCriterion("adminstration_id <", value, "adminstrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrativeDivisionIdLessThanOrEqualTo(Integer value) {
-            addCriterion("fourth_administrative_division_id <=", value, "fourthAdministrativeDivisionId");
+        public Criteria andAdminstrationIdLessThanOrEqualTo(Integer value) {
+            addCriterion("adminstration_id <=", value, "adminstrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrativeDivisionIdIn(List<Integer> values) {
-            addCriterion("fourth_administrative_division_id in", values, "fourthAdministrativeDivisionId");
+        public Criteria andAdminstrationIdIn(List<Integer> values) {
+            addCriterion("adminstration_id in", values, "adminstrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrativeDivisionIdNotIn(List<Integer> values) {
-            addCriterion("fourth_administrative_division_id not in", values, "fourthAdministrativeDivisionId");
+        public Criteria andAdminstrationIdNotIn(List<Integer> values) {
+            addCriterion("adminstration_id not in", values, "adminstrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrativeDivisionIdBetween(Integer value1, Integer value2) {
-            addCriterion("fourth_administrative_division_id between", value1, value2, "fourthAdministrativeDivisionId");
+        public Criteria andAdminstrationIdBetween(Integer value1, Integer value2) {
+            addCriterion("adminstration_id between", value1, value2, "adminstrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrativeDivisionIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("fourth_administrative_division_id not between", value1, value2, "fourthAdministrativeDivisionId");
+        public Criteria andAdminstrationIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("adminstration_id not between", value1, value2, "adminstrationId");
             return (Criteria) this;
         }
 
@@ -585,52 +585,52 @@ public class MerchantExample {
             return (Criteria) this;
         }
 
-        public Criteria andNetTypeEqualTo(Byte value) {
+        public Criteria andNetTypeEqualTo(Integer value) {
             addCriterion("net_type =", value, "netType");
             return (Criteria) this;
         }
 
-        public Criteria andNetTypeNotEqualTo(Byte value) {
+        public Criteria andNetTypeNotEqualTo(Integer value) {
             addCriterion("net_type <>", value, "netType");
             return (Criteria) this;
         }
 
-        public Criteria andNetTypeGreaterThan(Byte value) {
+        public Criteria andNetTypeGreaterThan(Integer value) {
             addCriterion("net_type >", value, "netType");
             return (Criteria) this;
         }
 
-        public Criteria andNetTypeGreaterThanOrEqualTo(Byte value) {
+        public Criteria andNetTypeGreaterThanOrEqualTo(Integer value) {
             addCriterion("net_type >=", value, "netType");
             return (Criteria) this;
         }
 
-        public Criteria andNetTypeLessThan(Byte value) {
+        public Criteria andNetTypeLessThan(Integer value) {
             addCriterion("net_type <", value, "netType");
             return (Criteria) this;
         }
 
-        public Criteria andNetTypeLessThanOrEqualTo(Byte value) {
+        public Criteria andNetTypeLessThanOrEqualTo(Integer value) {
             addCriterion("net_type <=", value, "netType");
             return (Criteria) this;
         }
 
-        public Criteria andNetTypeIn(List<Byte> values) {
+        public Criteria andNetTypeIn(List<Integer> values) {
             addCriterion("net_type in", values, "netType");
             return (Criteria) this;
         }
 
-        public Criteria andNetTypeNotIn(List<Byte> values) {
+        public Criteria andNetTypeNotIn(List<Integer> values) {
             addCriterion("net_type not in", values, "netType");
             return (Criteria) this;
         }
 
-        public Criteria andNetTypeBetween(Byte value1, Byte value2) {
+        public Criteria andNetTypeBetween(Integer value1, Integer value2) {
             addCriterion("net_type between", value1, value2, "netType");
             return (Criteria) this;
         }
 
-        public Criteria andNetTypeNotBetween(Byte value1, Byte value2) {
+        public Criteria andNetTypeNotBetween(Integer value1, Integer value2) {
             addCriterion("net_type not between", value1, value2, "netType");
             return (Criteria) this;
         }
@@ -1422,186 +1422,6 @@ public class MerchantExample {
 
         public Criteria andShortVideoUrlNotBetween(String value1, String value2) {
             addCriterion("short_video_url not between", value1, value2, "shortVideoUrl");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeFreeLimitIsNull() {
-            addCriterion("trace_code_free_limit is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeFreeLimitIsNotNull() {
-            addCriterion("trace_code_free_limit is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeFreeLimitEqualTo(Integer value) {
-            addCriterion("trace_code_free_limit =", value, "traceCodeFreeLimit");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeFreeLimitNotEqualTo(Integer value) {
-            addCriterion("trace_code_free_limit <>", value, "traceCodeFreeLimit");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeFreeLimitGreaterThan(Integer value) {
-            addCriterion("trace_code_free_limit >", value, "traceCodeFreeLimit");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeFreeLimitGreaterThanOrEqualTo(Integer value) {
-            addCriterion("trace_code_free_limit >=", value, "traceCodeFreeLimit");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeFreeLimitLessThan(Integer value) {
-            addCriterion("trace_code_free_limit <", value, "traceCodeFreeLimit");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeFreeLimitLessThanOrEqualTo(Integer value) {
-            addCriterion("trace_code_free_limit <=", value, "traceCodeFreeLimit");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeFreeLimitIn(List<Integer> values) {
-            addCriterion("trace_code_free_limit in", values, "traceCodeFreeLimit");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeFreeLimitNotIn(List<Integer> values) {
-            addCriterion("trace_code_free_limit not in", values, "traceCodeFreeLimit");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeFreeLimitBetween(Integer value1, Integer value2) {
-            addCriterion("trace_code_free_limit between", value1, value2, "traceCodeFreeLimit");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeFreeLimitNotBetween(Integer value1, Integer value2) {
-            addCriterion("trace_code_free_limit not between", value1, value2, "traceCodeFreeLimit");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeRemainingUndrawnIsNull() {
-            addCriterion("trace_code_remaining_undrawn is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeRemainingUndrawnIsNotNull() {
-            addCriterion("trace_code_remaining_undrawn is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeRemainingUndrawnEqualTo(Integer value) {
-            addCriterion("trace_code_remaining_undrawn =", value, "traceCodeRemainingUndrawn");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeRemainingUndrawnNotEqualTo(Integer value) {
-            addCriterion("trace_code_remaining_undrawn <>", value, "traceCodeRemainingUndrawn");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeRemainingUndrawnGreaterThan(Integer value) {
-            addCriterion("trace_code_remaining_undrawn >", value, "traceCodeRemainingUndrawn");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeRemainingUndrawnGreaterThanOrEqualTo(Integer value) {
-            addCriterion("trace_code_remaining_undrawn >=", value, "traceCodeRemainingUndrawn");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeRemainingUndrawnLessThan(Integer value) {
-            addCriterion("trace_code_remaining_undrawn <", value, "traceCodeRemainingUndrawn");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeRemainingUndrawnLessThanOrEqualTo(Integer value) {
-            addCriterion("trace_code_remaining_undrawn <=", value, "traceCodeRemainingUndrawn");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeRemainingUndrawnIn(List<Integer> values) {
-            addCriterion("trace_code_remaining_undrawn in", values, "traceCodeRemainingUndrawn");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeRemainingUndrawnNotIn(List<Integer> values) {
-            addCriterion("trace_code_remaining_undrawn not in", values, "traceCodeRemainingUndrawn");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeRemainingUndrawnBetween(Integer value1, Integer value2) {
-            addCriterion("trace_code_remaining_undrawn between", value1, value2, "traceCodeRemainingUndrawn");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeRemainingUndrawnNotBetween(Integer value1, Integer value2) {
-            addCriterion("trace_code_remaining_undrawn not between", value1, value2, "traceCodeRemainingUndrawn");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeApplyingUndrawnIsNull() {
-            addCriterion("trace_code_applying_undrawn is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeApplyingUndrawnIsNotNull() {
-            addCriterion("trace_code_applying_undrawn is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeApplyingUndrawnEqualTo(Integer value) {
-            addCriterion("trace_code_applying_undrawn =", value, "traceCodeApplyingUndrawn");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeApplyingUndrawnNotEqualTo(Integer value) {
-            addCriterion("trace_code_applying_undrawn <>", value, "traceCodeApplyingUndrawn");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeApplyingUndrawnGreaterThan(Integer value) {
-            addCriterion("trace_code_applying_undrawn >", value, "traceCodeApplyingUndrawn");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeApplyingUndrawnGreaterThanOrEqualTo(Integer value) {
-            addCriterion("trace_code_applying_undrawn >=", value, "traceCodeApplyingUndrawn");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeApplyingUndrawnLessThan(Integer value) {
-            addCriterion("trace_code_applying_undrawn <", value, "traceCodeApplyingUndrawn");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeApplyingUndrawnLessThanOrEqualTo(Integer value) {
-            addCriterion("trace_code_applying_undrawn <=", value, "traceCodeApplyingUndrawn");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeApplyingUndrawnIn(List<Integer> values) {
-            addCriterion("trace_code_applying_undrawn in", values, "traceCodeApplyingUndrawn");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeApplyingUndrawnNotIn(List<Integer> values) {
-            addCriterion("trace_code_applying_undrawn not in", values, "traceCodeApplyingUndrawn");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeApplyingUndrawnBetween(Integer value1, Integer value2) {
-            addCriterion("trace_code_applying_undrawn between", value1, value2, "traceCodeApplyingUndrawn");
-            return (Criteria) this;
-        }
-
-        public Criteria andTraceCodeApplyingUndrawnNotBetween(Integer value1, Integer value2) {
-            addCriterion("trace_code_applying_undrawn not between", value1, value2, "traceCodeApplyingUndrawn");
             return (Criteria) this;
         }
 

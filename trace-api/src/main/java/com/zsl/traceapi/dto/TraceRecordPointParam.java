@@ -15,4 +15,6 @@ public class TraceRecordPointParam {
     private Integer tracePointFromNumber;//追溯点结束编码
 
     private Integer traceParentId;//父节点id
+
+    private String traceCodeNumber; //追溯码批次号
 }

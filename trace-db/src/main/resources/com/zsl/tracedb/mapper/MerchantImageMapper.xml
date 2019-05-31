@@ -3,7 +3,7 @@
 <mapper namespace="com.zsl.tracedb.mapper.MerchantImageMapper">
   <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.MerchantImage">
     <id column="merchant_image_id" jdbcType="INTEGER" property="merchantImageId" />
-    <result column="merhcant_id" jdbcType="INTEGER" property="merhcantId" />
+    <result column="merchant_id" jdbcType="INTEGER" property="merchantId" />
     <result column="merchant_image_url" jdbcType="VARCHAR" property="merchantImageUrl" />
     <result column="merchant_image_index" jdbcType="INTEGER" property="merchantImageIndex" />
   </resultMap>
@@ -66,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    merchant_image_id, merhcant_id, merchant_image_url, merchant_image_index
+    merchant_image_id, merchant_id, merchant_image_url, merchant_image_index
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.MerchantImageExample" resultMap="BaseResultMap">
     select
@@ -102,9 +102,9 @@
     <selectKey keyProperty="merchantImageId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into merchant_image (merhcant_id, merchant_image_url, merchant_image_index
+    insert into merchant_image (merchant_id, merchant_image_url, merchant_image_index
       )
-    values (#{merhcantId,jdbcType=INTEGER}, #{merchantImageUrl,jdbcType=VARCHAR}, #{merchantImageIndex,jdbcType=INTEGER}
+    values (#{merchantId,jdbcType=INTEGER}, #{merchantImageUrl,jdbcType=VARCHAR}, #{merchantImageIndex,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.MerchantImage">
@@ -113,8 +113,8 @@
     </selectKey>
     insert into merchant_image
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="merhcantId != null">
-        merhcant_id,
+      <if test="merchantId != null">
+        merchant_id,
       </if>
       <if test="merchantImageUrl != null">
         merchant_image_url,
@@ -124,8 +124,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="merhcantId != null">
-        #{merhcantId,jdbcType=INTEGER},
+      <if test="merchantId != null">
+        #{merchantId,jdbcType=INTEGER},
       </if>
       <if test="merchantImageUrl != null">
         #{merchantImageUrl,jdbcType=VARCHAR},
@@ -147,8 +147,8 @@
       <if test="record.merchantImageId != null">
         merchant_image_id = #{record.merchantImageId,jdbcType=INTEGER},
       </if>
-      <if test="record.merhcantId != null">
-        merhcant_id = #{record.merhcantId,jdbcType=INTEGER},
+      <if test="record.merchantId != null">
+        merchant_id = #{record.merchantId,jdbcType=INTEGER},
       </if>
       <if test="record.merchantImageUrl != null">
         merchant_image_url = #{record.merchantImageUrl,jdbcType=VARCHAR},
@@ -164,7 +164,7 @@
   <update id="updateByExample" parameterType="map">
     update merchant_image
     set merchant_image_id = #{record.merchantImageId,jdbcType=INTEGER},
-      merhcant_id = #{record.merhcantId,jdbcType=INTEGER},
+      merchant_id = #{record.merchantId,jdbcType=INTEGER},
       merchant_image_url = #{record.merchantImageUrl,jdbcType=VARCHAR},
       merchant_image_index = #{record.merchantImageIndex,jdbcType=INTEGER}
     <if test="_parameter != null">
@@ -174,8 +174,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.MerchantImage">
     update merchant_image
     <set>
-      <if test="merhcantId != null">
-        merhcant_id = #{merhcantId,jdbcType=INTEGER},
+      <if test="merchantId != null">
+        merchant_id = #{merchantId,jdbcType=INTEGER},
       </if>
       <if test="merchantImageUrl != null">
         merchant_image_url = #{merchantImageUrl,jdbcType=VARCHAR},
@@ -188,7 +188,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.MerchantImage">
     update merchant_image
-    set merhcant_id = #{merhcantId,jdbcType=INTEGER},
+    set merchant_id = #{merchantId,jdbcType=INTEGER},
       merchant_image_url = #{merchantImageUrl,jdbcType=VARCHAR},
       merchant_image_index = #{merchantImageIndex,jdbcType=INTEGER}
     where merchant_image_id = #{merchantImageId,jdbcType=INTEGER}

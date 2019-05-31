@@ -5,11 +5,11 @@
     <id column="merchant_id" jdbcType="INTEGER" property="merchantId" />
     <result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
     <result column="merchant_account" jdbcType="VARCHAR" property="merchantAccount" />
-    <result column="fourth_administrative_division_id" jdbcType="INTEGER" property="fourthAdministrativeDivisionId" />
+    <result column="adminstration_id" jdbcType="INTEGER" property="adminstrationId" />
     <result column="administrative_division_full_site" jdbcType="VARCHAR" property="administrativeDivisionFullSite" />
     <result column="merchant_detail_site" jdbcType="VARCHAR" property="merchantDetailSite" />
     <result column="merchant_url" jdbcType="VARCHAR" property="merchantUrl" />
-    <result column="net_type" jdbcType="TINYINT" property="netType" />
+    <result column="net_type" jdbcType="INTEGER" property="netType" />
     <result column="merchant_coin" jdbcType="INTEGER" property="merchantCoin" />
     <result column="alliance_business_id" jdbcType="INTEGER" property="allianceBusinessId" />
     <result column="merchant_type" jdbcType="INTEGER" property="merchantType" />
@@ -22,9 +22,6 @@
     <result column="merchant_enter_time" jdbcType="TIMESTAMP" property="merchantEnterTime" />
     <result column="merchant_status" jdbcType="INTEGER" property="merchantStatus" />
     <result column="short_video_url" jdbcType="VARCHAR" property="shortVideoUrl" />
-    <result column="trace_code_free_limit" jdbcType="INTEGER" property="traceCodeFreeLimit" />
-    <result column="trace_code_remaining_undrawn" jdbcType="INTEGER" property="traceCodeRemainingUndrawn" />
-    <result column="trace_code_applying_undrawn" jdbcType="INTEGER" property="traceCodeApplyingUndrawn" />
     <result column="certification_to_pay" jdbcType="TINYINT" property="certificationToPay" />
     <result column="merchant_desciption" jdbcType="VARCHAR" property="merchantDesciption" />
     <result column="stall_limit" jdbcType="INTEGER" property="stallLimit" />
@@ -88,12 +85,11 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    merchant_id, merchant_name, merchant_account, fourth_administrative_division_id, 
-    administrative_division_full_site, merchant_detail_site, merchant_url, net_type, 
-    merchant_coin, alliance_business_id, merchant_type, leal_person_name, papers_url, 
-    papers_number, business_lines, merchant_contact, contact_number, merchant_enter_time, 
-    merchant_status, short_video_url, trace_code_free_limit, trace_code_remaining_undrawn, 
-    trace_code_applying_undrawn, certification_to_pay, merchant_desciption, stall_limit
+    merchant_id, merchant_name, merchant_account, adminstration_id, administrative_division_full_site, 
+    merchant_detail_site, merchant_url, net_type, merchant_coin, alliance_business_id, 
+    merchant_type, leal_person_name, papers_url, papers_number, business_lines, merchant_contact, 
+    contact_number, merchant_enter_time, merchant_status, short_video_url, certification_to_pay, 
+    merchant_desciption, stall_limit
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.MerchantExample" resultMap="BaseResultMap">
     select
@@ -129,26 +125,22 @@
     <selectKey keyProperty="merchantId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into merchant (merchant_name, merchant_account, fourth_administrative_division_id, 
+    insert into merchant (merchant_name, merchant_account, adminstration_id, 
       administrative_division_full_site, merchant_detail_site, 
       merchant_url, net_type, merchant_coin, 
       alliance_business_id, merchant_type, leal_person_name, 
       papers_url, papers_number, business_lines, 
       merchant_contact, contact_number, merchant_enter_time, 
-      merchant_status, short_video_url, trace_code_free_limit, 
-      trace_code_remaining_undrawn, trace_code_applying_undrawn, 
-      certification_to_pay, merchant_desciption, 
-      stall_limit)
-    values (#{merchantName,jdbcType=VARCHAR}, #{merchantAccount,jdbcType=VARCHAR}, #{fourthAdministrativeDivisionId,jdbcType=INTEGER}, 
+      merchant_status, short_video_url, certification_to_pay, 
+      merchant_desciption, stall_limit)
+    values (#{merchantName,jdbcType=VARCHAR}, #{merchantAccount,jdbcType=VARCHAR}, #{adminstrationId,jdbcType=INTEGER}, 
       #{administrativeDivisionFullSite,jdbcType=VARCHAR}, #{merchantDetailSite,jdbcType=VARCHAR}, 
-      #{merchantUrl,jdbcType=VARCHAR}, #{netType,jdbcType=TINYINT}, #{merchantCoin,jdbcType=INTEGER}, 
+      #{merchantUrl,jdbcType=VARCHAR}, #{netType,jdbcType=INTEGER}, #{merchantCoin,jdbcType=INTEGER}, 
       #{allianceBusinessId,jdbcType=INTEGER}, #{merchantType,jdbcType=INTEGER}, #{lealPersonName,jdbcType=VARCHAR}, 
       #{papersUrl,jdbcType=VARCHAR}, #{papersNumber,jdbcType=VARCHAR}, #{businessLines,jdbcType=VARCHAR}, 
       #{merchantContact,jdbcType=VARCHAR}, #{contactNumber,jdbcType=VARCHAR}, #{merchantEnterTime,jdbcType=TIMESTAMP}, 
-      #{merchantStatus,jdbcType=INTEGER}, #{shortVideoUrl,jdbcType=VARCHAR}, #{traceCodeFreeLimit,jdbcType=INTEGER}, 
-      #{traceCodeRemainingUndrawn,jdbcType=INTEGER}, #{traceCodeApplyingUndrawn,jdbcType=INTEGER}, 
-      #{certificationToPay,jdbcType=TINYINT}, #{merchantDesciption,jdbcType=VARCHAR}, 
-      #{stallLimit,jdbcType=INTEGER})
+      #{merchantStatus,jdbcType=INTEGER}, #{shortVideoUrl,jdbcType=VARCHAR}, #{certificationToPay,jdbcType=TINYINT}, 
+      #{merchantDesciption,jdbcType=VARCHAR}, #{stallLimit,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.Merchant">
     <selectKey keyProperty="merchantId" order="AFTER" resultType="java.lang.Integer">
@@ -162,8 +154,8 @@
       <if test="merchantAccount != null">
         merchant_account,
       </if>
-      <if test="fourthAdministrativeDivisionId != null">
-        fourth_administrative_division_id,
+      <if test="adminstrationId != null">
+        adminstration_id,
       </if>
       <if test="administrativeDivisionFullSite != null">
         administrative_division_full_site,
@@ -213,15 +205,6 @@
       <if test="shortVideoUrl != null">
         short_video_url,
       </if>
-      <if test="traceCodeFreeLimit != null">
-        trace_code_free_limit,
-      </if>
-      <if test="traceCodeRemainingUndrawn != null">
-        trace_code_remaining_undrawn,
-      </if>
-      <if test="traceCodeApplyingUndrawn != null">
-        trace_code_applying_undrawn,
-      </if>
       <if test="certificationToPay != null">
         certification_to_pay,
       </if>
@@ -239,8 +222,8 @@
       <if test="merchantAccount != null">
         #{merchantAccount,jdbcType=VARCHAR},
       </if>
-      <if test="fourthAdministrativeDivisionId != null">
-        #{fourthAdministrativeDivisionId,jdbcType=INTEGER},
+      <if test="adminstrationId != null">
+        #{adminstrationId,jdbcType=INTEGER},
       </if>
       <if test="administrativeDivisionFullSite != null">
         #{administrativeDivisionFullSite,jdbcType=VARCHAR},
@@ -252,7 +235,7 @@
         #{merchantUrl,jdbcType=VARCHAR},
       </if>
       <if test="netType != null">
-        #{netType,jdbcType=TINYINT},
+        #{netType,jdbcType=INTEGER},
       </if>
       <if test="merchantCoin != null">
         #{merchantCoin,jdbcType=INTEGER},
@@ -290,15 +273,6 @@
       <if test="shortVideoUrl != null">
         #{shortVideoUrl,jdbcType=VARCHAR},
       </if>
-      <if test="traceCodeFreeLimit != null">
-        #{traceCodeFreeLimit,jdbcType=INTEGER},
-      </if>
-      <if test="traceCodeRemainingUndrawn != null">
-        #{traceCodeRemainingUndrawn,jdbcType=INTEGER},
-      </if>
-      <if test="traceCodeApplyingUndrawn != null">
-        #{traceCodeApplyingUndrawn,jdbcType=INTEGER},
-      </if>
       <if test="certificationToPay != null">
         #{certificationToPay,jdbcType=TINYINT},
       </if>
@@ -328,8 +302,8 @@
       <if test="record.merchantAccount != null">
         merchant_account = #{record.merchantAccount,jdbcType=VARCHAR},
       </if>
-      <if test="record.fourthAdministrativeDivisionId != null">
-        fourth_administrative_division_id = #{record.fourthAdministrativeDivisionId,jdbcType=INTEGER},
+      <if test="record.adminstrationId != null">
+        adminstration_id = #{record.adminstrationId,jdbcType=INTEGER},
       </if>
       <if test="record.administrativeDivisionFullSite != null">
         administrative_division_full_site = #{record.administrativeDivisionFullSite,jdbcType=VARCHAR},
@@ -341,7 +315,7 @@
         merchant_url = #{record.merchantUrl,jdbcType=VARCHAR},
       </if>
       <if test="record.netType != null">
-        net_type = #{record.netType,jdbcType=TINYINT},
+        net_type = #{record.netType,jdbcType=INTEGER},
       </if>
       <if test="record.merchantCoin != null">
         merchant_coin = #{record.merchantCoin,jdbcType=INTEGER},
@@ -379,15 +353,6 @@
       <if test="record.shortVideoUrl != null">
         short_video_url = #{record.shortVideoUrl,jdbcType=VARCHAR},
       </if>
-      <if test="record.traceCodeFreeLimit != null">
-        trace_code_free_limit = #{record.traceCodeFreeLimit,jdbcType=INTEGER},
-      </if>
-      <if test="record.traceCodeRemainingUndrawn != null">
-        trace_code_remaining_undrawn = #{record.traceCodeRemainingUndrawn,jdbcType=INTEGER},
-      </if>
-      <if test="record.traceCodeApplyingUndrawn != null">
-        trace_code_applying_undrawn = #{record.traceCodeApplyingUndrawn,jdbcType=INTEGER},
-      </if>
       <if test="record.certificationToPay != null">
         certification_to_pay = #{record.certificationToPay,jdbcType=TINYINT},
       </if>
@@ -407,11 +372,11 @@
     set merchant_id = #{record.merchantId,jdbcType=INTEGER},
       merchant_name = #{record.merchantName,jdbcType=VARCHAR},
       merchant_account = #{record.merchantAccount,jdbcType=VARCHAR},
-      fourth_administrative_division_id = #{record.fourthAdministrativeDivisionId,jdbcType=INTEGER},
+      adminstration_id = #{record.adminstrationId,jdbcType=INTEGER},
       administrative_division_full_site = #{record.administrativeDivisionFullSite,jdbcType=VARCHAR},
       merchant_detail_site = #{record.merchantDetailSite,jdbcType=VARCHAR},
       merchant_url = #{record.merchantUrl,jdbcType=VARCHAR},
-      net_type = #{record.netType,jdbcType=TINYINT},
+      net_type = #{record.netType,jdbcType=INTEGER},
       merchant_coin = #{record.merchantCoin,jdbcType=INTEGER},
       alliance_business_id = #{record.allianceBusinessId,jdbcType=INTEGER},
       merchant_type = #{record.merchantType,jdbcType=INTEGER},
@@ -424,9 +389,6 @@
       merchant_enter_time = #{record.merchantEnterTime,jdbcType=TIMESTAMP},
       merchant_status = #{record.merchantStatus,jdbcType=INTEGER},
       short_video_url = #{record.shortVideoUrl,jdbcType=VARCHAR},
-      trace_code_free_limit = #{record.traceCodeFreeLimit,jdbcType=INTEGER},
-      trace_code_remaining_undrawn = #{record.traceCodeRemainingUndrawn,jdbcType=INTEGER},
-      trace_code_applying_undrawn = #{record.traceCodeApplyingUndrawn,jdbcType=INTEGER},
       certification_to_pay = #{record.certificationToPay,jdbcType=TINYINT},
       merchant_desciption = #{record.merchantDesciption,jdbcType=VARCHAR},
       stall_limit = #{record.stallLimit,jdbcType=INTEGER}
@@ -443,8 +405,8 @@
       <if test="merchantAccount != null">
         merchant_account = #{merchantAccount,jdbcType=VARCHAR},
       </if>
-      <if test="fourthAdministrativeDivisionId != null">
-        fourth_administrative_division_id = #{fourthAdministrativeDivisionId,jdbcType=INTEGER},
+      <if test="adminstrationId != null">
+        adminstration_id = #{adminstrationId,jdbcType=INTEGER},
       </if>
       <if test="administrativeDivisionFullSite != null">
         administrative_division_full_site = #{administrativeDivisionFullSite,jdbcType=VARCHAR},
@@ -456,7 +418,7 @@
         merchant_url = #{merchantUrl,jdbcType=VARCHAR},
       </if>
       <if test="netType != null">
-        net_type = #{netType,jdbcType=TINYINT},
+        net_type = #{netType,jdbcType=INTEGER},
       </if>
       <if test="merchantCoin != null">
         merchant_coin = #{merchantCoin,jdbcType=INTEGER},
@@ -494,15 +456,6 @@
       <if test="shortVideoUrl != null">
         short_video_url = #{shortVideoUrl,jdbcType=VARCHAR},
       </if>
-      <if test="traceCodeFreeLimit != null">
-        trace_code_free_limit = #{traceCodeFreeLimit,jdbcType=INTEGER},
-      </if>
-      <if test="traceCodeRemainingUndrawn != null">
-        trace_code_remaining_undrawn = #{traceCodeRemainingUndrawn,jdbcType=INTEGER},
-      </if>
-      <if test="traceCodeApplyingUndrawn != null">
-        trace_code_applying_undrawn = #{traceCodeApplyingUndrawn,jdbcType=INTEGER},
-      </if>
       <if test="certificationToPay != null">
         certification_to_pay = #{certificationToPay,jdbcType=TINYINT},
       </if>
@@ -519,11 +472,11 @@
     update merchant
     set merchant_name = #{merchantName,jdbcType=VARCHAR},
       merchant_account = #{merchantAccount,jdbcType=VARCHAR},
-      fourth_administrative_division_id = #{fourthAdministrativeDivisionId,jdbcType=INTEGER},
+      adminstration_id = #{adminstrationId,jdbcType=INTEGER},
       administrative_division_full_site = #{administrativeDivisionFullSite,jdbcType=VARCHAR},
       merchant_detail_site = #{merchantDetailSite,jdbcType=VARCHAR},
       merchant_url = #{merchantUrl,jdbcType=VARCHAR},
-      net_type = #{netType,jdbcType=TINYINT},
+      net_type = #{netType,jdbcType=INTEGER},
       merchant_coin = #{merchantCoin,jdbcType=INTEGER},
       alliance_business_id = #{allianceBusinessId,jdbcType=INTEGER},
       merchant_type = #{merchantType,jdbcType=INTEGER},
@@ -536,9 +489,6 @@
       merchant_enter_time = #{merchantEnterTime,jdbcType=TIMESTAMP},
       merchant_status = #{merchantStatus,jdbcType=INTEGER},
       short_video_url = #{shortVideoUrl,jdbcType=VARCHAR},
-      trace_code_free_limit = #{traceCodeFreeLimit,jdbcType=INTEGER},
-      trace_code_remaining_undrawn = #{traceCodeRemainingUndrawn,jdbcType=INTEGER},
-      trace_code_applying_undrawn = #{traceCodeApplyingUndrawn,jdbcType=INTEGER},
       certification_to_pay = #{certificationToPay,jdbcType=TINYINT},
       merchant_desciption = #{merchantDesciption,jdbcType=VARCHAR},
       stall_limit = #{stallLimit,jdbcType=INTEGER}

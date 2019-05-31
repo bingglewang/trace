@@ -6,7 +6,7 @@ import java.io.Serializable;
 public class MerchantImage implements Serializable {
     private Integer merchantImageId;
 
-    private Integer merhcantId;
+    private Integer merchantId;
 
     @ApiModelProperty(value = "商户图片地址")
     private String merchantImageUrl;
@@ -24,12 +24,12 @@ public class MerchantImage implements Serializable {
         this.merchantImageId = merchantImageId;
     }
 
-    public Integer getMerhcantId() {
-        return merhcantId;
+    public Integer getMerchantId() {
+        return merchantId;
     }
 
-    public void setMerhcantId(Integer merhcantId) {
-        this.merhcantId = merhcantId;
+    public void setMerchantId(Integer merchantId) {
+        this.merchantId = merchantId;
     }
 
     public String getMerchantImageUrl() {
@@ -55,7 +55,7 @@ public class MerchantImage implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", merchantImageId=").append(merchantImageId);
-        sb.append(", merhcantId=").append(merhcantId);
+        sb.append(", merchantId=").append(merchantId);
         sb.append(", merchantImageUrl=").append(merchantImageUrl);
         sb.append(", merchantImageIndex=").append(merchantImageIndex);
         sb.append(", serialVersionUID=").append(serialVersionUID);

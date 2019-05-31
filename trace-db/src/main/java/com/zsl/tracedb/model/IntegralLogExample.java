@@ -165,133 +165,123 @@ public class IntegralLogExample {
             return (Criteria) this;
         }
 
-        public Criteria andOperationTypeIsNull() {
-            addCriterion("operation_type is null");
+        public Criteria andMerchantIdIsNull() {
+            addCriterion("merchant_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andOperationTypeIsNotNull() {
-            addCriterion("operation_type is not null");
+        public Criteria andMerchantIdIsNotNull() {
+            addCriterion("merchant_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andOperationTypeEqualTo(Integer value) {
-            addCriterion("operation_type =", value, "operationType");
+        public Criteria andMerchantIdEqualTo(Integer value) {
+            addCriterion("merchant_id =", value, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andOperationTypeNotEqualTo(Integer value) {
-            addCriterion("operation_type <>", value, "operationType");
+        public Criteria andMerchantIdNotEqualTo(Integer value) {
+            addCriterion("merchant_id <>", value, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andOperationTypeGreaterThan(Integer value) {
-            addCriterion("operation_type >", value, "operationType");
+        public Criteria andMerchantIdGreaterThan(Integer value) {
+            addCriterion("merchant_id >", value, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andOperationTypeGreaterThanOrEqualTo(Integer value) {
-            addCriterion("operation_type >=", value, "operationType");
+        public Criteria andMerchantIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("merchant_id >=", value, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andOperationTypeLessThan(Integer value) {
-            addCriterion("operation_type <", value, "operationType");
+        public Criteria andMerchantIdLessThan(Integer value) {
+            addCriterion("merchant_id <", value, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andOperationTypeLessThanOrEqualTo(Integer value) {
-            addCriterion("operation_type <=", value, "operationType");
+        public Criteria andMerchantIdLessThanOrEqualTo(Integer value) {
+            addCriterion("merchant_id <=", value, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andOperationTypeIn(List<Integer> values) {
-            addCriterion("operation_type in", values, "operationType");
+        public Criteria andMerchantIdIn(List<Integer> values) {
+            addCriterion("merchant_id in", values, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andOperationTypeNotIn(List<Integer> values) {
-            addCriterion("operation_type not in", values, "operationType");
+        public Criteria andMerchantIdNotIn(List<Integer> values) {
+            addCriterion("merchant_id not in", values, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andOperationTypeBetween(Integer value1, Integer value2) {
-            addCriterion("operation_type between", value1, value2, "operationType");
+        public Criteria andMerchantIdBetween(Integer value1, Integer value2) {
+            addCriterion("merchant_id between", value1, value2, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andOperationTypeNotBetween(Integer value1, Integer value2) {
-            addCriterion("operation_type not between", value1, value2, "operationType");
+        public Criteria andMerchantIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("merchant_id not between", value1, value2, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andFunctionIsNull() {
-            addCriterion("function is null");
+        public Criteria andFunctionTypeIsNull() {
+            addCriterion("function_type is null");
             return (Criteria) this;
         }
 
-        public Criteria andFunctionIsNotNull() {
-            addCriterion("function is not null");
+        public Criteria andFunctionTypeIsNotNull() {
+            addCriterion("function_type is not null");
             return (Criteria) this;
         }
 
-        public Criteria andFunctionEqualTo(String value) {
-            addCriterion("function =", value, "function");
+        public Criteria andFunctionTypeEqualTo(Integer value) {
+            addCriterion("function_type =", value, "functionType");
             return (Criteria) this;
         }
 
-        public Criteria andFunctionNotEqualTo(String value) {
-            addCriterion("function <>", value, "function");
+        public Criteria andFunctionTypeNotEqualTo(Integer value) {
+            addCriterion("function_type <>", value, "functionType");
             return (Criteria) this;
         }
 
-        public Criteria andFunctionGreaterThan(String value) {
-            addCriterion("function >", value, "function");
+        public Criteria andFunctionTypeGreaterThan(Integer value) {
+            addCriterion("function_type >", value, "functionType");
             return (Criteria) this;
         }
 
-        public Criteria andFunctionGreaterThanOrEqualTo(String value) {
-            addCriterion("function >=", value, "function");
+        public Criteria andFunctionTypeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("function_type >=", value, "functionType");
             return (Criteria) this;
         }
 
-        public Criteria andFunctionLessThan(String value) {
-            addCriterion("function <", value, "function");
+        public Criteria andFunctionTypeLessThan(Integer value) {
+            addCriterion("function_type <", value, "functionType");
             return (Criteria) this;
         }
 
-        public Criteria andFunctionLessThanOrEqualTo(String value) {
-            addCriterion("function <=", value, "function");
+        public Criteria andFunctionTypeLessThanOrEqualTo(Integer value) {
+            addCriterion("function_type <=", value, "functionType");
             return (Criteria) this;
         }
 
-        public Criteria andFunctionLike(String value) {
-            addCriterion("function like", value, "function");
+        public Criteria andFunctionTypeIn(List<Integer> values) {
+            addCriterion("function_type in", values, "functionType");
             return (Criteria) this;
         }
 
-        public Criteria andFunctionNotLike(String value) {
-            addCriterion("function not like", value, "function");
+        public Criteria andFunctionTypeNotIn(List<Integer> values) {
+            addCriterion("function_type not in", values, "functionType");
             return (Criteria) this;
         }
 
-        public Criteria andFunctionIn(List<String> values) {
-            addCriterion("function in", values, "function");
+        public Criteria andFunctionTypeBetween(Integer value1, Integer value2) {
+            addCriterion("function_type between", value1, value2, "functionType");
             return (Criteria) this;
         }
 
-        public Criteria andFunctionNotIn(List<String> values) {
-            addCriterion("function not in", values, "function");
-            return (Criteria) this;
-        }
-
-        public Criteria andFunctionBetween(String value1, String value2) {
-            addCriterion("function between", value1, value2, "function");
-            return (Criteria) this;
-        }
-
-        public Criteria andFunctionNotBetween(String value1, String value2) {
-            addCriterion("function not between", value1, value2, "function");
+        public Criteria andFunctionTypeNotBetween(Integer value1, Integer value2) {
+            addCriterion("function_type not between", value1, value2, "functionType");
             return (Criteria) this;
         }
 
@@ -355,123 +345,243 @@ public class IntegralLogExample {
             return (Criteria) this;
         }
 
-        public Criteria andOperationIntegralIsNull() {
-            addCriterion("operation_integral is null");
+        public Criteria andDeductIntegralIsNull() {
+            addCriterion("deduct_integral is null");
             return (Criteria) this;
         }
 
-        public Criteria andOperationIntegralIsNotNull() {
-            addCriterion("operation_integral is not null");
+        public Criteria andDeductIntegralIsNotNull() {
+            addCriterion("deduct_integral is not null");
             return (Criteria) this;
         }
 
-        public Criteria andOperationIntegralEqualTo(Integer value) {
-            addCriterion("operation_integral =", value, "operationIntegral");
+        public Criteria andDeductIntegralEqualTo(Integer value) {
+            addCriterion("deduct_integral =", value, "deductIntegral");
             return (Criteria) this;
         }
 
-        public Criteria andOperationIntegralNotEqualTo(Integer value) {
-            addCriterion("operation_integral <>", value, "operationIntegral");
+        public Criteria andDeductIntegralNotEqualTo(Integer value) {
+            addCriterion("deduct_integral <>", value, "deductIntegral");
             return (Criteria) this;
         }
 
-        public Criteria andOperationIntegralGreaterThan(Integer value) {
-            addCriterion("operation_integral >", value, "operationIntegral");
+        public Criteria andDeductIntegralGreaterThan(Integer value) {
+            addCriterion("deduct_integral >", value, "deductIntegral");
             return (Criteria) this;
         }
 
-        public Criteria andOperationIntegralGreaterThanOrEqualTo(Integer value) {
-            addCriterion("operation_integral >=", value, "operationIntegral");
+        public Criteria andDeductIntegralGreaterThanOrEqualTo(Integer value) {
+            addCriterion("deduct_integral >=", value, "deductIntegral");
             return (Criteria) this;
         }
 
-        public Criteria andOperationIntegralLessThan(Integer value) {
-            addCriterion("operation_integral <", value, "operationIntegral");
+        public Criteria andDeductIntegralLessThan(Integer value) {
+            addCriterion("deduct_integral <", value, "deductIntegral");
             return (Criteria) this;
         }
 
-        public Criteria andOperationIntegralLessThanOrEqualTo(Integer value) {
-            addCriterion("operation_integral <=", value, "operationIntegral");
+        public Criteria andDeductIntegralLessThanOrEqualTo(Integer value) {
+            addCriterion("deduct_integral <=", value, "deductIntegral");
             return (Criteria) this;
         }
 
-        public Criteria andOperationIntegralIn(List<Integer> values) {
-            addCriterion("operation_integral in", values, "operationIntegral");
+        public Criteria andDeductIntegralIn(List<Integer> values) {
+            addCriterion("deduct_integral in", values, "deductIntegral");
             return (Criteria) this;
         }
 
-        public Criteria andOperationIntegralNotIn(List<Integer> values) {
-            addCriterion("operation_integral not in", values, "operationIntegral");
+        public Criteria andDeductIntegralNotIn(List<Integer> values) {
+            addCriterion("deduct_integral not in", values, "deductIntegral");
             return (Criteria) this;
         }
 
-        public Criteria andOperationIntegralBetween(Integer value1, Integer value2) {
-            addCriterion("operation_integral between", value1, value2, "operationIntegral");
+        public Criteria andDeductIntegralBetween(Integer value1, Integer value2) {
+            addCriterion("deduct_integral between", value1, value2, "deductIntegral");
             return (Criteria) this;
         }
 
-        public Criteria andOperationIntegralNotBetween(Integer value1, Integer value2) {
-            addCriterion("operation_integral not between", value1, value2, "operationIntegral");
+        public Criteria andDeductIntegralNotBetween(Integer value1, Integer value2) {
+            addCriterion("deduct_integral not between", value1, value2, "deductIntegral");
             return (Criteria) this;
         }
 
-        public Criteria andTotalIntegralIsNull() {
-            addCriterion("total_integral is null");
+        public Criteria andSurplusIntegralIsNull() {
+            addCriterion("surplus_integral is null");
             return (Criteria) this;
         }
 
-        public Criteria andTotalIntegralIsNotNull() {
-            addCriterion("total_integral is not null");
+        public Criteria andSurplusIntegralIsNotNull() {
+            addCriterion("surplus_integral is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTotalIntegralEqualTo(Integer value) {
-            addCriterion("total_integral =", value, "totalIntegral");
+        public Criteria andSurplusIntegralEqualTo(Integer value) {
+            addCriterion("surplus_integral =", value, "surplusIntegral");
             return (Criteria) this;
         }
 
-        public Criteria andTotalIntegralNotEqualTo(Integer value) {
-            addCriterion("total_integral <>", value, "totalIntegral");
+        public Criteria andSurplusIntegralNotEqualTo(Integer value) {
+            addCriterion("surplus_integral <>", value, "surplusIntegral");
             return (Criteria) this;
         }
 
-        public Criteria andTotalIntegralGreaterThan(Integer value) {
-            addCriterion("total_integral >", value, "totalIntegral");
+        public Criteria andSurplusIntegralGreaterThan(Integer value) {
+            addCriterion("surplus_integral >", value, "surplusIntegral");
             return (Criteria) this;
         }
 
-        public Criteria andTotalIntegralGreaterThanOrEqualTo(Integer value) {
-            addCriterion("total_integral >=", value, "totalIntegral");
+        public Criteria andSurplusIntegralGreaterThanOrEqualTo(Integer value) {
+            addCriterion("surplus_integral >=", value, "surplusIntegral");
             return (Criteria) this;
         }
 
-        public Criteria andTotalIntegralLessThan(Integer value) {
-            addCriterion("total_integral <", value, "totalIntegral");
+        public Criteria andSurplusIntegralLessThan(Integer value) {
+            addCriterion("surplus_integral <", value, "surplusIntegral");
             return (Criteria) this;
         }
 
-        public Criteria andTotalIntegralLessThanOrEqualTo(Integer value) {
-            addCriterion("total_integral <=", value, "totalIntegral");
+        public Criteria andSurplusIntegralLessThanOrEqualTo(Integer value) {
+            addCriterion("surplus_integral <=", value, "surplusIntegral");
             return (Criteria) this;
         }
 
-        public Criteria andTotalIntegralIn(List<Integer> values) {
-            addCriterion("total_integral in", values, "totalIntegral");
+        public Criteria andSurplusIntegralIn(List<Integer> values) {
+            addCriterion("surplus_integral in", values, "surplusIntegral");
             return (Criteria) this;
         }
 
-        public Criteria andTotalIntegralNotIn(List<Integer> values) {
-            addCriterion("total_integral not in", values, "totalIntegral");
+        public Criteria andSurplusIntegralNotIn(List<Integer> values) {
+            addCriterion("surplus_integral not in", values, "surplusIntegral");
             return (Criteria) this;
         }
 
-        public Criteria andTotalIntegralBetween(Integer value1, Integer value2) {
-            addCriterion("total_integral between", value1, value2, "totalIntegral");
+        public Criteria andSurplusIntegralBetween(Integer value1, Integer value2) {
+            addCriterion("surplus_integral between", value1, value2, "surplusIntegral");
             return (Criteria) this;
         }
 
-        public Criteria andTotalIntegralNotBetween(Integer value1, Integer value2) {
-            addCriterion("total_integral not between", value1, value2, "totalIntegral");
+        public Criteria andSurplusIntegralNotBetween(Integer value1, Integer value2) {
+            addCriterion("surplus_integral not between", value1, value2, "surplusIntegral");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeductTimeIsNull() {
+            addCriterion("deduct_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeductTimeIsNotNull() {
+            addCriterion("deduct_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeductTimeEqualTo(Date value) {
+            addCriterion("deduct_time =", value, "deductTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeductTimeNotEqualTo(Date value) {
+            addCriterion("deduct_time <>", value, "deductTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeductTimeGreaterThan(Date value) {
+            addCriterion("deduct_time >", value, "deductTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeductTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("deduct_time >=", value, "deductTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeductTimeLessThan(Date value) {
+            addCriterion("deduct_time <", value, "deductTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeductTimeLessThanOrEqualTo(Date value) {
+            addCriterion("deduct_time <=", value, "deductTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeductTimeIn(List<Date> values) {
+            addCriterion("deduct_time in", values, "deductTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeductTimeNotIn(List<Date> values) {
+            addCriterion("deduct_time not in", values, "deductTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeductTimeBetween(Date value1, Date value2) {
+            addCriterion("deduct_time between", value1, value2, "deductTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeductTimeNotBetween(Date value1, Date value2) {
+            addCriterion("deduct_time not between", value1, value2, "deductTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeductStatusIsNull() {
+            addCriterion("deduct_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeductStatusIsNotNull() {
+            addCriterion("deduct_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeductStatusEqualTo(Integer value) {
+            addCriterion("deduct_status =", value, "deductStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeductStatusNotEqualTo(Integer value) {
+            addCriterion("deduct_status <>", value, "deductStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeductStatusGreaterThan(Integer value) {
+            addCriterion("deduct_status >", value, "deductStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeductStatusGreaterThanOrEqualTo(Integer value) {
+            addCriterion("deduct_status >=", value, "deductStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeductStatusLessThan(Integer value) {
+            addCriterion("deduct_status <", value, "deductStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeductStatusLessThanOrEqualTo(Integer value) {
+            addCriterion("deduct_status <=", value, "deductStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeductStatusIn(List<Integer> values) {
+            addCriterion("deduct_status in", values, "deductStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeductStatusNotIn(List<Integer> values) {
+            addCriterion("deduct_status not in", values, "deductStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeductStatusBetween(Integer value1, Integer value2) {
+            addCriterion("deduct_status between", value1, value2, "deductStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeductStatusNotBetween(Integer value1, Integer value2) {
+            addCriterion("deduct_status not between", value1, value2, "deductStatus");
             return (Criteria) this;
         }
 

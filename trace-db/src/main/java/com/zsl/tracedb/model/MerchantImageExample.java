@@ -164,63 +164,63 @@ public class MerchantImageExample {
             return (Criteria) this;
         }
 
-        public Criteria andMerhcantIdIsNull() {
-            addCriterion("merhcant_id is null");
+        public Criteria andMerchantIdIsNull() {
+            addCriterion("merchant_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andMerhcantIdIsNotNull() {
-            addCriterion("merhcant_id is not null");
+        public Criteria andMerchantIdIsNotNull() {
+            addCriterion("merchant_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andMerhcantIdEqualTo(Integer value) {
-            addCriterion("merhcant_id =", value, "merhcantId");
+        public Criteria andMerchantIdEqualTo(Integer value) {
+            addCriterion("merchant_id =", value, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andMerhcantIdNotEqualTo(Integer value) {
-            addCriterion("merhcant_id <>", value, "merhcantId");
+        public Criteria andMerchantIdNotEqualTo(Integer value) {
+            addCriterion("merchant_id <>", value, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andMerhcantIdGreaterThan(Integer value) {
-            addCriterion("merhcant_id >", value, "merhcantId");
+        public Criteria andMerchantIdGreaterThan(Integer value) {
+            addCriterion("merchant_id >", value, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andMerhcantIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("merhcant_id >=", value, "merhcantId");
+        public Criteria andMerchantIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("merchant_id >=", value, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andMerhcantIdLessThan(Integer value) {
-            addCriterion("merhcant_id <", value, "merhcantId");
+        public Criteria andMerchantIdLessThan(Integer value) {
+            addCriterion("merchant_id <", value, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andMerhcantIdLessThanOrEqualTo(Integer value) {
-            addCriterion("merhcant_id <=", value, "merhcantId");
+        public Criteria andMerchantIdLessThanOrEqualTo(Integer value) {
+            addCriterion("merchant_id <=", value, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andMerhcantIdIn(List<Integer> values) {
-            addCriterion("merhcant_id in", values, "merhcantId");
+        public Criteria andMerchantIdIn(List<Integer> values) {
+            addCriterion("merchant_id in", values, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andMerhcantIdNotIn(List<Integer> values) {
-            addCriterion("merhcant_id not in", values, "merhcantId");
+        public Criteria andMerchantIdNotIn(List<Integer> values) {
+            addCriterion("merchant_id not in", values, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andMerhcantIdBetween(Integer value1, Integer value2) {
-            addCriterion("merhcant_id between", value1, value2, "merhcantId");
+        public Criteria andMerchantIdBetween(Integer value1, Integer value2) {
+            addCriterion("merchant_id between", value1, value2, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andMerhcantIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("merhcant_id not between", value1, value2, "merhcantId");
+        public Criteria andMerchantIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("merchant_id not between", value1, value2, "merchantId");
             return (Criteria) this;
         }
 

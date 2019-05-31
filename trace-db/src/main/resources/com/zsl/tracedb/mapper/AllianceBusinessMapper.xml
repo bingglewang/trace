@@ -8,8 +8,6 @@
     <result column="company_description" jdbcType="VARCHAR" property="companyDescription" />
     <result column="alliance_business_enter_time" jdbcType="TIMESTAMP" property="allianceBusinessEnterTime" />
     <result column="alliance_business_status" jdbcType="TINYINT" property="allianceBusinessStatus" />
-    <result column="third_administrative_division_id" jdbcType="INTEGER" property="thirdAdministrativeDivisionId" />
-    <result column="alliance_business_full_site" jdbcType="VARCHAR" property="allianceBusinessFullSite" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -71,8 +69,7 @@
   </sql>
   <sql id="Base_Column_List">
     alliance_business_id, alliance_business_name, business_license_url, company_description, 
-    alliance_business_enter_time, alliance_business_status, third_administrative_division_id, 
-    alliance_business_full_site
+    alliance_business_enter_time, alliance_business_status
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.AllianceBusinessExample" resultMap="BaseResultMap">
     select
@@ -110,12 +107,10 @@
     </selectKey>
     insert into alliance_business (alliance_business_name, business_license_url, 
       company_description, alliance_business_enter_time, 
-      alliance_business_status, third_administrative_division_id, 
-      alliance_business_full_site)
+      alliance_business_status)
     values (#{allianceBusinessName,jdbcType=VARCHAR}, #{businessLicenseUrl,jdbcType=VARCHAR}, 
       #{companyDescription,jdbcType=VARCHAR}, #{allianceBusinessEnterTime,jdbcType=TIMESTAMP}, 
-      #{allianceBusinessStatus,jdbcType=TINYINT}, #{thirdAdministrativeDivisionId,jdbcType=INTEGER}, 
-      #{allianceBusinessFullSite,jdbcType=VARCHAR})
+      #{allianceBusinessStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.AllianceBusiness">
     <selectKey keyProperty="allianceBusinessId" order="AFTER" resultType="java.lang.Integer">
@@ -138,12 +133,6 @@
       <if test="allianceBusinessStatus != null">
         alliance_business_status,
       </if>
-      <if test="thirdAdministrativeDivisionId != null">
-        third_administrative_division_id,
-      </if>
-      <if test="allianceBusinessFullSite != null">
-        alliance_business_full_site,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="allianceBusinessName != null">
@@ -160,12 +149,6 @@
       </if>
       <if test="allianceBusinessStatus != null">
         #{allianceBusinessStatus,jdbcType=TINYINT},
-      </if>
-      <if test="thirdAdministrativeDivisionId != null">
-        #{thirdAdministrativeDivisionId,jdbcType=INTEGER},
-      </if>
-      <if test="allianceBusinessFullSite != null">
-        #{allianceBusinessFullSite,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -196,12 +179,6 @@
       <if test="record.allianceBusinessStatus != null">
         alliance_business_status = #{record.allianceBusinessStatus,jdbcType=TINYINT},
       </if>
-      <if test="record.thirdAdministrativeDivisionId != null">
-        third_administrative_division_id = #{record.thirdAdministrativeDivisionId,jdbcType=INTEGER},
-      </if>
-      <if test="record.allianceBusinessFullSite != null">
-        alliance_business_full_site = #{record.allianceBusinessFullSite,jdbcType=VARCHAR},
-      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -214,9 +191,7 @@
       business_license_url = #{record.businessLicenseUrl,jdbcType=VARCHAR},
       company_description = #{record.companyDescription,jdbcType=VARCHAR},
       alliance_business_enter_time = #{record.allianceBusinessEnterTime,jdbcType=TIMESTAMP},
-      alliance_business_status = #{record.allianceBusinessStatus,jdbcType=TINYINT},
-      third_administrative_division_id = #{record.thirdAdministrativeDivisionId,jdbcType=INTEGER},
-      alliance_business_full_site = #{record.allianceBusinessFullSite,jdbcType=VARCHAR}
+      alliance_business_status = #{record.allianceBusinessStatus,jdbcType=TINYINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -239,12 +214,6 @@
       <if test="allianceBusinessStatus != null">
         alliance_business_status = #{allianceBusinessStatus,jdbcType=TINYINT},
       </if>
-      <if test="thirdAdministrativeDivisionId != null">
-        third_administrative_division_id = #{thirdAdministrativeDivisionId,jdbcType=INTEGER},
-      </if>
-      <if test="allianceBusinessFullSite != null">
-        alliance_business_full_site = #{allianceBusinessFullSite,jdbcType=VARCHAR},
-      </if>
     </set>
     where alliance_business_id = #{allianceBusinessId,jdbcType=INTEGER}
   </update>
@@ -254,9 +223,7 @@
       business_license_url = #{businessLicenseUrl,jdbcType=VARCHAR},
       company_description = #{companyDescription,jdbcType=VARCHAR},
       alliance_business_enter_time = #{allianceBusinessEnterTime,jdbcType=TIMESTAMP},
-      alliance_business_status = #{allianceBusinessStatus,jdbcType=TINYINT},
-      third_administrative_division_id = #{thirdAdministrativeDivisionId,jdbcType=INTEGER},
-      alliance_business_full_site = #{allianceBusinessFullSite,jdbcType=VARCHAR}
+      alliance_business_status = #{allianceBusinessStatus,jdbcType=TINYINT}
     where alliance_business_id = #{allianceBusinessId,jdbcType=INTEGER}
   </update>
 </mapper>

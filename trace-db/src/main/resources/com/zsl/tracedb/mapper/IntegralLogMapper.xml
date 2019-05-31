@@ -3,11 +3,13 @@
 <mapper namespace="com.zsl.tracedb.mapper.IntegralLogMapper">
   <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.IntegralLog">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="operation_type" jdbcType="INTEGER" property="operationType" />
-    <result column="function" jdbcType="VARCHAR" property="function" />
+    <result column="merchant_id" jdbcType="INTEGER" property="merchantId" />
+    <result column="function_type" jdbcType="INTEGER" property="functionType" />
     <result column="function_id" jdbcType="INTEGER" property="functionId" />
-    <result column="operation_integral" jdbcType="INTEGER" property="operationIntegral" />
-    <result column="total_integral" jdbcType="INTEGER" property="totalIntegral" />
+    <result column="deduct_integral" jdbcType="INTEGER" property="deductIntegral" />
+    <result column="surplus_integral" jdbcType="INTEGER" property="surplusIntegral" />
+    <result column="deduct_time" jdbcType="TIMESTAMP" property="deductTime" />
+    <result column="deduct_status" jdbcType="INTEGER" property="deductStatus" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -69,7 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, operation_type, function, function_id, operation_integral, total_integral, create_time
+    id, merchant_id, function_type, function_id, deduct_integral, surplus_integral, deduct_time, 
+    deduct_status, create_time
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.IntegralLogExample" resultMap="BaseResultMap">
     select
@@ -105,12 +108,12 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into integral_log (operation_type, function, function_id, 
-      operation_integral, total_integral, create_time
-      )
-    values (#{operationType,jdbcType=INTEGER}, #{function,jdbcType=VARCHAR}, #{functionId,jdbcType=INTEGER}, 
-      #{operationIntegral,jdbcType=INTEGER}, #{totalIntegral,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
-      )
+    insert into integral_log (merchant_id, function_type, function_id, 
+      deduct_integral, surplus_integral, deduct_time, 
+      deduct_status, create_time)
+    values (#{merchantId,jdbcType=INTEGER}, #{functionType,jdbcType=INTEGER}, #{functionId,jdbcType=INTEGER}, 
+      #{deductIntegral,jdbcType=INTEGER}, #{surplusIntegral,jdbcType=INTEGER}, #{deductTime,jdbcType=TIMESTAMP}, 
+      #{deductStatus,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.IntegralLog">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -118,40 +121,52 @@
     </selectKey>
     insert into integral_log
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="operationType != null">
-        operation_type,
+      <if test="merchantId != null">
+        merchant_id,
       </if>
-      <if test="function != null">
-        function,
+      <if test="functionType != null">
+        function_type,
       </if>
       <if test="functionId != null">
         function_id,
       </if>
-      <if test="operationIntegral != null">
-        operation_integral,
+      <if test="deductIntegral != null">
+        deduct_integral,
       </if>
-      <if test="totalIntegral != null">
-        total_integral,
+      <if test="surplusIntegral != null">
+        surplus_integral,
+      </if>
+      <if test="deductTime != null">
+        deduct_time,
+      </if>
+      <if test="deductStatus != null">
+        deduct_status,
       </if>
       <if test="createTime != null">
         create_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="operationType != null">
-        #{operationType,jdbcType=INTEGER},
+      <if test="merchantId != null">
+        #{merchantId,jdbcType=INTEGER},
       </if>
-      <if test="function != null">
-        #{function,jdbcType=VARCHAR},
+      <if test="functionType != null">
+        #{functionType,jdbcType=INTEGER},
       </if>
       <if test="functionId != null">
         #{functionId,jdbcType=INTEGER},
       </if>
-      <if test="operationIntegral != null">
-        #{operationIntegral,jdbcType=INTEGER},
+      <if test="deductIntegral != null">
+        #{deductIntegral,jdbcType=INTEGER},
       </if>
-      <if test="totalIntegral != null">
-        #{totalIntegral,jdbcType=INTEGER},
+      <if test="surplusIntegral != null">
+        #{surplusIntegral,jdbcType=INTEGER},
+      </if>
+      <if test="deductTime != null">
+        #{deductTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deductStatus != null">
+        #{deductStatus,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -170,20 +185,26 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.operationType != null">
-        operation_type = #{record.operationType,jdbcType=INTEGER},
+      <if test="record.merchantId != null">
+        merchant_id = #{record.merchantId,jdbcType=INTEGER},
       </if>
-      <if test="record.function != null">
-        function = #{record.function,jdbcType=VARCHAR},
+      <if test="record.functionType != null">
+        function_type = #{record.functionType,jdbcType=INTEGER},
       </if>
       <if test="record.functionId != null">
         function_id = #{record.functionId,jdbcType=INTEGER},
       </if>
-      <if test="record.operationIntegral != null">
-        operation_integral = #{record.operationIntegral,jdbcType=INTEGER},
+      <if test="record.deductIntegral != null">
+        deduct_integral = #{record.deductIntegral,jdbcType=INTEGER},
       </if>
-      <if test="record.totalIntegral != null">
-        total_integral = #{record.totalIntegral,jdbcType=INTEGER},
+      <if test="record.surplusIntegral != null">
+        surplus_integral = #{record.surplusIntegral,jdbcType=INTEGER},
+      </if>
+      <if test="record.deductTime != null">
+        deduct_time = #{record.deductTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.deductStatus != null">
+        deduct_status = #{record.deductStatus,jdbcType=INTEGER},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -196,11 +217,13 @@
   <update id="updateByExample" parameterType="map">
     update integral_log
     set id = #{record.id,jdbcType=INTEGER},
-      operation_type = #{record.operationType,jdbcType=INTEGER},
-      function = #{record.function,jdbcType=VARCHAR},
+      merchant_id = #{record.merchantId,jdbcType=INTEGER},
+      function_type = #{record.functionType,jdbcType=INTEGER},
       function_id = #{record.functionId,jdbcType=INTEGER},
-      operation_integral = #{record.operationIntegral,jdbcType=INTEGER},
-      total_integral = #{record.totalIntegral,jdbcType=INTEGER},
+      deduct_integral = #{record.deductIntegral,jdbcType=INTEGER},
+      surplus_integral = #{record.surplusIntegral,jdbcType=INTEGER},
+      deduct_time = #{record.deductTime,jdbcType=TIMESTAMP},
+      deduct_status = #{record.deductStatus,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -209,20 +232,26 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.IntegralLog">
     update integral_log
     <set>
-      <if test="operationType != null">
-        operation_type = #{operationType,jdbcType=INTEGER},
+      <if test="merchantId != null">
+        merchant_id = #{merchantId,jdbcType=INTEGER},
       </if>
-      <if test="function != null">
-        function = #{function,jdbcType=VARCHAR},
+      <if test="functionType != null">
+        function_type = #{functionType,jdbcType=INTEGER},
       </if>
       <if test="functionId != null">
         function_id = #{functionId,jdbcType=INTEGER},
       </if>
-      <if test="operationIntegral != null">
-        operation_integral = #{operationIntegral,jdbcType=INTEGER},
+      <if test="deductIntegral != null">
+        deduct_integral = #{deductIntegral,jdbcType=INTEGER},
       </if>
-      <if test="totalIntegral != null">
-        total_integral = #{totalIntegral,jdbcType=INTEGER},
+      <if test="surplusIntegral != null">
+        surplus_integral = #{surplusIntegral,jdbcType=INTEGER},
+      </if>
+      <if test="deductTime != null">
+        deduct_time = #{deductTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deductStatus != null">
+        deduct_status = #{deductStatus,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -232,11 +261,13 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.IntegralLog">
     update integral_log
-    set operation_type = #{operationType,jdbcType=INTEGER},
-      function = #{function,jdbcType=VARCHAR},
+    set merchant_id = #{merchantId,jdbcType=INTEGER},
+      function_type = #{functionType,jdbcType=INTEGER},
       function_id = #{functionId,jdbcType=INTEGER},
-      operation_integral = #{operationIntegral,jdbcType=INTEGER},
-      total_integral = #{totalIntegral,jdbcType=INTEGER},
+      deduct_integral = #{deductIntegral,jdbcType=INTEGER},
+      surplus_integral = #{surplusIntegral,jdbcType=INTEGER},
+      deduct_time = #{deductTime,jdbcType=TIMESTAMP},
+      deduct_status = #{deductStatus,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>

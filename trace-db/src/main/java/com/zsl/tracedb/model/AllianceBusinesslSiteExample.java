@@ -224,63 +224,63 @@ public class AllianceBusinesslSiteExample {
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrationIdIsNull() {
-            addCriterion("fourth_administration_id is null");
+        public Criteria andAdministrationIdIsNull() {
+            addCriterion("administration_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrationIdIsNotNull() {
-            addCriterion("fourth_administration_id is not null");
+        public Criteria andAdministrationIdIsNotNull() {
+            addCriterion("administration_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrationIdEqualTo(Integer value) {
-            addCriterion("fourth_administration_id =", value, "fourthAdministrationId");
+        public Criteria andAdministrationIdEqualTo(Integer value) {
+            addCriterion("administration_id =", value, "administrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrationIdNotEqualTo(Integer value) {
-            addCriterion("fourth_administration_id <>", value, "fourthAdministrationId");
+        public Criteria andAdministrationIdNotEqualTo(Integer value) {
+            addCriterion("administration_id <>", value, "administrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrationIdGreaterThan(Integer value) {
-            addCriterion("fourth_administration_id >", value, "fourthAdministrationId");
+        public Criteria andAdministrationIdGreaterThan(Integer value) {
+            addCriterion("administration_id >", value, "administrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrationIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("fourth_administration_id >=", value, "fourthAdministrationId");
+        public Criteria andAdministrationIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("administration_id >=", value, "administrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrationIdLessThan(Integer value) {
-            addCriterion("fourth_administration_id <", value, "fourthAdministrationId");
+        public Criteria andAdministrationIdLessThan(Integer value) {
+            addCriterion("administration_id <", value, "administrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrationIdLessThanOrEqualTo(Integer value) {
-            addCriterion("fourth_administration_id <=", value, "fourthAdministrationId");
+        public Criteria andAdministrationIdLessThanOrEqualTo(Integer value) {
+            addCriterion("administration_id <=", value, "administrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrationIdIn(List<Integer> values) {
-            addCriterion("fourth_administration_id in", values, "fourthAdministrationId");
+        public Criteria andAdministrationIdIn(List<Integer> values) {
+            addCriterion("administration_id in", values, "administrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrationIdNotIn(List<Integer> values) {
-            addCriterion("fourth_administration_id not in", values, "fourthAdministrationId");
+        public Criteria andAdministrationIdNotIn(List<Integer> values) {
+            addCriterion("administration_id not in", values, "administrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrationIdBetween(Integer value1, Integer value2) {
-            addCriterion("fourth_administration_id between", value1, value2, "fourthAdministrationId");
+        public Criteria andAdministrationIdBetween(Integer value1, Integer value2) {
+            addCriterion("administration_id between", value1, value2, "administrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrationIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("fourth_administration_id not between", value1, value2, "fourthAdministrationId");
+        public Criteria andAdministrationIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("administration_id not between", value1, value2, "administrationId");
             return (Criteria) this;
         }
     }

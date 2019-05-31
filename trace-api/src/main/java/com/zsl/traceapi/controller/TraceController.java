@@ -71,10 +71,18 @@ public class TraceController {
     @ApiOperation("新增追溯信息")
     @ResponseBody
     public CommonResult insert(@RequestBody @Valid ZslTraceAddAndUpdateParam zslTraceAddAndUpdateParam, BindingResult bindingResult) {
+       String resultStr = "申请成功";
+        if(zslTraceAddAndUpdateParam.getTraceApplyType() == 1 &&  zslTraceAddAndUpdateParam.getTraceApplyCount() - Constant.UPPER_LIMIT > 0){
+            resultStr = "申请成功，免费标签超过额度，需要扣除积分";
+        }
         ZslTrace insertParam = new ZslTrace();
         BeanUtils.copyProperties(zslTraceAddAndUpdateParam, insertParam);
         // 默认为待审核状态
         insertParam.setTraceHandleStatus(2);
+        // 剩余数量（）
+        insertParam.setTraceEnableCount(Integer.parseInt(zslTraceAddAndUpdateParam.getTraceApplyCount()+""));
+        // 已经关联数量（0）
+        insertParam.setTraceBack1(0);
 
         //根据商家id查询加盟商/公司
         Merchant merchant = merchantMapper.selectByPrimaryKey(insertParam.getTraceBusinessId());
@@ -95,9 +103,9 @@ public class TraceController {
 
         ZslTrace result = traceService.insert(insertParam);
         if (result != null) {
-            return CommonResult.success(result, "新增成功");
+            return CommonResult.success(result, resultStr);
         } else {
-            return CommonResult.failed("新增失败");
+            return CommonResult.failed("申请失败");
         }
     }
 
@@ -127,7 +135,19 @@ public class TraceController {
             return CommonResult.failed("已经审核，不用重复审核");
         } else if (i == -2) {
             return CommonResult.failed("审核信息不存在");
-        } else {
+        } else if (i == -3) {
+            return CommonResult.failed("审核失败，服务器错误");
+        }
+        else if (i == -4) {
+            return CommonResult.failed("积分不够，请进行充值");
+        }
+        else if (i == -5) {
+            return CommonResult.failed("积分处理失败");
+        }
+        else if (i == -6) {
+            return CommonResult.failed("积分扣除失败");
+        }
+        else {
             return CommonResult.failed("审核失败，服务器错误");
         }
     }
@@ -160,6 +180,10 @@ public class TraceController {
             return CommonResult.failed("商品信息不存在");
         } else if (count == -2) {
             return CommonResult.failed("追溯码不存在");
+        } else if(count == -3){
+            return CommonResult.failed("追溯记录处理失败");
+        }else if(count == -4){
+            return CommonResult.failed("积分处理失败");
         }
         return CommonResult.failed();
     }
@@ -175,6 +199,21 @@ public class TraceController {
             return CommonResult.failed("商品信息不存在");
         } else if (count == -2) {
             return CommonResult.failed("父追溯点不存在");
+        }
+        else if (count == -3) {
+            return CommonResult.failed("追溯码不存在");
+        }
+        else if (count == -4) {
+            return CommonResult.failed("积分不够，请进行充值");
+        }
+        else if (count == -5) {
+            return CommonResult.failed("追溯插入失败");
+        }
+        else if (count == -6) {
+            return CommonResult.failed("积分扣除失败");
+        }
+        else if (count == -7) {
+            return CommonResult.failed("积分日志处理失败");
         }
         return CommonResult.failed();
     }

@@ -7,9 +7,7 @@ import com.zsl.traceapi.dao.ZslTraceDao;
 import com.zsl.traceapi.dao.ZslTraceRecordDao;
 import com.zsl.traceapi.dto.*;
 import com.zsl.traceapi.service.TraceService;
-import com.zsl.traceapi.util.ExcelStyleUtil;
-import com.zsl.traceapi.util.FilePathUtils;
-import com.zsl.traceapi.util.TraceCodeUtil;
+import com.zsl.traceapi.util.*;
 import com.zsl.traceapi.vo.ZslTraceVo;
 import com.zsl.tracedb.mapper.*;
 import com.zsl.tracedb.model.*;
@@ -25,6 +23,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static com.zsl.traceapi.util.IntegralEnum.INTEGRAL_DECUCT_RATIO_TYPE_2;
 
 @Service
 public class TraceServiceImpl implements TraceService {
@@ -48,6 +48,12 @@ public class TraceServiceImpl implements TraceService {
 
     @Autowired
     private MerchantStallMapper merchantStallMapper;
+
+    @Autowired
+    private IntegralDeductRatioMapper integralDeductRatioMapper;
+
+    @Autowired
+    private IntegralLogMapper integralLogMapper;
 
     @Override
     public ZslTraceVo getZslTraceById(Integer id) {
@@ -92,7 +98,37 @@ public class TraceServiceImpl implements TraceService {
                 passParam.setTraceHandleStatus(1);
                 passParam.setTraceReviewDate(new Date());
                 //生成追溯码批次号
-                passParam.setTraceCodeNumber("ZS"+System.currentTimeMillis());
+                //批次号：zs+时间戳+商家id+4位随机数
+                passParam.setTraceCodeNumber("zs"+System.currentTimeMillis()*1000+zslTraceInfo.getTraceBusinessId()+RandomUtil.getRandNumberCode(4));
+                //积分判断
+                IntegralDeductRatio integralDeductRatio =  integralDeductRatioMapper.selectByPrimaryKey(IntegralEnum.INTEGRAL_DECUCT_RATIO_TYPE_3.getId());
+                Merchant merchant =  merchantMapper.selectByPrimaryKey(zslTraceInfo.getTraceBusinessId());
+                if(zslTraceInfo.getTraceApplyType() == 1 && merchant.getMerchantCoin() - ((zslTraceInfo.getTraceApplyCount() - Constant.UPPER_LIMIT)* integralDeductRatio.getIntegralRatio())  < 0){
+                    return -4; // 积分不够，请进行充值
+                }
+
+                if(zslTraceInfo.getTraceApplyType() == 1 && merchant.getMerchantCoin() - ((zslTraceInfo.getTraceApplyCount() - Constant.UPPER_LIMIT)* integralDeductRatio.getIntegralRatio())  > 0){
+                    Merchant merchantUdate = new Merchant();
+                    merchantUdate.setMerchantId(zslTraceInfo.getTraceBusinessId());
+                    Long kouchu = (zslTraceInfo.getTraceApplyCount() - Constant.UPPER_LIMIT)* integralDeductRatio.getIntegralRatio();
+                    merchantUdate.setMerchantCoin(Integer.parseInt((merchant.getMerchantCoin() - (kouchu))+ ""));
+                    int  update = merchantMapper.updateByPrimaryKeySelective(merchantUdate);
+                    if(update < 0 ){
+                        return -6; //积分扣除失败
+                    }
+                    IntegralLog integralLog = new IntegralLog();
+                    integralLog.setDeductIntegral(Integer.parseInt(((zslTraceInfo.getTraceApplyCount() - Constant.UPPER_LIMIT)* integralDeductRatio.getIntegralRatio())+""));//当前扣除的积分
+                    integralLog.setFunctionId(zslTraceInfo.getTraceId());//操作业务主键id
+                    integralLog.setFunctionType(ServiceEnum.APPLY_PAPER.getId());
+                    integralLog.setMerchantId(zslTraceInfo.getTraceBusinessId());//商家id
+                    integralLog.setDeductStatus(2);//已经扣减
+                    integralLog.setDeductTime(new Date()); //扣减时间
+                    int integLogInsert =  integralLogMapper.insert(integralLog);
+                    if(integLogInsert < 0){
+                        return -5;  //积分处理失败
+                    }
+                }
+
                 int i = zslTraceMapper.updateByPrimaryKeySelective(passParam);
                 if(i > 0){
                     return i;
@@ -136,7 +172,9 @@ public class TraceServiceImpl implements TraceService {
 
     @Override
     public int traceRecordInsert(List<TraceRecordInsertParam> traceRecordInsertParamList) {
-
+        Integer traceId = 0;
+        Long total = 0L;
+        Long haveRelationCount = 0L;
         for(TraceRecordInsertParam item : traceRecordInsertParamList){
             ZslTraceExample zslTraceExample = new ZslTraceExample();
             ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
@@ -144,6 +182,9 @@ public class TraceServiceImpl implements TraceService {
             List<ZslTrace> zslTrace = zslTraceMapper.selectByExample(zslTraceExample);
             if(CollectionUtils.isEmpty(zslTrace)){
                 return -2; //追溯码不存在
+            }else{
+                traceId = zslTrace.get(0).getTraceId();
+                total = zslTrace.get(0).getTraceApplyCount();
             }
             //查询商家名字（根据商品id）
             Goods goods = goodsMapper.selectByPrimaryKey(item.getTraceGoodId());
@@ -155,13 +196,42 @@ public class TraceServiceImpl implements TraceService {
                 zslTracePoint.setTracePointName(merchant.getMerchantName()); //商家名称
                 zslTracePoint.setTracePointToNumber(item.getTraceToNumber()); //起始编码
                 zslTracePoint.setTracePointFromNumber(item.getTraceFromNumber());  //结束编码
+                if(item.getTraceFromNumber() - item.getTraceToNumber() != 0)
+                haveRelationCount += item.getTraceFromNumber() - item.getTraceToNumber() + 1;
                 zslTracePoint.setTraceGoodsId(item.getTraceGoodId()); // 所属商品id
                 zslTracePointMapper.insert(zslTracePoint);
             }else{
                 return -1;//商品不存在
             }
+
+            //扣除积分
+            IntegralDeductRatio integralDeductRatio =  integralDeductRatioMapper.selectByPrimaryKey(IntegralEnum.INTEGRAL_DECUCT_RATIO_TYPE_2.getId());
+            IntegralLog integralLog = new IntegralLog();
+            if(item.getTraceFromNumber() - item.getTraceToNumber() != 0)
+            integralLog.setDeductIntegral(Integer.parseInt((integralDeductRatio.getIntegralRatio()*(item.getTraceFromNumber() - item.getTraceToNumber() + 1))+""));//当前扣除的积分
+            integralLog.setFunctionId(traceId);//操作业务主键id
+            integralLog.setFunctionType(ServiceEnum.TRACE_RECORD.getId());
+            integralLog.setMerchantId(zslTrace.get(0).getTraceBusinessId());//商家id
+            integralLog.setDeductStatus(1);//未扣减
+            int integLogInsert =  integralLogMapper.insert(integralLog);
+            if(integLogInsert > 0){
+                return integLogInsert;
+            }else {
+                return -4;  //积分处理失败
+            }
+
         }
-        return zslTraceRecordDao.insertList(traceRecordInsertParamList);
+        ZslTrace updateTrace = new ZslTrace();
+        updateTrace.setTraceId(traceId);
+        updateTrace.setTraceBack1(Integer.parseInt(haveRelationCount+"")); //已经关联数量
+        updateTrace.setTraceEnableCount(Integer.parseInt((total - haveRelationCount)+"" ));//剩余数量
+        zslTraceMapper.updateByPrimaryKeySelective(updateTrace);
+        int i = zslTraceRecordDao.insertList(traceRecordInsertParamList);
+        if(i > 0){
+          return i;
+        }else {
+            return -3; //追溯记录处理失败
+        }
     }
 
     @Override
@@ -174,6 +244,18 @@ public class TraceServiceImpl implements TraceService {
         if(zslTracePointDetail == null){
             return -2; //父追溯点不存在
         }
+        //判断积分够不够扣除
+        ZslTraceExample zslTraceExample = new ZslTraceExample();
+        ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
+        criteria.andTraceCodeNumberEqualTo(traceRecordPointParam.getTraceCodeNumber());
+        List<ZslTrace> zslTrace = zslTraceMapper.selectByExample(zslTraceExample);
+        if(CollectionUtils.isEmpty(zslTrace)){
+            return -3; //追溯码不存在
+        }
+        Merchant merchant =  merchantMapper.selectByPrimaryKey(zslTrace.get(0).getTraceBusinessId());
+        if(merchant.getMerchantCoin() - (traceRecordPointParam.getTracePointFromNumber() - traceRecordPointParam.getTracePointToNumber() +1)  < 0){
+            return -4; // 积分不够，请进行充值
+        }
         //摊位id，如果有则为摊位id，没有则为-1（代表非农贸）
         MerchantStall merchantStall = merchantStallMapper.selectByPrimaryKey(traceRecordPointParam.getTraceStallId());
         if(merchantStall == null){
@@ -181,7 +263,33 @@ public class TraceServiceImpl implements TraceService {
         }
         ZslTracePoint zslTracePoint = new ZslTracePoint();
         BeanUtils.copyProperties(traceRecordPointParam,zslTracePoint);
-        return zslTracePointMapper.insert(zslTracePoint);
+        int i = zslTracePointMapper.insert(zslTracePoint);
+        if(i < 0 ){
+            return -5;//追溯插入失败
+        }
+        Merchant merchantUdate = new Merchant();
+        merchantUdate.setMerchantId(zslTrace.get(0).getTraceBusinessId());
+        merchant.setMerchantCoin(merchant.getMerchantCoin() - (traceRecordPointParam.getTracePointFromNumber() - traceRecordPointParam.getTracePointToNumber() +1));
+        int  update = merchantMapper.updateByPrimaryKeySelective(merchantUdate);
+        if(update < 0 ){
+            return -6; //积分扣除失败
+        }
+        //扣除积分
+        IntegralDeductRatio integralDeductRatio =  integralDeductRatioMapper.selectByPrimaryKey(IntegralEnum.INTEGRAL_DECUCT_RATIO_TYPE_2.getId());
+        IntegralLog integralLog = new IntegralLog();
+        integralLog.setDeductIntegral(Integer.parseInt((integralDeductRatio.getIntegralRatio()*(traceRecordPointParam.getTracePointFromNumber() - traceRecordPointParam.getTracePointToNumber() +1))+""));//当前扣除的积分
+        integralLog.setFunctionId(zslTracePoint.getTracePointId());//操作业务主键id
+        integralLog.setFunctionType(ServiceEnum.INSERT_TRACE_POINT.getId());
+        integralLog.setMerchantId(zslTrace.get(0).getTraceBusinessId());//商家id
+        integralLog.setDeductStatus(2);//已经扣减
+        integralLog.setDeductTime(new Date()); //扣减时间
+        int integLogInsert =  integralLogMapper.insert(integralLog);
+        if(integLogInsert > 0){
+            return integLogInsert;
+        }else {
+            return -7;  //积分处理失败
+        }
+
     }
 
     @Override
@@ -202,7 +310,7 @@ public class TraceServiceImpl implements TraceService {
         for(int i = 0;i<codeList.size();i++){
             ExcelTraceCode excelTraceCode = new ExcelTraceCode();
             excelTraceCode.setIndex(i+1+"");
-            excelTraceCode.setCode(codeList.get(0));
+            excelTraceCode.setCode(codeList.get(i));
             excelTraceCodes.add(excelTraceCode);
         }
 

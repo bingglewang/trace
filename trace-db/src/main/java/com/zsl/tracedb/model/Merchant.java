@@ -13,8 +13,8 @@ public class Merchant implements Serializable {
     @ApiModelProperty(value = "商家账号")
     private String merchantAccount;
 
-    @ApiModelProperty(value = "四级行政地址ID")
-    private Integer fourthAdministrativeDivisionId;
+    @ApiModelProperty(value = "行政ID")
+    private Integer adminstrationId;
 
     @ApiModelProperty(value = "行政地址全称")
     private String administrativeDivisionFullSite;
@@ -25,8 +25,8 @@ public class Merchant implements Serializable {
     @ApiModelProperty(value = "商家网址")
     private String merchantUrl;
 
-    @ApiModelProperty(value = "入网类型：0服务型 1生产型")
-    private Byte netType;
+    @ApiModelProperty(value = "入网类型-外键")
+    private Integer netType;
 
     @ApiModelProperty(value = "积分")
     private Integer merchantCoin;
@@ -64,15 +64,6 @@ public class Merchant implements Serializable {
     @ApiModelProperty(value = "短视频地址")
     private String shortVideoUrl;
 
-    @ApiModelProperty(value = "追溯码免费额度")
-    private Integer traceCodeFreeLimit;
-
-    @ApiModelProperty(value = "追溯码剩余额度")
-    private Integer traceCodeRemainingUndrawn;
-
-    @ApiModelProperty(value = "追溯码申请中额度")
-    private Integer traceCodeApplyingUndrawn;
-
     @ApiModelProperty(value = "是否缴纳认证金：0未缴纳 1已缴纳")
     private Byte certificationToPay;
 
@@ -108,12 +99,12 @@ public class Merchant implements Serializable {
         this.merchantAccount = merchantAccount;
     }
 
-    public Integer getFourthAdministrativeDivisionId() {
-        return fourthAdministrativeDivisionId;
+    public Integer getAdminstrationId() {
+        return adminstrationId;
     }
 
-    public void setFourthAdministrativeDivisionId(Integer fourthAdministrativeDivisionId) {
-        this.fourthAdministrativeDivisionId = fourthAdministrativeDivisionId;
+    public void setAdminstrationId(Integer adminstrationId) {
+        this.adminstrationId = adminstrationId;
     }
 
     public String getAdministrativeDivisionFullSite() {
@@ -140,11 +131,11 @@ public class Merchant implements Serializable {
         this.merchantUrl = merchantUrl;
     }
 
-    public Byte getNetType() {
+    public Integer getNetType() {
         return netType;
     }
 
-    public void setNetType(Byte netType) {
+    public void setNetType(Integer netType) {
         this.netType = netType;
     }
 
@@ -244,30 +235,6 @@ public class Merchant implements Serializable {
         this.shortVideoUrl = shortVideoUrl;
     }
 
-    public Integer getTraceCodeFreeLimit() {
-        return traceCodeFreeLimit;
-    }
-
-    public void setTraceCodeFreeLimit(Integer traceCodeFreeLimit) {
-        this.traceCodeFreeLimit = traceCodeFreeLimit;
-    }
-
-    public Integer getTraceCodeRemainingUndrawn() {
-        return traceCodeRemainingUndrawn;
-    }
-
-    public void setTraceCodeRemainingUndrawn(Integer traceCodeRemainingUndrawn) {
-        this.traceCodeRemainingUndrawn = traceCodeRemainingUndrawn;
-    }
-
-    public Integer getTraceCodeApplyingUndrawn() {
-        return traceCodeApplyingUndrawn;
-    }
-
-    public void setTraceCodeApplyingUndrawn(Integer traceCodeApplyingUndrawn) {
-        this.traceCodeApplyingUndrawn = traceCodeApplyingUndrawn;
-    }
-
     public Byte getCertificationToPay() {
         return certificationToPay;
     }
@@ -301,7 +268,7 @@ public class Merchant implements Serializable {
         sb.append(", merchantId=").append(merchantId);
         sb.append(", merchantName=").append(merchantName);
         sb.append(", merchantAccount=").append(merchantAccount);
-        sb.append(", fourthAdministrativeDivisionId=").append(fourthAdministrativeDivisionId);
+        sb.append(", adminstrationId=").append(adminstrationId);
         sb.append(", administrativeDivisionFullSite=").append(administrativeDivisionFullSite);
         sb.append(", merchantDetailSite=").append(merchantDetailSite);
         sb.append(", merchantUrl=").append(merchantUrl);
@@ -318,9 +285,6 @@ public class Merchant implements Serializable {
         sb.append(", merchantEnterTime=").append(merchantEnterTime);
         sb.append(", merchantStatus=").append(merchantStatus);
         sb.append(", shortVideoUrl=").append(shortVideoUrl);
-        sb.append(", traceCodeFreeLimit=").append(traceCodeFreeLimit);
-        sb.append(", traceCodeRemainingUndrawn=").append(traceCodeRemainingUndrawn);
-        sb.append(", traceCodeApplyingUndrawn=").append(traceCodeApplyingUndrawn);
         sb.append(", certificationToPay=").append(certificationToPay);
         sb.append(", merchantDesciption=").append(merchantDesciption);
         sb.append(", stallLimit=").append(stallLimit);

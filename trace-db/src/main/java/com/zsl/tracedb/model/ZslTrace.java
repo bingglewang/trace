@@ -38,7 +38,7 @@ public class ZslTrace implements Serializable {
     @ApiModelProperty(value = "拒绝申请原因")
     private String traceRefuseRemark;
 
-    @ApiModelProperty(value = "备用字段1")
+    @ApiModelProperty(value = "已经关联的数量")
     private Integer traceBack1;
 
     @ApiModelProperty(value = "备用字段2")

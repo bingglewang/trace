@@ -25,6 +25,9 @@ public class ZslTracePoint implements Serializable {
     @ApiModelProperty(value = "摊位id（非农贸则为-1）")
     private Integer traceStallId;
 
+    @ApiModelProperty(value = "追溯码批次号")
+    private String traceCodeNumber;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getTracePointId() {
@@ -83,6 +86,14 @@ public class ZslTracePoint implements Serializable {
         this.traceStallId = traceStallId;
     }
 
+    public String getTraceCodeNumber() {
+        return traceCodeNumber;
+    }
+
+    public void setTraceCodeNumber(String traceCodeNumber) {
+        this.traceCodeNumber = traceCodeNumber;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -96,6 +107,7 @@ public class ZslTracePoint implements Serializable {
         sb.append(", tracePointFromNumber=").append(tracePointFromNumber);
         sb.append(", traceParentId=").append(traceParentId);
         sb.append(", traceStallId=").append(traceStallId);
+        sb.append(", traceCodeNumber=").append(traceCodeNumber);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

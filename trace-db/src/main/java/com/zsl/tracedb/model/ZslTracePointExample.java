@@ -533,6 +533,76 @@ public class ZslTracePointExample {
             addCriterion("trace_stall_id not between", value1, value2, "traceStallId");
             return (Criteria) this;
         }
+
+        public Criteria andTraceCodeNumberIsNull() {
+            addCriterion("trace_code_number is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceCodeNumberIsNotNull() {
+            addCriterion("trace_code_number is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceCodeNumberEqualTo(String value) {
+            addCriterion("trace_code_number =", value, "traceCodeNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceCodeNumberNotEqualTo(String value) {
+            addCriterion("trace_code_number <>", value, "traceCodeNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceCodeNumberGreaterThan(String value) {
+            addCriterion("trace_code_number >", value, "traceCodeNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceCodeNumberGreaterThanOrEqualTo(String value) {
+            addCriterion("trace_code_number >=", value, "traceCodeNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceCodeNumberLessThan(String value) {
+            addCriterion("trace_code_number <", value, "traceCodeNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceCodeNumberLessThanOrEqualTo(String value) {
+            addCriterion("trace_code_number <=", value, "traceCodeNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceCodeNumberLike(String value) {
+            addCriterion("trace_code_number like", value, "traceCodeNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceCodeNumberNotLike(String value) {
+            addCriterion("trace_code_number not like", value, "traceCodeNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceCodeNumberIn(List<String> values) {
+            addCriterion("trace_code_number in", values, "traceCodeNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceCodeNumberNotIn(List<String> values) {
+            addCriterion("trace_code_number not in", values, "traceCodeNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceCodeNumberBetween(String value1, String value2) {
+            addCriterion("trace_code_number between", value1, value2, "traceCodeNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceCodeNumberNotBetween(String value1, String value2) {
+            addCriterion("trace_code_number not between", value1, value2, "traceCodeNumber");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -22,12 +22,6 @@ public class AllianceBusiness implements Serializable {
     @ApiModelProperty(value = "加盟商状态：0正常 1：禁用")
     private Byte allianceBusinessStatus;
 
-    @ApiModelProperty(value = "三级行政ID")
-    private Integer thirdAdministrativeDivisionId;
-
-    @ApiModelProperty(value = "加盟商行政地址全称")
-    private String allianceBusinessFullSite;
-
     private static final long serialVersionUID = 1L;
 
     public Integer getAllianceBusinessId() {
@@ -78,22 +72,6 @@ public class AllianceBusiness implements Serializable {
         this.allianceBusinessStatus = allianceBusinessStatus;
     }
 
-    public Integer getThirdAdministrativeDivisionId() {
-        return thirdAdministrativeDivisionId;
-    }
-
-    public void setThirdAdministrativeDivisionId(Integer thirdAdministrativeDivisionId) {
-        this.thirdAdministrativeDivisionId = thirdAdministrativeDivisionId;
-    }
-
-    public String getAllianceBusinessFullSite() {
-        return allianceBusinessFullSite;
-    }
-
-    public void setAllianceBusinessFullSite(String allianceBusinessFullSite) {
-        this.allianceBusinessFullSite = allianceBusinessFullSite;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -106,8 +84,6 @@ public class AllianceBusiness implements Serializable {
         sb.append(", companyDescription=").append(companyDescription);
         sb.append(", allianceBusinessEnterTime=").append(allianceBusinessEnterTime);
         sb.append(", allianceBusinessStatus=").append(allianceBusinessStatus);
-        sb.append(", thirdAdministrativeDivisionId=").append(thirdAdministrativeDivisionId);
-        sb.append(", allianceBusinessFullSite=").append(allianceBusinessFullSite);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
