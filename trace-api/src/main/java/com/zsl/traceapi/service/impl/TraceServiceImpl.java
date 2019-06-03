@@ -145,14 +145,39 @@ public class TraceServiceImpl implements TraceService {
     }
 
     @Override
+    public int cancel(Integer id) {
+        ZslTrace zslTraceInfo = zslTraceMapper.selectByPrimaryKey(id);
+        if(zslTraceInfo != null){
+            if(zslTraceInfo.getTraceHandleStatus() == 2){
+                //将申请处理状态改为 已撤回3
+                ZslTrace passParam = new ZslTrace();
+                passParam.setTraceId(id);
+                passParam.setTraceHandleStatus(3);
+                int i = zslTraceMapper.updateByPrimaryKeySelective(passParam);
+                if(i > 0){
+                    return i;
+                }else{
+                    return -3;//撤回失败，服务器错误
+                }
+
+            }else{
+                return -1;//已经撤回，不用重复撤回
+            }
+        }else{
+            return -2;//申请信息不存在
+        }
+    }
+
+
+    @Override
     public int refuse(Integer id, String remark) {
         ZslTrace zslTraceInfo = zslTraceMapper.selectByPrimaryKey(id);
         if(zslTraceInfo != null){
             if(zslTraceInfo.getTraceHandleStatus() == 2){
-                //将申请处理状态改为 已撤回 3
+                //将申请处理状态改为 已拒绝 4
                 ZslTrace passParam = new ZslTrace();
                 passParam.setTraceId(id);
-                passParam.setTraceHandleStatus(3);
+                passParam.setTraceHandleStatus(4);
                 passParam.setTraceRefuseRemark(remark);
                 passParam.setTraceReviewDate(new Date());
                 int i = zslTraceMapper.updateByPrimaryKeySelective(passParam);

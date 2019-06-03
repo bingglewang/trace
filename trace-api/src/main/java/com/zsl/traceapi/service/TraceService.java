@@ -49,6 +49,13 @@ public interface TraceService {
     int pass(Integer id);
 
     /**
+     * 撤回申请
+     * @param id
+     * @return
+     */
+    int cancel(Integer id);
+
+    /**
      * 拒绝申请
      * @param id
      * @param remark

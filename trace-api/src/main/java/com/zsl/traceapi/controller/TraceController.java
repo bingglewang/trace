@@ -152,6 +152,23 @@ public class TraceController {
         }
     }
 
+    @PutMapping("/cancel/{id:[0-9]+}")
+    @ApiOperation("撤回申请")
+    @ResponseBody
+    public CommonResult cancel(@PathVariable Integer id) {
+        int i = traceService.cancel(id);
+        if (i > 0) {
+            return CommonResult.success(null, "撤回成功");
+        } else if (i == -1) {
+            return CommonResult.failed("已经撤回，不用重复撤回");
+        } else if (i == -2) {
+            return CommonResult.failed("申请信息不存在");
+        } else {
+            return CommonResult.failed("撤回失败，服务器错误");
+        }
+    }
+
+
     @PutMapping("/refuse/{id:[0-9]+}")
     @ApiOperation("拒绝申请")
     @ResponseBody
