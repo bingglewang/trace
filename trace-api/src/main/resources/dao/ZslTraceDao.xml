@@ -58,14 +58,17 @@
             AND z.trace_company_name like concat("%",#{queryParam.traceCompanyName},"%")
         </if>
         <if test="queryParam.traceHandleStatus!=null and queryParam.traceHandleStatus!=''">
-            AND z.trace_handle_status = #{queryParam.traceHandleStatus
+            AND z.trace_handle_status = #{queryParam.traceHandleStatus}
+        </if>
+        <if test="queryParam.traceApplyType!=null and queryParam.traceApplyType!=''">
+            AND z.trace_apply_type = #{queryParam.traceApplyType}
         </if>
         <if test="queryParam.merchantName!=null and queryParam.merchantName!=''">
             AND m.merchant_name like concat("%",#{queryParam.merchantName},"%")
         </if>
-        <if test="queryParam.traceApplyStartDate!=null and queryParam.traceApplyEndDate!=null and queryParam.traceApplyStartDate!='' and queryParam.traceApplyEndDate!=''">
-            AND  date_format(z.trace_apply_date,'%Y-%m-%d') &gt;= date_format(#{queryParam.traceApplyStartDate},'%Y-%m-%d')
-            AND  date_format(z.trace_apply_date,'%Y-%m-%d') &lt;= date_format(#{queryParam.traceApplyEndDate},'%Y-%m-%d')
+        <if test="queryParam.traceApplyStartDate!=null and queryParam.traceApplyEndDate!=null">
+            AND  date_format(z.trace_apply_date,'%Y-%m-%e %H:%i:%S') &gt;= date_format(#{queryParam.traceApplyStartDate},'%Y-%m-%e %H:%i:%S')
+            AND  date_format(z.trace_apply_date,'%Y-%m-%e %H:%i:%S') &lt;= date_format(#{queryParam.traceApplyEndDate},'%Y-%m-%e %H:%i:%S')
         </if>
     </select>
 </mapper>

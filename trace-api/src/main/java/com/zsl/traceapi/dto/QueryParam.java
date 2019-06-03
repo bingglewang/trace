@@ -1,6 +1,7 @@
 package com.zsl.traceapi.dto;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -8,8 +9,11 @@ import java.util.Date;
 public class QueryParam {
     private String traceCodeNumber; //追溯码批次号
     private String traceCompanyName; //所属公司名称
-    private Date traceApplyStartDate; //申请开始日期
-    private Date traceApplyEndDate; //申请结束日期
+    @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
+    private Date  traceApplyStartDate; //申请开始日期
+    @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
+    private Date  traceApplyEndDate; //申请结束日期
     private Integer traceHandleStatus; //处理状态
     private String merchantName; //商家名称
+    private Integer traceApplyType; //申请类型
 }
