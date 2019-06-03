@@ -11,7 +11,7 @@
         <result column="trace_review_date" jdbcType="TIMESTAMP" property="traceReviewDate"></result>
         <result column="trace_enable_count" jdbcType="BIGINT" property="traceApplyCount"></result>
         <result column="trace_refuse_remark" jdbcType="VARCHAR" property="traceRefuseRemark"></result>
-        <result column="merchant_name" jdbcType="VARCHAR" property="merchantName"></result>
+        <association property="merchant" resultMap="com.zsl.tracedb.mapper.MerchantMapper.BaseResultMap"></association>
     </resultMap>
 
     <select id="getZslTraceDetailById" resultMap="zslTraceIDetailResultMap">
