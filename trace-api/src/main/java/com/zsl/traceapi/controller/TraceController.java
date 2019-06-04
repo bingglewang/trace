@@ -26,7 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Api(tags = "TraceController", description = "追溯模块")
-@RestController("/trace")
+@RestController
+@RequestMapping("/trace")
 public class TraceController {
 
     @Autowired
