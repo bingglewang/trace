@@ -14,4 +14,6 @@ public class TraceCodeUtil {
         }
         return result;
     }
+
+    //判断起始编码，和结束编码,(起始编码必须小于结束编码，)
 }

@@ -87,4 +87,18 @@ public interface TraceService {
      */
     FileInfo exportPointCode(String traceCode,HttpServletResponse response);
 
+    /**
+     * 判断记录编码冲突
+     * @param traceRecordInsertParamList
+     * @return
+     */
+    String isCodeRepeat(List<TraceRecordInsertParam> traceRecordInsertParamList);
+
+    /**
+     * 判断追溯点编码冲突
+     * @param traceRecordPointParam
+     * @return
+     */
+    String isPointRepeat(TraceRecordPointParam traceRecordPointParam);
+
 }

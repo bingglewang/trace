@@ -191,6 +191,10 @@ public class TraceController {
     @PostMapping("/record/batch")
     @ResponseBody
     public CommonResult recordInsertBatch(@RequestBody List<TraceRecordInsertParam> traceRecordInsertParamList) {
+       String repeat = traceService.isCodeRepeat(traceRecordInsertParamList);
+       if(!repeat.equals("编码没有冲突")){
+           return CommonResult.failed(repeat);
+       }
         int count = traceService.traceRecordInsert(traceRecordInsertParamList);
         if (count > 0) {
             return CommonResult.success(count);
@@ -210,6 +214,10 @@ public class TraceController {
     @PostMapping("/point")
     @ResponseBody
     public CommonResult pointInsert(@RequestBody TraceRecordPointParam traceRecordPointParam) {
+        String repeat = traceService.isPointRepeat(traceRecordPointParam);
+        if(!repeat.equals("编码没有冲突")){
+            return CommonResult.failed(repeat);
+        }
         int count = traceService.traceRecordPointInsert(traceRecordPointParam);
         if (count > 0) {
             return CommonResult.success(count);
@@ -279,6 +287,5 @@ public class TraceController {
             return  CommonResult.success(fileInfo, "追溯编码导出成功");
         }
     }
-
 
 }
