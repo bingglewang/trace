@@ -276,4 +276,279 @@
       business_adminstration_third_id = #{businessAdminstrationThirdId,jdbcType=INTEGER}
     where alliance_business_id = #{allianceBusinessId,jdbcType=INTEGER}
   </update>
+  <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.AllianceBusiness">
+    <id column="alliance_business_id" jdbcType="INTEGER" property="allianceBusinessId" />
+    <result column="alliance_business_name" jdbcType="VARCHAR" property="allianceBusinessName" />
+    <result column="business_license_url" jdbcType="VARCHAR" property="businessLicenseUrl" />
+    <result column="company_description" jdbcType="VARCHAR" property="companyDescription" />
+    <result column="alliance_business_enter_time" jdbcType="TIMESTAMP" property="allianceBusinessEnterTime" />
+    <result column="alliance_business_status" jdbcType="TINYINT" property="allianceBusinessStatus" />
+    <result column="business_adminstration_id" jdbcType="INTEGER" property="businessAdminstrationId" />
+    <result column="business_adminstration_second_id" jdbcType="INTEGER" property="businessAdminstrationSecondId" />
+    <result column="business_adminstration_third_id" jdbcType="INTEGER" property="businessAdminstrationThirdId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    alliance_business_id, alliance_business_name, business_license_url, company_description, 
+    alliance_business_enter_time, alliance_business_status, business_adminstration_id, 
+    business_adminstration_second_id, business_adminstration_third_id
+  </sql>
+  <select id="selectByExample" parameterType="com.zsl.tracedb.model.AllianceBusinessExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from alliance_business
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from alliance_business
+    where alliance_business_id = #{allianceBusinessId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from alliance_business
+    where alliance_business_id = #{allianceBusinessId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zsl.tracedb.model.AllianceBusinessExample">
+    delete from alliance_business
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zsl.tracedb.model.AllianceBusiness">
+    <selectKey keyProperty="allianceBusinessId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into alliance_business (alliance_business_name, business_license_url, 
+      company_description, alliance_business_enter_time, 
+      alliance_business_status, business_adminstration_id, 
+      business_adminstration_second_id, business_adminstration_third_id
+      )
+    values (#{allianceBusinessName,jdbcType=VARCHAR}, #{businessLicenseUrl,jdbcType=VARCHAR}, 
+      #{companyDescription,jdbcType=VARCHAR}, #{allianceBusinessEnterTime,jdbcType=TIMESTAMP}, 
+      #{allianceBusinessStatus,jdbcType=TINYINT}, #{businessAdminstrationId,jdbcType=INTEGER}, 
+      #{businessAdminstrationSecondId,jdbcType=INTEGER}, #{businessAdminstrationThirdId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zsl.tracedb.model.AllianceBusiness">
+    <selectKey keyProperty="allianceBusinessId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into alliance_business
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="allianceBusinessName != null">
+        alliance_business_name,
+      </if>
+      <if test="businessLicenseUrl != null">
+        business_license_url,
+      </if>
+      <if test="companyDescription != null">
+        company_description,
+      </if>
+      <if test="allianceBusinessEnterTime != null">
+        alliance_business_enter_time,
+      </if>
+      <if test="allianceBusinessStatus != null">
+        alliance_business_status,
+      </if>
+      <if test="businessAdminstrationId != null">
+        business_adminstration_id,
+      </if>
+      <if test="businessAdminstrationSecondId != null">
+        business_adminstration_second_id,
+      </if>
+      <if test="businessAdminstrationThirdId != null">
+        business_adminstration_third_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="allianceBusinessName != null">
+        #{allianceBusinessName,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicenseUrl != null">
+        #{businessLicenseUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="companyDescription != null">
+        #{companyDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="allianceBusinessEnterTime != null">
+        #{allianceBusinessEnterTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="allianceBusinessStatus != null">
+        #{allianceBusinessStatus,jdbcType=TINYINT},
+      </if>
+      <if test="businessAdminstrationId != null">
+        #{businessAdminstrationId,jdbcType=INTEGER},
+      </if>
+      <if test="businessAdminstrationSecondId != null">
+        #{businessAdminstrationSecondId,jdbcType=INTEGER},
+      </if>
+      <if test="businessAdminstrationThirdId != null">
+        #{businessAdminstrationThirdId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zsl.tracedb.model.AllianceBusinessExample" resultType="java.lang.Integer">
+    select count(*) from alliance_business
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update alliance_business
+    <set>
+      <if test="record.allianceBusinessId != null">
+        alliance_business_id = #{record.allianceBusinessId,jdbcType=INTEGER},
+      </if>
+      <if test="record.allianceBusinessName != null">
+        alliance_business_name = #{record.allianceBusinessName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.businessLicenseUrl != null">
+        business_license_url = #{record.businessLicenseUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyDescription != null">
+        company_description = #{record.companyDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="record.allianceBusinessEnterTime != null">
+        alliance_business_enter_time = #{record.allianceBusinessEnterTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.allianceBusinessStatus != null">
+        alliance_business_status = #{record.allianceBusinessStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.businessAdminstrationId != null">
+        business_adminstration_id = #{record.businessAdminstrationId,jdbcType=INTEGER},
+      </if>
+      <if test="record.businessAdminstrationSecondId != null">
+        business_adminstration_second_id = #{record.businessAdminstrationSecondId,jdbcType=INTEGER},
+      </if>
+      <if test="record.businessAdminstrationThirdId != null">
+        business_adminstration_third_id = #{record.businessAdminstrationThirdId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update alliance_business
+    set alliance_business_id = #{record.allianceBusinessId,jdbcType=INTEGER},
+      alliance_business_name = #{record.allianceBusinessName,jdbcType=VARCHAR},
+      business_license_url = #{record.businessLicenseUrl,jdbcType=VARCHAR},
+      company_description = #{record.companyDescription,jdbcType=VARCHAR},
+      alliance_business_enter_time = #{record.allianceBusinessEnterTime,jdbcType=TIMESTAMP},
+      alliance_business_status = #{record.allianceBusinessStatus,jdbcType=TINYINT},
+      business_adminstration_id = #{record.businessAdminstrationId,jdbcType=INTEGER},
+      business_adminstration_second_id = #{record.businessAdminstrationSecondId,jdbcType=INTEGER},
+      business_adminstration_third_id = #{record.businessAdminstrationThirdId,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.AllianceBusiness">
+    update alliance_business
+    <set>
+      <if test="allianceBusinessName != null">
+        alliance_business_name = #{allianceBusinessName,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicenseUrl != null">
+        business_license_url = #{businessLicenseUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="companyDescription != null">
+        company_description = #{companyDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="allianceBusinessEnterTime != null">
+        alliance_business_enter_time = #{allianceBusinessEnterTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="allianceBusinessStatus != null">
+        alliance_business_status = #{allianceBusinessStatus,jdbcType=TINYINT},
+      </if>
+      <if test="businessAdminstrationId != null">
+        business_adminstration_id = #{businessAdminstrationId,jdbcType=INTEGER},
+      </if>
+      <if test="businessAdminstrationSecondId != null">
+        business_adminstration_second_id = #{businessAdminstrationSecondId,jdbcType=INTEGER},
+      </if>
+      <if test="businessAdminstrationThirdId != null">
+        business_adminstration_third_id = #{businessAdminstrationThirdId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where alliance_business_id = #{allianceBusinessId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.AllianceBusiness">
+    update alliance_business
+    set alliance_business_name = #{allianceBusinessName,jdbcType=VARCHAR},
+      business_license_url = #{businessLicenseUrl,jdbcType=VARCHAR},
+      company_description = #{companyDescription,jdbcType=VARCHAR},
+      alliance_business_enter_time = #{allianceBusinessEnterTime,jdbcType=TIMESTAMP},
+      alliance_business_status = #{allianceBusinessStatus,jdbcType=TINYINT},
+      business_adminstration_id = #{businessAdminstrationId,jdbcType=INTEGER},
+      business_adminstration_second_id = #{businessAdminstrationSecondId,jdbcType=INTEGER},
+      business_adminstration_third_id = #{businessAdminstrationThirdId,jdbcType=INTEGER}
+    where alliance_business_id = #{allianceBusinessId,jdbcType=INTEGER}
+  </update>
 </mapper>

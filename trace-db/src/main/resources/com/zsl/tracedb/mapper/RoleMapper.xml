@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zsl.tracedb.mapper.BrandMapper">
-  <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.Brand">
-    <id column="brand_id" jdbcType="INTEGER" property="brandId" />
-    <result column="merchant_id" jdbcType="INTEGER" property="merchantId" />
-    <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
+<mapper namespace="com.zsl.tracedb.mapper.RoleMapper">
+  <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.Role">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="headquarters" jdbcType="BIT" property="headquarters" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,15 +66,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    brand_id, merchant_id, brand_name
+    id, role_name, description, headquarters
   </sql>
-  <select id="selectByExample" parameterType="com.zsl.tracedb.model.BrandExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.zsl.tracedb.model.RoleExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from brand
+    from role
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -81,68 +82,69 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from brand
-    where brand_id = #{brandId,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from brand
-    where brand_id = #{brandId,jdbcType=INTEGER}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.zsl.tracedb.model.BrandExample">
-    delete from brand
+  <delete id="deleteByExample" parameterType="com.zsl.tracedb.model.RoleExample">
+    delete from role
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.zsl.tracedb.model.Brand">
-    <selectKey keyProperty="brandId" order="AFTER" resultType="java.lang.Integer">
+  <insert id="insert" parameterType="com.zsl.tracedb.model.Role">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into brand (merchant_id, brand_name)
-    values (#{merchantId,jdbcType=INTEGER}, #{brandName,jdbcType=VARCHAR})
+    insert into role (role_name, description, headquarters
+      )
+    values (#{roleName,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{headquarters,jdbcType=BIT}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.zsl.tracedb.model.Brand">
-    <selectKey keyProperty="brandId" order="AFTER" resultType="java.lang.Integer">
+  <insert id="insertSelective" parameterType="com.zsl.tracedb.model.Role">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into brand
+    insert into role
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="merchantId != null">
-        merchant_id,
+      <if test="roleName != null">
+        role_name,
       </if>
-      <if test="brandName != null">
-        brand_name,
+      <if test="description != null">
+        description,
+      </if>
+      <if test="headquarters != null">
+        headquarters,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="merchantId != null">
-        #{merchantId,jdbcType=INTEGER},
+      <if test="roleName != null">
+        #{roleName,jdbcType=VARCHAR},
       </if>
-      <if test="brandName != null">
-        #{brandName,jdbcType=VARCHAR},
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="headquarters != null">
+        #{headquarters,jdbcType=BIT},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.zsl.tracedb.model.BrandExample" resultType="java.lang.Integer">
-    select count(*) from brand
+  <select id="countByExample" parameterType="com.zsl.tracedb.model.RoleExample" resultType="java.lang.Integer">
+    select count(*) from role
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update brand
+    update role
     <set>
-      <if test="record.brandId != null">
-        brand_id = #{record.brandId,jdbcType=INTEGER},
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.merchantId != null">
-        merchant_id = #{record.merchantId,jdbcType=INTEGER},
+      <if test="record.roleName != null">
+        role_name = #{record.roleName,jdbcType=VARCHAR},
       </if>
-      <if test="record.brandName != null">
-        brand_name = #{record.brandName,jdbcType=VARCHAR},
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.headquarters != null">
+        headquarters = #{record.headquarters,jdbcType=BIT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -150,36 +152,20 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update brand
-    set brand_id = #{record.brandId,jdbcType=INTEGER},
-      merchant_id = #{record.merchantId,jdbcType=INTEGER},
-      brand_name = #{record.brandName,jdbcType=VARCHAR}
+    update role
+    set id = #{record.id,jdbcType=INTEGER},
+      role_name = #{record.roleName,jdbcType=VARCHAR},
+      description = #{record.description,jdbcType=VARCHAR},
+      headquarters = #{record.headquarters,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.Brand">
-    update brand
-    <set>
-      <if test="merchantId != null">
-        merchant_id = #{merchantId,jdbcType=INTEGER},
-      </if>
-      <if test="brandName != null">
-        brand_name = #{brandName,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where brand_id = #{brandId,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.Brand">
-    update brand
-    set merchant_id = #{merchantId,jdbcType=INTEGER},
-      brand_name = #{brandName,jdbcType=VARCHAR}
-    where brand_id = #{brandId,jdbcType=INTEGER}
-  </update>
-  <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.Brand">
-    <id column="brand_id" jdbcType="INTEGER" property="brandId" />
-    <result column="merchant_id" jdbcType="INTEGER" property="merchantId" />
-    <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
+  <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.Role">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="headquarters" jdbcType="BIT" property="headquarters" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -240,15 +226,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    brand_id, merchant_id, brand_name
+    id, role_name, description, headquarters
   </sql>
-  <select id="selectByExample" parameterType="com.zsl.tracedb.model.BrandExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.zsl.tracedb.model.RoleExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from brand
+    from role
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -256,68 +242,69 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from brand
-    where brand_id = #{brandId,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from brand
-    where brand_id = #{brandId,jdbcType=INTEGER}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.zsl.tracedb.model.BrandExample">
-    delete from brand
+  <delete id="deleteByExample" parameterType="com.zsl.tracedb.model.RoleExample">
+    delete from role
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.zsl.tracedb.model.Brand">
-    <selectKey keyProperty="brandId" order="AFTER" resultType="java.lang.Integer">
+  <insert id="insert" parameterType="com.zsl.tracedb.model.Role">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into brand (merchant_id, brand_name)
-    values (#{merchantId,jdbcType=INTEGER}, #{brandName,jdbcType=VARCHAR})
+    insert into role (role_name, description, headquarters
+      )
+    values (#{roleName,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{headquarters,jdbcType=BIT}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.zsl.tracedb.model.Brand">
-    <selectKey keyProperty="brandId" order="AFTER" resultType="java.lang.Integer">
+  <insert id="insertSelective" parameterType="com.zsl.tracedb.model.Role">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into brand
+    insert into role
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="merchantId != null">
-        merchant_id,
+      <if test="roleName != null">
+        role_name,
       </if>
-      <if test="brandName != null">
-        brand_name,
+      <if test="description != null">
+        description,
+      </if>
+      <if test="headquarters != null">
+        headquarters,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="merchantId != null">
-        #{merchantId,jdbcType=INTEGER},
+      <if test="roleName != null">
+        #{roleName,jdbcType=VARCHAR},
       </if>
-      <if test="brandName != null">
-        #{brandName,jdbcType=VARCHAR},
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="headquarters != null">
+        #{headquarters,jdbcType=BIT},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.zsl.tracedb.model.BrandExample" resultType="java.lang.Integer">
-    select count(*) from brand
+  <select id="countByExample" parameterType="com.zsl.tracedb.model.RoleExample" resultType="java.lang.Integer">
+    select count(*) from role
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update brand
+    update role
     <set>
-      <if test="record.brandId != null">
-        brand_id = #{record.brandId,jdbcType=INTEGER},
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.merchantId != null">
-        merchant_id = #{record.merchantId,jdbcType=INTEGER},
+      <if test="record.roleName != null">
+        role_name = #{record.roleName,jdbcType=VARCHAR},
       </if>
-      <if test="record.brandName != null">
-        brand_name = #{record.brandName,jdbcType=VARCHAR},
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.headquarters != null">
+        headquarters = #{record.headquarters,jdbcType=BIT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -325,30 +312,13 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update brand
-    set brand_id = #{record.brandId,jdbcType=INTEGER},
-      merchant_id = #{record.merchantId,jdbcType=INTEGER},
-      brand_name = #{record.brandName,jdbcType=VARCHAR}
+    update role
+    set id = #{record.id,jdbcType=INTEGER},
+      role_name = #{record.roleName,jdbcType=VARCHAR},
+      description = #{record.description,jdbcType=VARCHAR},
+      headquarters = #{record.headquarters,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.Brand">
-    update brand
-    <set>
-      <if test="merchantId != null">
-        merchant_id = #{merchantId,jdbcType=INTEGER},
-      </if>
-      <if test="brandName != null">
-        brand_name = #{brandName,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where brand_id = #{brandId,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.Brand">
-    update brand
-    set merchant_id = #{merchantId,jdbcType=INTEGER},
-      brand_name = #{brandName,jdbcType=VARCHAR}
-    where brand_id = #{brandId,jdbcType=INTEGER}
   </update>
 </mapper>

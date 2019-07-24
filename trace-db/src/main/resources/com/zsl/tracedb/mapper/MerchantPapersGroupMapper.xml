@@ -273,4 +273,276 @@
       warenzeichenlizenz_url = #{warenzeichenlizenzUrl,jdbcType=VARCHAR}
     where papers_group_id = #{papersGroupId,jdbcType=INTEGER}
   </update>
+  <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.MerchantPapersGroup">
+    <id column="papers_group_id" jdbcType="INTEGER" property="papersGroupId" />
+    <result column="merchant_id" jdbcType="INTEGER" property="merchantId" />
+    <result column="merchant_logo_url" jdbcType="VARCHAR" property="merchantLogoUrl" />
+    <result column="product_test_report_url" jdbcType="VARCHAR" property="productTestReportUrl" />
+    <result column="hygienic_license_url" jdbcType="VARCHAR" property="hygienicLicenseUrl" />
+    <result column="business_certificate_url" jdbcType="VARCHAR" property="businessCertificateUrl" />
+    <result column="product_certification_url" jdbcType="VARCHAR" property="productCertificationUrl" />
+    <result column="production_licence_url" jdbcType="VARCHAR" property="productionLicenceUrl" />
+    <result column="warenzeichenlizenz_url" jdbcType="VARCHAR" property="warenzeichenlizenzUrl" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    papers_group_id, merchant_id, merchant_logo_url, product_test_report_url, hygienic_license_url, 
+    business_certificate_url, product_certification_url, production_licence_url, warenzeichenlizenz_url
+  </sql>
+  <select id="selectByExample" parameterType="com.zsl.tracedb.model.MerchantPapersGroupExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from merchant_papers_group
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_papers_group
+    where papers_group_id = #{papersGroupId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from merchant_papers_group
+    where papers_group_id = #{papersGroupId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zsl.tracedb.model.MerchantPapersGroupExample">
+    delete from merchant_papers_group
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zsl.tracedb.model.MerchantPapersGroup">
+    <selectKey keyProperty="papersGroupId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into merchant_papers_group (merchant_id, merchant_logo_url, product_test_report_url, 
+      hygienic_license_url, business_certificate_url, 
+      product_certification_url, production_licence_url, 
+      warenzeichenlizenz_url)
+    values (#{merchantId,jdbcType=INTEGER}, #{merchantLogoUrl,jdbcType=VARCHAR}, #{productTestReportUrl,jdbcType=VARCHAR}, 
+      #{hygienicLicenseUrl,jdbcType=VARCHAR}, #{businessCertificateUrl,jdbcType=VARCHAR}, 
+      #{productCertificationUrl,jdbcType=VARCHAR}, #{productionLicenceUrl,jdbcType=VARCHAR}, 
+      #{warenzeichenlizenzUrl,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zsl.tracedb.model.MerchantPapersGroup">
+    <selectKey keyProperty="papersGroupId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into merchant_papers_group
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="merchantId != null">
+        merchant_id,
+      </if>
+      <if test="merchantLogoUrl != null">
+        merchant_logo_url,
+      </if>
+      <if test="productTestReportUrl != null">
+        product_test_report_url,
+      </if>
+      <if test="hygienicLicenseUrl != null">
+        hygienic_license_url,
+      </if>
+      <if test="businessCertificateUrl != null">
+        business_certificate_url,
+      </if>
+      <if test="productCertificationUrl != null">
+        product_certification_url,
+      </if>
+      <if test="productionLicenceUrl != null">
+        production_licence_url,
+      </if>
+      <if test="warenzeichenlizenzUrl != null">
+        warenzeichenlizenz_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="merchantId != null">
+        #{merchantId,jdbcType=INTEGER},
+      </if>
+      <if test="merchantLogoUrl != null">
+        #{merchantLogoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="productTestReportUrl != null">
+        #{productTestReportUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="hygienicLicenseUrl != null">
+        #{hygienicLicenseUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="businessCertificateUrl != null">
+        #{businessCertificateUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="productCertificationUrl != null">
+        #{productCertificationUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="productionLicenceUrl != null">
+        #{productionLicenceUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="warenzeichenlizenzUrl != null">
+        #{warenzeichenlizenzUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zsl.tracedb.model.MerchantPapersGroupExample" resultType="java.lang.Integer">
+    select count(*) from merchant_papers_group
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update merchant_papers_group
+    <set>
+      <if test="record.papersGroupId != null">
+        papers_group_id = #{record.papersGroupId,jdbcType=INTEGER},
+      </if>
+      <if test="record.merchantId != null">
+        merchant_id = #{record.merchantId,jdbcType=INTEGER},
+      </if>
+      <if test="record.merchantLogoUrl != null">
+        merchant_logo_url = #{record.merchantLogoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productTestReportUrl != null">
+        product_test_report_url = #{record.productTestReportUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hygienicLicenseUrl != null">
+        hygienic_license_url = #{record.hygienicLicenseUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.businessCertificateUrl != null">
+        business_certificate_url = #{record.businessCertificateUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productCertificationUrl != null">
+        product_certification_url = #{record.productCertificationUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productionLicenceUrl != null">
+        production_licence_url = #{record.productionLicenceUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.warenzeichenlizenzUrl != null">
+        warenzeichenlizenz_url = #{record.warenzeichenlizenzUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update merchant_papers_group
+    set papers_group_id = #{record.papersGroupId,jdbcType=INTEGER},
+      merchant_id = #{record.merchantId,jdbcType=INTEGER},
+      merchant_logo_url = #{record.merchantLogoUrl,jdbcType=VARCHAR},
+      product_test_report_url = #{record.productTestReportUrl,jdbcType=VARCHAR},
+      hygienic_license_url = #{record.hygienicLicenseUrl,jdbcType=VARCHAR},
+      business_certificate_url = #{record.businessCertificateUrl,jdbcType=VARCHAR},
+      product_certification_url = #{record.productCertificationUrl,jdbcType=VARCHAR},
+      production_licence_url = #{record.productionLicenceUrl,jdbcType=VARCHAR},
+      warenzeichenlizenz_url = #{record.warenzeichenlizenzUrl,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.MerchantPapersGroup">
+    update merchant_papers_group
+    <set>
+      <if test="merchantId != null">
+        merchant_id = #{merchantId,jdbcType=INTEGER},
+      </if>
+      <if test="merchantLogoUrl != null">
+        merchant_logo_url = #{merchantLogoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="productTestReportUrl != null">
+        product_test_report_url = #{productTestReportUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="hygienicLicenseUrl != null">
+        hygienic_license_url = #{hygienicLicenseUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="businessCertificateUrl != null">
+        business_certificate_url = #{businessCertificateUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="productCertificationUrl != null">
+        product_certification_url = #{productCertificationUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="productionLicenceUrl != null">
+        production_licence_url = #{productionLicenceUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="warenzeichenlizenzUrl != null">
+        warenzeichenlizenz_url = #{warenzeichenlizenzUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where papers_group_id = #{papersGroupId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.MerchantPapersGroup">
+    update merchant_papers_group
+    set merchant_id = #{merchantId,jdbcType=INTEGER},
+      merchant_logo_url = #{merchantLogoUrl,jdbcType=VARCHAR},
+      product_test_report_url = #{productTestReportUrl,jdbcType=VARCHAR},
+      hygienic_license_url = #{hygienicLicenseUrl,jdbcType=VARCHAR},
+      business_certificate_url = #{businessCertificateUrl,jdbcType=VARCHAR},
+      product_certification_url = #{productCertificationUrl,jdbcType=VARCHAR},
+      production_licence_url = #{productionLicenceUrl,jdbcType=VARCHAR},
+      warenzeichenlizenz_url = #{warenzeichenlizenzUrl,jdbcType=VARCHAR}
+    where papers_group_id = #{papersGroupId,jdbcType=INTEGER}
+  </update>
 </mapper>

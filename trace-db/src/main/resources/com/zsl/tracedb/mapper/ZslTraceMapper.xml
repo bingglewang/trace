@@ -383,4 +383,386 @@
       trace_back5 = #{traceBack5,jdbcType=VARCHAR}
     where trace_id = #{traceId,jdbcType=INTEGER}
   </update>
+  <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.ZslTrace">
+    <id column="trace_id" jdbcType="INTEGER" property="traceId" />
+    <result column="trace_code_number" jdbcType="VARCHAR" property="traceCodeNumber" />
+    <result column="trace_business_id" jdbcType="INTEGER" property="traceBusinessId" />
+    <result column="trace_apply_type" jdbcType="INTEGER" property="traceApplyType" />
+    <result column="trace_handle_status" jdbcType="INTEGER" property="traceHandleStatus" />
+    <result column="trace_company_name" jdbcType="VARCHAR" property="traceCompanyName" />
+    <result column="trace_apply_date" jdbcType="TIMESTAMP" property="traceApplyDate" />
+    <result column="trace_review_date" jdbcType="TIMESTAMP" property="traceReviewDate" />
+    <result column="trace_apply_count" jdbcType="BIGINT" property="traceApplyCount" />
+    <result column="trace_enable_count" jdbcType="INTEGER" property="traceEnableCount" />
+    <result column="trace_refuse_remark" jdbcType="VARCHAR" property="traceRefuseRemark" />
+    <result column="trace_back1" jdbcType="INTEGER" property="traceBack1" />
+    <result column="trace_back2" jdbcType="INTEGER" property="traceBack2" />
+    <result column="trace_back3" jdbcType="VARCHAR" property="traceBack3" />
+    <result column="trace_back4" jdbcType="VARCHAR" property="traceBack4" />
+    <result column="trace_back5" jdbcType="VARCHAR" property="traceBack5" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    trace_id, trace_code_number, trace_business_id, trace_apply_type, trace_handle_status, 
+    trace_company_name, trace_apply_date, trace_review_date, trace_apply_count, trace_enable_count, 
+    trace_refuse_remark, trace_back1, trace_back2, trace_back3, trace_back4, trace_back5
+  </sql>
+  <select id="selectByExample" parameterType="com.zsl.tracedb.model.ZslTraceExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from zsl_trace
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from zsl_trace
+    where trace_id = #{traceId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from zsl_trace
+    where trace_id = #{traceId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zsl.tracedb.model.ZslTraceExample">
+    delete from zsl_trace
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zsl.tracedb.model.ZslTrace">
+    <selectKey keyProperty="traceId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into zsl_trace (trace_code_number, trace_business_id, 
+      trace_apply_type, trace_handle_status, trace_company_name, 
+      trace_apply_date, trace_review_date, trace_apply_count, 
+      trace_enable_count, trace_refuse_remark, trace_back1, 
+      trace_back2, trace_back3, trace_back4, 
+      trace_back5)
+    values (#{traceCodeNumber,jdbcType=VARCHAR}, #{traceBusinessId,jdbcType=INTEGER}, 
+      #{traceApplyType,jdbcType=INTEGER}, #{traceHandleStatus,jdbcType=INTEGER}, #{traceCompanyName,jdbcType=VARCHAR}, 
+      #{traceApplyDate,jdbcType=TIMESTAMP}, #{traceReviewDate,jdbcType=TIMESTAMP}, #{traceApplyCount,jdbcType=BIGINT}, 
+      #{traceEnableCount,jdbcType=INTEGER}, #{traceRefuseRemark,jdbcType=VARCHAR}, #{traceBack1,jdbcType=INTEGER}, 
+      #{traceBack2,jdbcType=INTEGER}, #{traceBack3,jdbcType=VARCHAR}, #{traceBack4,jdbcType=VARCHAR}, 
+      #{traceBack5,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zsl.tracedb.model.ZslTrace">
+    <selectKey keyProperty="traceId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into zsl_trace
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="traceCodeNumber != null">
+        trace_code_number,
+      </if>
+      <if test="traceBusinessId != null">
+        trace_business_id,
+      </if>
+      <if test="traceApplyType != null">
+        trace_apply_type,
+      </if>
+      <if test="traceHandleStatus != null">
+        trace_handle_status,
+      </if>
+      <if test="traceCompanyName != null">
+        trace_company_name,
+      </if>
+      <if test="traceApplyDate != null">
+        trace_apply_date,
+      </if>
+      <if test="traceReviewDate != null">
+        trace_review_date,
+      </if>
+      <if test="traceApplyCount != null">
+        trace_apply_count,
+      </if>
+      <if test="traceEnableCount != null">
+        trace_enable_count,
+      </if>
+      <if test="traceRefuseRemark != null">
+        trace_refuse_remark,
+      </if>
+      <if test="traceBack1 != null">
+        trace_back1,
+      </if>
+      <if test="traceBack2 != null">
+        trace_back2,
+      </if>
+      <if test="traceBack3 != null">
+        trace_back3,
+      </if>
+      <if test="traceBack4 != null">
+        trace_back4,
+      </if>
+      <if test="traceBack5 != null">
+        trace_back5,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="traceCodeNumber != null">
+        #{traceCodeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="traceBusinessId != null">
+        #{traceBusinessId,jdbcType=INTEGER},
+      </if>
+      <if test="traceApplyType != null">
+        #{traceApplyType,jdbcType=INTEGER},
+      </if>
+      <if test="traceHandleStatus != null">
+        #{traceHandleStatus,jdbcType=INTEGER},
+      </if>
+      <if test="traceCompanyName != null">
+        #{traceCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="traceApplyDate != null">
+        #{traceApplyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="traceReviewDate != null">
+        #{traceReviewDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="traceApplyCount != null">
+        #{traceApplyCount,jdbcType=BIGINT},
+      </if>
+      <if test="traceEnableCount != null">
+        #{traceEnableCount,jdbcType=INTEGER},
+      </if>
+      <if test="traceRefuseRemark != null">
+        #{traceRefuseRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="traceBack1 != null">
+        #{traceBack1,jdbcType=INTEGER},
+      </if>
+      <if test="traceBack2 != null">
+        #{traceBack2,jdbcType=INTEGER},
+      </if>
+      <if test="traceBack3 != null">
+        #{traceBack3,jdbcType=VARCHAR},
+      </if>
+      <if test="traceBack4 != null">
+        #{traceBack4,jdbcType=VARCHAR},
+      </if>
+      <if test="traceBack5 != null">
+        #{traceBack5,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zsl.tracedb.model.ZslTraceExample" resultType="java.lang.Integer">
+    select count(*) from zsl_trace
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update zsl_trace
+    <set>
+      <if test="record.traceId != null">
+        trace_id = #{record.traceId,jdbcType=INTEGER},
+      </if>
+      <if test="record.traceCodeNumber != null">
+        trace_code_number = #{record.traceCodeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.traceBusinessId != null">
+        trace_business_id = #{record.traceBusinessId,jdbcType=INTEGER},
+      </if>
+      <if test="record.traceApplyType != null">
+        trace_apply_type = #{record.traceApplyType,jdbcType=INTEGER},
+      </if>
+      <if test="record.traceHandleStatus != null">
+        trace_handle_status = #{record.traceHandleStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.traceCompanyName != null">
+        trace_company_name = #{record.traceCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.traceApplyDate != null">
+        trace_apply_date = #{record.traceApplyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.traceReviewDate != null">
+        trace_review_date = #{record.traceReviewDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.traceApplyCount != null">
+        trace_apply_count = #{record.traceApplyCount,jdbcType=BIGINT},
+      </if>
+      <if test="record.traceEnableCount != null">
+        trace_enable_count = #{record.traceEnableCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.traceRefuseRemark != null">
+        trace_refuse_remark = #{record.traceRefuseRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.traceBack1 != null">
+        trace_back1 = #{record.traceBack1,jdbcType=INTEGER},
+      </if>
+      <if test="record.traceBack2 != null">
+        trace_back2 = #{record.traceBack2,jdbcType=INTEGER},
+      </if>
+      <if test="record.traceBack3 != null">
+        trace_back3 = #{record.traceBack3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.traceBack4 != null">
+        trace_back4 = #{record.traceBack4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.traceBack5 != null">
+        trace_back5 = #{record.traceBack5,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update zsl_trace
+    set trace_id = #{record.traceId,jdbcType=INTEGER},
+      trace_code_number = #{record.traceCodeNumber,jdbcType=VARCHAR},
+      trace_business_id = #{record.traceBusinessId,jdbcType=INTEGER},
+      trace_apply_type = #{record.traceApplyType,jdbcType=INTEGER},
+      trace_handle_status = #{record.traceHandleStatus,jdbcType=INTEGER},
+      trace_company_name = #{record.traceCompanyName,jdbcType=VARCHAR},
+      trace_apply_date = #{record.traceApplyDate,jdbcType=TIMESTAMP},
+      trace_review_date = #{record.traceReviewDate,jdbcType=TIMESTAMP},
+      trace_apply_count = #{record.traceApplyCount,jdbcType=BIGINT},
+      trace_enable_count = #{record.traceEnableCount,jdbcType=INTEGER},
+      trace_refuse_remark = #{record.traceRefuseRemark,jdbcType=VARCHAR},
+      trace_back1 = #{record.traceBack1,jdbcType=INTEGER},
+      trace_back2 = #{record.traceBack2,jdbcType=INTEGER},
+      trace_back3 = #{record.traceBack3,jdbcType=VARCHAR},
+      trace_back4 = #{record.traceBack4,jdbcType=VARCHAR},
+      trace_back5 = #{record.traceBack5,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.ZslTrace">
+    update zsl_trace
+    <set>
+      <if test="traceCodeNumber != null">
+        trace_code_number = #{traceCodeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="traceBusinessId != null">
+        trace_business_id = #{traceBusinessId,jdbcType=INTEGER},
+      </if>
+      <if test="traceApplyType != null">
+        trace_apply_type = #{traceApplyType,jdbcType=INTEGER},
+      </if>
+      <if test="traceHandleStatus != null">
+        trace_handle_status = #{traceHandleStatus,jdbcType=INTEGER},
+      </if>
+      <if test="traceCompanyName != null">
+        trace_company_name = #{traceCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="traceApplyDate != null">
+        trace_apply_date = #{traceApplyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="traceReviewDate != null">
+        trace_review_date = #{traceReviewDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="traceApplyCount != null">
+        trace_apply_count = #{traceApplyCount,jdbcType=BIGINT},
+      </if>
+      <if test="traceEnableCount != null">
+        trace_enable_count = #{traceEnableCount,jdbcType=INTEGER},
+      </if>
+      <if test="traceRefuseRemark != null">
+        trace_refuse_remark = #{traceRefuseRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="traceBack1 != null">
+        trace_back1 = #{traceBack1,jdbcType=INTEGER},
+      </if>
+      <if test="traceBack2 != null">
+        trace_back2 = #{traceBack2,jdbcType=INTEGER},
+      </if>
+      <if test="traceBack3 != null">
+        trace_back3 = #{traceBack3,jdbcType=VARCHAR},
+      </if>
+      <if test="traceBack4 != null">
+        trace_back4 = #{traceBack4,jdbcType=VARCHAR},
+      </if>
+      <if test="traceBack5 != null">
+        trace_back5 = #{traceBack5,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where trace_id = #{traceId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.ZslTrace">
+    update zsl_trace
+    set trace_code_number = #{traceCodeNumber,jdbcType=VARCHAR},
+      trace_business_id = #{traceBusinessId,jdbcType=INTEGER},
+      trace_apply_type = #{traceApplyType,jdbcType=INTEGER},
+      trace_handle_status = #{traceHandleStatus,jdbcType=INTEGER},
+      trace_company_name = #{traceCompanyName,jdbcType=VARCHAR},
+      trace_apply_date = #{traceApplyDate,jdbcType=TIMESTAMP},
+      trace_review_date = #{traceReviewDate,jdbcType=TIMESTAMP},
+      trace_apply_count = #{traceApplyCount,jdbcType=BIGINT},
+      trace_enable_count = #{traceEnableCount,jdbcType=INTEGER},
+      trace_refuse_remark = #{traceRefuseRemark,jdbcType=VARCHAR},
+      trace_back1 = #{traceBack1,jdbcType=INTEGER},
+      trace_back2 = #{traceBack2,jdbcType=INTEGER},
+      trace_back3 = #{traceBack3,jdbcType=VARCHAR},
+      trace_back4 = #{traceBack4,jdbcType=VARCHAR},
+      trace_back5 = #{traceBack5,jdbcType=VARCHAR}
+    where trace_id = #{traceId,jdbcType=INTEGER}
+  </update>
 </mapper>

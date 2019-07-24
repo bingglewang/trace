@@ -178,4 +178,181 @@
       combobox_value = #{comboboxValue,jdbcType=VARCHAR}
     where property_value_id = #{propertyValueId,jdbcType=INTEGER}
   </update>
+  <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.PropertyValue">
+    <id column="property_value_id" jdbcType="INTEGER" property="propertyValueId" />
+    <result column="category_property_id" jdbcType="INTEGER" property="categoryPropertyId" />
+    <result column="combobox_value" jdbcType="VARCHAR" property="comboboxValue" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    property_value_id, category_property_id, combobox_value
+  </sql>
+  <select id="selectByExample" parameterType="com.zsl.tracedb.model.PropertyValueExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from property_value
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from property_value
+    where property_value_id = #{propertyValueId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from property_value
+    where property_value_id = #{propertyValueId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zsl.tracedb.model.PropertyValueExample">
+    delete from property_value
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zsl.tracedb.model.PropertyValue">
+    <selectKey keyProperty="propertyValueId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into property_value (category_property_id, combobox_value
+      )
+    values (#{categoryPropertyId,jdbcType=INTEGER}, #{comboboxValue,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zsl.tracedb.model.PropertyValue">
+    <selectKey keyProperty="propertyValueId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into property_value
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="categoryPropertyId != null">
+        category_property_id,
+      </if>
+      <if test="comboboxValue != null">
+        combobox_value,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="categoryPropertyId != null">
+        #{categoryPropertyId,jdbcType=INTEGER},
+      </if>
+      <if test="comboboxValue != null">
+        #{comboboxValue,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zsl.tracedb.model.PropertyValueExample" resultType="java.lang.Integer">
+    select count(*) from property_value
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update property_value
+    <set>
+      <if test="record.propertyValueId != null">
+        property_value_id = #{record.propertyValueId,jdbcType=INTEGER},
+      </if>
+      <if test="record.categoryPropertyId != null">
+        category_property_id = #{record.categoryPropertyId,jdbcType=INTEGER},
+      </if>
+      <if test="record.comboboxValue != null">
+        combobox_value = #{record.comboboxValue,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update property_value
+    set property_value_id = #{record.propertyValueId,jdbcType=INTEGER},
+      category_property_id = #{record.categoryPropertyId,jdbcType=INTEGER},
+      combobox_value = #{record.comboboxValue,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.PropertyValue">
+    update property_value
+    <set>
+      <if test="categoryPropertyId != null">
+        category_property_id = #{categoryPropertyId,jdbcType=INTEGER},
+      </if>
+      <if test="comboboxValue != null">
+        combobox_value = #{comboboxValue,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where property_value_id = #{propertyValueId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.PropertyValue">
+    update property_value
+    set category_property_id = #{categoryPropertyId,jdbcType=INTEGER},
+      combobox_value = #{comboboxValue,jdbcType=VARCHAR}
+    where property_value_id = #{propertyValueId,jdbcType=INTEGER}
+  </update>
 </mapper>

@@ -223,4 +223,226 @@
       stallholder_openid = #{stallholderOpenid,jdbcType=VARCHAR}
     where stall_id = #{stallId,jdbcType=INTEGER}
   </update>
+  <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.MerchantStall">
+    <id column="stall_id" jdbcType="INTEGER" property="stallId" />
+    <result column="stall_name" jdbcType="VARCHAR" property="stallName" />
+    <result column="merchant_id" jdbcType="INTEGER" property="merchantId" />
+    <result column="stallholder_name" jdbcType="VARCHAR" property="stallholderName" />
+    <result column="stallholder_number" jdbcType="VARCHAR" property="stallholderNumber" />
+    <result column="stallholder_openid" jdbcType="VARCHAR" property="stallholderOpenid" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    stall_id, stall_name, merchant_id, stallholder_name, stallholder_number, stallholder_openid
+  </sql>
+  <select id="selectByExample" parameterType="com.zsl.tracedb.model.MerchantStallExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from merchant_stall
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_stall
+    where stall_id = #{stallId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from merchant_stall
+    where stall_id = #{stallId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zsl.tracedb.model.MerchantStallExample">
+    delete from merchant_stall
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zsl.tracedb.model.MerchantStall">
+    <selectKey keyProperty="stallId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into merchant_stall (stall_name, merchant_id, stallholder_name, 
+      stallholder_number, stallholder_openid)
+    values (#{stallName,jdbcType=VARCHAR}, #{merchantId,jdbcType=INTEGER}, #{stallholderName,jdbcType=VARCHAR}, 
+      #{stallholderNumber,jdbcType=VARCHAR}, #{stallholderOpenid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zsl.tracedb.model.MerchantStall">
+    <selectKey keyProperty="stallId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into merchant_stall
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="stallName != null">
+        stall_name,
+      </if>
+      <if test="merchantId != null">
+        merchant_id,
+      </if>
+      <if test="stallholderName != null">
+        stallholder_name,
+      </if>
+      <if test="stallholderNumber != null">
+        stallholder_number,
+      </if>
+      <if test="stallholderOpenid != null">
+        stallholder_openid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="stallName != null">
+        #{stallName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null">
+        #{merchantId,jdbcType=INTEGER},
+      </if>
+      <if test="stallholderName != null">
+        #{stallholderName,jdbcType=VARCHAR},
+      </if>
+      <if test="stallholderNumber != null">
+        #{stallholderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="stallholderOpenid != null">
+        #{stallholderOpenid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zsl.tracedb.model.MerchantStallExample" resultType="java.lang.Integer">
+    select count(*) from merchant_stall
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update merchant_stall
+    <set>
+      <if test="record.stallId != null">
+        stall_id = #{record.stallId,jdbcType=INTEGER},
+      </if>
+      <if test="record.stallName != null">
+        stall_name = #{record.stallName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.merchantId != null">
+        merchant_id = #{record.merchantId,jdbcType=INTEGER},
+      </if>
+      <if test="record.stallholderName != null">
+        stallholder_name = #{record.stallholderName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stallholderNumber != null">
+        stallholder_number = #{record.stallholderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stallholderOpenid != null">
+        stallholder_openid = #{record.stallholderOpenid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update merchant_stall
+    set stall_id = #{record.stallId,jdbcType=INTEGER},
+      stall_name = #{record.stallName,jdbcType=VARCHAR},
+      merchant_id = #{record.merchantId,jdbcType=INTEGER},
+      stallholder_name = #{record.stallholderName,jdbcType=VARCHAR},
+      stallholder_number = #{record.stallholderNumber,jdbcType=VARCHAR},
+      stallholder_openid = #{record.stallholderOpenid,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.MerchantStall">
+    update merchant_stall
+    <set>
+      <if test="stallName != null">
+        stall_name = #{stallName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null">
+        merchant_id = #{merchantId,jdbcType=INTEGER},
+      </if>
+      <if test="stallholderName != null">
+        stallholder_name = #{stallholderName,jdbcType=VARCHAR},
+      </if>
+      <if test="stallholderNumber != null">
+        stallholder_number = #{stallholderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="stallholderOpenid != null">
+        stallholder_openid = #{stallholderOpenid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where stall_id = #{stallId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.MerchantStall">
+    update merchant_stall
+    set stall_name = #{stallName,jdbcType=VARCHAR},
+      merchant_id = #{merchantId,jdbcType=INTEGER},
+      stallholder_name = #{stallholderName,jdbcType=VARCHAR},
+      stallholder_number = #{stallholderNumber,jdbcType=VARCHAR},
+      stallholder_openid = #{stallholderOpenid,jdbcType=VARCHAR}
+    where stall_id = #{stallId,jdbcType=INTEGER}
+  </update>
 </mapper>
