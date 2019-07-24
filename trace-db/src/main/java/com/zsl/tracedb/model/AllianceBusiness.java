@@ -22,6 +22,15 @@ public class AllianceBusiness implements Serializable {
     @ApiModelProperty(value = "加盟商状态：0正常 1：禁用")
     private Byte allianceBusinessStatus;
 
+    @ApiModelProperty(value = "一级行政ID")
+    private Integer businessAdminstrationId;
+
+    @ApiModelProperty(value = "二级行政ID")
+    private Integer businessAdminstrationSecondId;
+
+    @ApiModelProperty(value = "三级行政ID")
+    private Integer businessAdminstrationThirdId;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getAllianceBusinessId() {
@@ -72,6 +81,30 @@ public class AllianceBusiness implements Serializable {
         this.allianceBusinessStatus = allianceBusinessStatus;
     }
 
+    public Integer getBusinessAdminstrationId() {
+        return businessAdminstrationId;
+    }
+
+    public void setBusinessAdminstrationId(Integer businessAdminstrationId) {
+        this.businessAdminstrationId = businessAdminstrationId;
+    }
+
+    public Integer getBusinessAdminstrationSecondId() {
+        return businessAdminstrationSecondId;
+    }
+
+    public void setBusinessAdminstrationSecondId(Integer businessAdminstrationSecondId) {
+        this.businessAdminstrationSecondId = businessAdminstrationSecondId;
+    }
+
+    public Integer getBusinessAdminstrationThirdId() {
+        return businessAdminstrationThirdId;
+    }
+
+    public void setBusinessAdminstrationThirdId(Integer businessAdminstrationThirdId) {
+        this.businessAdminstrationThirdId = businessAdminstrationThirdId;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -84,6 +117,9 @@ public class AllianceBusiness implements Serializable {
         sb.append(", companyDescription=").append(companyDescription);
         sb.append(", allianceBusinessEnterTime=").append(allianceBusinessEnterTime);
         sb.append(", allianceBusinessStatus=").append(allianceBusinessStatus);
+        sb.append(", businessAdminstrationId=").append(businessAdminstrationId);
+        sb.append(", businessAdminstrationSecondId=").append(businessAdminstrationSecondId);
+        sb.append(", businessAdminstrationThirdId=").append(businessAdminstrationThirdId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

@@ -3,8 +3,9 @@
 <mapper namespace="com.zsl.tracedb.mapper.CategoryMapper">
   <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.Category">
     <id column="category_id" jdbcType="INTEGER" property="categoryId" />
-    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
     <result column="category_super_id" jdbcType="INTEGER" property="categorySuperId" />
+    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="category_full_name" jdbcType="VARCHAR" property="categoryFullName" />
     <result column="category_level" jdbcType="INTEGER" property="categoryLevel" />
     <result column="include_brand" jdbcType="TINYINT" property="includeBrand" />
   </resultMap>
@@ -67,7 +68,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    category_id, category_name, category_super_id, category_level, include_brand
+    category_id, category_super_id, category_name, category_full_name, category_level, 
+    include_brand
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.CategoryExample" resultMap="BaseResultMap">
     select
@@ -103,10 +105,10 @@
     <selectKey keyProperty="categoryId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into category (category_name, category_super_id, category_level, 
-      include_brand)
-    values (#{categoryName,jdbcType=VARCHAR}, #{categorySuperId,jdbcType=INTEGER}, #{categoryLevel,jdbcType=INTEGER}, 
-      #{includeBrand,jdbcType=TINYINT})
+    insert into category (category_super_id, category_name, category_full_name, 
+      category_level, include_brand)
+    values (#{categorySuperId,jdbcType=INTEGER}, #{categoryName,jdbcType=VARCHAR}, #{categoryFullName,jdbcType=VARCHAR}, 
+      #{categoryLevel,jdbcType=INTEGER}, #{includeBrand,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.Category">
     <selectKey keyProperty="categoryId" order="AFTER" resultType="java.lang.Integer">
@@ -114,11 +116,14 @@
     </selectKey>
     insert into category
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="categorySuperId != null">
+        category_super_id,
+      </if>
       <if test="categoryName != null">
         category_name,
       </if>
-      <if test="categorySuperId != null">
-        category_super_id,
+      <if test="categoryFullName != null">
+        category_full_name,
       </if>
       <if test="categoryLevel != null">
         category_level,
@@ -128,11 +133,14 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="categorySuperId != null">
+        #{categorySuperId,jdbcType=INTEGER},
+      </if>
       <if test="categoryName != null">
         #{categoryName,jdbcType=VARCHAR},
       </if>
-      <if test="categorySuperId != null">
-        #{categorySuperId,jdbcType=INTEGER},
+      <if test="categoryFullName != null">
+        #{categoryFullName,jdbcType=VARCHAR},
       </if>
       <if test="categoryLevel != null">
         #{categoryLevel,jdbcType=INTEGER},
@@ -154,11 +162,14 @@
       <if test="record.categoryId != null">
         category_id = #{record.categoryId,jdbcType=INTEGER},
       </if>
+      <if test="record.categorySuperId != null">
+        category_super_id = #{record.categorySuperId,jdbcType=INTEGER},
+      </if>
       <if test="record.categoryName != null">
         category_name = #{record.categoryName,jdbcType=VARCHAR},
       </if>
-      <if test="record.categorySuperId != null">
-        category_super_id = #{record.categorySuperId,jdbcType=INTEGER},
+      <if test="record.categoryFullName != null">
+        category_full_name = #{record.categoryFullName,jdbcType=VARCHAR},
       </if>
       <if test="record.categoryLevel != null">
         category_level = #{record.categoryLevel,jdbcType=INTEGER},
@@ -174,8 +185,9 @@
   <update id="updateByExample" parameterType="map">
     update category
     set category_id = #{record.categoryId,jdbcType=INTEGER},
-      category_name = #{record.categoryName,jdbcType=VARCHAR},
       category_super_id = #{record.categorySuperId,jdbcType=INTEGER},
+      category_name = #{record.categoryName,jdbcType=VARCHAR},
+      category_full_name = #{record.categoryFullName,jdbcType=VARCHAR},
       category_level = #{record.categoryLevel,jdbcType=INTEGER},
       include_brand = #{record.includeBrand,jdbcType=TINYINT}
     <if test="_parameter != null">
@@ -185,11 +197,14 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.Category">
     update category
     <set>
+      <if test="categorySuperId != null">
+        category_super_id = #{categorySuperId,jdbcType=INTEGER},
+      </if>
       <if test="categoryName != null">
         category_name = #{categoryName,jdbcType=VARCHAR},
       </if>
-      <if test="categorySuperId != null">
-        category_super_id = #{categorySuperId,jdbcType=INTEGER},
+      <if test="categoryFullName != null">
+        category_full_name = #{categoryFullName,jdbcType=VARCHAR},
       </if>
       <if test="categoryLevel != null">
         category_level = #{categoryLevel,jdbcType=INTEGER},
@@ -202,8 +217,9 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.Category">
     update category
-    set category_name = #{categoryName,jdbcType=VARCHAR},
-      category_super_id = #{categorySuperId,jdbcType=INTEGER},
+    set category_super_id = #{categorySuperId,jdbcType=INTEGER},
+      category_name = #{categoryName,jdbcType=VARCHAR},
+      category_full_name = #{categoryFullName,jdbcType=VARCHAR},
       category_level = #{categoryLevel,jdbcType=INTEGER},
       include_brand = #{includeBrand,jdbcType=TINYINT}
     where category_id = #{categoryId,jdbcType=INTEGER}

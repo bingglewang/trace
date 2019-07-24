@@ -15,6 +15,7 @@
     <result column="merchant_type" jdbcType="INTEGER" property="merchantType" />
     <result column="leal_person_name" jdbcType="VARCHAR" property="lealPersonName" />
     <result column="papers_url" jdbcType="VARCHAR" property="papersUrl" />
+    <result column="papers_back_url" jdbcType="VARCHAR" property="papersBackUrl" />
     <result column="papers_number" jdbcType="VARCHAR" property="papersNumber" />
     <result column="business_lines" jdbcType="VARCHAR" property="businessLines" />
     <result column="merchant_contact" jdbcType="VARCHAR" property="merchantContact" />
@@ -25,6 +26,7 @@
     <result column="certification_to_pay" jdbcType="TINYINT" property="certificationToPay" />
     <result column="merchant_desciption" jdbcType="VARCHAR" property="merchantDesciption" />
     <result column="stall_limit" jdbcType="INTEGER" property="stallLimit" />
+    <result column="paper_label_upper" jdbcType="BIGINT" property="paperLabelUpper" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -87,9 +89,9 @@
   <sql id="Base_Column_List">
     merchant_id, merchant_name, merchant_account, adminstration_id, administrative_division_full_site, 
     merchant_detail_site, merchant_url, net_type, merchant_coin, alliance_business_id, 
-    merchant_type, leal_person_name, papers_url, papers_number, business_lines, merchant_contact, 
-    contact_number, merchant_enter_time, merchant_status, short_video_url, certification_to_pay, 
-    merchant_desciption, stall_limit
+    merchant_type, leal_person_name, papers_url, papers_back_url, papers_number, business_lines, 
+    merchant_contact, contact_number, merchant_enter_time, merchant_status, short_video_url, 
+    certification_to_pay, merchant_desciption, stall_limit, paper_label_upper
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.MerchantExample" resultMap="BaseResultMap">
     select
@@ -129,18 +131,20 @@
       administrative_division_full_site, merchant_detail_site, 
       merchant_url, net_type, merchant_coin, 
       alliance_business_id, merchant_type, leal_person_name, 
-      papers_url, papers_number, business_lines, 
-      merchant_contact, contact_number, merchant_enter_time, 
-      merchant_status, short_video_url, certification_to_pay, 
-      merchant_desciption, stall_limit)
+      papers_url, papers_back_url, papers_number, 
+      business_lines, merchant_contact, contact_number, 
+      merchant_enter_time, merchant_status, short_video_url, 
+      certification_to_pay, merchant_desciption, 
+      stall_limit, paper_label_upper)
     values (#{merchantName,jdbcType=VARCHAR}, #{merchantAccount,jdbcType=VARCHAR}, #{adminstrationId,jdbcType=INTEGER}, 
       #{administrativeDivisionFullSite,jdbcType=VARCHAR}, #{merchantDetailSite,jdbcType=VARCHAR}, 
       #{merchantUrl,jdbcType=VARCHAR}, #{netType,jdbcType=INTEGER}, #{merchantCoin,jdbcType=INTEGER}, 
       #{allianceBusinessId,jdbcType=INTEGER}, #{merchantType,jdbcType=INTEGER}, #{lealPersonName,jdbcType=VARCHAR}, 
-      #{papersUrl,jdbcType=VARCHAR}, #{papersNumber,jdbcType=VARCHAR}, #{businessLines,jdbcType=VARCHAR}, 
-      #{merchantContact,jdbcType=VARCHAR}, #{contactNumber,jdbcType=VARCHAR}, #{merchantEnterTime,jdbcType=TIMESTAMP}, 
-      #{merchantStatus,jdbcType=INTEGER}, #{shortVideoUrl,jdbcType=VARCHAR}, #{certificationToPay,jdbcType=TINYINT}, 
-      #{merchantDesciption,jdbcType=VARCHAR}, #{stallLimit,jdbcType=INTEGER})
+      #{papersUrl,jdbcType=VARCHAR}, #{papersBackUrl,jdbcType=VARCHAR}, #{papersNumber,jdbcType=VARCHAR}, 
+      #{businessLines,jdbcType=VARCHAR}, #{merchantContact,jdbcType=VARCHAR}, #{contactNumber,jdbcType=VARCHAR}, 
+      #{merchantEnterTime,jdbcType=TIMESTAMP}, #{merchantStatus,jdbcType=INTEGER}, #{shortVideoUrl,jdbcType=VARCHAR}, 
+      #{certificationToPay,jdbcType=TINYINT}, #{merchantDesciption,jdbcType=VARCHAR}, 
+      #{stallLimit,jdbcType=INTEGER}, #{paperLabelUpper,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.Merchant">
     <selectKey keyProperty="merchantId" order="AFTER" resultType="java.lang.Integer">
@@ -184,6 +188,9 @@
       <if test="papersUrl != null">
         papers_url,
       </if>
+      <if test="papersBackUrl != null">
+        papers_back_url,
+      </if>
       <if test="papersNumber != null">
         papers_number,
       </if>
@@ -213,6 +220,9 @@
       </if>
       <if test="stallLimit != null">
         stall_limit,
+      </if>
+      <if test="paperLabelUpper != null">
+        paper_label_upper,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -252,6 +262,9 @@
       <if test="papersUrl != null">
         #{papersUrl,jdbcType=VARCHAR},
       </if>
+      <if test="papersBackUrl != null">
+        #{papersBackUrl,jdbcType=VARCHAR},
+      </if>
       <if test="papersNumber != null">
         #{papersNumber,jdbcType=VARCHAR},
       </if>
@@ -281,6 +294,9 @@
       </if>
       <if test="stallLimit != null">
         #{stallLimit,jdbcType=INTEGER},
+      </if>
+      <if test="paperLabelUpper != null">
+        #{paperLabelUpper,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -332,6 +348,9 @@
       <if test="record.papersUrl != null">
         papers_url = #{record.papersUrl,jdbcType=VARCHAR},
       </if>
+      <if test="record.papersBackUrl != null">
+        papers_back_url = #{record.papersBackUrl,jdbcType=VARCHAR},
+      </if>
       <if test="record.papersNumber != null">
         papers_number = #{record.papersNumber,jdbcType=VARCHAR},
       </if>
@@ -362,6 +381,9 @@
       <if test="record.stallLimit != null">
         stall_limit = #{record.stallLimit,jdbcType=INTEGER},
       </if>
+      <if test="record.paperLabelUpper != null">
+        paper_label_upper = #{record.paperLabelUpper,jdbcType=BIGINT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -382,6 +404,7 @@
       merchant_type = #{record.merchantType,jdbcType=INTEGER},
       leal_person_name = #{record.lealPersonName,jdbcType=VARCHAR},
       papers_url = #{record.papersUrl,jdbcType=VARCHAR},
+      papers_back_url = #{record.papersBackUrl,jdbcType=VARCHAR},
       papers_number = #{record.papersNumber,jdbcType=VARCHAR},
       business_lines = #{record.businessLines,jdbcType=VARCHAR},
       merchant_contact = #{record.merchantContact,jdbcType=VARCHAR},
@@ -391,7 +414,8 @@
       short_video_url = #{record.shortVideoUrl,jdbcType=VARCHAR},
       certification_to_pay = #{record.certificationToPay,jdbcType=TINYINT},
       merchant_desciption = #{record.merchantDesciption,jdbcType=VARCHAR},
-      stall_limit = #{record.stallLimit,jdbcType=INTEGER}
+      stall_limit = #{record.stallLimit,jdbcType=INTEGER},
+      paper_label_upper = #{record.paperLabelUpper,jdbcType=BIGINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -435,6 +459,9 @@
       <if test="papersUrl != null">
         papers_url = #{papersUrl,jdbcType=VARCHAR},
       </if>
+      <if test="papersBackUrl != null">
+        papers_back_url = #{papersBackUrl,jdbcType=VARCHAR},
+      </if>
       <if test="papersNumber != null">
         papers_number = #{papersNumber,jdbcType=VARCHAR},
       </if>
@@ -465,6 +492,9 @@
       <if test="stallLimit != null">
         stall_limit = #{stallLimit,jdbcType=INTEGER},
       </if>
+      <if test="paperLabelUpper != null">
+        paper_label_upper = #{paperLabelUpper,jdbcType=BIGINT},
+      </if>
     </set>
     where merchant_id = #{merchantId,jdbcType=INTEGER}
   </update>
@@ -482,6 +512,7 @@
       merchant_type = #{merchantType,jdbcType=INTEGER},
       leal_person_name = #{lealPersonName,jdbcType=VARCHAR},
       papers_url = #{papersUrl,jdbcType=VARCHAR},
+      papers_back_url = #{papersBackUrl,jdbcType=VARCHAR},
       papers_number = #{papersNumber,jdbcType=VARCHAR},
       business_lines = #{businessLines,jdbcType=VARCHAR},
       merchant_contact = #{merchantContact,jdbcType=VARCHAR},
@@ -491,7 +522,8 @@
       short_video_url = #{shortVideoUrl,jdbcType=VARCHAR},
       certification_to_pay = #{certificationToPay,jdbcType=TINYINT},
       merchant_desciption = #{merchantDesciption,jdbcType=VARCHAR},
-      stall_limit = #{stallLimit,jdbcType=INTEGER}
+      stall_limit = #{stallLimit,jdbcType=INTEGER},
+      paper_label_upper = #{paperLabelUpper,jdbcType=BIGINT}
     where merchant_id = #{merchantId,jdbcType=INTEGER}
   </update>
 </mapper>

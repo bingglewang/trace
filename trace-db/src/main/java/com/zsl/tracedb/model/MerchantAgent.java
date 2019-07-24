@@ -2,10 +2,13 @@ package com.zsl.tracedb.model;
 
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.util.Date;
 
 public class MerchantAgent implements Serializable {
     @ApiModelProperty(value = "代理商ID")
     private Integer merchantAgentId;
+
+    private Integer merchantId;
 
     @ApiModelProperty(value = "代理商名称")
     private String agentName;
@@ -20,7 +23,7 @@ public class MerchantAgent implements Serializable {
     private String agentCpntactNumber;
 
     @ApiModelProperty(value = "四级行政ID")
-    private Integer fourthAdministrationId;
+    private String fourthAdministrationId;
 
     @ApiModelProperty(value = "详细地址")
     private String agentDetailSite;
@@ -31,10 +34,14 @@ public class MerchantAgent implements Serializable {
     @ApiModelProperty(value = "代理商描述")
     private String agentDescription;
 
-    @ApiModelProperty(value = "代理商状态：0正常 1禁用")
+    @ApiModelProperty(value = "代理商状态：0表示禁止，1表示开通，2表示待审核,3表示拒绝")
     private Byte agentStatus;
 
-    private Integer merchantId;
+    private Date createTime;
+
+    private Byte agentPath;
+
+    private String agentGoods;
 
     private static final long serialVersionUID = 1L;
 
@@ -44,6 +51,14 @@ public class MerchantAgent implements Serializable {
 
     public void setMerchantAgentId(Integer merchantAgentId) {
         this.merchantAgentId = merchantAgentId;
+    }
+
+    public Integer getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(Integer merchantId) {
+        this.merchantId = merchantId;
     }
 
     public String getAgentName() {
@@ -78,11 +93,11 @@ public class MerchantAgent implements Serializable {
         this.agentCpntactNumber = agentCpntactNumber;
     }
 
-    public Integer getFourthAdministrationId() {
+    public String getFourthAdministrationId() {
         return fourthAdministrationId;
     }
 
-    public void setFourthAdministrationId(Integer fourthAdministrationId) {
+    public void setFourthAdministrationId(String fourthAdministrationId) {
         this.fourthAdministrationId = fourthAdministrationId;
     }
 
@@ -118,12 +133,28 @@ public class MerchantAgent implements Serializable {
         this.agentStatus = agentStatus;
     }
 
-    public Integer getMerchantId() {
-        return merchantId;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setMerchantId(Integer merchantId) {
-        this.merchantId = merchantId;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Byte getAgentPath() {
+        return agentPath;
+    }
+
+    public void setAgentPath(Byte agentPath) {
+        this.agentPath = agentPath;
+    }
+
+    public String getAgentGoods() {
+        return agentGoods;
+    }
+
+    public void setAgentGoods(String agentGoods) {
+        this.agentGoods = agentGoods;
     }
 
     @Override
@@ -133,6 +164,7 @@ public class MerchantAgent implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", merchantAgentId=").append(merchantAgentId);
+        sb.append(", merchantId=").append(merchantId);
         sb.append(", agentName=").append(agentName);
         sb.append(", agentAnotherName=").append(agentAnotherName);
         sb.append(", agentContact=").append(agentContact);
@@ -142,7 +174,9 @@ public class MerchantAgent implements Serializable {
         sb.append(", agentPapersUrl=").append(agentPapersUrl);
         sb.append(", agentDescription=").append(agentDescription);
         sb.append(", agentStatus=").append(agentStatus);
-        sb.append(", merchantId=").append(merchantId);
+        sb.append(", createTime=").append(createTime);
+        sb.append(", agentPath=").append(agentPath);
+        sb.append(", agentGoods=").append(agentGoods);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

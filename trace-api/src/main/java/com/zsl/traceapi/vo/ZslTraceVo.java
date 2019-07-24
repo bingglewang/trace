@@ -16,5 +16,6 @@ public class ZslTraceVo {
     private Date traceApplyDate;  //申请日期
     private Date traceReviewDate; //审核日期
     private Long traceApplyCount; //申请数量
+    private Integer traceEnableCount; //剩余数量
     private String traceRefuseRemark; //拒绝备注
 }

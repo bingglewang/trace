@@ -1,7 +1,10 @@
 package com.zsl.traceapi.service;
 
 import com.zsl.traceapi.dto.*;
+import com.zsl.traceapi.vo.GoodsVo;
+import com.zsl.traceapi.vo.TraceRecordVo;
 import com.zsl.traceapi.vo.ZslTraceVo;
+import com.zsl.tracedb.model.Goods;
 import com.zsl.tracedb.model.ZslTrace;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +32,6 @@ public interface TraceService {
      * @param zslTrace
      * @return
      */
-    @Transactional
     ZslTrace insert(ZslTrace zslTrace);
 
     /**
@@ -37,7 +39,6 @@ public interface TraceService {
      * @param zslTrace
      * @return
      */
-    @Transactional
     int update(ZslTrace zslTrace);
 
     /**
@@ -45,7 +46,6 @@ public interface TraceService {
      * @param id
      * @return
      */
-    @Transactional
     int pass(Integer id);
 
     /**
@@ -61,7 +61,6 @@ public interface TraceService {
      * @param remark
      * @return
      */
-    @Transactional
     int refuse(Integer id,String remark);
 
     /**
@@ -69,7 +68,6 @@ public interface TraceService {
      * @param traceRecordInsertParamList
      * @return
      */
-    @Transactional
     int traceRecordInsert(List<TraceRecordInsertParam> traceRecordInsertParamList);
 
     /**
@@ -77,7 +75,6 @@ public interface TraceService {
      * @param traceRecordPointParam
      * @return
      */
-    @Transactional
     int traceRecordPointInsert(TraceRecordPointParam traceRecordPointParam);
 
     /**
@@ -101,4 +98,58 @@ public interface TraceService {
      */
     String isPointRepeat(TraceRecordPointParam traceRecordPointParam);
 
+    /**
+     * 获取总追溯数量和昨日追溯额
+     * @return
+     */
+    Object getTraceTotalCountAndPrice(Integer companyId);
+
+    /**
+     * 首页图表统计
+     * @param chartType
+     * @return
+     */
+    Object getChartData(Integer companyId,Integer chartType);
+
+    /**
+     * 首页图表统计排名
+     * @param companyId
+     * @param chartType
+     * @param pageParams
+     * @return
+     */
+    List<MerchantRankVo> getBusiTraceRank(Integer companyId,Integer chartType,PageParams pageParams);
+
+    /**
+     * 首页饼图
+     * @param companyId
+     * @return
+     */
+    Object getPieChart(Integer companyId);
+
+    /**
+     * 首页最新申请记录
+     * @return
+     */
+    Object getNewTraceRecord();
+
+    /**
+     * 本月追溯额
+     * @return
+     */
+    Object getMonthTrace();
+
+    /**
+     * 根据追溯码获取追溯记录
+     * @param traceCodeNumber
+     * @return
+     */
+    List<TraceRecordVo> getTraceRecodeByCode(String traceCodeNumber, PageParams pageParams);
+
+    /**
+     * 根据追溯码获取商品列表
+     * @param traceCodeNumber
+     * @return
+     */
+    List<GoodsVo> getGoodsByTraceCodeNumber(String traceCodeNumber);
 }

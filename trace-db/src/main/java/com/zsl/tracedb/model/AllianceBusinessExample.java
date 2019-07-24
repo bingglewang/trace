@@ -494,6 +494,186 @@ public class AllianceBusinessExample {
             addCriterion("alliance_business_status not between", value1, value2, "allianceBusinessStatus");
             return (Criteria) this;
         }
+
+        public Criteria andBusinessAdminstrationIdIsNull() {
+            addCriterion("business_adminstration_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationIdIsNotNull() {
+            addCriterion("business_adminstration_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationIdEqualTo(Integer value) {
+            addCriterion("business_adminstration_id =", value, "businessAdminstrationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationIdNotEqualTo(Integer value) {
+            addCriterion("business_adminstration_id <>", value, "businessAdminstrationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationIdGreaterThan(Integer value) {
+            addCriterion("business_adminstration_id >", value, "businessAdminstrationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("business_adminstration_id >=", value, "businessAdminstrationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationIdLessThan(Integer value) {
+            addCriterion("business_adminstration_id <", value, "businessAdminstrationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationIdLessThanOrEqualTo(Integer value) {
+            addCriterion("business_adminstration_id <=", value, "businessAdminstrationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationIdIn(List<Integer> values) {
+            addCriterion("business_adminstration_id in", values, "businessAdminstrationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationIdNotIn(List<Integer> values) {
+            addCriterion("business_adminstration_id not in", values, "businessAdminstrationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationIdBetween(Integer value1, Integer value2) {
+            addCriterion("business_adminstration_id between", value1, value2, "businessAdminstrationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("business_adminstration_id not between", value1, value2, "businessAdminstrationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationSecondIdIsNull() {
+            addCriterion("business_adminstration_second_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationSecondIdIsNotNull() {
+            addCriterion("business_adminstration_second_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationSecondIdEqualTo(Integer value) {
+            addCriterion("business_adminstration_second_id =", value, "businessAdminstrationSecondId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationSecondIdNotEqualTo(Integer value) {
+            addCriterion("business_adminstration_second_id <>", value, "businessAdminstrationSecondId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationSecondIdGreaterThan(Integer value) {
+            addCriterion("business_adminstration_second_id >", value, "businessAdminstrationSecondId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationSecondIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("business_adminstration_second_id >=", value, "businessAdminstrationSecondId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationSecondIdLessThan(Integer value) {
+            addCriterion("business_adminstration_second_id <", value, "businessAdminstrationSecondId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationSecondIdLessThanOrEqualTo(Integer value) {
+            addCriterion("business_adminstration_second_id <=", value, "businessAdminstrationSecondId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationSecondIdIn(List<Integer> values) {
+            addCriterion("business_adminstration_second_id in", values, "businessAdminstrationSecondId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationSecondIdNotIn(List<Integer> values) {
+            addCriterion("business_adminstration_second_id not in", values, "businessAdminstrationSecondId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationSecondIdBetween(Integer value1, Integer value2) {
+            addCriterion("business_adminstration_second_id between", value1, value2, "businessAdminstrationSecondId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationSecondIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("business_adminstration_second_id not between", value1, value2, "businessAdminstrationSecondId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationThirdIdIsNull() {
+            addCriterion("business_adminstration_third_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationThirdIdIsNotNull() {
+            addCriterion("business_adminstration_third_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationThirdIdEqualTo(Integer value) {
+            addCriterion("business_adminstration_third_id =", value, "businessAdminstrationThirdId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationThirdIdNotEqualTo(Integer value) {
+            addCriterion("business_adminstration_third_id <>", value, "businessAdminstrationThirdId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationThirdIdGreaterThan(Integer value) {
+            addCriterion("business_adminstration_third_id >", value, "businessAdminstrationThirdId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationThirdIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("business_adminstration_third_id >=", value, "businessAdminstrationThirdId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationThirdIdLessThan(Integer value) {
+            addCriterion("business_adminstration_third_id <", value, "businessAdminstrationThirdId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationThirdIdLessThanOrEqualTo(Integer value) {
+            addCriterion("business_adminstration_third_id <=", value, "businessAdminstrationThirdId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationThirdIdIn(List<Integer> values) {
+            addCriterion("business_adminstration_third_id in", values, "businessAdminstrationThirdId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationThirdIdNotIn(List<Integer> values) {
+            addCriterion("business_adminstration_third_id not in", values, "businessAdminstrationThirdId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationThirdIdBetween(Integer value1, Integer value2) {
+            addCriterion("business_adminstration_third_id between", value1, value2, "businessAdminstrationThirdId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessAdminstrationThirdIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("business_adminstration_third_id not between", value1, value2, "businessAdminstrationThirdId");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

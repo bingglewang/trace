@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsl.traceapi.dao.ZslTraceSubcodeDao">
+    <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.ZslTraceSubcode">
+        <result column="trace_index" jdbcType="BIGINT" property="traceIndex" />
+        <result column="trace_code_number" jdbcType="VARCHAR" property="traceCodeNumber" />
+        <result column="trace_sub_code_number" jdbcType="VARCHAR" property="traceSubCodeNumber" />
+        <result column="trace_good_id" jdbcType="INTEGER" property="traceGoodId" />
+        <result column="trace_stall_id" jdbcType="INTEGER" property="traceStallId" />
+    </resultMap>
+
+    <insert id="insertCodeBatch">
+        insert into zsl_trace_subcode (trace_index, trace_code_number,trace_sub_code_number) values
+        <foreach collection="list" item="item" separator="," index="index">
+            (#{item.traceIndex,jdbcType=BIGINT},
+            #{item.traceCodeNumber,jdbcType=VARCHAR},
+            #{item.traceSubcodeNumber,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+    <select id="selectByCodeNumber" resultMap="BaseResultMap">
+        SELECT *  FROM `zsl_trace_subcode` WHERE trace_sub_code_number = #{traceCodeNumber} LIMIT 1;
+    </select>
+
+    <delete id="deleteByCodeNumber" >
+        delete from zsl_trace_subcode where trace_code_number=#{traceCodeNumber};
+    </delete>
+</mapper>

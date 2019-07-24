@@ -16,4 +16,7 @@ public class QueryParam {
     private Integer traceHandleStatus; //处理状态
     private String merchantName; //商家名称
     private Integer traceApplyType; //申请类型
+    private Integer merchantId; //商家id
+    private Integer allianceId; //加盟商id
+    private boolean isZongBu; //是否为总部运营
 }

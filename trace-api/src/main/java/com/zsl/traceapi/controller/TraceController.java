@@ -1,14 +1,20 @@
 package com.zsl.traceapi.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.zsl.traceapi.context.RequestContext;
+import com.zsl.traceapi.context.RequestContextMgr;
 import com.zsl.traceapi.dto.*;
 import com.zsl.traceapi.service.TraceService;
 import com.zsl.traceapi.util.Constant;
 import com.zsl.traceapi.util.TreeNode;
 import com.zsl.traceapi.util.TreeUtils;
+import com.zsl.traceapi.vo.TracePointTreeVo;
+import com.zsl.traceapi.vo.TraceRecordVo;
 import com.zsl.traceapi.vo.ZslTraceVo;
 import com.zsl.tracecommon.CommonPage;
 import com.zsl.tracecommon.CommonResult;
 import com.zsl.tracedb.mapper.AllianceBusinessMapper;
+import com.zsl.tracedb.mapper.GoodsMapper;
 import com.zsl.tracedb.mapper.MerchantMapper;
 import com.zsl.tracedb.mapper.ZslTracePointMapper;
 import com.zsl.tracedb.model.*;
@@ -20,10 +26,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Api(tags = "TraceController", description = "追溯模块")
 @RestController
@@ -35,6 +44,9 @@ public class TraceController {
 
     @Autowired
     private MerchantMapper merchantMapper;
+
+    @Autowired
+    private GoodsMapper goodsMapper;
 
     @Autowired
     private AllianceBusinessMapper allianceBusinessMapper;
@@ -68,6 +80,35 @@ public class TraceController {
         return CommonResult.success(CommonPage.restPage(result));
     }
 
+    @ApiOperation(value = "分页获取追溯记录")
+    @GetMapping("/getTraceRecordByPage")
+    @ResponseBody
+    public CommonResult<CommonPage<TraceRecordVo>> getTraceRecordByPage(String traceCodeNumber, @Valid PageParams pageParams, BindingResult bindingResult) {
+        if (pageParams.getPageNum() == null || pageParams.getPageNum() == 0) {
+            pageParams.setPageNum(1); //默认从第1页开始
+        }
+        if (pageParams.getPageSize() == null || pageParams.getPageSize() == 0) {
+            pageParams.setPageSize(10);//默认页面大小为10
+        }
+        List<TraceRecordVo> result = traceService.getTraceRecodeByCode(traceCodeNumber, pageParams);
+        return CommonResult.success(CommonPage.restPage(result));
+    }
+
+
+    @ApiOperation(value = "首页商家追溯排名")
+    @GetMapping("/getBusiTraceRank")
+    @ResponseBody
+    public CommonResult<CommonPage<MerchantRankVo>> getBusiTraceRank(Integer companyId, Integer chartType, @Valid PageParams pageParams, BindingResult bindingResult) {
+        if (pageParams.getPageNum() == null || pageParams.getPageNum() == 0) {
+            pageParams.setPageNum(1); //默认从第1页开始
+        }
+        if (pageParams.getPageSize() == null || pageParams.getPageSize() == 0) {
+            pageParams.setPageSize(10);//默认页面大小为10
+        }
+        List<MerchantRankVo> result = traceService.getBusiTraceRank(companyId,chartType, pageParams);
+        return CommonResult.success(CommonPage.restPage(result));
+    }
+
     @PostMapping("/insert")
     @ApiOperation("新增追溯信息")
     @ResponseBody
@@ -85,18 +126,33 @@ public class TraceController {
         // 已经关联数量（0）
         insertParam.setTraceBack1(0);
 
+        //获取用户登录信息
+        RequestContext requestContext = RequestContextMgr.getLocalContext();
+        JSONObject loginUser = requestContext.getJsonObject();
+        Integer accountType = Integer.parseInt(loginUser.get("accountType").toString());
+
         //根据商家id查询加盟商/公司
         Merchant merchant = merchantMapper.selectByPrimaryKey(insertParam.getTraceBusinessId());
         if (merchant == null) {
             return CommonResult.failed("商家不存在");
+        }else if(merchant.getCertificationToPay() != 1 && accountType == 2){
+            return CommonResult.failed("商家没有认证");
         }
         Integer jiamenId = merchant.getAllianceBusinessId();//加盟商id:如果为空则为总部，否则为对应的加盟商
         if (jiamenId == null) {
             insertParam.setTraceCompanyName(Constant.ZONGBU);
+            insertParam.setTraceBack2(null); //总部加盟商id
         } else {
             AllianceBusiness allianceBusiness = allianceBusinessMapper.selectByPrimaryKey(jiamenId);
             if (allianceBusiness != null) {
-                insertParam.setTraceCompanyName(allianceBusiness.getAllianceBusinessName());
+                //如果加盟商禁用，则属于总部
+                if(allianceBusiness.getAllianceBusinessStatus() == 1){
+                    insertParam.setTraceCompanyName(Constant.ZONGBU);
+                    insertParam.setTraceBack2(null); //总部加盟商id
+                }else{
+                    insertParam.setTraceCompanyName(allianceBusiness.getAllianceBusinessName());
+                    insertParam.setTraceBack2(allianceBusiness.getAllianceBusinessId());
+                }
             } else {
                 return CommonResult.failed("加盟商不存在");
             }
@@ -147,6 +203,12 @@ public class TraceController {
         }
         else if (i == -6) {
             return CommonResult.failed("积分扣除失败");
+        }
+        else if(i == -7){
+            return CommonResult.failed("商家还未认证");
+        }
+        else if(i == -8){
+            return CommonResult.failed("追溯码生成错误");
         }
         else {
             return CommonResult.failed("审核失败，服务器错误");
@@ -244,32 +306,77 @@ public class TraceController {
         return CommonResult.failed();
     }
 
-    @ApiOperation("根据商品id和摊位id返回追溯点树结构")
+    @ApiOperation("返回追溯点树结构")
     @GetMapping("/zPointTree")
     @ResponseBody
-    public CommonResult buildZTPointTree(@ApiParam("商品id") @RequestParam(required = true) Integer goodsId, @ApiParam("摊位id") @RequestParam(required = true) Integer stallId) {
-        ZslTracePointExample zslTracePointExample = new ZslTracePointExample();
-        ZslTracePointExample.Criteria criteria = zslTracePointExample.createCriteria();
-        if(goodsId != null) {
-            criteria.andTraceGoodsIdEqualTo(goodsId);
+    public CommonResult buildZTPointTree(@ApiParam("摊位id") Integer stallId, @RequestParam(required = true) String  traceCodeNumber, HttpServletRequest request) {
+        List<TracePointTreeVo> result = new ArrayList<>();
+        Set<Integer> goodsIds = new HashSet<>();
+        ZslTracePointExample zgoodsExample = new ZslTracePointExample();
+        ZslTracePointExample.Criteria criteriaGoods = zgoodsExample.createCriteria();
+        if(stallId == null || stallId == -1 ){  //非农贸,则根据追溯码获取商品id
+            ZslTracePointExample.Criteria criteriaGoods1 = zgoodsExample.createCriteria();
+            String goodsId = request.getParameter("goodsId");
+            criteriaGoods.andTraceCodeNumberEqualTo(traceCodeNumber);
+            criteriaGoods.andTraceStallIdEqualTo(-1);
+            int goodsIdInt = 0;
+            try{
+                goodsIdInt = Integer.parseInt(goodsId);
+            }catch (Exception e){
+
+            }
+            criteriaGoods.andTraceGoodsIdEqualTo(goodsIdInt);
+            //或者
+            criteriaGoods1.andTraceCodeNumberEqualTo(traceCodeNumber);
+            criteriaGoods1.andTraceStallIdIsNull();
+            criteriaGoods1.andTraceGoodsIdEqualTo(goodsIdInt);
+            zgoodsExample.or(criteriaGoods1);
+        }else{
+            criteriaGoods.andTraceCodeNumberEqualTo(traceCodeNumber);
+            criteriaGoods.andTraceStallIdEqualTo(stallId);
         }
-        if(stallId != null){
-            criteria.andTraceStallIdEqualTo(stallId);
+        List<ZslTracePoint> goodsTraceList = zslTracePointMapper.selectByExample(zgoodsExample);
+        for(ZslTracePoint zgoodsPoint : goodsTraceList){
+            if(goodsIds.add(zgoodsPoint.getTraceGoodsId())){
+                TracePointTreeVo tracePointTreeVo = new TracePointTreeVo();
+                Goods tGoods = goodsMapper.selectByPrimaryKey(zgoodsPoint.getTraceGoodsId());
+                if(tGoods != null){
+                    tracePointTreeVo.setGoodsName(tGoods.getGoodsName());
+                }
+                ZslTracePointExample zslTracePointExample = new ZslTracePointExample();
+                ZslTracePointExample.Criteria criteria = zslTracePointExample.createCriteria();
+                if(stallId != null){
+                    criteria.andTraceStallIdEqualTo(stallId);
+                }else{
+                    criteria.andTraceStallIdEqualTo(-1);
+                    //或者
+                    ZslTracePointExample.Criteria criteria1 = zslTracePointExample.createCriteria();
+                    criteria1.andTraceCodeNumberEqualTo(traceCodeNumber);
+                    criteria1.andTraceStallIdIsNull();
+                    criteria1.andTraceGoodsIdEqualTo(zgoodsPoint.getTraceGoodsId());
+                    zslTracePointExample.or(criteria1);
+                }
+                criteria.andTraceCodeNumberEqualTo(traceCodeNumber);
+                criteria.andTraceGoodsIdEqualTo(zgoodsPoint.getTraceGoodsId());
+                List<ZslTracePoint> listz = zslTracePointMapper.selectByExample(zslTracePointExample);
+
+                List<TreeNode> treeNodes = new ArrayList<>();
+                for(ZslTracePoint item: listz){
+                    TreeNode node = new TreeNode();
+                    BeanUtils.copyProperties(item,node);
+                    treeNodes.add(node);
+                }
+                try {
+                    List<TreeNode> list =   TreeUtils.buildTree(treeNodes,"com.zsl.traceapi.util.TreeNode","tracePointId","traceParentId","children");
+                    tracePointTreeVo.setTreeNodes(list);
+                }catch (Exception e){
+                    e.printStackTrace();
+                    return CommonResult.failed();
+                }
+                result.add(tracePointTreeVo);
+            }
         }
-        List<ZslTracePoint> listz = zslTracePointMapper.selectByExample(zslTracePointExample);
-        List<TreeNode> treeNodes = new ArrayList<>();
-        for(ZslTracePoint item: listz){
-            TreeNode node = new TreeNode();
-            BeanUtils.copyProperties(item,node);
-            treeNodes.add(node);
-        }
-        try {
-          List<TreeNode> list =   TreeUtils.buildTree(treeNodes,"com.zsl.traceapi.util.TreeNode","tracePointId","traceParentId","children");
-          return CommonResult.success(list);
-        }catch (Exception e){
-            e.printStackTrace();
-            return CommonResult.failed();
-        }
+        return CommonResult.success(result);
     }
 
     /**
@@ -287,5 +394,64 @@ public class TraceController {
             return  CommonResult.success(fileInfo, "追溯编码导出成功");
         }
     }
+
+    /**
+     * 首页追溯数量
+     * @param companyId
+     * @return
+     */
+    @GetMapping("getTraceTotalCountAndYest")
+    public CommonResult getTraceTotalCountAndPrice(Integer companyId){
+        return CommonResult.success(traceService.getTraceTotalCountAndPrice(companyId));
+    }
+
+    /**
+     * 首页图表统计
+     * @param companyId
+     * @return
+     */
+    @GetMapping("getChartData")
+    public CommonResult getChartData(Integer companyId,Integer chartType){
+        return CommonResult.success(traceService.getChartData(companyId,chartType));
+    }
+
+    /**
+     * 首页饼图
+     * @param companyId
+     * @return
+     */
+    @GetMapping("getPieChart")
+    public CommonResult getPieChart(Integer companyId){
+        return CommonResult.success(traceService.getPieChart(companyId));
+    }
+
+    /**
+     * 首页最新追溯申请记录
+     * @return
+     */
+    @GetMapping("getNewTraceRecord")
+    public CommonResult getNewTraceRecord(){
+        return CommonResult.success(traceService.getNewTraceRecord());
+    }
+
+    /**
+     * 首页本月追溯额
+     * @return
+     */
+    @GetMapping("getMonthTrace")
+    public CommonResult getMonthTrace(){
+        return CommonResult.success(traceService.getMonthTrace());
+    }
+
+    /**
+     * 根据追溯码获取商品列表
+     * @param
+     * @return
+     */
+    @GetMapping("/getGoodsListByTraceCode")
+    public CommonResult getGoodsListByTraceCode(String traceCodeNumber) {
+         return CommonResult.success( traceService.getGoodsByTraceCodeNumber(traceCodeNumber));
+    }
+
 
 }

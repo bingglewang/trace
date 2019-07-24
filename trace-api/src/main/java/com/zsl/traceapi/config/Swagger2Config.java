@@ -23,7 +23,7 @@ import java.util.List;
  * Swagger2API文档的配置
  * Created by wangbinggui on 2019/5/27.
  */
-@Configuration
+//@Configuration
 @EnableSwagger2
 public class Swagger2Config {
     @Bean

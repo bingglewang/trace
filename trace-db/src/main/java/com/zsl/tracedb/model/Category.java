@@ -6,9 +6,12 @@ import java.io.Serializable;
 public class Category implements Serializable {
     private Integer categoryId;
 
+    private Integer categorySuperId;
+
     private String categoryName;
 
-    private Integer categorySuperId;
+    @ApiModelProperty(value = "分类名称全称")
+    private String categoryFullName;
 
     private Integer categoryLevel;
 
@@ -24,6 +27,14 @@ public class Category implements Serializable {
         this.categoryId = categoryId;
     }
 
+    public Integer getCategorySuperId() {
+        return categorySuperId;
+    }
+
+    public void setCategorySuperId(Integer categorySuperId) {
+        this.categorySuperId = categorySuperId;
+    }
+
     public String getCategoryName() {
         return categoryName;
     }
@@ -32,12 +43,12 @@ public class Category implements Serializable {
         this.categoryName = categoryName;
     }
 
-    public Integer getCategorySuperId() {
-        return categorySuperId;
+    public String getCategoryFullName() {
+        return categoryFullName;
     }
 
-    public void setCategorySuperId(Integer categorySuperId) {
-        this.categorySuperId = categorySuperId;
+    public void setCategoryFullName(String categoryFullName) {
+        this.categoryFullName = categoryFullName;
     }
 
     public Integer getCategoryLevel() {
@@ -63,8 +74,9 @@ public class Category implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", categoryId=").append(categoryId);
-        sb.append(", categoryName=").append(categoryName);
         sb.append(", categorySuperId=").append(categorySuperId);
+        sb.append(", categoryName=").append(categoryName);
+        sb.append(", categoryFullName=").append(categoryFullName);
         sb.append(", categoryLevel=").append(categoryLevel);
         sb.append(", includeBrand=").append(includeBrand);
         sb.append(", serialVersionUID=").append(serialVersionUID);

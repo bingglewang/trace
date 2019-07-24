@@ -17,7 +17,7 @@ public class ZslTrace implements Serializable {
     @ApiModelProperty(value = "申请类型（1：纸质标签，2：电子标签）")
     private Integer traceApplyType;
 
-    @ApiModelProperty(value = "处理状态（1：已通过，2：待审核，3：已撤回）")
+    @ApiModelProperty(value = "处理状态（1：已通过，2：待审核，3：已撤回，4：已拒绝）")
     private Integer traceHandleStatus;
 
     @ApiModelProperty(value = "所属公司名称")
@@ -41,10 +41,10 @@ public class ZslTrace implements Serializable {
     @ApiModelProperty(value = "已经关联的数量")
     private Integer traceBack1;
 
-    @ApiModelProperty(value = "备用字段2")
+    @ApiModelProperty(value = "加盟商id（null：总部，）")
     private Integer traceBack2;
 
-    @ApiModelProperty(value = "备用字段3")
+    @ApiModelProperty(value = "申请的码是否已经生成完(Y:生成完，N:没有)，默认N")
     private String traceBack3;
 
     @ApiModelProperty(value = "备用字段4")

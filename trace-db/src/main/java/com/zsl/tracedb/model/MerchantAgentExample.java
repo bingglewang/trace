@@ -1,6 +1,7 @@
 package com.zsl.tracedb.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MerchantAgentExample {
@@ -161,6 +162,66 @@ public class MerchantAgentExample {
 
         public Criteria andMerchantAgentIdNotBetween(Integer value1, Integer value2) {
             addCriterion("merchant_agent_id not between", value1, value2, "merchantAgentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantIdIsNull() {
+            addCriterion("merchant_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantIdIsNotNull() {
+            addCriterion("merchant_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantIdEqualTo(Integer value) {
+            addCriterion("merchant_id =", value, "merchantId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantIdNotEqualTo(Integer value) {
+            addCriterion("merchant_id <>", value, "merchantId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantIdGreaterThan(Integer value) {
+            addCriterion("merchant_id >", value, "merchantId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("merchant_id >=", value, "merchantId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantIdLessThan(Integer value) {
+            addCriterion("merchant_id <", value, "merchantId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantIdLessThanOrEqualTo(Integer value) {
+            addCriterion("merchant_id <=", value, "merchantId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantIdIn(List<Integer> values) {
+            addCriterion("merchant_id in", values, "merchantId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantIdNotIn(List<Integer> values) {
+            addCriterion("merchant_id not in", values, "merchantId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantIdBetween(Integer value1, Integer value2) {
+            addCriterion("merchant_id between", value1, value2, "merchantId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("merchant_id not between", value1, value2, "merchantId");
             return (Criteria) this;
         }
 
@@ -454,52 +515,62 @@ public class MerchantAgentExample {
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrationIdEqualTo(Integer value) {
+        public Criteria andFourthAdministrationIdEqualTo(String value) {
             addCriterion("fourth_administration_id =", value, "fourthAdministrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrationIdNotEqualTo(Integer value) {
+        public Criteria andFourthAdministrationIdNotEqualTo(String value) {
             addCriterion("fourth_administration_id <>", value, "fourthAdministrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrationIdGreaterThan(Integer value) {
+        public Criteria andFourthAdministrationIdGreaterThan(String value) {
             addCriterion("fourth_administration_id >", value, "fourthAdministrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrationIdGreaterThanOrEqualTo(Integer value) {
+        public Criteria andFourthAdministrationIdGreaterThanOrEqualTo(String value) {
             addCriterion("fourth_administration_id >=", value, "fourthAdministrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrationIdLessThan(Integer value) {
+        public Criteria andFourthAdministrationIdLessThan(String value) {
             addCriterion("fourth_administration_id <", value, "fourthAdministrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrationIdLessThanOrEqualTo(Integer value) {
+        public Criteria andFourthAdministrationIdLessThanOrEqualTo(String value) {
             addCriterion("fourth_administration_id <=", value, "fourthAdministrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrationIdIn(List<Integer> values) {
+        public Criteria andFourthAdministrationIdLike(String value) {
+            addCriterion("fourth_administration_id like", value, "fourthAdministrationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFourthAdministrationIdNotLike(String value) {
+            addCriterion("fourth_administration_id not like", value, "fourthAdministrationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFourthAdministrationIdIn(List<String> values) {
             addCriterion("fourth_administration_id in", values, "fourthAdministrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrationIdNotIn(List<Integer> values) {
+        public Criteria andFourthAdministrationIdNotIn(List<String> values) {
             addCriterion("fourth_administration_id not in", values, "fourthAdministrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrationIdBetween(Integer value1, Integer value2) {
+        public Criteria andFourthAdministrationIdBetween(String value1, String value2) {
             addCriterion("fourth_administration_id between", value1, value2, "fourthAdministrationId");
             return (Criteria) this;
         }
 
-        public Criteria andFourthAdministrationIdNotBetween(Integer value1, Integer value2) {
+        public Criteria andFourthAdministrationIdNotBetween(String value1, String value2) {
             addCriterion("fourth_administration_id not between", value1, value2, "fourthAdministrationId");
             return (Criteria) this;
         }
@@ -774,63 +845,193 @@ public class MerchantAgentExample {
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdIsNull() {
-            addCriterion("merchant_id is null");
+        public Criteria andCreateTimeIsNull() {
+            addCriterion("create_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdIsNotNull() {
-            addCriterion("merchant_id is not null");
+        public Criteria andCreateTimeIsNotNull() {
+            addCriterion("create_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdEqualTo(Integer value) {
-            addCriterion("merchant_id =", value, "merchantId");
+        public Criteria andCreateTimeEqualTo(Date value) {
+            addCriterion("create_time =", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdNotEqualTo(Integer value) {
-            addCriterion("merchant_id <>", value, "merchantId");
+        public Criteria andCreateTimeNotEqualTo(Date value) {
+            addCriterion("create_time <>", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdGreaterThan(Integer value) {
-            addCriterion("merchant_id >", value, "merchantId");
+        public Criteria andCreateTimeGreaterThan(Date value) {
+            addCriterion("create_time >", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("merchant_id >=", value, "merchantId");
+        public Criteria andCreateTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("create_time >=", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdLessThan(Integer value) {
-            addCriterion("merchant_id <", value, "merchantId");
+        public Criteria andCreateTimeLessThan(Date value) {
+            addCriterion("create_time <", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdLessThanOrEqualTo(Integer value) {
-            addCriterion("merchant_id <=", value, "merchantId");
+        public Criteria andCreateTimeLessThanOrEqualTo(Date value) {
+            addCriterion("create_time <=", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdIn(List<Integer> values) {
-            addCriterion("merchant_id in", values, "merchantId");
+        public Criteria andCreateTimeIn(List<Date> values) {
+            addCriterion("create_time in", values, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdNotIn(List<Integer> values) {
-            addCriterion("merchant_id not in", values, "merchantId");
+        public Criteria andCreateTimeNotIn(List<Date> values) {
+            addCriterion("create_time not in", values, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdBetween(Integer value1, Integer value2) {
-            addCriterion("merchant_id between", value1, value2, "merchantId");
+        public Criteria andCreateTimeBetween(Date value1, Date value2) {
+            addCriterion("create_time between", value1, value2, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("merchant_id not between", value1, value2, "merchantId");
+        public Criteria andCreateTimeNotBetween(Date value1, Date value2) {
+            addCriterion("create_time not between", value1, value2, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentPathIsNull() {
+            addCriterion("agent_path is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentPathIsNotNull() {
+            addCriterion("agent_path is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentPathEqualTo(Byte value) {
+            addCriterion("agent_path =", value, "agentPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentPathNotEqualTo(Byte value) {
+            addCriterion("agent_path <>", value, "agentPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentPathGreaterThan(Byte value) {
+            addCriterion("agent_path >", value, "agentPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentPathGreaterThanOrEqualTo(Byte value) {
+            addCriterion("agent_path >=", value, "agentPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentPathLessThan(Byte value) {
+            addCriterion("agent_path <", value, "agentPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentPathLessThanOrEqualTo(Byte value) {
+            addCriterion("agent_path <=", value, "agentPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentPathIn(List<Byte> values) {
+            addCriterion("agent_path in", values, "agentPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentPathNotIn(List<Byte> values) {
+            addCriterion("agent_path not in", values, "agentPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentPathBetween(Byte value1, Byte value2) {
+            addCriterion("agent_path between", value1, value2, "agentPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentPathNotBetween(Byte value1, Byte value2) {
+            addCriterion("agent_path not between", value1, value2, "agentPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentGoodsIsNull() {
+            addCriterion("agent_goods is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentGoodsIsNotNull() {
+            addCriterion("agent_goods is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentGoodsEqualTo(String value) {
+            addCriterion("agent_goods =", value, "agentGoods");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentGoodsNotEqualTo(String value) {
+            addCriterion("agent_goods <>", value, "agentGoods");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentGoodsGreaterThan(String value) {
+            addCriterion("agent_goods >", value, "agentGoods");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentGoodsGreaterThanOrEqualTo(String value) {
+            addCriterion("agent_goods >=", value, "agentGoods");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentGoodsLessThan(String value) {
+            addCriterion("agent_goods <", value, "agentGoods");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentGoodsLessThanOrEqualTo(String value) {
+            addCriterion("agent_goods <=", value, "agentGoods");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentGoodsLike(String value) {
+            addCriterion("agent_goods like", value, "agentGoods");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentGoodsNotLike(String value) {
+            addCriterion("agent_goods not like", value, "agentGoods");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentGoodsIn(List<String> values) {
+            addCriterion("agent_goods in", values, "agentGoods");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentGoodsNotIn(List<String> values) {
+            addCriterion("agent_goods not in", values, "agentGoods");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentGoodsBetween(String value1, String value2) {
+            addCriterion("agent_goods between", value1, value2, "agentGoods");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentGoodsNotBetween(String value1, String value2) {
+            addCriterion("agent_goods not between", value1, value2, "agentGoods");
             return (Criteria) this;
         }
     }

@@ -164,6 +164,66 @@ public class CategoryExample {
             return (Criteria) this;
         }
 
+        public Criteria andCategorySuperIdIsNull() {
+            addCriterion("category_super_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategorySuperIdIsNotNull() {
+            addCriterion("category_super_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategorySuperIdEqualTo(Integer value) {
+            addCriterion("category_super_id =", value, "categorySuperId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategorySuperIdNotEqualTo(Integer value) {
+            addCriterion("category_super_id <>", value, "categorySuperId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategorySuperIdGreaterThan(Integer value) {
+            addCriterion("category_super_id >", value, "categorySuperId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategorySuperIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("category_super_id >=", value, "categorySuperId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategorySuperIdLessThan(Integer value) {
+            addCriterion("category_super_id <", value, "categorySuperId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategorySuperIdLessThanOrEqualTo(Integer value) {
+            addCriterion("category_super_id <=", value, "categorySuperId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategorySuperIdIn(List<Integer> values) {
+            addCriterion("category_super_id in", values, "categorySuperId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategorySuperIdNotIn(List<Integer> values) {
+            addCriterion("category_super_id not in", values, "categorySuperId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategorySuperIdBetween(Integer value1, Integer value2) {
+            addCriterion("category_super_id between", value1, value2, "categorySuperId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategorySuperIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("category_super_id not between", value1, value2, "categorySuperId");
+            return (Criteria) this;
+        }
+
         public Criteria andCategoryNameIsNull() {
             addCriterion("category_name is null");
             return (Criteria) this;
@@ -234,63 +294,73 @@ public class CategoryExample {
             return (Criteria) this;
         }
 
-        public Criteria andCategorySuperIdIsNull() {
-            addCriterion("category_super_id is null");
+        public Criteria andCategoryFullNameIsNull() {
+            addCriterion("category_full_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andCategorySuperIdIsNotNull() {
-            addCriterion("category_super_id is not null");
+        public Criteria andCategoryFullNameIsNotNull() {
+            addCriterion("category_full_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCategorySuperIdEqualTo(Integer value) {
-            addCriterion("category_super_id =", value, "categorySuperId");
+        public Criteria andCategoryFullNameEqualTo(String value) {
+            addCriterion("category_full_name =", value, "categoryFullName");
             return (Criteria) this;
         }
 
-        public Criteria andCategorySuperIdNotEqualTo(Integer value) {
-            addCriterion("category_super_id <>", value, "categorySuperId");
+        public Criteria andCategoryFullNameNotEqualTo(String value) {
+            addCriterion("category_full_name <>", value, "categoryFullName");
             return (Criteria) this;
         }
 
-        public Criteria andCategorySuperIdGreaterThan(Integer value) {
-            addCriterion("category_super_id >", value, "categorySuperId");
+        public Criteria andCategoryFullNameGreaterThan(String value) {
+            addCriterion("category_full_name >", value, "categoryFullName");
             return (Criteria) this;
         }
 
-        public Criteria andCategorySuperIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("category_super_id >=", value, "categorySuperId");
+        public Criteria andCategoryFullNameGreaterThanOrEqualTo(String value) {
+            addCriterion("category_full_name >=", value, "categoryFullName");
             return (Criteria) this;
         }
 
-        public Criteria andCategorySuperIdLessThan(Integer value) {
-            addCriterion("category_super_id <", value, "categorySuperId");
+        public Criteria andCategoryFullNameLessThan(String value) {
+            addCriterion("category_full_name <", value, "categoryFullName");
             return (Criteria) this;
         }
 
-        public Criteria andCategorySuperIdLessThanOrEqualTo(Integer value) {
-            addCriterion("category_super_id <=", value, "categorySuperId");
+        public Criteria andCategoryFullNameLessThanOrEqualTo(String value) {
+            addCriterion("category_full_name <=", value, "categoryFullName");
             return (Criteria) this;
         }
 
-        public Criteria andCategorySuperIdIn(List<Integer> values) {
-            addCriterion("category_super_id in", values, "categorySuperId");
+        public Criteria andCategoryFullNameLike(String value) {
+            addCriterion("category_full_name like", value, "categoryFullName");
             return (Criteria) this;
         }
 
-        public Criteria andCategorySuperIdNotIn(List<Integer> values) {
-            addCriterion("category_super_id not in", values, "categorySuperId");
+        public Criteria andCategoryFullNameNotLike(String value) {
+            addCriterion("category_full_name not like", value, "categoryFullName");
             return (Criteria) this;
         }
 
-        public Criteria andCategorySuperIdBetween(Integer value1, Integer value2) {
-            addCriterion("category_super_id between", value1, value2, "categorySuperId");
+        public Criteria andCategoryFullNameIn(List<String> values) {
+            addCriterion("category_full_name in", values, "categoryFullName");
             return (Criteria) this;
         }
 
-        public Criteria andCategorySuperIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("category_super_id not between", value1, value2, "categorySuperId");
+        public Criteria andCategoryFullNameNotIn(List<String> values) {
+            addCriterion("category_full_name not in", values, "categoryFullName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryFullNameBetween(String value1, String value2) {
+            addCriterion("category_full_name between", value1, value2, "categoryFullName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryFullNameNotBetween(String value1, String value2) {
+            addCriterion("category_full_name not between", value1, value2, "categoryFullName");
             return (Criteria) this;
         }
 

@@ -43,6 +43,9 @@ public class Merchant implements Serializable {
     @ApiModelProperty(value = "营业执照/身份证/护照 图片地址")
     private String papersUrl;
 
+    @ApiModelProperty(value = "营业执照/身份证/护照 反面图片地址")
+    private String papersBackUrl;
+
     @ApiModelProperty(value = "营业执照/身份证/护照 号码")
     private String papersNumber;
 
@@ -72,6 +75,9 @@ public class Merchant implements Serializable {
 
     @ApiModelProperty(value = "摊位数（农贸专享）")
     private Integer stallLimit;
+
+    @ApiModelProperty(value = "纸质标签额度上限")
+    private Long paperLabelUpper;
 
     private static final long serialVersionUID = 1L;
 
@@ -179,6 +185,14 @@ public class Merchant implements Serializable {
         this.papersUrl = papersUrl;
     }
 
+    public String getPapersBackUrl() {
+        return papersBackUrl;
+    }
+
+    public void setPapersBackUrl(String papersBackUrl) {
+        this.papersBackUrl = papersBackUrl;
+    }
+
     public String getPapersNumber() {
         return papersNumber;
     }
@@ -259,6 +273,14 @@ public class Merchant implements Serializable {
         this.stallLimit = stallLimit;
     }
 
+    public Long getPaperLabelUpper() {
+        return paperLabelUpper;
+    }
+
+    public void setPaperLabelUpper(Long paperLabelUpper) {
+        this.paperLabelUpper = paperLabelUpper;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -278,6 +300,7 @@ public class Merchant implements Serializable {
         sb.append(", merchantType=").append(merchantType);
         sb.append(", lealPersonName=").append(lealPersonName);
         sb.append(", papersUrl=").append(papersUrl);
+        sb.append(", papersBackUrl=").append(papersBackUrl);
         sb.append(", papersNumber=").append(papersNumber);
         sb.append(", businessLines=").append(businessLines);
         sb.append(", merchantContact=").append(merchantContact);
@@ -288,6 +311,7 @@ public class Merchant implements Serializable {
         sb.append(", certificationToPay=").append(certificationToPay);
         sb.append(", merchantDesciption=").append(merchantDesciption);
         sb.append(", stallLimit=").append(stallLimit);
+        sb.append(", paperLabelUpper=").append(paperLabelUpper);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

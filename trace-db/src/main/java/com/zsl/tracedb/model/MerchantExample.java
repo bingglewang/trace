@@ -955,6 +955,76 @@ public class MerchantExample {
             return (Criteria) this;
         }
 
+        public Criteria andPapersBackUrlIsNull() {
+            addCriterion("papers_back_url is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPapersBackUrlIsNotNull() {
+            addCriterion("papers_back_url is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPapersBackUrlEqualTo(String value) {
+            addCriterion("papers_back_url =", value, "papersBackUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPapersBackUrlNotEqualTo(String value) {
+            addCriterion("papers_back_url <>", value, "papersBackUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPapersBackUrlGreaterThan(String value) {
+            addCriterion("papers_back_url >", value, "papersBackUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPapersBackUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("papers_back_url >=", value, "papersBackUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPapersBackUrlLessThan(String value) {
+            addCriterion("papers_back_url <", value, "papersBackUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPapersBackUrlLessThanOrEqualTo(String value) {
+            addCriterion("papers_back_url <=", value, "papersBackUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPapersBackUrlLike(String value) {
+            addCriterion("papers_back_url like", value, "papersBackUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPapersBackUrlNotLike(String value) {
+            addCriterion("papers_back_url not like", value, "papersBackUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPapersBackUrlIn(List<String> values) {
+            addCriterion("papers_back_url in", values, "papersBackUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPapersBackUrlNotIn(List<String> values) {
+            addCriterion("papers_back_url not in", values, "papersBackUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPapersBackUrlBetween(String value1, String value2) {
+            addCriterion("papers_back_url between", value1, value2, "papersBackUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPapersBackUrlNotBetween(String value1, String value2) {
+            addCriterion("papers_back_url not between", value1, value2, "papersBackUrl");
+            return (Criteria) this;
+        }
+
         public Criteria andPapersNumberIsNull() {
             addCriterion("papers_number is null");
             return (Criteria) this;
@@ -1612,6 +1682,66 @@ public class MerchantExample {
 
         public Criteria andStallLimitNotBetween(Integer value1, Integer value2) {
             addCriterion("stall_limit not between", value1, value2, "stallLimit");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaperLabelUpperIsNull() {
+            addCriterion("paper_label_upper is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaperLabelUpperIsNotNull() {
+            addCriterion("paper_label_upper is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaperLabelUpperEqualTo(Long value) {
+            addCriterion("paper_label_upper =", value, "paperLabelUpper");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaperLabelUpperNotEqualTo(Long value) {
+            addCriterion("paper_label_upper <>", value, "paperLabelUpper");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaperLabelUpperGreaterThan(Long value) {
+            addCriterion("paper_label_upper >", value, "paperLabelUpper");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaperLabelUpperGreaterThanOrEqualTo(Long value) {
+            addCriterion("paper_label_upper >=", value, "paperLabelUpper");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaperLabelUpperLessThan(Long value) {
+            addCriterion("paper_label_upper <", value, "paperLabelUpper");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaperLabelUpperLessThanOrEqualTo(Long value) {
+            addCriterion("paper_label_upper <=", value, "paperLabelUpper");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaperLabelUpperIn(List<Long> values) {
+            addCriterion("paper_label_upper in", values, "paperLabelUpper");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaperLabelUpperNotIn(List<Long> values) {
+            addCriterion("paper_label_upper not in", values, "paperLabelUpper");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaperLabelUpperBetween(Long value1, Long value2) {
+            addCriterion("paper_label_upper between", value1, value2, "paperLabelUpper");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaperLabelUpperNotBetween(Long value1, Long value2) {
+            addCriterion("paper_label_upper not between", value1, value2, "paperLabelUpper");
             return (Criteria) this;
         }
     }

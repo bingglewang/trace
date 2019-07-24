@@ -3,16 +3,19 @@
 <mapper namespace="com.zsl.tracedb.mapper.MerchantAgentMapper">
   <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.MerchantAgent">
     <id column="merchant_agent_id" jdbcType="INTEGER" property="merchantAgentId" />
+    <result column="merchant_id" jdbcType="INTEGER" property="merchantId" />
     <result column="agent_name" jdbcType="VARCHAR" property="agentName" />
     <result column="agent_another_name" jdbcType="VARCHAR" property="agentAnotherName" />
     <result column="agent_contact" jdbcType="VARCHAR" property="agentContact" />
     <result column="agent_cpntact_number" jdbcType="VARCHAR" property="agentCpntactNumber" />
-    <result column="fourth_administration_id" jdbcType="INTEGER" property="fourthAdministrationId" />
+    <result column="fourth_administration_id" jdbcType="VARCHAR" property="fourthAdministrationId" />
     <result column="agent_detail_site" jdbcType="VARCHAR" property="agentDetailSite" />
     <result column="agent_papers_url" jdbcType="VARCHAR" property="agentPapersUrl" />
     <result column="agent_description" jdbcType="VARCHAR" property="agentDescription" />
     <result column="agent_status" jdbcType="TINYINT" property="agentStatus" />
-    <result column="merchant_id" jdbcType="INTEGER" property="merchantId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="agent_path" jdbcType="TINYINT" property="agentPath" />
+    <result column="agent_goods" jdbcType="VARCHAR" property="agentGoods" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,9 +76,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    merchant_agent_id, agent_name, agent_another_name, agent_contact, agent_cpntact_number, 
+    merchant_agent_id, merchant_id, agent_name, agent_another_name, agent_contact, agent_cpntact_number, 
     fourth_administration_id, agent_detail_site, agent_papers_url, agent_description, 
-    agent_status, merchant_id
+    agent_status, create_time, agent_path, agent_goods
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.MerchantAgentExample" resultMap="BaseResultMap">
     select
@@ -111,14 +114,16 @@
     <selectKey keyProperty="merchantAgentId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into merchant_agent (agent_name, agent_another_name, agent_contact, 
-      agent_cpntact_number, fourth_administration_id, 
+    insert into merchant_agent (merchant_id, agent_name, agent_another_name, 
+      agent_contact, agent_cpntact_number, fourth_administration_id, 
       agent_detail_site, agent_papers_url, agent_description, 
-      agent_status, merchant_id)
-    values (#{agentName,jdbcType=VARCHAR}, #{agentAnotherName,jdbcType=VARCHAR}, #{agentContact,jdbcType=VARCHAR}, 
-      #{agentCpntactNumber,jdbcType=VARCHAR}, #{fourthAdministrationId,jdbcType=INTEGER}, 
+      agent_status, create_time, agent_path, 
+      agent_goods)
+    values (#{merchantId,jdbcType=INTEGER}, #{agentName,jdbcType=VARCHAR}, #{agentAnotherName,jdbcType=VARCHAR}, 
+      #{agentContact,jdbcType=VARCHAR}, #{agentCpntactNumber,jdbcType=VARCHAR}, #{fourthAdministrationId,jdbcType=VARCHAR}, 
       #{agentDetailSite,jdbcType=VARCHAR}, #{agentPapersUrl,jdbcType=VARCHAR}, #{agentDescription,jdbcType=VARCHAR}, 
-      #{agentStatus,jdbcType=TINYINT}, #{merchantId,jdbcType=INTEGER})
+      #{agentStatus,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{agentPath,jdbcType=TINYINT}, 
+      #{agentGoods,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.MerchantAgent">
     <selectKey keyProperty="merchantAgentId" order="AFTER" resultType="java.lang.Integer">
@@ -126,6 +131,9 @@
     </selectKey>
     insert into merchant_agent
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="merchantId != null">
+        merchant_id,
+      </if>
       <if test="agentName != null">
         agent_name,
       </if>
@@ -153,11 +161,20 @@
       <if test="agentStatus != null">
         agent_status,
       </if>
-      <if test="merchantId != null">
-        merchant_id,
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="agentPath != null">
+        agent_path,
+      </if>
+      <if test="agentGoods != null">
+        agent_goods,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="merchantId != null">
+        #{merchantId,jdbcType=INTEGER},
+      </if>
       <if test="agentName != null">
         #{agentName,jdbcType=VARCHAR},
       </if>
@@ -171,7 +188,7 @@
         #{agentCpntactNumber,jdbcType=VARCHAR},
       </if>
       <if test="fourthAdministrationId != null">
-        #{fourthAdministrationId,jdbcType=INTEGER},
+        #{fourthAdministrationId,jdbcType=VARCHAR},
       </if>
       <if test="agentDetailSite != null">
         #{agentDetailSite,jdbcType=VARCHAR},
@@ -185,8 +202,14 @@
       <if test="agentStatus != null">
         #{agentStatus,jdbcType=TINYINT},
       </if>
-      <if test="merchantId != null">
-        #{merchantId,jdbcType=INTEGER},
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="agentPath != null">
+        #{agentPath,jdbcType=TINYINT},
+      </if>
+      <if test="agentGoods != null">
+        #{agentGoods,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -202,6 +225,9 @@
       <if test="record.merchantAgentId != null">
         merchant_agent_id = #{record.merchantAgentId,jdbcType=INTEGER},
       </if>
+      <if test="record.merchantId != null">
+        merchant_id = #{record.merchantId,jdbcType=INTEGER},
+      </if>
       <if test="record.agentName != null">
         agent_name = #{record.agentName,jdbcType=VARCHAR},
       </if>
@@ -215,7 +241,7 @@
         agent_cpntact_number = #{record.agentCpntactNumber,jdbcType=VARCHAR},
       </if>
       <if test="record.fourthAdministrationId != null">
-        fourth_administration_id = #{record.fourthAdministrationId,jdbcType=INTEGER},
+        fourth_administration_id = #{record.fourthAdministrationId,jdbcType=VARCHAR},
       </if>
       <if test="record.agentDetailSite != null">
         agent_detail_site = #{record.agentDetailSite,jdbcType=VARCHAR},
@@ -229,8 +255,14 @@
       <if test="record.agentStatus != null">
         agent_status = #{record.agentStatus,jdbcType=TINYINT},
       </if>
-      <if test="record.merchantId != null">
-        merchant_id = #{record.merchantId,jdbcType=INTEGER},
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.agentPath != null">
+        agent_path = #{record.agentPath,jdbcType=TINYINT},
+      </if>
+      <if test="record.agentGoods != null">
+        agent_goods = #{record.agentGoods,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -240,16 +272,19 @@
   <update id="updateByExample" parameterType="map">
     update merchant_agent
     set merchant_agent_id = #{record.merchantAgentId,jdbcType=INTEGER},
+      merchant_id = #{record.merchantId,jdbcType=INTEGER},
       agent_name = #{record.agentName,jdbcType=VARCHAR},
       agent_another_name = #{record.agentAnotherName,jdbcType=VARCHAR},
       agent_contact = #{record.agentContact,jdbcType=VARCHAR},
       agent_cpntact_number = #{record.agentCpntactNumber,jdbcType=VARCHAR},
-      fourth_administration_id = #{record.fourthAdministrationId,jdbcType=INTEGER},
+      fourth_administration_id = #{record.fourthAdministrationId,jdbcType=VARCHAR},
       agent_detail_site = #{record.agentDetailSite,jdbcType=VARCHAR},
       agent_papers_url = #{record.agentPapersUrl,jdbcType=VARCHAR},
       agent_description = #{record.agentDescription,jdbcType=VARCHAR},
       agent_status = #{record.agentStatus,jdbcType=TINYINT},
-      merchant_id = #{record.merchantId,jdbcType=INTEGER}
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      agent_path = #{record.agentPath,jdbcType=TINYINT},
+      agent_goods = #{record.agentGoods,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -257,6 +292,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.MerchantAgent">
     update merchant_agent
     <set>
+      <if test="merchantId != null">
+        merchant_id = #{merchantId,jdbcType=INTEGER},
+      </if>
       <if test="agentName != null">
         agent_name = #{agentName,jdbcType=VARCHAR},
       </if>
@@ -270,7 +308,7 @@
         agent_cpntact_number = #{agentCpntactNumber,jdbcType=VARCHAR},
       </if>
       <if test="fourthAdministrationId != null">
-        fourth_administration_id = #{fourthAdministrationId,jdbcType=INTEGER},
+        fourth_administration_id = #{fourthAdministrationId,jdbcType=VARCHAR},
       </if>
       <if test="agentDetailSite != null">
         agent_detail_site = #{agentDetailSite,jdbcType=VARCHAR},
@@ -284,24 +322,33 @@
       <if test="agentStatus != null">
         agent_status = #{agentStatus,jdbcType=TINYINT},
       </if>
-      <if test="merchantId != null">
-        merchant_id = #{merchantId,jdbcType=INTEGER},
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="agentPath != null">
+        agent_path = #{agentPath,jdbcType=TINYINT},
+      </if>
+      <if test="agentGoods != null">
+        agent_goods = #{agentGoods,jdbcType=VARCHAR},
       </if>
     </set>
     where merchant_agent_id = #{merchantAgentId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.MerchantAgent">
     update merchant_agent
-    set agent_name = #{agentName,jdbcType=VARCHAR},
+    set merchant_id = #{merchantId,jdbcType=INTEGER},
+      agent_name = #{agentName,jdbcType=VARCHAR},
       agent_another_name = #{agentAnotherName,jdbcType=VARCHAR},
       agent_contact = #{agentContact,jdbcType=VARCHAR},
       agent_cpntact_number = #{agentCpntactNumber,jdbcType=VARCHAR},
-      fourth_administration_id = #{fourthAdministrationId,jdbcType=INTEGER},
+      fourth_administration_id = #{fourthAdministrationId,jdbcType=VARCHAR},
       agent_detail_site = #{agentDetailSite,jdbcType=VARCHAR},
       agent_papers_url = #{agentPapersUrl,jdbcType=VARCHAR},
       agent_description = #{agentDescription,jdbcType=VARCHAR},
       agent_status = #{agentStatus,jdbcType=TINYINT},
-      merchant_id = #{merchantId,jdbcType=INTEGER}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      agent_path = #{agentPath,jdbcType=TINYINT},
+      agent_goods = #{agentGoods,jdbcType=VARCHAR}
     where merchant_agent_id = #{merchantAgentId,jdbcType=INTEGER}
   </update>
 </mapper>

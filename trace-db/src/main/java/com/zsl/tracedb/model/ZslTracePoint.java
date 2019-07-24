@@ -13,10 +13,10 @@ public class ZslTracePoint implements Serializable {
     @ApiModelProperty(value = "追溯点其他信息")
     private String tracePointName;
 
-    @ApiModelProperty(value = "追溯点起始编码")
+    @ApiModelProperty(value = "追溯点结束编码")
     private Integer tracePointToNumber;
 
-    @ApiModelProperty(value = "追溯点结束编码")
+    @ApiModelProperty(value = "追溯点起始编码")
     private Integer tracePointFromNumber;
 
     @ApiModelProperty(value = "父节点id")

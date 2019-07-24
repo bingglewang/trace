@@ -9,10 +9,119 @@
         <result column="trace_handle_status" jdbcType="INTEGER" property="traceHandleStatus"></result>
         <result column="trace_apply_date" jdbcType="TIMESTAMP" property="traceApplyDate"></result>
         <result column="trace_review_date" jdbcType="TIMESTAMP" property="traceReviewDate"></result>
-        <result column="trace_enable_count" jdbcType="BIGINT" property="traceApplyCount"></result>
+        <result column="trace_enable_count" jdbcType="INTEGER" property="traceEnableCount"></result>
+        <result column="trace_apply_count" jdbcType="BIGINT" property="traceApplyCount"></result>
         <result column="trace_refuse_remark" jdbcType="VARCHAR" property="traceRefuseRemark"></result>
         <association property="merchant" resultMap="com.zsl.tracedb.mapper.MerchantMapper.BaseResultMap"></association>
     </resultMap>
+
+    <resultMap id="getMerchantRank" type="com.zsl.traceapi.dto.MerchantRankVo">
+        <result column="merchant_name" jdbcType="VARCHAR" property="merchantName"></result>
+        <result column="apply_count" jdbcType="BIGINT" property="traceCount"></result>
+    </resultMap>
+
+    <resultMap id="getPieResult" type="com.zsl.traceapi.vo.GoodsTracePieVo">
+        <result column="count1" jdbcType="VARCHAR" property="value"></result>
+        <result column="str_1" jdbcType="BIGINT" property="name"></result>
+    </resultMap>
+
+    <resultMap id="newTraceRecordResult" type="com.zsl.traceapi.vo.NewTraceRecordVo">
+        <result column="trace_id" jdbcType="INTEGER" property="traceId"></result>
+        <result column="trace_apply_date" jdbcType="TIMESTAMP" property="traceApplyDate"></result>
+        <result column="merchant_name" jdbcType="VARCHAR" property="merchantName"></result>
+        <result column="trace_apply_count" jdbcType="BIGINT" property="traceApplyCount"></result>
+        <result column="handle_status" jdbcType="VARCHAR" property="handleStatus"></result>
+        <result column="merchant_logo" jdbcType="VARCHAR" property="merchantLogo"></result>
+        <result column="trace_code_number" jdbcType="VARCHAR" property="traceCodeNumber"></result>
+        <result column="trace_refuse_remark" jdbcType="VARCHAR" property="traceRefuseRemark"></result>
+    </resultMap>
+
+    <select id="getMerchantRankList" resultMap="getMerchantRank">
+        SELECT m.merchant_id,m.merchant_name,
+        sum(
+        if(
+        z.trace_handle_status = 1
+        and date_format(z.trace_review_date,'%Y-%m-%e %H:%i:%S') &lt;= date_format(#{endDate},'%Y-%m-%e %H:%i:%S')
+        and date_format(z.trace_review_date,'%Y-%m-%e %H:%i:%S') &gt;= date_format(#{startDate},'%Y-%m-%e %H:%i:%S')
+        <if test="companyId != null and companyId != 0 ">
+        and z.trace_back2 = #{companyId}
+    </if>
+        ,z.trace_apply_count
+        ,0
+        )
+        ) as apply_count
+        from merchant m
+        LEFT JOIN zsl_trace z
+        on z.trace_business_id = m.merchant_id
+        <where>
+            <if test="companyId == 0">
+              m.alliance_business_id is null
+            </if>
+            <if test="companyId != null and companyId != 0">
+                m.alliance_business_id = #{companyId}
+            </if>
+        </where>
+        GROUP BY m.merchant_id,m.merchant_name
+        ORDER BY apply_count desc
+    </select>
+
+
+    <select id="getPieChart" resultMap="getPieResult">
+        SELECT
+            sum(zp.trace_point_to_number - zp.trace_point_from_number + 1) as count1,
+            substring_index(g.category_full_name,'/', 1) as str_1
+        from zsl_trace_point zp
+        LEFT JOIN zsl_trace z
+        on z.trace_code_number = zp.trace_code_number
+        LEFT JOIN goods g
+        on g.goods_id = zp.trace_goods_id
+        where zp.trace_parent_id is NULL
+        <if test="companyId != null and companyId != 0 ">
+            and z.trace_back2 = #{companyId}
+        </if>
+        <if test="companyId == 0 ">
+            and z.trace_back2 is null
+        </if>
+        GROUP BY str_1
+    </select>
+
+
+    <select id="getNewTraceRecord" resultMap="newTraceRecordResult">
+      SELECT
+            z.trace_id,
+            z.trace_apply_date,
+            m.merchant_name,
+            z.trace_apply_count,
+			IFNULL(z.trace_code_number,'') as trace_code_number,
+			IFNULL(z.trace_refuse_remark,'') as trace_refuse_remark ,
+            case z.trace_handle_status
+               when 2 then '待审核'
+               when 1 then '已通过'
+							 when 3 then '已撤回'
+							 ELSE '已拒绝' END
+            as handle_status,
+            (
+            select
+                    mpg.merchant_logo_url
+                from merchant_papers_group mpg
+                where mpg.merchant_id = m.merchant_id
+            ) as merchant_logo
+        FROM zsl_trace z
+        LEFT JOIN merchant m
+        on m.merchant_id = z.trace_business_id
+        <where>
+            <if test="allianceBusinessId != null and allianceBusinessId != 0">
+                 z.trace_back2 = #{allianceBusinessId}
+            </if>
+            <if test="merchantId != null and merchantId != 0">
+                z.trace_business_id = #{merchantId}
+            </if>
+            <if test="merchantId == null and merchantId == null">
+                z.trace_back2 is null and z.trace_handle_status = 2
+            </if>
+        </where>
+        ORDER BY z.trace_apply_date desc
+    </select>
 
     <select id="getZslTraceDetailById" resultMap="zslTraceIDetailResultMap">
         select
@@ -25,6 +134,7 @@
             z.trace_review_date,
             z.trace_enable_count,
             z.trace_refuse_remark,
+            z.trace_apply_count,
             m.*
         from
             zsl_trace z
@@ -35,22 +145,32 @@
     </select>
 
     <select id="getListByPage" resultMap="zslTraceIDetailResultMap">
-         select
-            z.trace_id,
-            z.trace_code_number,
-            z.trace_company_name,
-            z.trace_apply_type,
-            z.trace_handle_status,
-            z.trace_apply_date,
-            z.trace_review_date,
-            z.trace_enable_count,
-            z.trace_refuse_remark,
-            m.*
+        select
+        z.trace_id,
+        z.trace_code_number,
+        z.trace_company_name,
+        z.trace_apply_type,
+        z.trace_handle_status,
+        z.trace_apply_date,
+        z.trace_review_date,
+        z.trace_enable_count,
+        z.trace_refuse_remark,
+        z.trace_apply_count,
+        m.*
         from
-            zsl_trace z
-            left join merchant m on m.merchant_id = z.trace_business_id
+        zsl_trace z
+        left join merchant m on m.merchant_id = z.trace_business_id
         where
-            m.merchant_status = 0
+        m.merchant_status = 0
+        <if test="queryParam.isZongBu">
+            and z.trace_back2 is null
+        </if>
+        <if test="queryParam.merchantId != null and queryParam.merchantId != 0">
+          and z.trace_business_id = #{queryParam.merchantId}
+        </if>
+        <if test="queryParam.allianceId != null and queryParam.allianceId != 0">
+            and z.trace_back2 = #{queryParam.allianceId}
+        </if>
         <if test="queryParam.traceCodeNumber!=null and queryParam.traceCodeNumber!=''">
             AND z.trace_code_number like concat("%",#{queryParam.traceCodeNumber},"%")
         </if>
@@ -67,8 +187,10 @@
             AND m.merchant_name like concat("%",#{queryParam.merchantName},"%")
         </if>
         <if test="queryParam.traceApplyStartDate!=null and queryParam.traceApplyEndDate!=null">
-            AND  date_format(z.trace_apply_date,'%Y-%m-%e %H:%i:%S') &gt;= date_format(#{queryParam.traceApplyStartDate},'%Y-%m-%e %H:%i:%S')
-            AND  date_format(z.trace_apply_date,'%Y-%m-%e %H:%i:%S') &lt;= date_format(#{queryParam.traceApplyEndDate},'%Y-%m-%e %H:%i:%S')
+            AND date_format(z.trace_apply_date,'%Y-%m-%e %H:%i:%S') &gt;=
+            date_format(#{queryParam.traceApplyStartDate},'%Y-%m-%e %H:%i:%S')
+            AND date_format(z.trace_apply_date,'%Y-%m-%e %H:%i:%S') &lt;=
+            date_format(#{queryParam.traceApplyEndDate},'%Y-%m-%e %H:%i:%S')
         </if>
     </select>
 </mapper>

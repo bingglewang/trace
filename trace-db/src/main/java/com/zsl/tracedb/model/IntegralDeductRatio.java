@@ -6,7 +6,6 @@ import java.io.Serializable;
 public class IntegralDeductRatio implements Serializable {
     private Integer integralDeductRatioId;
 
-    @ApiModelProperty(value = "类型")
     private Integer integralDeductRatioType;
 
     @ApiModelProperty(value = "扣减或兑换的比例积分")

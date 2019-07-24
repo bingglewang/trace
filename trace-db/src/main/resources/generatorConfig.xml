@@ -36,23 +36,23 @@
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.zsl.tracedb.mapper"
                              targetProject="trace-db\src\main\java"/>
         <!--生成全部表tableName设为%-->
-        <table tableName="administration_first">
-            <generatedKey column="nation_id" sqlStatement="MySql" identity="true"/>
+        <table tableName="account">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="administration_fourth">
-            <generatedKey column="fourth_administration_id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="administration_second">
-            <generatedKey column="second_administration_id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="administration_third">
-            <generatedKey column="third_administration_id" sqlStatement="MySql" identity="true"/>
+        <table tableName="account_role">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="alliance_business">
             <generatedKey column="alliance_business_id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="alliance_businessl_site">
             <generatedKey column="alliance_businessl_site_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="area">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="role">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="brand">
             <generatedKey column="brand_id" sqlStatement="MySql" identity="true"/>
@@ -122,6 +122,9 @@
         </table>
         <table tableName="zsl_trace_record">
             <generatedKey column="trace_record_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="zsl_trace_subcode">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>
 </generatorConfiguration>

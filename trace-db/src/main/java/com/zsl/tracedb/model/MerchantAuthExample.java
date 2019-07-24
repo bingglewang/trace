@@ -105,63 +105,63 @@ public class MerchantAuthExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andIdIsNull() {
-            addCriterion("id is null");
+        public Criteria andMerchantAuthIdIsNull() {
+            addCriterion("merchant_auth_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andIdIsNotNull() {
-            addCriterion("id is not null");
+        public Criteria andMerchantAuthIdIsNotNull() {
+            addCriterion("merchant_auth_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIdEqualTo(Integer value) {
-            addCriterion("id =", value, "id");
+        public Criteria andMerchantAuthIdEqualTo(Integer value) {
+            addCriterion("merchant_auth_id =", value, "merchantAuthId");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotEqualTo(Integer value) {
-            addCriterion("id <>", value, "id");
+        public Criteria andMerchantAuthIdNotEqualTo(Integer value) {
+            addCriterion("merchant_auth_id <>", value, "merchantAuthId");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThan(Integer value) {
-            addCriterion("id >", value, "id");
+        public Criteria andMerchantAuthIdGreaterThan(Integer value) {
+            addCriterion("merchant_auth_id >", value, "merchantAuthId");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("id >=", value, "id");
+        public Criteria andMerchantAuthIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("merchant_auth_id >=", value, "merchantAuthId");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThan(Integer value) {
-            addCriterion("id <", value, "id");
+        public Criteria andMerchantAuthIdLessThan(Integer value) {
+            addCriterion("merchant_auth_id <", value, "merchantAuthId");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThanOrEqualTo(Integer value) {
-            addCriterion("id <=", value, "id");
+        public Criteria andMerchantAuthIdLessThanOrEqualTo(Integer value) {
+            addCriterion("merchant_auth_id <=", value, "merchantAuthId");
             return (Criteria) this;
         }
 
-        public Criteria andIdIn(List<Integer> values) {
-            addCriterion("id in", values, "id");
+        public Criteria andMerchantAuthIdIn(List<Integer> values) {
+            addCriterion("merchant_auth_id in", values, "merchantAuthId");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotIn(List<Integer> values) {
-            addCriterion("id not in", values, "id");
+        public Criteria andMerchantAuthIdNotIn(List<Integer> values) {
+            addCriterion("merchant_auth_id not in", values, "merchantAuthId");
             return (Criteria) this;
         }
 
-        public Criteria andIdBetween(Integer value1, Integer value2) {
-            addCriterion("id between", value1, value2, "id");
+        public Criteria andMerchantAuthIdBetween(Integer value1, Integer value2) {
+            addCriterion("merchant_auth_id between", value1, value2, "merchantAuthId");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("id not between", value1, value2, "id");
+        public Criteria andMerchantAuthIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("merchant_auth_id not between", value1, value2, "merchantAuthId");
             return (Criteria) this;
         }
 
@@ -292,66 +292,6 @@ public class MerchantAuthExample {
 
         public Criteria andMerchantIdNotBetween(Integer value1, Integer value2) {
             addCriterion("merchant_id not between", value1, value2, "merchantId");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsAcceptProtocolIsNull() {
-            addCriterion("is_accept_protocol is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsAcceptProtocolIsNotNull() {
-            addCriterion("is_accept_protocol is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsAcceptProtocolEqualTo(Integer value) {
-            addCriterion("is_accept_protocol =", value, "isAcceptProtocol");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsAcceptProtocolNotEqualTo(Integer value) {
-            addCriterion("is_accept_protocol <>", value, "isAcceptProtocol");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsAcceptProtocolGreaterThan(Integer value) {
-            addCriterion("is_accept_protocol >", value, "isAcceptProtocol");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsAcceptProtocolGreaterThanOrEqualTo(Integer value) {
-            addCriterion("is_accept_protocol >=", value, "isAcceptProtocol");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsAcceptProtocolLessThan(Integer value) {
-            addCriterion("is_accept_protocol <", value, "isAcceptProtocol");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsAcceptProtocolLessThanOrEqualTo(Integer value) {
-            addCriterion("is_accept_protocol <=", value, "isAcceptProtocol");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsAcceptProtocolIn(List<Integer> values) {
-            addCriterion("is_accept_protocol in", values, "isAcceptProtocol");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsAcceptProtocolNotIn(List<Integer> values) {
-            addCriterion("is_accept_protocol not in", values, "isAcceptProtocol");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsAcceptProtocolBetween(Integer value1, Integer value2) {
-            addCriterion("is_accept_protocol between", value1, value2, "isAcceptProtocol");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsAcceptProtocolNotBetween(Integer value1, Integer value2) {
-            addCriterion("is_accept_protocol not between", value1, value2, "isAcceptProtocol");
             return (Criteria) this;
         }
 
@@ -672,6 +612,66 @@ public class MerchantAuthExample {
 
         public Criteria andPayStatusNotBetween(Integer value1, Integer value2) {
             addCriterion("pay_status not between", value1, value2, "payStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusIsNull() {
+            addCriterion("audit_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusIsNotNull() {
+            addCriterion("audit_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusEqualTo(Integer value) {
+            addCriterion("audit_status =", value, "auditStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusNotEqualTo(Integer value) {
+            addCriterion("audit_status <>", value, "auditStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusGreaterThan(Integer value) {
+            addCriterion("audit_status >", value, "auditStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusGreaterThanOrEqualTo(Integer value) {
+            addCriterion("audit_status >=", value, "auditStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusLessThan(Integer value) {
+            addCriterion("audit_status <", value, "auditStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusLessThanOrEqualTo(Integer value) {
+            addCriterion("audit_status <=", value, "auditStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusIn(List<Integer> values) {
+            addCriterion("audit_status in", values, "auditStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusNotIn(List<Integer> values) {
+            addCriterion("audit_status not in", values, "auditStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusBetween(Integer value1, Integer value2) {
+            addCriterion("audit_status between", value1, value2, "auditStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusNotBetween(Integer value1, Integer value2) {
+            addCriterion("audit_status not between", value1, value2, "auditStatus");
             return (Criteria) this;
         }
 

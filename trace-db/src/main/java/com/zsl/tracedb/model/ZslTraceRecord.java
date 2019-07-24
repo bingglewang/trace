@@ -13,10 +13,10 @@ public class ZslTraceRecord implements Serializable {
     @ApiModelProperty(value = "关联商品id")
     private Integer traceGoodId;
 
-    @ApiModelProperty(value = "商品起始编码")
+    @ApiModelProperty(value = "商品结束编码")
     private Integer traceToNumber;
 
-    @ApiModelProperty(value = "商品结束编码")
+    @ApiModelProperty(value = "商品起始编码")
     private Integer traceFromNumber;
 
     @ApiModelProperty(value = "关联摊位id（没有则为非农贸）")

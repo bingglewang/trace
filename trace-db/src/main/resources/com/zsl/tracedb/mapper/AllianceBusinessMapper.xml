@@ -8,6 +8,9 @@
     <result column="company_description" jdbcType="VARCHAR" property="companyDescription" />
     <result column="alliance_business_enter_time" jdbcType="TIMESTAMP" property="allianceBusinessEnterTime" />
     <result column="alliance_business_status" jdbcType="TINYINT" property="allianceBusinessStatus" />
+    <result column="business_adminstration_id" jdbcType="INTEGER" property="businessAdminstrationId" />
+    <result column="business_adminstration_second_id" jdbcType="INTEGER" property="businessAdminstrationSecondId" />
+    <result column="business_adminstration_third_id" jdbcType="INTEGER" property="businessAdminstrationThirdId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,7 +72,8 @@
   </sql>
   <sql id="Base_Column_List">
     alliance_business_id, alliance_business_name, business_license_url, company_description, 
-    alliance_business_enter_time, alliance_business_status
+    alliance_business_enter_time, alliance_business_status, business_adminstration_id, 
+    business_adminstration_second_id, business_adminstration_third_id
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.AllianceBusinessExample" resultMap="BaseResultMap">
     select
@@ -107,10 +111,14 @@
     </selectKey>
     insert into alliance_business (alliance_business_name, business_license_url, 
       company_description, alliance_business_enter_time, 
-      alliance_business_status)
+      alliance_business_status, business_adminstration_id, 
+      business_adminstration_second_id, business_adminstration_third_id
+      )
     values (#{allianceBusinessName,jdbcType=VARCHAR}, #{businessLicenseUrl,jdbcType=VARCHAR}, 
       #{companyDescription,jdbcType=VARCHAR}, #{allianceBusinessEnterTime,jdbcType=TIMESTAMP}, 
-      #{allianceBusinessStatus,jdbcType=TINYINT})
+      #{allianceBusinessStatus,jdbcType=TINYINT}, #{businessAdminstrationId,jdbcType=INTEGER}, 
+      #{businessAdminstrationSecondId,jdbcType=INTEGER}, #{businessAdminstrationThirdId,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.AllianceBusiness">
     <selectKey keyProperty="allianceBusinessId" order="AFTER" resultType="java.lang.Integer">
@@ -133,6 +141,15 @@
       <if test="allianceBusinessStatus != null">
         alliance_business_status,
       </if>
+      <if test="businessAdminstrationId != null">
+        business_adminstration_id,
+      </if>
+      <if test="businessAdminstrationSecondId != null">
+        business_adminstration_second_id,
+      </if>
+      <if test="businessAdminstrationThirdId != null">
+        business_adminstration_third_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="allianceBusinessName != null">
@@ -149,6 +166,15 @@
       </if>
       <if test="allianceBusinessStatus != null">
         #{allianceBusinessStatus,jdbcType=TINYINT},
+      </if>
+      <if test="businessAdminstrationId != null">
+        #{businessAdminstrationId,jdbcType=INTEGER},
+      </if>
+      <if test="businessAdminstrationSecondId != null">
+        #{businessAdminstrationSecondId,jdbcType=INTEGER},
+      </if>
+      <if test="businessAdminstrationThirdId != null">
+        #{businessAdminstrationThirdId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -179,6 +205,15 @@
       <if test="record.allianceBusinessStatus != null">
         alliance_business_status = #{record.allianceBusinessStatus,jdbcType=TINYINT},
       </if>
+      <if test="record.businessAdminstrationId != null">
+        business_adminstration_id = #{record.businessAdminstrationId,jdbcType=INTEGER},
+      </if>
+      <if test="record.businessAdminstrationSecondId != null">
+        business_adminstration_second_id = #{record.businessAdminstrationSecondId,jdbcType=INTEGER},
+      </if>
+      <if test="record.businessAdminstrationThirdId != null">
+        business_adminstration_third_id = #{record.businessAdminstrationThirdId,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -191,7 +226,10 @@
       business_license_url = #{record.businessLicenseUrl,jdbcType=VARCHAR},
       company_description = #{record.companyDescription,jdbcType=VARCHAR},
       alliance_business_enter_time = #{record.allianceBusinessEnterTime,jdbcType=TIMESTAMP},
-      alliance_business_status = #{record.allianceBusinessStatus,jdbcType=TINYINT}
+      alliance_business_status = #{record.allianceBusinessStatus,jdbcType=TINYINT},
+      business_adminstration_id = #{record.businessAdminstrationId,jdbcType=INTEGER},
+      business_adminstration_second_id = #{record.businessAdminstrationSecondId,jdbcType=INTEGER},
+      business_adminstration_third_id = #{record.businessAdminstrationThirdId,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -214,6 +252,15 @@
       <if test="allianceBusinessStatus != null">
         alliance_business_status = #{allianceBusinessStatus,jdbcType=TINYINT},
       </if>
+      <if test="businessAdminstrationId != null">
+        business_adminstration_id = #{businessAdminstrationId,jdbcType=INTEGER},
+      </if>
+      <if test="businessAdminstrationSecondId != null">
+        business_adminstration_second_id = #{businessAdminstrationSecondId,jdbcType=INTEGER},
+      </if>
+      <if test="businessAdminstrationThirdId != null">
+        business_adminstration_third_id = #{businessAdminstrationThirdId,jdbcType=INTEGER},
+      </if>
     </set>
     where alliance_business_id = #{allianceBusinessId,jdbcType=INTEGER}
   </update>
@@ -223,7 +270,10 @@
       business_license_url = #{businessLicenseUrl,jdbcType=VARCHAR},
       company_description = #{companyDescription,jdbcType=VARCHAR},
       alliance_business_enter_time = #{allianceBusinessEnterTime,jdbcType=TIMESTAMP},
-      alliance_business_status = #{allianceBusinessStatus,jdbcType=TINYINT}
+      alliance_business_status = #{allianceBusinessStatus,jdbcType=TINYINT},
+      business_adminstration_id = #{businessAdminstrationId,jdbcType=INTEGER},
+      business_adminstration_second_id = #{businessAdminstrationSecondId,jdbcType=INTEGER},
+      business_adminstration_third_id = #{businessAdminstrationThirdId,jdbcType=INTEGER}
     where alliance_business_id = #{allianceBusinessId,jdbcType=INTEGER}
   </update>
 </mapper>
