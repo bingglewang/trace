@@ -1,12 +1,12 @@
 package com.zsl.traceapi;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.zsl.traceapi.config.rabbitmq.producer.TraceUpdateProducer;
 import com.zsl.traceapi.dao.ZslTraceSubcodeDao;
-import com.zsl.traceapi.dto.TraceSubcodeInsertParam;
+import com.zsl.traceapi.dto.TraceCodeRelation;
+import com.zsl.traceapi.dto.TraceSubcodeUpdateParam;
 import com.zsl.traceapi.service.RedisService;
-import com.zsl.traceapi.util.MStringUtils;
-import com.zsl.traceapi.util.RandomUtil;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -32,12 +26,56 @@ public class TraceApiApplicationTests {
     private ZslTraceSubcodeDao zslTraceSubcodeDao;
 
     @Autowired
-    ApplicationContext applicationContext;
+    private TraceUpdateProducer traceUpdateProducer;
 
-    private String codeUrl = "https://scode.cntracechain.com/#/Produce?SID=";
+    @Autowired
+    ApplicationContext applicationContext;
 
     @Test
     public void contextLoads() {
+        try {
+            TraceCodeRelation traceCodeRelation = new TraceCodeRelation();
+            traceCodeRelation.setFromNumber(1001L);
+            traceCodeRelation.setToNumber(4444L);
+            traceCodeRelation.setGoodsId(123);
+            traceCodeRelation.setStallId(123);
+            traceCodeRelation.setTraceCodeNumber("zs1563958663716000574946324");
+            String sendJsonStr = JSONObject.toJSONString(traceCodeRelation);
+            traceUpdateProducer.sendMessage(sendJsonStr,100);
+        }catch (Exception e){
+
+        }
+      /*  Long start = System.currentTimeMillis();
+        Long fromNumber = 1001L;
+        Long toNumber = 4444L;
+        int goodsId = 6;
+        int stallId = 6;
+        String traceCodeNumber = "zs1563958663716000574946324";
+        Long count = toNumber - fromNumber + 1;
+        int totalPage = (int)Math.ceil((double)count/1000);
+        for(int currentPage = 1; currentPage <= totalPage; currentPage++){
+            Long fromIndex = 0L;
+            Long toIndex = 0L;
+            fromIndex = new Long((currentPage - 1)*1000 + fromNumber);
+            if(currentPage - totalPage == 0){
+                toIndex = toNumber;
+            }else{
+                toIndex = new Long(currentPage*1000)+fromNumber;
+            }
+            System.out.println("开始："+fromIndex+"，结束："+toIndex);
+            List<Long> traceCodeIds = zslTraceSubcodeDao.selectByRange(fromIndex,toIndex,traceCodeNumber);
+            List<TraceSubcodeUpdateParam> updateParams = new ArrayList<>();
+            for(int i = 0;i < traceCodeIds.size();i++ ){
+                TraceSubcodeUpdateParam traceSubcodeUpdateParam = new TraceSubcodeUpdateParam();
+                traceSubcodeUpdateParam.setGoodsId(goodsId);
+                traceSubcodeUpdateParam.setStallId(stallId);
+                traceSubcodeUpdateParam.setId(traceCodeIds.get(i));
+                updateParams.add(traceSubcodeUpdateParam);
+            }
+            new MyThread(updateParams).start();
+        }
+        Long end = System.currentTimeMillis();
+        System.out.println("cast : " + (end - start) / 1000 + "s");*/
       /*  String s = "{\n" +
                 "        \"id\": 56,\n" +
                 "        \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoie1wiaGVhZHF1YXJ0ZXJzXCI6MCxcInJvbGVOYW1lXCI6XCJST0xFX0hFQURRVUFSVEVSU19PUEVSQVRFXCIsXCJpZFwiOjN9IiwiaXNzIjoiNTYiLCJleHAiOjE1NjIwNTY5MzIsImlhdCI6MTU2MjA0OTczMn0.S6IUhrYWADx25mJM6UPdgOpUFddnAMoNQBQh4gmeo14\",\n" +
@@ -69,7 +107,7 @@ public class TraceApiApplicationTests {
        System.out.println("替换后的值："+tem);*/
 
         //生成追溯子码
-        Long count = 1000000L;
+      /*  Long count = 1000000L;
         String traceCode = "zs123456";
         Long start = System.currentTimeMillis();
         List<TraceSubcodeInsertParam> insertParams = new ArrayList<>();
@@ -92,7 +130,7 @@ public class TraceApiApplicationTests {
             zslTraceSubcodeDao.insertCodeBatch(insertParams);
         }
         Long end = System.currentTimeMillis();
-        System.out.println("sql执行时间：" + (end - start) / 1000 + "秒");
+        System.out.println("sql执行时间：" + (end - start) / 1000 + "秒");*/
 
         // 获取配置的数据源
        /* DataSource dataSource = applicationContext.getBean(DataSource.class);
@@ -147,5 +185,17 @@ public class TraceApiApplicationTests {
             Long end = new Date().getTime();
             // 耗时
             System.out.println("cast : " + (end - begin) / 1000 + " ms");*/
+    }
+
+
+    class MyThread extends Thread {
+        List<TraceSubcodeUpdateParam> updateParams;
+        MyThread(List<TraceSubcodeUpdateParam> updateParams){
+            this.updateParams = updateParams;
+        }
+        public void run (){
+            int j = zslTraceSubcodeDao.updateGoodsAndStall(updateParams);
+        }
+
     }
 }

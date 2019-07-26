@@ -2,11 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zsl.traceapi.dao.ZslTraceSubcodeDao">
     <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.ZslTraceSubcode">
+        <id column="id" jdbcType="BIGINT" property="id" />
         <result column="trace_index" jdbcType="BIGINT" property="traceIndex" />
         <result column="trace_code_number" jdbcType="VARCHAR" property="traceCodeNumber" />
         <result column="trace_sub_code_number" jdbcType="VARCHAR" property="traceSubCodeNumber" />
         <result column="trace_good_id" jdbcType="INTEGER" property="traceGoodId" />
         <result column="trace_stall_id" jdbcType="INTEGER" property="traceStallId" />
+        <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+        <result column="is_leaf" jdbcType="CHAR" property="isLeaf" />
+        <result column="node_level" jdbcType="INTEGER" property="nodeLevel" />
+        <result column="scan_count" jdbcType="BIGINT" property="scanCount" />
+    </resultMap>
+
+    <resultMap id="BaseResultMapSub" type="com.zsl.traceapi.dto.ExcelTraceCode">
+        <result column="trace_sub_code_number" jdbcType="VARCHAR" property="code" />
+    </resultMap>
+
+    <resultMap id="BaseResultMapByRange" type="com.zsl.traceapi.dto.TraceCodeRelation">
+        <id column="id" jdbcType="BIGINT" property="id" />
     </resultMap>
 
     <insert id="insertCodeBatch">
@@ -18,11 +31,45 @@
         </foreach>
     </insert>
 
+    <update id="updateGoodsAndStall" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE zsl_trace_subcode
+            <set>
+                trace_good_id=#{item.goodsId},
+                trace_stall_id=#{item.stallId}
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+
     <select id="selectByCodeNumber" resultMap="BaseResultMap">
         SELECT *  FROM `zsl_trace_subcode` WHERE trace_sub_code_number = #{traceCodeNumber} LIMIT 1;
     </select>
 
-    <delete id="deleteByCodeNumber" >
-        delete from zsl_trace_subcode where trace_code_number=#{traceCodeNumber};
+    <select id="exportExcel" resultMap="BaseResultMapSub">
+        SELECT trace_sub_code_number
+        FROM `zsl_trace_subcode`
+        where id BETWEEN
+        (SELECT id from zsl_trace_subcode where trace_index = #{fromIndex} and trace_code_number = #{traceCodeNumber})
+        and
+        (SELECT id from zsl_trace_subcode where  trace_index = #{toIndex} and trace_code_number = #{traceCodeNumber})
+    </select>
+
+    <select id="selectByRange" resultType="java.lang.Long">
+        SELECT id
+        FROM `zsl_trace_subcode`
+        where id BETWEEN
+        (SELECT id from zsl_trace_subcode where trace_index = #{fromIndex} and trace_code_number = #{traceCodeNumber})
+        and
+        (SELECT id from zsl_trace_subcode where  trace_index = #{toIndex} and trace_code_number = #{traceCodeNumber})
+    </select>
+
+    <delete id="deleteByCodeNumber">
+        delete from zsl_trace_subcode where trace_code_number=#{traceCodeNumber}
     </delete>
+
+
 </mapper>

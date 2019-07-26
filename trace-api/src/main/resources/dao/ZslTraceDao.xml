@@ -193,4 +193,8 @@
             date_format(#{queryParam.traceApplyEndDate},'%Y-%m-%e %H:%i:%S')
         </if>
     </select>
+
+    <select id="busiTotalTraceCount" resultType="java.lang.Long">
+        SELECT sum(trace_apply_count) FROM `zsl_trace` where trace_business_id = #{traceBusinessId};
+    </select>
 </mapper>

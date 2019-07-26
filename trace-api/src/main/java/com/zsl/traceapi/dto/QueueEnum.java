@@ -7,8 +7,8 @@ public enum QueueEnum {
     /**
      * 追溯队列
      */
-    QUEUE_TRACE_CODE("trace.code.direct", "trace.code.generator", "trace.code.generator");
-
+    QUEUE_TRACE_CODE("trace.code.direct", "trace.code.generator", "trace.code.generator"),
+    QUEUE_UPDATE_CODE("trace.code.direct","trace.code.update","trace.code.update");
     /**
      * 交换名称
      */

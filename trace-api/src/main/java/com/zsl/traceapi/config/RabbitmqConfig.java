@@ -29,6 +29,11 @@ public class RabbitmqConfig {
         return new Queue(QueueEnum.QUEUE_TRACE_CODE.getName(),true,false,false);
     }
 
+    @Bean
+    public Queue traceUpdateQueue(){
+        return new Queue(QueueEnum.QUEUE_UPDATE_CODE.getName(),true,false,false);
+    }
+
     /**
      * 将队列绑定到交换机
      * @param traceCodeDirect
@@ -41,5 +46,19 @@ public class RabbitmqConfig {
                 .bind(traceCodeQueue)
                 .to(traceCodeDirect)
                 .with(QueueEnum.QUEUE_TRACE_CODE.getRouteKey());
+    }
+
+    /**
+     * 将队列绑定到交换机
+     * @param traceCodeDirect
+     * @param traceUpdateQueue
+     * @return
+     */
+    @Bean
+    Binding traceUpdateBinding(DirectExchange traceCodeDirect,Queue traceUpdateQueue){
+        return BindingBuilder
+                .bind(traceUpdateQueue)
+                .to(traceCodeDirect)
+                .with(QueueEnum.QUEUE_UPDATE_CODE.getRouteKey());
     }
 }

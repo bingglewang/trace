@@ -1,8 +1,12 @@
 package com.zsl.traceapi.controller;
 
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
+import cn.afterturn.easypoi.excel.entity.params.ExcelExportEntity;
 import com.alibaba.fastjson.JSONObject;
 import com.zsl.traceapi.context.RequestContext;
 import com.zsl.traceapi.context.RequestContextMgr;
+import com.zsl.traceapi.dao.ZslTraceDao;
 import com.zsl.traceapi.dto.*;
 import com.zsl.traceapi.service.TraceService;
 import com.zsl.traceapi.util.Constant;
@@ -21,6 +25,7 @@ import com.zsl.tracedb.model.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -29,10 +34,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.util.*;
 
 @Api(tags = "TraceController", description = "追溯模块")
 @RestController
@@ -53,6 +57,9 @@ public class TraceController {
 
     @Autowired
     private ZslTracePointMapper zslTracePointMapper;
+
+    @Autowired
+    private ZslTraceDao zslTraceDao;
 
     @GetMapping("/{id:[0-9]+}")
     @ApiOperation("根据id获取追溯信息")
@@ -114,9 +121,6 @@ public class TraceController {
     @ResponseBody
     public CommonResult insert(@RequestBody @Valid ZslTraceAddAndUpdateParam zslTraceAddAndUpdateParam, BindingResult bindingResult) {
        String resultStr = "申请成功";
-        if(zslTraceAddAndUpdateParam.getTraceApplyType() == 1 &&  zslTraceAddAndUpdateParam.getTraceApplyCount() - Constant.UPPER_LIMIT > 0){
-            resultStr = "申请成功，免费标签超过额度，需要扣除积分";
-        }
         ZslTrace insertParam = new ZslTrace();
         BeanUtils.copyProperties(zslTraceAddAndUpdateParam, insertParam);
         // 默认为待审核状态
@@ -133,6 +137,11 @@ public class TraceController {
 
         //根据商家id查询加盟商/公司
         Merchant merchant = merchantMapper.selectByPrimaryKey(insertParam.getTraceBusinessId());
+        //判断是否需要扣除积分
+        Long totalApplyCount = zslTraceDao.busiTotalTraceCount(zslTraceAddAndUpdateParam.getTraceBusinessId());
+        if(zslTraceAddAndUpdateParam.getTraceApplyType() == 1 &&  totalApplyCount - merchant.getPaperLabelUpper() > 0){
+            resultStr = "申请成功，免费标签超过额度，需要扣除积分";
+        }
         if (merchant == null) {
             return CommonResult.failed("商家不存在");
         }else if(merchant.getCertificationToPay() != 1 && accountType == 2){
@@ -452,6 +461,4 @@ public class TraceController {
     public CommonResult getGoodsListByTraceCode(String traceCodeNumber) {
          return CommonResult.success( traceService.getGoodsByTraceCodeNumber(traceCodeNumber));
     }
-
-
 }

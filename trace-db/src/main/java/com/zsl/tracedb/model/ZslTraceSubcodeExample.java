@@ -673,6 +673,66 @@ public class ZslTraceSubcodeExample {
             addCriterion("node_level not between", value1, value2, "nodeLevel");
             return (Criteria) this;
         }
+
+        public Criteria andScanCountIsNull() {
+            addCriterion("scan_count is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andScanCountIsNotNull() {
+            addCriterion("scan_count is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andScanCountEqualTo(Long value) {
+            addCriterion("scan_count =", value, "scanCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andScanCountNotEqualTo(Long value) {
+            addCriterion("scan_count <>", value, "scanCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andScanCountGreaterThan(Long value) {
+            addCriterion("scan_count >", value, "scanCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andScanCountGreaterThanOrEqualTo(Long value) {
+            addCriterion("scan_count >=", value, "scanCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andScanCountLessThan(Long value) {
+            addCriterion("scan_count <", value, "scanCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andScanCountLessThanOrEqualTo(Long value) {
+            addCriterion("scan_count <=", value, "scanCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andScanCountIn(List<Long> values) {
+            addCriterion("scan_count in", values, "scanCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andScanCountNotIn(List<Long> values) {
+            addCriterion("scan_count not in", values, "scanCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andScanCountBetween(Long value1, Long value2) {
+            addCriterion("scan_count between", value1, value2, "scanCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andScanCountNotBetween(Long value1, Long value2) {
+            addCriterion("scan_count not between", value1, value2, "scanCount");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

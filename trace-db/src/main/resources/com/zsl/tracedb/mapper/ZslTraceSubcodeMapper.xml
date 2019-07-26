@@ -11,6 +11,7 @@
     <result column="parent_id" jdbcType="BIGINT" property="parentId" />
     <result column="is_leaf" jdbcType="CHAR" property="isLeaf" />
     <result column="node_level" jdbcType="INTEGER" property="nodeLevel" />
+    <result column="scan_count" jdbcType="BIGINT" property="scanCount" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -72,7 +73,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, trace_index, trace_code_number, trace_sub_code_number, trace_good_id, trace_stall_id, 
-    parent_id, is_leaf, node_level
+    parent_id, is_leaf, node_level, scan_count
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.ZslTraceSubcodeExample" resultMap="BaseResultMap">
     select
@@ -110,10 +111,12 @@
     </selectKey>
     insert into zsl_trace_subcode (trace_index, trace_code_number, trace_sub_code_number, 
       trace_good_id, trace_stall_id, parent_id, 
-      is_leaf, node_level)
+      is_leaf, node_level, scan_count
+      )
     values (#{traceIndex,jdbcType=BIGINT}, #{traceCodeNumber,jdbcType=VARCHAR}, #{traceSubCodeNumber,jdbcType=VARCHAR}, 
       #{traceGoodId,jdbcType=INTEGER}, #{traceStallId,jdbcType=INTEGER}, #{parentId,jdbcType=BIGINT}, 
-      #{isLeaf,jdbcType=CHAR}, #{nodeLevel,jdbcType=INTEGER})
+      #{isLeaf,jdbcType=CHAR}, #{nodeLevel,jdbcType=INTEGER}, #{scanCount,jdbcType=BIGINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.ZslTraceSubcode">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -145,6 +148,9 @@
       <if test="nodeLevel != null">
         node_level,
       </if>
+      <if test="scanCount != null">
+        scan_count,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="traceIndex != null">
@@ -170,6 +176,9 @@
       </if>
       <if test="nodeLevel != null">
         #{nodeLevel,jdbcType=INTEGER},
+      </if>
+      <if test="scanCount != null">
+        #{scanCount,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -209,6 +218,9 @@
       <if test="record.nodeLevel != null">
         node_level = #{record.nodeLevel,jdbcType=INTEGER},
       </if>
+      <if test="record.scanCount != null">
+        scan_count = #{record.scanCount,jdbcType=BIGINT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -224,7 +236,8 @@
       trace_stall_id = #{record.traceStallId,jdbcType=INTEGER},
       parent_id = #{record.parentId,jdbcType=BIGINT},
       is_leaf = #{record.isLeaf,jdbcType=CHAR},
-      node_level = #{record.nodeLevel,jdbcType=INTEGER}
+      node_level = #{record.nodeLevel,jdbcType=INTEGER},
+      scan_count = #{record.scanCount,jdbcType=BIGINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -256,6 +269,9 @@
       <if test="nodeLevel != null">
         node_level = #{nodeLevel,jdbcType=INTEGER},
       </if>
+      <if test="scanCount != null">
+        scan_count = #{scanCount,jdbcType=BIGINT},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -268,7 +284,8 @@
       trace_stall_id = #{traceStallId,jdbcType=INTEGER},
       parent_id = #{parentId,jdbcType=BIGINT},
       is_leaf = #{isLeaf,jdbcType=CHAR},
-      node_level = #{nodeLevel,jdbcType=INTEGER}
+      node_level = #{nodeLevel,jdbcType=INTEGER},
+      scan_count = #{scanCount,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

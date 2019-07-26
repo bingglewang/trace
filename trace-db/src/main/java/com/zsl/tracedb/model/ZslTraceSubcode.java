@@ -31,6 +31,9 @@ public class ZslTraceSubcode implements Serializable {
     @ApiModelProperty(value = "节点层级")
     private Integer nodeLevel;
 
+    @ApiModelProperty(value = "扫码次数")
+    private Long scanCount;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -105,6 +108,14 @@ public class ZslTraceSubcode implements Serializable {
         this.nodeLevel = nodeLevel;
     }
 
+    public Long getScanCount() {
+        return scanCount;
+    }
+
+    public void setScanCount(Long scanCount) {
+        this.scanCount = scanCount;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -120,6 +131,7 @@ public class ZslTraceSubcode implements Serializable {
         sb.append(", parentId=").append(parentId);
         sb.append(", isLeaf=").append(isLeaf);
         sb.append(", nodeLevel=").append(nodeLevel);
+        sb.append(", scanCount=").append(scanCount);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

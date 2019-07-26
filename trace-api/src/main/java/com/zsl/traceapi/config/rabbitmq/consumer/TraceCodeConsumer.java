@@ -1,5 +1,6 @@
 package com.zsl.traceapi.config.rabbitmq.consumer;
 
+import com.zsl.traceapi.config.rabbitmq.producer.TraceCodeProducer;
 import com.zsl.traceapi.dao.ZslTraceSubcodeDao;
 import com.zsl.traceapi.dto.TraceSubcodeInsertParam;
 import com.zsl.traceapi.util.RandomUtil;
@@ -26,13 +27,14 @@ import java.util.List;
 public class TraceCodeConsumer {
     private static Logger logger = LoggerFactory.getLogger(TraceCodeConsumer.class);
 
-    private String codeUrl = "https://scode.cntracechain.com/#/Produce?SID=";
-
     @Autowired
     private ZslTraceMapper zslTraceMapper;
 
     @Autowired
     private ZslTraceSubcodeDao zslTraceSubcodeDao;
+
+    @Autowired
+    private TraceCodeProducer traceCodeProducer;
 
     @RabbitHandler
     public void handle(String traceCodeNumber){
@@ -89,7 +91,11 @@ public class TraceCodeConsumer {
                 }
                 logger.info("已经完成的批次号:{}", traceCodeNumber);
             }catch (Exception e){
-                e.printStackTrace();
+                logger.info("处理失败:{}", traceCodeNumber);
+                try {
+                    traceCodeProducer.sendMessage(traceCodeNumber, 100);
+                }catch (Exception e1){
+                }
             }
         }
     }

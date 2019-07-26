@@ -15,14 +15,26 @@ spring:
         timeout: 3000ms # 连接超时时间（毫秒）
   #rabbitmq
   rabbitmq:
-     host: 39.108.139.140
+#     host: 39.108.139.140
+#     port: 5672
+#     virtual-host: /traceMall
+#     username: traceMall
+#     password: traceMall
+     host: 193.112.186.190
      port: 5672
-     virtual-host: /traceMall
-     username: traceMall
-     password: traceMall
+     virtual-host: /
+     username: admin
+     password: admin
      publisher-confirms: true #如果对异步消息需要回调必须设置为true
+     listener:
+           simple:
+             retry:
+               enabled: true
+               max-attempts: 5
+               initial-interval: 2000
+             default-requeue-rejected: false
   datasource:
-    url: jdbc:mysql://cdb-puhlb3l3.gz.tencentcdb.com:10076/traceability_platform?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://cdb-puhlb3l3.gz.tencentcdb.com:10076/traceability_platform?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root
     password: adminfeng5148@
     druid:

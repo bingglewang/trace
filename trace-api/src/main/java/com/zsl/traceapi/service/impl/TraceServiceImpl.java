@@ -2,10 +2,10 @@ package com.zsl.traceapi.service.impl;
 
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
-import cn.afterturn.easypoi.excel.entity.params.ExcelExportEntity;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.zsl.traceapi.config.rabbitmq.producer.TraceCodeProducer;
+import com.zsl.traceapi.config.rabbitmq.producer.TraceUpdateProducer;
 import com.zsl.traceapi.context.RequestContext;
 import com.zsl.traceapi.context.RequestContextMgr;
 import com.zsl.traceapi.dao.ZslTraceDao;
@@ -31,6 +31,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URLEncoder;
 import java.util.*;
 
 import static com.zsl.traceapi.util.IntegralEnum.INTEGRAL_DECUCT_RATIO_TYPE_2;
@@ -70,6 +71,11 @@ public class TraceServiceImpl implements TraceService {
     @Autowired
     private TraceCodeProducer traceCodeProducer;
 
+    @Autowired
+    private TraceUpdateProducer traceUpdateProducer;
+
+    @Autowired
+    private ZslTraceSubcodeDao zslTraceSubcodeDao;
 
     @Override
     public ZslTraceVo getZslTraceById(Integer id) {
@@ -143,11 +149,14 @@ public class TraceServiceImpl implements TraceService {
                 if (merchant.getCertificationToPay() != 1) {
                     return -7;//商家未认证
                 }
-                if (zslTraceInfo.getTraceApplyType() == 1 && merchant.getMerchantCoin() - ((zslTraceInfo.getTraceApplyCount() - merchant.getPaperLabelUpper()) * integralDeductRatio.getIntegralRatio()) < 0) {
+                //判断纸质标签是否超过上限
+                Long totalApplyCount = zslTraceDao.busiTotalTraceCount(merchant.getMerchantId());
+
+                if (zslTraceInfo.getTraceApplyType() == 1 && (totalApplyCount - merchant.getPaperLabelUpper() > 0) && merchant.getMerchantCoin() - ((zslTraceInfo.getTraceApplyCount() - merchant.getPaperLabelUpper()) * integralDeductRatio.getIntegralRatio()) < 0) {
                     return -4; // 积分不够，请进行充值
                 }
 
-                if (zslTraceInfo.getTraceApplyType() == 1 && merchant.getMerchantCoin() - ((zslTraceInfo.getTraceApplyCount() - merchant.getPaperLabelUpper()) * integralDeductRatio.getIntegralRatio()) > 0) {
+                if (zslTraceInfo.getTraceApplyType() == 1 && (totalApplyCount - merchant.getPaperLabelUpper() > 0) &&  merchant.getMerchantCoin() - ((zslTraceInfo.getTraceApplyCount() - merchant.getPaperLabelUpper()) * integralDeductRatio.getIntegralRatio()) > 0) {
                     Merchant merchantUdate = new Merchant();
                     merchantUdate.setMerchantId(zslTraceInfo.getTraceBusinessId());
                     Long kouchu = (zslTraceInfo.getTraceApplyCount() - merchant.getPaperLabelUpper()) * integralDeductRatio.getIntegralRatio();
@@ -280,7 +289,21 @@ public class TraceServiceImpl implements TraceService {
                 }else{
                     zslTracePoint.setTraceStallId(item.getTraceStallId());
                 }
+                //队列用到的对象
+                TraceCodeRelation traceCodeRelation = new TraceCodeRelation();
+                traceCodeRelation.setFromNumber(new Long(item.getTraceFromNumber()));
+                traceCodeRelation.setToNumber(new Long(item.getTraceToNumber()));
+                traceCodeRelation.setGoodsId(zslTracePoint.getTraceGoodsId());
+                traceCodeRelation.setStallId(zslTracePoint.getTraceStallId());
+                traceCodeRelation.setTraceCodeNumber(zslTracePoint.getTraceCodeNumber());
+
                 zslTracePointMapper.insert(zslTracePoint);
+                //将关联信息放入队列
+                try {
+                    String sendJsonStr = JSONObject.toJSONString(traceCodeRelation);
+                    traceUpdateProducer.sendMessage(sendJsonStr,100);
+                }catch (Exception e){
+                }
             } else {
                 return -1;//商品不存在
             }
@@ -433,10 +456,8 @@ public class TraceServiceImpl implements TraceService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public FileInfo exportPointCode(String traceCode, HttpServletResponse response) {
-        //创建集合用于追溯码导出
-        List<ExcelExportEntity> entity = new ArrayList<ExcelExportEntity>();
-        entity.add(new ExcelExportEntity("追溯码", "name"));
-        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        Long start = System.currentTimeMillis();
+        //判断追溯信息是否存在
         ZslTraceExample zslTraceExample = new ZslTraceExample();
         ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
         criteria.andTraceCodeNumberEqualTo(traceCode);
@@ -444,60 +465,47 @@ public class TraceServiceImpl implements TraceService {
         if (CollectionUtils.isEmpty(zslTrace)) {
             return null; //追溯码不存在
         }
-
-
-
+        //创建导出数据
         Long count = zslTrace.get(0).getTraceApplyCount();
-        for (int i = 0; i < count; i++) {
-           /* Long time = System.currentTimeMillis() * 1000;
-            Long random = Long.parseLong(RandomUtil.getRandNumberCode(3));
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("name", ((time + random + count + i + 1) * 37) + "");*/
-            Map<String, Object> map = new HashMap<String, Object>();
-            StringBuffer stringBuffer = new StringBuffer();
-            stringBuffer.append(RandomUtil.getRandNumberCode(4));
-            stringBuffer.append(System.currentTimeMillis()*1000);
-            stringBuffer.append(i+1);
-            map.put("name", stringBuffer.toString());
-            list.add(map);
-        }
-
-        // 设置导出配置
-        // ExportParams params = new ExportParams("追溯码","追溯码");
-        ExportParams params = new ExportParams(null, "Sheet1");
-        params.setStyle(ExcelStyleUtil.class);
-        Workbook workbook = ExcelExportUtil.exportBigExcel(params, entity, list);
-        Row row = workbook.getSheetAt(0).getRow(0);
-        workbook.getSheetAt(0).setColumnWidth(0, 6000);
-        File localFile = null;
-        try {
-            localFile = File.createTempFile("temp", null);
-            response.setContentType("application/force-download");// 设置强制下载不打开
-            response.setContentType("multipart/form-data;charset=UTF-8");
-            //response.addHeader("Content-Disposition", "attachment;fileName=" + traceCode+"的追溯码.xls");// 设置文件名
-            response.setHeader("Content-Disposition", "attachment;fileName=" + new String((traceCode + ".xls").getBytes("GB2312"), "ISO-8859-1"));
-            byte[] buffer = new byte[1024];
-            FileInputStream fis = null;
-            BufferedInputStream bis = null;
-            //写到临时文件
-            FileOutputStream fos = new FileOutputStream(localFile);
-            workbook.write(fos);
-            fos.close();
-            //
-            fis = new FileInputStream(localFile);
-            bis = new BufferedInputStream(fis);
-            OutputStream os = response.getOutputStream();
-            int i = bis.read(buffer);
-            while (i != -1) {
-                os.write(buffer, 0, i);
-                i = bis.read(buffer);
+        Workbook workbook = null;
+        int totalPage = (int)Math.ceil((double)count/100000);
+        for(int currentPage = 1; currentPage <= totalPage; currentPage++){
+            ExportParams params = new ExportParams(null, "sheet"+(currentPage - 1));
+            params.setStyle(ExcelStyleUtil.class);
+            Long fromIndex = 0L;
+            Long toIndex = 0L;
+            fromIndex = new Long((currentPage - 1)*100000 + 1);
+            if(currentPage - totalPage == 0){
+                toIndex = count;
+            }else{
+                toIndex = new Long(currentPage*100000);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            List<ExcelTraceCode> list =  zslTraceSubcodeDao.exportExcel(fromIndex,toIndex,traceCode);
+            workbook = ExcelExportUtil.exportBigExcel(params,ExcelTraceCode.class,list);
+            Row row = workbook.getSheetAt(0).getRow(0);
+            workbook.getSheetAt(0).setColumnWidth(0, 6000);
+        }
+        ExcelExportUtil.closeExportBigExcel();
+
+        String fileName = "test.xlsx";
+        //告诉浏览器下载excel
+        try {
+            downloadExcel(fileName, workbook, response);
+            Long end = System.currentTimeMillis();
+            System.out.println("sql执行时间：" + (end - start) / 1000 + "秒");
+        }catch (Exception e){
         }
         return new FileInfo();
     }
 
+    protected void downloadExcel(String filename, Workbook workbook, HttpServletResponse response) throws Exception {
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(filename, "utf-8"));
+        OutputStream outputStream = response.getOutputStream();
+        workbook.write(outputStream);
+        outputStream.flush();
+        outputStream.close();
+    }
     @Override
     public String isPointRepeat(TraceRecordPointParam traceRecordPointParam) {
         String result = "编码没有冲突";

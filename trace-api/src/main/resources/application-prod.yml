@@ -21,8 +21,15 @@ spring:
     username: admin
     password: admin
     publisher-confirms: true #如果对异步消息需要回调必须设置为true
+    listener:
+               simple:
+                 retry:
+                   enabled: true
+                   max-attempts: 5
+                   initial-interval: 2000
+                 default-requeue-rejected: false
   datasource:
-    url: jdbc:mysql://cdb-puhlb3l3.gz.tencentcdb.com:10076/traceability_platform?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://cdb-puhlb3l3.gz.tencentcdb.com:10076/traceability_platform?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root
     password: adminfeng5148@
     druid:

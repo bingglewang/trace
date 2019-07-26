@@ -26,4 +26,6 @@ public interface ZslTraceDao {
     List<GoodsTracePieVo> getPieChart(@Param("companyId")Integer companyId);
 
     List<NewTraceRecordVo> getNewTraceRecord(@Param("allianceBusinessId")Integer allianceBusinessId,@Param("merchantId")Integer merchantId);
- }
+
+    Long busiTotalTraceCount(@Param("traceBusinessId") Integer traceBusinessId);
+}
