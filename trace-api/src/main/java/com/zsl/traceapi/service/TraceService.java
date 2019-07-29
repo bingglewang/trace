@@ -8,6 +8,7 @@ import com.zsl.tracedb.model.Goods;
 import com.zsl.tracedb.model.ZslTrace;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public interface TraceService {
      * @param pageParams
      * @return
      */
-    List<ZslTraceVo> getZslTraceByPage(QueryParam queryParam, PageParams pageParams);
+    List<ZslTraceVo> getZslTraceByPage(QueryParam queryParam, PageParams pageParams, HttpServletRequest request);
 
     /**
      * 新增追溯信息
@@ -82,7 +83,7 @@ public interface TraceService {
      * @param traceCode
      * @return
      */
-    FileInfo exportPointCode(String traceCode,HttpServletResponse response);
+    int exportPointCode(String traceCode,HttpServletResponse response);
 
     /**
      * 判断记录编码冲突
@@ -152,4 +153,11 @@ public interface TraceService {
      * @return
      */
     List<GoodsVo> getGoodsByTraceCodeNumber(String traceCodeNumber);
+
+    /**
+     * 设置外码比例，生成外码
+     * @param miniCodeInsertParams
+     * @return
+     */
+    int generateOutCode(List<MiniCodeInsertParam> miniCodeInsertParams);
 }

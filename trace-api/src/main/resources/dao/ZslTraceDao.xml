@@ -162,6 +162,9 @@
         left join merchant m on m.merchant_id = z.trace_business_id
         where
         m.merchant_status = 0
+        <if test="queryParam.isMiniProgram">
+            and z.trace_back4 is null or z.trace_back4 = '' or z.trace_back4 = #{queryParam.isMiniProgram}
+        </if>
         <if test="queryParam.isZongBu">
             and z.trace_back2 is null
         </if>

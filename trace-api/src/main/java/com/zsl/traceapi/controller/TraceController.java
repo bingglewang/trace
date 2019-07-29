@@ -76,14 +76,14 @@ public class TraceController {
     @ApiOperation(value = "分页获取追溯信息")
     @GetMapping("/getByPage")
     @ResponseBody
-    public CommonResult<CommonPage<ZslTraceVo>> getZslTraceByPage(QueryParam query, @Valid PageParams pageParams, BindingResult bindingResult) {
+    public CommonResult<CommonPage<ZslTraceVo>> getZslTraceByPage(QueryParam query, @Valid PageParams pageParams,HttpServletRequest request, BindingResult bindingResult) {
         if (pageParams.getPageNum() == null || pageParams.getPageNum() == 0) {
             pageParams.setPageNum(1); //默认从第1页开始
         }
         if (pageParams.getPageSize() == null || pageParams.getPageSize() == 0) {
             pageParams.setPageSize(10);//默认页面大小为10
         }
-        List<ZslTraceVo> result = traceService.getZslTraceByPage(query, pageParams);
+        List<ZslTraceVo> result = traceService.getZslTraceByPage(query, pageParams,request);
         return CommonResult.success(CommonPage.restPage(result));
     }
 
@@ -396,9 +396,11 @@ public class TraceController {
     @GetMapping("/point/export")
     @ApiOperation(value = "追溯编码导出")
     public CommonResult exportPointCode(@ApiParam("追溯码批次号") @RequestParam(required = true) String traceCode,HttpServletResponse response) {
-        FileInfo fileInfo = traceService.exportPointCode(traceCode,response);
-        if(fileInfo == null){
-            return CommonResult.failed( "追溯码不存在或申请数量为0");
+        int fileInfo = traceService.exportPointCode(traceCode,response);
+        if(fileInfo == -1){
+            return CommonResult.failed( "追溯码不存在");
+        }else if(fileInfo == -2){
+            return CommonResult.failed( "追溯码还未生成完");
         }else{
             return  CommonResult.success(fileInfo, "追溯编码导出成功");
         }

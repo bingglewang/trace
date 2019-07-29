@@ -44,6 +44,18 @@
         </foreach>
     </update>
 
+    <update id="updateOutCodeBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE zsl_trace_subcode
+            <set>
+                parent_id = #{item.parentId}
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
 
     <select id="selectByCodeNumber" resultMap="BaseResultMap">
         SELECT *  FROM `zsl_trace_subcode` WHERE trace_sub_code_number = #{traceCodeNumber} LIMIT 1;

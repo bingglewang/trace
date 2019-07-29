@@ -20,6 +20,8 @@ import com.zsl.traceapi.vo.TraceRecordVo;
 import com.zsl.traceapi.vo.ZslTraceVo;
 import com.zsl.tracedb.mapper.*;
 import com.zsl.tracedb.model.*;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -29,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
@@ -77,13 +80,16 @@ public class TraceServiceImpl implements TraceService {
     @Autowired
     private ZslTraceSubcodeDao zslTraceSubcodeDao;
 
+    @Autowired
+    private ZslTraceSubcodeMapper zslTraceSubcodeMapper;
+
     @Override
     public ZslTraceVo getZslTraceById(Integer id) {
         return zslTraceDao.getZslTraceDetailById(id);
     }
 
     @Override
-    public List<ZslTraceVo> getZslTraceByPage(QueryParam queryParam, PageParams pageParams) {
+    public List<ZslTraceVo> getZslTraceByPage(QueryParam queryParam, PageParams pageParams, HttpServletRequest request) {
         //设置排序，大小，页数
         if (pageParams.getPageSize() != null) {
             PageHelper.startPage(pageParams.getPageNum(), pageParams.getPageSize(), pageParams.getOrderBy());
@@ -105,6 +111,15 @@ public class TraceServiceImpl implements TraceService {
             if ((RoleEnum.ROLE_HEADQUARTERS_OPERATE.getValue()).equals((loginUser.getJSONObject("role").get("roleName")).toString())) {
                 queryParam.setZongBu(true);
             }
+        }
+
+        //是否为附码小程序端
+        String isMiniProgram = request.getParameter("isMiniProgram");
+        if(StringUtils.isBlank(isMiniProgram)){
+            //默认为pc端
+            isMiniProgram = "N";
+        }else{
+            isMiniProgram = "Y";
         }
 
         //获取数据
@@ -407,6 +422,12 @@ public class TraceServiceImpl implements TraceService {
         if (CollectionUtils.isEmpty(zslTrace)) {
             return -3; //追溯码不存在
         }
+        //修改追溯状态为pc端（字段back4）
+        ZslTrace traceUpdate = new ZslTrace();
+        traceUpdate.setTraceId(zslTrace.get(0).getTraceId());
+        traceUpdate.setTraceBack4("N");
+        zslTraceMapper.updateByPrimaryKeySelective(traceUpdate);
+
         Merchant merchant = merchantMapper.selectByPrimaryKey(zslTrace.get(0).getTraceBusinessId());
         if (merchant.getMerchantCoin() - (traceRecordPointParam.getTracePointToNumber() - traceRecordPointParam.getTracePointFromNumber() + 1) < 0) {
             return -4; // 积分不够，请进行充值
@@ -455,15 +476,17 @@ public class TraceServiceImpl implements TraceService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public FileInfo exportPointCode(String traceCode, HttpServletResponse response) {
-        Long start = System.currentTimeMillis();
+    public int exportPointCode(String traceCode, HttpServletResponse response) {
         //判断追溯信息是否存在
         ZslTraceExample zslTraceExample = new ZslTraceExample();
         ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
         criteria.andTraceCodeNumberEqualTo(traceCode);
         List<ZslTrace> zslTrace = zslTraceMapper.selectByExample(zslTraceExample);
         if (CollectionUtils.isEmpty(zslTrace)) {
-            return null; //追溯码不存在
+            return -1; //追溯码不存在
+        }
+        if("N".equals(zslTrace.get(0).getTraceBack3())){
+            return -2;//追溯码还未生成完
         }
         //创建导出数据
         Long count = zslTrace.get(0).getTraceApplyCount();
@@ -487,15 +510,13 @@ public class TraceServiceImpl implements TraceService {
         }
         ExcelExportUtil.closeExportBigExcel();
 
-        String fileName = "test.xlsx";
+        String fileName = "追溯码.xlsx";
         //告诉浏览器下载excel
         try {
             downloadExcel(fileName, workbook, response);
-            Long end = System.currentTimeMillis();
-            System.out.println("sql执行时间：" + (end - start) / 1000 + "秒");
         }catch (Exception e){
         }
-        return new FileInfo();
+        return 1;
     }
 
     protected void downloadExcel(String filename, Workbook workbook, HttpServletResponse response) throws Exception {
@@ -868,5 +889,22 @@ public class TraceServiceImpl implements TraceService {
             }
         }
         return result;
+    }
+
+    @Override
+    public int generateOutCode(List<MiniCodeInsertParam> miniCodeInsertParams) {
+        //生成外码
+        for(int i = 0;i < miniCodeInsertParams.size();i++){
+           List<Long> subcodeIds = zslTraceSubcodeDao.selectByRange(new Long(miniCodeInsertParams.get(i).getTraceFromNumber()),new Long(miniCodeInsertParams.get(i).getTraceToNumber()),miniCodeInsertParams.get(i).getTraceCodeNumber());
+           List<TraceOutCodeUpdateParam> traceOutCodeUpdateParams = new ArrayList<>();
+           Integer radio = miniCodeInsertParams.get(i).getOutCodeRadio();
+           for(int j = 0;j < subcodeIds.size();j++){
+                //生成外码
+                if((i+1) % radio == 0){
+
+                }
+            }
+        }
+        return 0;
     }
 }
