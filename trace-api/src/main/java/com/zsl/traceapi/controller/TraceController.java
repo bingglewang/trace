@@ -463,4 +463,94 @@ public class TraceController {
     public CommonResult getGoodsListByTraceCode(String traceCodeNumber) {
          return CommonResult.success( traceService.getGoodsByTraceCodeNumber(traceCodeNumber));
     }
+
+
+    @ApiOperation("设置生成外码")
+    @PostMapping("/generateOutCode")
+    @ResponseBody
+    public CommonResult generateOutCode(@RequestBody List<MiniCodeInsertParam> miniCodeList) {
+        Object object  = traceService.generateOutCode(miniCodeList);
+        if(object == null){
+            return CommonResult.failed("生成失败");
+        }else{
+            return CommonResult.success(object,"生成成功");
+        }
+    }
+
+
+    /**
+     * 根据数量生成外码
+     * @param count
+     * @return
+     */
+    @GetMapping("/generateOutCodeByCount")
+    @ResponseBody
+    public CommonResult generateOutCodeByCount(Integer count){
+        Object object = traceService.generateOutCodeByCount(count);
+        if(object == null){
+            return CommonResult.failed("生成失败");
+        }else{
+            return CommonResult.success(object,"生成成功");
+        }
+    }
+
+    /**
+     * 外码关联子码
+     * @param relationOutCode
+     * @return
+     */
+    @PostMapping("/relationOutCode")
+    @ResponseBody
+    public CommonResult relationOutCode(@RequestBody RelationOutCode relationOutCode){
+        int i = traceService.relationOutCode(relationOutCode.getOutCode(),relationOutCode.getSubCodeList());
+        if(i < 0){
+            return CommonResult.failed("关联失败");
+        }else{
+            return CommonResult.success("关联成功");
+        }
+    }
+
+
+    /**
+     * 单独内码转外码
+     * @param outCode
+     * @return
+     */
+        @GetMapping("/changeOutCode")
+    @ResponseBody
+    public CommonResult changeOutCode(String outCode){
+        int  i = traceService.changeOutCode(outCode);
+        if(i == -1){
+            return CommonResult.failed("该码已经为外码");
+        }else if(i == -2){
+            return CommonResult.failed("转换失败");
+        }else{
+            return CommonResult.success("转换成功");
+        }
+    }
+
+    /**
+     * 批量内码转外码
+     * @param outCodeBatch
+     * @return
+     */
+    @PostMapping("/changOutCodeBatch")
+    public CommonResult changOutCodeBatch(@RequestBody  OutCodeBatch outCodeBatch){
+        return traceService.changOutCodeBatch(outCodeBatch);
+    }
+
+    /**
+     * 发货
+     * @return
+     */
+    @PostMapping("/deliverGoods")
+    public CommonResult deliverGoods(@RequestBody DeliverGoods deliverGoods){
+        int i = traceService.deliverGoods(deliverGoods);
+        if(i > 0){
+            return CommonResult.success("发货成功");
+        }else{
+            return CommonResult.failed("发货失败");
+        }
+    }
+
 }

@@ -11,7 +11,11 @@ import java.util.List;
  */
 public interface ZslTraceSubcodeDao {
     int insertCodeBatch(@Param("list") List<TraceSubcodeInsertParam> traceSubcodeInsertParams);
+    int insertCodeBatch1(@Param("list") List<TraceOutCodeByCount> traceOutCodeByCounts);
     ZslTraceSubcode selectByCodeNumber(@Param("traceCodeNumber") String traceCodeNumber);
+    List<ZslTraceSubcode> selectByParenId(@Param("parentId") Long parentId);
+    ZslTraceSubcode selectBySubCode(@Param("traceSubCode") String traceSubCode);
+    ZslTraceSubcode selectById(@Param("id") Long id);
     int deleteByCodeNumber(@Param("traceCodeNumber") String traceCodeNumber);
     List<ExcelTraceCode> exportExcel(@Param("fromIndex") Long fromIndex,@Param("toIndex") Long toIndex,@Param("traceCodeNumber") String traceCodeNumber);
     List<Long> selectByRange(@Param("fromIndex") Long fromIndex,@Param("toIndex") Long toIndex,@Param("traceCodeNumber") String traceCodeNumber);

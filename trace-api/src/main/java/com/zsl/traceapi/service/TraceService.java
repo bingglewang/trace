@@ -4,6 +4,7 @@ import com.zsl.traceapi.dto.*;
 import com.zsl.traceapi.vo.GoodsVo;
 import com.zsl.traceapi.vo.TraceRecordVo;
 import com.zsl.traceapi.vo.ZslTraceVo;
+import com.zsl.tracecommon.CommonResult;
 import com.zsl.tracedb.model.Goods;
 import com.zsl.tracedb.model.ZslTrace;
 import org.springframework.transaction.annotation.Transactional;
@@ -159,5 +160,41 @@ public interface TraceService {
      * @param miniCodeInsertParams
      * @return
      */
-    int generateOutCode(List<MiniCodeInsertParam> miniCodeInsertParams);
+    Object generateOutCode(List<MiniCodeInsertParam> miniCodeInsertParams);
+
+    /**
+     * 根据数量生成外码
+     * @param count
+     * @return
+     */
+    Object generateOutCodeByCount(Integer count);
+
+    /**
+     * 关联外码
+     * @param outCode
+     * @param subCodeList
+     * @return
+     */
+    int relationOutCode(String outCode,List<String> subCodeList);
+
+    /**
+     * 单独内码变外码
+     * @param outCode
+     * @return
+     */
+    int changeOutCode(String outCode);
+
+    /**
+     * 批量内码转外码
+     * @param outCodeBatch
+     * @return
+     */
+    CommonResult changOutCodeBatch(OutCodeBatch outCodeBatch);
+
+    /**
+     * 发货
+     * @param deliverGoods
+     * @return
+     */
+    int deliverGoods(DeliverGoods deliverGoods);
 }

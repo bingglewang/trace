@@ -18,16 +18,20 @@
         <result column="trace_sub_code_number" jdbcType="VARCHAR" property="code" />
     </resultMap>
 
-    <resultMap id="BaseResultMapByRange" type="com.zsl.traceapi.dto.TraceCodeRelation">
-        <id column="id" jdbcType="BIGINT" property="id" />
-    </resultMap>
-
     <insert id="insertCodeBatch">
         insert into zsl_trace_subcode (trace_index, trace_code_number,trace_sub_code_number) values
         <foreach collection="list" item="item" separator="," index="index">
             (#{item.traceIndex,jdbcType=BIGINT},
             #{item.traceCodeNumber,jdbcType=VARCHAR},
             #{item.traceSubcodeNumber,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+    <insert id="insertCodeBatch1">
+        insert into zsl_trace_subcode (trace_sub_code_number,is_leaf) values
+        <foreach collection="list" item="item" separator="," index="index">
+            (#{item.subCodeNumber,jdbcType=VARCHAR},
+            #{item.isLeaf,jdbcType=VARCHAR})
         </foreach>
     </insert>
 
@@ -58,7 +62,19 @@
 
 
     <select id="selectByCodeNumber" resultMap="BaseResultMap">
-        SELECT *  FROM `zsl_trace_subcode` WHERE trace_sub_code_number = #{traceCodeNumber} LIMIT 1;
+        SELECT *  FROM `zsl_trace_subcode` WHERE trace_code_number = #{traceCodeNumber} LIMIT 1;
+    </select>
+
+    <select id="selectByParenId" resultMap="BaseResultMap">
+        SELECT * FROM `zsl_trace_subcode` where parent_id = #{parentId};
+    </select>
+
+    <select id="selectBySubCode" resultMap="BaseResultMap">
+        SELECT *  FROM `zsl_trace_subcode` WHERE trace_sub_code_number = #{traceSubCode} LIMIT 1;
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT *  FROM `zsl_trace_subcode` WHERE id = #{id} LIMIT 1;
     </select>
 
     <select id="exportExcel" resultMap="BaseResultMapSub">

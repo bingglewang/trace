@@ -189,11 +189,13 @@
         <if test="queryParam.merchantName!=null and queryParam.merchantName!=''">
             AND m.merchant_name like concat("%",#{queryParam.merchantName},"%")
         </if>
-        <if test="queryParam.traceApplyStartDate!=null and queryParam.traceApplyEndDate!=null">
+        <if test="queryParam.traceApplyStartDate1!=null">
             AND date_format(z.trace_apply_date,'%Y-%m-%e %H:%i:%S') &gt;=
-            date_format(#{queryParam.traceApplyStartDate},'%Y-%m-%e %H:%i:%S')
+            date_format(#{queryParam.traceApplyStartDate1},'%Y-%m-%e %H:%i:%S')
+        </if>
+        <if test="queryParam.traceApplyEndDate1!=null">
             AND date_format(z.trace_apply_date,'%Y-%m-%e %H:%i:%S') &lt;=
-            date_format(#{queryParam.traceApplyEndDate},'%Y-%m-%e %H:%i:%S')
+            date_format(#{queryParam.traceApplyEndDate1},'%Y-%m-%e %H:%i:%S')
         </if>
     </select>
 

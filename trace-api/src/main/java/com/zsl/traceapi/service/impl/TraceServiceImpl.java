@@ -18,10 +18,13 @@ import com.zsl.traceapi.vo.GoodsTracePieVo;
 import com.zsl.traceapi.vo.GoodsVo;
 import com.zsl.traceapi.vo.TraceRecordVo;
 import com.zsl.traceapi.vo.ZslTraceVo;
+import com.zsl.tracecommon.CommonResult;
 import com.zsl.tracedb.mapper.*;
 import com.zsl.tracedb.model.*;
+import io.swagger.models.auth.In;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.jdbc.Null;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -35,6 +38,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static com.zsl.traceapi.util.IntegralEnum.INTEGRAL_DECUCT_RATIO_TYPE_2;
@@ -113,6 +117,13 @@ public class TraceServiceImpl implements TraceService {
             }
         }
 
+        //时间戳处理
+        if(queryParam.getTraceApplyStartDate() != null && StringUtils.isNotBlank(queryParam.getTraceApplyStartDate().toString())){
+            queryParam.setTraceApplyStartDate1(new Date(queryParam.getTraceApplyStartDate()));
+        }
+        if(queryParam.getTraceApplyEndDate() != null && StringUtils.isNotBlank(queryParam.getTraceApplyEndDate().toString())) {
+            queryParam.setTraceApplyEndDate1(new Date(queryParam.getTraceApplyEndDate()));
+        }
         //是否为附码小程序端
         String isMiniProgram = request.getParameter("isMiniProgram");
         if(StringUtils.isBlank(isMiniProgram)){
@@ -892,19 +903,240 @@ public class TraceServiceImpl implements TraceService {
     }
 
     @Override
-    public int generateOutCode(List<MiniCodeInsertParam> miniCodeInsertParams) {
+    public Object generateOutCode(List<MiniCodeInsertParam> miniCodeInsertParams) {
         //生成外码
+        List<String> result = new ArrayList<>();
         for(int i = 0;i < miniCodeInsertParams.size();i++){
            List<Long> subcodeIds = zslTraceSubcodeDao.selectByRange(new Long(miniCodeInsertParams.get(i).getTraceFromNumber()),new Long(miniCodeInsertParams.get(i).getTraceToNumber()),miniCodeInsertParams.get(i).getTraceCodeNumber());
            List<TraceOutCodeUpdateParam> traceOutCodeUpdateParams = new ArrayList<>();
            Integer radio = miniCodeInsertParams.get(i).getOutCodeRadio();
            for(int j = 0;j < subcodeIds.size();j++){
+               // 批量更新子码的父码
+               TraceOutCodeUpdateParam traceOutCodeUpdateParam = new TraceOutCodeUpdateParam();
+               traceOutCodeUpdateParam.setId(subcodeIds.get(j));
+               traceOutCodeUpdateParams.add(traceOutCodeUpdateParam);
                 //生成外码
-                if((i+1) % radio == 0){
-
+                if((j+1) % radio == 0 || (j+1) == subcodeIds.size()){
+                    //外码
+                    StringBuffer stringBuffer = new StringBuffer();
+                    stringBuffer.append(RandomUtil.getRandNumberCode(4));
+                    stringBuffer.append(System.currentTimeMillis() * 1000);
+                    stringBuffer.append(j + 1);
+                    result.add(stringBuffer.toString());
+                    new OutCodeThread(miniCodeInsertParams.get(i).getTraceCodeNumber(),(j+1),miniCodeInsertParams.get(i).getTraceGoodId(),miniCodeInsertParams.get(i).getTraceStallId(),traceOutCodeUpdateParams).start();
+                    //清除list
+                    traceOutCodeUpdateParams.clear();
                 }
             }
         }
-        return 0;
+        return result;
+    }
+
+    @Override
+    public Object generateOutCodeByCount(Integer count) {
+        List<String> outCodeList = new ArrayList<>();
+        List<TraceOutCodeByCount> insertParam = new ArrayList<>();
+        for(int i = 0;i < count;i++) {
+            TraceOutCodeByCount traceOutCodeByCount = new TraceOutCodeByCount();
+            //外码
+            StringBuffer stringBuffer = new StringBuffer();
+            stringBuffer.append(RandomUtil.getRandNumberCode(4));
+            stringBuffer.append(System.currentTimeMillis() * 1000);
+            stringBuffer.append(i + 1);
+            outCodeList.add(stringBuffer.toString());
+            traceOutCodeByCount.setSubCodeNumber(stringBuffer.toString());
+            //是否叶子节点
+            traceOutCodeByCount.setIsLeaf("N");
+            insertParam.add(traceOutCodeByCount);
+        }
+        int m  = zslTraceSubcodeDao.insertCodeBatch1(insertParam);
+        if(m < 0)
+            return null;
+        return outCodeList;
+    }
+
+    @Override
+    public int relationOutCode(String outCode, List<String> subCodeList) {
+        ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectBySubCode(outCode);
+        Integer nodeLevel = 1;
+        List<TraceOutCodeUpdateParam> traceOutCodeUpdateParams = new ArrayList<>();
+        for(String subCode : subCodeList){
+            ZslTraceSubcode zslTraceSubcodeItem = zslTraceSubcodeDao.selectBySubCode(subCode);
+            //关联子码
+            if(zslTraceSubcodeItem.getNodeLevel() > nodeLevel){
+                nodeLevel = zslTraceSubcodeItem.getNodeLevel();
+            }
+            TraceOutCodeUpdateParam traceOutCodeUpdateParam = new TraceOutCodeUpdateParam();
+            traceOutCodeUpdateParam.setParentId(zslTraceSubcode.getId());
+            traceOutCodeUpdateParam.setId(zslTraceSubcodeItem.getId());
+            traceOutCodeUpdateParams.add(traceOutCodeUpdateParam);
+        }
+        ZslTraceSubcode updateLevel = new ZslTraceSubcode();
+        updateLevel.setId(zslTraceSubcode.getId());
+        updateLevel.setNodeLevel(nodeLevel + 1);
+        int i = zslTraceSubcodeDao.updateOutCodeBatch(traceOutCodeUpdateParams);
+        zslTraceSubcodeMapper.updateByPrimaryKeySelective(updateLevel);
+        return i;
+    }
+
+    @Override
+    public int changeOutCode(String outCode) {
+        ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectBySubCode(outCode);
+        if("N".equals(zslTraceSubcode.getIsLeaf())){
+            return -1;//该码已经为外码
+        }
+        ZslTraceSubcode update = new ZslTraceSubcode();
+        update.setId(zslTraceSubcode.getId());
+        update.setIsLeaf("N");
+        int i = zslTraceSubcodeMapper.updateByPrimaryKeySelective(update);
+        if(i < 0){
+            return -2;
+        }
+        return i;
+    }
+
+    @Override
+    public CommonResult changOutCodeBatch(OutCodeBatch outCodeBatch) {
+        //判断需要转成外码的内码，本身是否为外码
+        Set<Long> isRepeat = new HashSet<>();
+        List<Long> conflictSids = new ArrayList<>();
+        for(Long i = outCodeBatch.getOutCodeStart();i <= outCodeBatch.getOutCodeEnd();i++ ){
+            if(!isRepeat.add(i)){
+                return CommonResult.failed("编号不能交叉");
+            }
+            ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectById(i);
+            if("N".equals(zslTraceSubcode.getIsLeaf())){
+                conflictSids.add(i);
+            }
+        }
+        if(CollectionUtils.isEmpty(conflictSids)){
+            //进行内码转外码
+            List<TraceOutCodeUpdateParam> traceOutCodeUpdateParams = new ArrayList<>();
+            Long outCodeNum = outCodeBatch.getOutCodeStart();
+            for(Long m = outCodeBatch.getInCodeStart();m <= outCodeBatch.getInCodeEnd();m++){
+                if(!isRepeat.add(m)){
+                    return CommonResult.failed("编号不能交叉");
+                }else{
+                    TraceOutCodeUpdateParam traceOutCodeUpdateParam = new TraceOutCodeUpdateParam();
+                    traceOutCodeUpdateParam.setId(m);
+                    traceOutCodeUpdateParam.setParentId(outCodeNum);
+                    traceOutCodeUpdateParams.add(traceOutCodeUpdateParam);
+                    outCodeNum++;
+                }
+            }
+            int i = zslTraceSubcodeDao.updateOutCodeBatch(traceOutCodeUpdateParams);
+            return CommonResult.success("转换成功");
+        }else{
+            return CommonResult.failed(conflictSids,"这些编号已经为外码了");
+        }
+    }
+
+    public int directDeliver(ZslTraceSubcode zslTraceSubcode,String bussName){
+        //直接发货
+        ZslTracePoint zslTracePoint = new ZslTracePoint();
+        zslTracePoint.setTraceStallId(-1);
+        zslTracePoint.setTraceGoodsId(zslTraceSubcode.getTraceGoodId());
+        zslTracePoint.setTraceCodeNumber(zslTraceSubcode.getTraceCodeNumber());
+        zslTracePoint.setTracePointName(bussName);
+        zslTracePoint.setTracePointToNumber(Integer.parseInt(zslTraceSubcode.getTraceIndex().toString()));
+        zslTracePoint.setTracePointFromNumber(Integer.parseInt(zslTraceSubcode.getTraceIndex().toString()));
+        //根据追溯码和编号查询父节点 商品id
+        ZslTracePoint parent = new ZslTracePoint();
+        ZslTracePointExample zslTracePointExample = new ZslTracePointExample();
+        ZslTracePointExample.Criteria criteria = zslTracePointExample.createCriteria();
+        criteria.andTraceCodeNumberEqualTo(zslTraceSubcode.getTraceCodeNumber());
+        criteria.andTraceGoodsIdEqualTo(zslTraceSubcode.getTraceGoodId());
+        criteria.andTracePointFromNumberEqualTo(Integer.parseInt(zslTraceSubcode.getTraceIndex().toString()));
+        criteria.andTracePointToNumberEqualTo(Integer.parseInt(zslTraceSubcode.getTraceIndex().toString()));
+        criteria.andTraceParentIdIsNotNull();
+        List<ZslTracePoint> zslTracePoints = zslTracePointMapper.selectByExample(zslTracePointExample);
+        if(CollectionUtils.isEmpty(zslTracePoints)){
+            ZslTracePointExample zslTracePointExample1 = new ZslTracePointExample();
+            ZslTracePointExample.Criteria criteria1 = zslTracePointExample1.createCriteria();
+            criteria1.andTraceCodeNumberEqualTo(zslTraceSubcode.getTraceCodeNumber());
+            criteria1.andTraceGoodsIdEqualTo(zslTraceSubcode.getTraceGoodId());
+            criteria1.andTraceParentIdIsNull();
+            List<ZslTracePoint> zslTracePoints1 = zslTracePointMapper.selectByExample(zslTracePointExample1);
+            if(!(CollectionUtils.isEmpty(zslTracePoints1))){
+                parent = zslTracePoints1.get(0);
+            }
+        }else{
+            parent = zslTracePoints.get(0);
+        }
+        zslTracePoint.setTraceParentId(parent.getTracePointId());
+        int result = zslTracePointMapper.insert(zslTracePoint);
+        return result;
+    }
+
+    public void getTreeList(List<ZslTraceSubcode> traceSubcodes ,String bussName ) {
+        for(ZslTraceSubcode zslTraceSubcode : traceSubcodes){
+            if("Y".equals(zslTraceSubcode.getIsLeaf())){
+                directDeliver(zslTraceSubcode,bussName);
+            }else{
+                List<ZslTraceSubcode> children = zslTraceSubcodeDao.selectByParenId(zslTraceSubcode.getParentId());
+                getTreeList(children,bussName);
+            }
+        }
+    }
+
+
+    @Override
+    public int deliverGoods(DeliverGoods deliverGoods) {
+        List<String> codeList = deliverGoods.getCodeNumber();
+        int result = -1;
+        for(int i = 0;i < codeList.size();i++){
+            ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectBySubCode(codeList.get(i));
+            // 是否为内码
+            if("Y".equals(zslTraceSubcode.getIsLeaf())){
+                result =  directDeliver(zslTraceSubcode,deliverGoods.getBussName());
+            }else{
+                List<ZslTraceSubcode> digui = new ArrayList<>();
+                digui.add(zslTraceSubcode);
+                getTreeList(digui,deliverGoods.getBussName());
+                result = 1;
+            }
+        }
+        return result;
+    }
+
+
+    class OutCodeThread extends Thread{
+        private String traceCodeNumber;
+        private Integer number;
+        private Integer goodsId;
+        private Integer stallId;
+        List<TraceOutCodeUpdateParam> traceOutCodeUpdateParams;
+        OutCodeThread(String traceCodeNumber,Integer number,Integer goodsId,Integer stallId,List<TraceOutCodeUpdateParam> traceOutCodeUpdateParams){
+            this.traceCodeNumber = traceCodeNumber;
+            this.number = number;
+            this.goodsId = goodsId;
+            this.stallId = stallId;
+            this.traceOutCodeUpdateParams = traceOutCodeUpdateParams;
+        }
+        public void run(){
+            ZslTraceSubcode zslTraceSubcode = new ZslTraceSubcode();
+            //追溯码
+            zslTraceSubcode.setTraceSubCodeNumber(traceCodeNumber);
+            //外码
+            StringBuffer stringBuffer = new StringBuffer();
+            stringBuffer.append(RandomUtil.getRandNumberCode(4));
+            stringBuffer.append(System.currentTimeMillis() * 1000);
+            stringBuffer.append(number);
+            zslTraceSubcode.setTraceSubCodeNumber(stringBuffer.toString());
+            //是否叶子节点
+            zslTraceSubcode.setIsLeaf("N");
+            //节点层级
+            zslTraceSubcode.setNodeLevel(2);
+            zslTraceSubcode.setTraceIndex(new Long(number));
+            //商品id和摊位id
+            zslTraceSubcode.setTraceGoodId(goodsId);
+            zslTraceSubcode.setTraceStallId(stallId);
+            int m = zslTraceSubcodeMapper.insert(zslTraceSubcode);
+            // 批量更新子码的父码
+            for(TraceOutCodeUpdateParam traceOutCodeUpdateParam1 : traceOutCodeUpdateParams){
+                traceOutCodeUpdateParam1.setParentId(zslTraceSubcode.getId());
+            }
+            int n = zslTraceSubcodeDao.updateOutCodeBatch(traceOutCodeUpdateParams);
+        }
     }
 }
