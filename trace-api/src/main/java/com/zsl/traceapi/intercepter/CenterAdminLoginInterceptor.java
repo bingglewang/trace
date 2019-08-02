@@ -28,6 +28,7 @@ public class CenterAdminLoginInterceptor implements HandlerInterceptor{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
+		String url = request.getRequestURL().toString();
 		String token = request.getHeader("token");
 		if(StringUtils.isEmpty(token)) {//尝试从查询参数获取
 			token = request.getParameter("token");

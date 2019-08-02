@@ -12,6 +12,7 @@
         <result column="trace_enable_count" jdbcType="INTEGER" property="traceEnableCount"></result>
         <result column="trace_apply_count" jdbcType="BIGINT" property="traceApplyCount"></result>
         <result column="trace_refuse_remark" jdbcType="VARCHAR" property="traceRefuseRemark"></result>
+        <result column="trace_back4" jdbcType="VARCHAR" property="isMiniProgram"></result>
         <association property="merchant" resultMap="com.zsl.tracedb.mapper.MerchantMapper.BaseResultMap"></association>
     </resultMap>
 
@@ -44,7 +45,7 @@
         and date_format(z.trace_review_date,'%Y-%m-%e %H:%i:%S') &lt;= date_format(#{endDate},'%Y-%m-%e %H:%i:%S')
         and date_format(z.trace_review_date,'%Y-%m-%e %H:%i:%S') &gt;= date_format(#{startDate},'%Y-%m-%e %H:%i:%S')
         <if test="companyId != null and companyId != 0 ">
-        and z.trace_back2 = #{companyId}
+        and (SELECT alliance_business_id FROM `merchant` where merchant_id = z.trace_business_id) = #{companyId}
     </if>
         ,z.trace_apply_count
         ,0
@@ -77,10 +78,10 @@
         on g.goods_id = zp.trace_goods_id
         where zp.trace_parent_id is NULL
         <if test="companyId != null and companyId != 0 ">
-            and z.trace_back2 = #{companyId}
+            and (SELECT alliance_business_id FROM `merchant` where merchant_id = z.trace_business_id) = #{companyId}
         </if>
         <if test="companyId == 0 ">
-            and z.trace_back2 is null
+            and (SELECT alliance_business_id FROM `merchant` where merchant_id = z.trace_business_id) is null
         </if>
         GROUP BY str_1
     </select>
@@ -111,13 +112,13 @@
         on m.merchant_id = z.trace_business_id
         <where>
             <if test="allianceBusinessId != null and allianceBusinessId != 0">
-                 z.trace_back2 = #{allianceBusinessId}
+                (SELECT alliance_business_id FROM `merchant` where merchant_id = z.trace_business_id) = #{allianceBusinessId}
             </if>
             <if test="merchantId != null and merchantId != 0">
                 z.trace_business_id = #{merchantId}
             </if>
             <if test="merchantId == null and merchantId == null">
-                z.trace_back2 is null and z.trace_handle_status = 2
+                (SELECT alliance_business_id FROM `merchant` where merchant_id = z.trace_business_id) is null and z.trace_handle_status = 2
             </if>
         </where>
         ORDER BY z.trace_apply_date desc
@@ -135,6 +136,7 @@
             z.trace_enable_count,
             z.trace_refuse_remark,
             z.trace_apply_count,
+            z.trace_back4,
             m.*
         from
             zsl_trace z
@@ -149,6 +151,7 @@
         z.trace_id,
         z.trace_code_number,
         z.trace_company_name,
+        z.trace_business_id,
         z.trace_apply_type,
         z.trace_handle_status,
         z.trace_apply_date,
@@ -156,23 +159,24 @@
         z.trace_enable_count,
         z.trace_refuse_remark,
         z.trace_apply_count,
+        z.trace_back4,
         m.*
         from
         zsl_trace z
         left join merchant m on m.merchant_id = z.trace_business_id
         where
         m.merchant_status = 0
-        <if test="queryParam.isMiniProgram">
+        <if test="queryParam.isMiniProgram != null and queryParam.isMiniProgram != ''">
             and z.trace_back4 is null or z.trace_back4 = '' or z.trace_back4 = #{queryParam.isMiniProgram}
         </if>
-        <if test="queryParam.isZongBu">
-            and z.trace_back2 is null
+        <if test="queryParam.isZongBu != null and queryParam.isZongBu != ''">
+            and (SELECT alliance_business_id FROM `merchant` where merchant_id = z.trace_business_id) is null
         </if>
         <if test="queryParam.merchantId != null and queryParam.merchantId != 0">
           and z.trace_business_id = #{queryParam.merchantId}
         </if>
         <if test="queryParam.allianceId != null and queryParam.allianceId != 0">
-            and z.trace_back2 = #{queryParam.allianceId}
+            and (SELECT alliance_business_id FROM `merchant` where merchant_id = z.trace_business_id) = #{queryParam.allianceId}
         </if>
         <if test="queryParam.traceCodeNumber!=null and queryParam.traceCodeNumber!=''">
             AND z.trace_code_number like concat("%",#{queryParam.traceCodeNumber},"%")

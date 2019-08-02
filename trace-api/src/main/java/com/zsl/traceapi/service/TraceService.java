@@ -7,6 +7,7 @@ import com.zsl.traceapi.vo.ZslTraceVo;
 import com.zsl.tracecommon.CommonResult;
 import com.zsl.tracedb.model.Goods;
 import com.zsl.tracedb.model.ZslTrace;
+import com.zsl.tracedb.model.ZslTraceSubcode;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -217,5 +218,12 @@ public interface TraceService {
      * @param sid
      * @return
      */
-    CommonResult getTraceGoodInfo(Long sid);
+    CommonResult getTraceGoodInfo(Long sid,HttpServletRequest request);
+
+    /**
+     * 根据sid获取追溯码
+     * @param sid
+     * @return
+     */
+    ZslTraceSubcode getSubCodeById(Long sid);
 }

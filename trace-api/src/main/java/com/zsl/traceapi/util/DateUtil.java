@@ -35,6 +35,11 @@ public class DateUtil {
         System.out.println("上年开始点时间：" + getLastYearStartTime().toLocaleString());*/
     }
 
+    public static String DateToString(Date date, String dateFormat) {
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+        return sdf.format(date);
+
+    }
     public static Date getString2Date(String dateStr){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date result = new Date();

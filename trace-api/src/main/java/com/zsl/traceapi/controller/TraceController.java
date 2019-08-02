@@ -1,8 +1,5 @@
 package com.zsl.traceapi.controller;
 
-import cn.afterturn.easypoi.excel.ExcelExportUtil;
-import cn.afterturn.easypoi.excel.entity.ExportParams;
-import cn.afterturn.easypoi.excel.entity.params.ExcelExportEntity;
 import com.alibaba.fastjson.JSONObject;
 import com.zsl.traceapi.context.RequestContext;
 import com.zsl.traceapi.context.RequestContextMgr;
@@ -554,6 +551,16 @@ public class TraceController {
     }
 
     /**
+     * 根据sid获取追溯码
+     * @param sid
+     * @return
+     */
+    @GetMapping("getSubCodeById")
+    public CommonResult getSubCodeById(Long sid){
+        return CommonResult.success(traceService.getSubCodeById(sid));
+    }
+
+    /**
      * 插入扫码记录
      * @param scanRecordInsertParam
      * @return
@@ -584,7 +591,7 @@ public class TraceController {
      * @return
      */
     @GetMapping("getTraceGoodInfo")
-    public CommonResult getTraceGoodInfo(Long sid){
-        return traceService.getTraceGoodInfo(sid);
+    public CommonResult getTraceGoodInfo(Long sid,HttpServletRequest request){
+        return traceService.getTraceGoodInfo(sid,request);
     }
 }

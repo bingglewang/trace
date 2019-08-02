@@ -20,6 +20,6 @@ public class QueryParam {
     private Integer traceApplyType; //申请类型
     private Integer merchantId; //商家id
     private Integer allianceId; //加盟商id
-    private boolean isZongBu; //是否为总部运营
+    private String isZongBu; //是否为总部运营
     private String isMiniProgram; //是否为小程序
 }

@@ -18,4 +18,5 @@ public class ZslTraceVo {
     private Long traceApplyCount; //申请数量
     private Integer traceEnableCount; //剩余数量
     private String traceRefuseRemark; //拒绝备注
+    private String isMiniProgram;//是否为小程序
 }

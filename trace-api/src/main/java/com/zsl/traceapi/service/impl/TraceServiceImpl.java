@@ -14,10 +14,7 @@ import com.zsl.traceapi.dao.ZslTraceSubcodeDao;
 import com.zsl.traceapi.dto.*;
 import com.zsl.traceapi.service.TraceService;
 import com.zsl.traceapi.util.*;
-import com.zsl.traceapi.vo.GoodsTracePieVo;
-import com.zsl.traceapi.vo.GoodsVo;
-import com.zsl.traceapi.vo.TraceRecordVo;
-import com.zsl.traceapi.vo.ZslTraceVo;
+import com.zsl.traceapi.vo.*;
 import com.zsl.tracecommon.CommonResult;
 import com.zsl.tracedb.mapper.*;
 import com.zsl.tracedb.model.*;
@@ -116,7 +113,7 @@ public class TraceServiceImpl implements TraceService {
             queryParam.setMerchantId(merchantId);
         } else if (accountType == 0) {
             if ((RoleEnum.ROLE_HEADQUARTERS_OPERATE.getValue()).equals((loginUser.getJSONObject("role").get("roleName")).toString())) {
-                queryParam.setZongBu(true);
+                queryParam.setIsZongBu("Y");
             }
         }
 
@@ -127,15 +124,6 @@ public class TraceServiceImpl implements TraceService {
         if(queryParam.getTraceApplyEndDate() != null && StringUtils.isNotBlank(queryParam.getTraceApplyEndDate().toString())) {
             queryParam.setTraceApplyEndDate1(new Date(queryParam.getTraceApplyEndDate()));
         }
-        //是否为附码小程序端
-        String isMiniProgram = request.getParameter("isMiniProgram");
-        if(StringUtils.isBlank(isMiniProgram)){
-            //默认为pc端
-            isMiniProgram = "N";
-        }else{
-            isMiniProgram = "Y";
-        }
-
         //获取数据
         List<ZslTraceVo> result = zslTraceDao.getListByPage(queryParam);
         return result;
@@ -454,6 +442,7 @@ public class TraceServiceImpl implements TraceService {
         }
         ZslTracePoint zslTracePoint = new ZslTracePoint();
         BeanUtils.copyProperties(traceRecordPointParam, zslTracePoint);
+        zslTracePoint.setTracePointTime(new Date());
         int i = zslTracePointMapper.insert(zslTracePoint);
         if (i < 0) {
             return -5;//追溯插入失败
@@ -1066,6 +1055,7 @@ public class TraceServiceImpl implements TraceService {
         }else{
             parent = zslTracePoints.get(0);
         }
+        zslTracePoint.setTracePointTime(new Date());
         zslTracePoint.setTraceParentId(parent.getTracePointId());
         int result = zslTracePointMapper.insert(zslTracePoint);
         return result;
@@ -1098,6 +1088,19 @@ public class TraceServiceImpl implements TraceService {
                 getTreeList(digui,deliverGoods.getBussName());
                 result = 1;
             }
+            if( result > 0){
+                //修改追溯状态为小程序端（字段back4） Y
+                ZslTraceExample zslTraceExample = new ZslTraceExample();
+                ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
+                criteria.andTraceCodeNumberEqualTo(zslTraceSubcode.getTraceCodeNumber());
+                List<ZslTrace> zslTraceList = zslTraceMapper.selectByExample(zslTraceExample);
+                if(!CollectionUtils.isEmpty(zslTraceList)){
+                    ZslTrace traceUpdate = new ZslTrace();
+                    traceUpdate.setTraceId(zslTraceList.get(0).getTraceId());
+                    traceUpdate.setTraceBack4("Y");
+                    zslTraceMapper.updateByPrimaryKeySelective(traceUpdate);
+                }
+            }
         }
         return result;
     }
@@ -1123,14 +1126,15 @@ public class TraceServiceImpl implements TraceService {
         List<ScanRecordQueryParam> result = new ArrayList<>();
         for(ZslScanRecord zslScanRecord : scanRecordList){
             ScanRecordQueryParam scanRecordQueryParam = new ScanRecordQueryParam();
-            BeanUtils.copyProperties(zslScanRecord,scanRecordQueryParam);
+            scanRecordQueryParam.setScanAddress(zslScanRecord.getScanAddress());
+            scanRecordQueryParam.setScanTime(DateUtil.DateToString(zslScanRecord.getScanTime(),"yyyy-MM-dd HH:mm:ss"));
             result.add(scanRecordQueryParam);
         }
         return result;
     }
 
     @Override
-    public CommonResult getTraceGoodInfo(Long sid) {
+    public CommonResult getTraceGoodInfo(Long sid,HttpServletRequest request) {
         ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectById(sid);
         if(zslTraceSubcode != null && "Y".equals(zslTraceSubcode.getIsLeaf())){
             Map<String,Object> result = new HashMap<>();
@@ -1147,9 +1151,40 @@ public class TraceServiceImpl implements TraceService {
             for(ZslTracePoint zslTracePoint : tracePointList){
                 ScanPointQueryParam scanPointQueryParam = new ScanPointQueryParam();
                 scanPointQueryParam.setTracePointName(zslTracePoint.getTracePointName());
-                scanPointQueryParam.setTracePointTime(zslTracePoint.getTracePointTime());
+                scanPointQueryParam.setTracePointTime(DateUtil.DateToString(zslTracePoint.getTracePointTime(),"yyyy-MM-dd HH:mm:ss"));
                 tracePointNodes.add(scanPointQueryParam);
             }
+            ClientInfo clientInfo =  ClientInfoUtil.get(request.getHeader("user-agent"));
+            AddressUtils addressUtils = new AddressUtils();
+            String ip = IpUtil.getRequestIp(request);
+            String address = "";
+            try {
+                address = addressUtils.getAddresses("ip=" + ip, "utf-8");
+                JSONObject jsonObject = JSONObject.parseObject(address);
+                jsonObject = jsonObject.getJSONObject("data");
+                result.put("netAndAddressInfo",jsonObject);
+            }
+            catch (Exception e) {
+                address = "{\n" +
+                        "            \"area\": \"\",\n" +
+                        "            \"country\": \"XX\",\n" +
+                        "            \"isp_id\": \"local\",\n" +
+                        "            \"city\": \"内网IP\",\n" +
+                        "            \"ip\": \"192.168.2.173\",\n" +
+                        "            \"isp\": \"无法识别\",\n" +
+                        "            \"county\": \"内网IP\",\n" +
+                        "            \"region_id\": \"xx\",\n" +
+                        "            \"area_id\": \"\",\n" +
+                        "            \"county_id\": \"local\",\n" +
+                        "            \"region\": \"XX\",\n" +
+                        "            \"country_id\": \"xx\",\n" +
+                        "            \"city_id\": \"local\"\n" +
+                        "        }";
+                JSONObject jsonObject = JSONObject.parseObject(address);
+                result.put("netAndAddressInfo",jsonObject);
+                e.printStackTrace();
+            }
+            result.put("clientInfo",clientInfo);
             result.put("notScannedCount",notScannedCount);
             result.put("TotalCount",TotalCount);
             result.put("traceCode",traceCode);
@@ -1164,6 +1199,11 @@ public class TraceServiceImpl implements TraceService {
         }else{
             return CommonResult.failed("编码错误");
         }
+    }
+
+    @Override
+    public ZslTraceSubcode getSubCodeById(Long sid) {
+        return zslTraceSubcodeDao.selectById(sid);
     }
 
 

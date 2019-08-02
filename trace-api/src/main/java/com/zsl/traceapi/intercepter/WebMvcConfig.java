@@ -8,17 +8,19 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    @Bean
-    public CenterAdminLoginInterceptor centerAdminLoginInterceptor() {
-        return new CenterAdminLoginInterceptor();
-    }
-
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 添加拦截器
         registry.addInterceptor(centerAdminLoginInterceptor()).addPathPatterns("/**")
                 .excludePathPatterns("/trace/insertScanRecord")
                 .excludePathPatterns("/trace/getScanRecordBySid")
-                .excludePathPatterns("/trace/getTraceGoodInfo");
+                .excludePathPatterns("/trace/getTraceGoodInfo")
+                .excludePathPatterns("/error")
+                .excludePathPatterns("/getIpInfo.php");
+    }
+
+    @Bean
+    public CenterAdminLoginInterceptor centerAdminLoginInterceptor() {
+        return new CenterAdminLoginInterceptor();
     }
 }
