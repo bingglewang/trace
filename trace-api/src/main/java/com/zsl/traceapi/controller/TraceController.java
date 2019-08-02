@@ -553,4 +553,38 @@ public class TraceController {
         }
     }
 
+    /**
+     * 插入扫码记录
+     * @param scanRecordInsertParam
+     * @return
+     */
+    @PostMapping("insertScanRecord")
+    public CommonResult insertScanRecord(@RequestBody ScanRecordInsertParam scanRecordInsertParam){
+        int i = traceService.insertScanRecord(scanRecordInsertParam);
+        if(i > 0){
+            return CommonResult.success("操作成功");
+        }else{
+            return CommonResult.failed();
+        }
+    }
+
+    /**
+     * 根据sid获取扫码记录
+     * @param sid
+     * @return
+     */
+    @GetMapping("getScanRecordBySid")
+    public CommonResult getScanRecordBySid(Long sid){
+        return CommonResult.success(traceService.getScanRecordBySid(sid));
+    }
+
+    /**
+     * 根据sid获取追溯信息
+     * @param sid
+     * @return
+     */
+    @GetMapping("getTraceGoodInfo")
+    public CommonResult getTraceGoodInfo(Long sid){
+        return traceService.getTraceGoodInfo(sid);
+    }
 }

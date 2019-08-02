@@ -67,6 +67,8 @@ public class CenterAdminLoginInterceptor implements HandlerInterceptor{
 		String jsonStr = (String) redisService.get(token);
 		String tokenTmp = StringEscapeUtils.unescapeEcmaScript(jsonStr);
 		String targetStr =  MStringUtils.trimFirstAndLastChar(tokenTmp,'"');
+		// 重新刷新token时间
+		redisService.expire(token,7200);
 		LOGGER.info("登录字符串："+targetStr);
 		JSONObject jsonObject = JSONObject.parseObject(targetStr);
 

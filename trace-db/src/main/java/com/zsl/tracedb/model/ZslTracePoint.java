@@ -2,6 +2,7 @@ package com.zsl.tracedb.model;
 
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.util.Date;
 
 public class ZslTracePoint implements Serializable {
     @ApiModelProperty(value = "追溯点id")
@@ -27,6 +28,8 @@ public class ZslTracePoint implements Serializable {
 
     @ApiModelProperty(value = "追溯码批次号")
     private String traceCodeNumber;
+
+    private Date tracePointTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -94,6 +97,14 @@ public class ZslTracePoint implements Serializable {
         this.traceCodeNumber = traceCodeNumber;
     }
 
+    public Date getTracePointTime() {
+        return tracePointTime;
+    }
+
+    public void setTracePointTime(Date tracePointTime) {
+        this.tracePointTime = tracePointTime;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -108,6 +119,7 @@ public class ZslTracePoint implements Serializable {
         sb.append(", traceParentId=").append(traceParentId);
         sb.append(", traceStallId=").append(traceStallId);
         sb.append(", traceCodeNumber=").append(traceCodeNumber);
+        sb.append(", tracePointTime=").append(tracePointTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

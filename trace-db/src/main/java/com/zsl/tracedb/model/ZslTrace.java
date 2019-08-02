@@ -47,7 +47,7 @@ public class ZslTrace implements Serializable {
     @ApiModelProperty(value = "申请的码是否已经生成完(Y:生成完，N:没有)，默认N")
     private String traceBack3;
 
-    @ApiModelProperty(value = "备用字段4")
+    @ApiModelProperty(value = "是否为小程序操作(Y:是，N:否)")
     private String traceBack4;
 
     @ApiModelProperty(value = "备用字段5")

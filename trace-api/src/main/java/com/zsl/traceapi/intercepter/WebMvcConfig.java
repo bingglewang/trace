@@ -16,6 +16,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 添加拦截器
-        registry.addInterceptor(centerAdminLoginInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(centerAdminLoginInterceptor()).addPathPatterns("/**")
+                .excludePathPatterns("/trace/insertScanRecord")
+                .excludePathPatterns("/trace/getScanRecordBySid")
+                .excludePathPatterns("/trace/getTraceGoodInfo");
     }
 }

@@ -14,6 +14,18 @@
         <result column="scan_count" jdbcType="BIGINT" property="scanCount" />
     </resultMap>
 
+    <resultMap id="PointResultMap" type="com.zsl.tracedb.model.ZslTracePoint">
+        <id column="trace_point_id" jdbcType="INTEGER" property="tracePointId" />
+        <result column="trace_goods_id" jdbcType="INTEGER" property="traceGoodsId" />
+        <result column="trace_point_name" jdbcType="VARCHAR" property="tracePointName" />
+        <result column="trace_point_to_number" jdbcType="INTEGER" property="tracePointToNumber" />
+        <result column="trace_point_from_number" jdbcType="INTEGER" property="tracePointFromNumber" />
+        <result column="trace_parent_id" jdbcType="INTEGER" property="traceParentId" />
+        <result column="trace_stall_id" jdbcType="INTEGER" property="traceStallId" />
+        <result column="trace_code_number" jdbcType="VARCHAR" property="traceCodeNumber" />
+        <result column="trace_point_time" jdbcType="TIMESTAMP" property="tracePointTime" />
+    </resultMap>
+
     <resultMap id="BaseResultMapSub" type="com.zsl.traceapi.dto.ExcelTraceCode">
         <result column="trace_sub_code_number" jdbcType="VARCHAR" property="code" />
     </resultMap>
@@ -99,5 +111,28 @@
         delete from zsl_trace_subcode where trace_code_number=#{traceCodeNumber}
     </delete>
 
+    <select id="goodsScanCount" resultType="java.lang.Long">
+        SELECT count(id)
+        FROM `zsl_trace_subcode`
+        where (trace_index BETWEEN (select trace_from_number from zsl_trace_record where trace_good_id = #{goodsId}) and (select trace_to_number from zsl_trace_record where trace_good_id = #{goodsId}))
+        and is_leaf = 'Y'
+        and scan_count = 0;
+    </select>
+
+    <select id="goodsTotalCount" resultType="java.lang.Long">
+        SELECT count(id)
+        FROM `zsl_trace_subcode`
+        where (trace_index BETWEEN (select trace_from_number from zsl_trace_record where trace_good_id = #{goodsId}) and (select trace_to_number from zsl_trace_record where trace_good_id = #{goodsId}))
+        and is_leaf = 'Y'
+    </select>
+
+    <select id="selectTracePointNodes" resultMap="PointResultMap">
+       select *
+        from zsl_trace_point
+         where (#{traceIndex} BETWEEN trace_point_from_number and trace_point_to_number)
+        and trace_code_number = #{traceCodeNumber}
+        and trace_goods_id = #{traceGoodsId}
+        ORDER BY trace_point_time ASC
+    </select>
 
 </mapper>

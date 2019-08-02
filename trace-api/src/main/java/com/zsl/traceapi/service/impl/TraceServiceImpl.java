@@ -87,6 +87,9 @@ public class TraceServiceImpl implements TraceService {
     @Autowired
     private ZslTraceSubcodeMapper zslTraceSubcodeMapper;
 
+    @Autowired
+    private ZslScanRecordMapper zslScanRecordMapper;
+
     @Override
     public ZslTraceVo getZslTraceById(Integer id) {
         return zslTraceDao.getZslTraceDetailById(id);
@@ -1097,6 +1100,70 @@ public class TraceServiceImpl implements TraceService {
             }
         }
         return result;
+    }
+
+    @Override
+    public int insertScanRecord(ScanRecordInsertParam scanRecordInsertParam) {
+        ZslScanRecord zslScanRecord = new ZslScanRecord();
+        zslScanRecord.setScanAddress(scanRecordInsertParam.getScanAddress());
+        zslScanRecord.setSid(scanRecordInsertParam.getSid());
+        if(scanRecordInsertParam.getScanTime() != null && StringUtils.isNotBlank(scanRecordInsertParam.getScanTime().toString())){
+            zslScanRecord.setScanTime(new Date(scanRecordInsertParam.getScanTime()));
+        }
+        int i = zslScanRecordMapper.insert(zslScanRecord);
+        return i;
+    }
+
+    @Override
+    public List<ScanRecordQueryParam> getScanRecordBySid(Long sid) {
+        ZslScanRecordExample zslScanRecordExample = new ZslScanRecordExample();
+        ZslScanRecordExample.Criteria criteria = zslScanRecordExample.createCriteria();
+        criteria.andSidEqualTo(sid);
+        List<ZslScanRecord> scanRecordList = zslScanRecordMapper.selectByExample(zslScanRecordExample);
+        List<ScanRecordQueryParam> result = new ArrayList<>();
+        for(ZslScanRecord zslScanRecord : scanRecordList){
+            ScanRecordQueryParam scanRecordQueryParam = new ScanRecordQueryParam();
+            BeanUtils.copyProperties(zslScanRecord,scanRecordQueryParam);
+            result.add(scanRecordQueryParam);
+        }
+        return result;
+    }
+
+    @Override
+    public CommonResult getTraceGoodInfo(Long sid) {
+        ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectById(sid);
+        if(zslTraceSubcode != null && "Y".equals(zslTraceSubcode.getIsLeaf())){
+            Map<String,Object> result = new HashMap<>();
+            //没有被扫过的
+            Long notScannedCount = zslTraceSubcodeDao.goodsScanCount(zslTraceSubcode.getTraceGoodId());
+            // 总共的
+            Long TotalCount = zslTraceSubcodeDao.goodsTotalCount(zslTraceSubcode.getTraceGoodId());
+            String traceCode = zslTraceSubcode.getTraceSubCodeNumber();
+            // 第几次扫码
+            Long  scanCount  = zslTraceSubcode.getScanCount() + 1;
+            //追溯信息
+             List<ScanPointQueryParam> tracePointNodes = new ArrayList<>();
+            List<ZslTracePoint> tracePointList = zslTraceSubcodeDao.selectTracePointNodes(zslTraceSubcode.getTraceGoodId(),zslTraceSubcode.getTraceIndex(),zslTraceSubcode.getTraceCodeNumber());
+            for(ZslTracePoint zslTracePoint : tracePointList){
+                ScanPointQueryParam scanPointQueryParam = new ScanPointQueryParam();
+                scanPointQueryParam.setTracePointName(zslTracePoint.getTracePointName());
+                scanPointQueryParam.setTracePointTime(zslTracePoint.getTracePointTime());
+                tracePointNodes.add(scanPointQueryParam);
+            }
+            result.put("notScannedCount",notScannedCount);
+            result.put("TotalCount",TotalCount);
+            result.put("traceCode",traceCode);
+            result.put("scanCount",scanCount);
+            result.put("tracePointNodes",tracePointNodes);
+            //更新扫码次数
+            ZslTraceSubcode updateScanCount = new ZslTraceSubcode();
+            updateScanCount.setId(zslTraceSubcode.getId());
+            updateScanCount.setScanCount(zslTraceSubcode.getScanCount() + 1);
+            zslTraceSubcodeMapper.updateByPrimaryKeySelective(updateScanCount);
+            return CommonResult.success(result);
+        }else{
+            return CommonResult.failed("编码错误");
+        }
     }
 
 

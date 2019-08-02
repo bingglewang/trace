@@ -197,4 +197,25 @@ public interface TraceService {
      * @return
      */
     int deliverGoods(DeliverGoods deliverGoods);
+
+    /**
+     * 插入扫码记录
+     * @param scanRecordInsertParam
+     * @return
+     */
+    int insertScanRecord(ScanRecordInsertParam scanRecordInsertParam);
+
+    /**
+     * 根据sid获取扫码记录
+     * @param sid
+     * @return
+     */
+    List<ScanRecordQueryParam> getScanRecordBySid(Long sid);
+
+    /**
+     * 根据sid获取追溯信息
+     * @param sid
+     * @return
+     */
+    CommonResult getTraceGoodInfo(Long sid);
 }

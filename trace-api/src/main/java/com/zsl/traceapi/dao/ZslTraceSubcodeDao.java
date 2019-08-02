@@ -1,6 +1,7 @@
 package com.zsl.traceapi.dao;
 
 import com.zsl.traceapi.dto.*;
+import com.zsl.tracedb.model.ZslTracePoint;
 import com.zsl.tracedb.model.ZslTraceSubcode;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,4 +22,7 @@ public interface ZslTraceSubcodeDao {
     List<Long> selectByRange(@Param("fromIndex") Long fromIndex,@Param("toIndex") Long toIndex,@Param("traceCodeNumber") String traceCodeNumber);
     int updateGoodsAndStall(@Param(value = "list") List<TraceSubcodeUpdateParam> traceSubcodeUpdateParams);
     int updateOutCodeBatch(@Param(value = "list") List<TraceOutCodeUpdateParam> traceOutCodeUpdateParams);
+    Long goodsScanCount(@Param("goodsId") Integer goodsId);
+    Long goodsTotalCount(@Param("goodsId") Integer goodsId);
+    List<ZslTracePoint> selectTracePointNodes(@Param("traceGoodsId") Integer traceGoodsId,@Param("traceIndex") Long traceIndex,@Param("traceCodeNumber") String traceCodeNumber);
 }

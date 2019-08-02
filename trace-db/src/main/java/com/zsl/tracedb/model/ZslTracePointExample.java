@@ -1,6 +1,7 @@
 package com.zsl.tracedb.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ZslTracePointExample {
@@ -601,6 +602,66 @@ public class ZslTracePointExample {
 
         public Criteria andTraceCodeNumberNotBetween(String value1, String value2) {
             addCriterion("trace_code_number not between", value1, value2, "traceCodeNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointTimeIsNull() {
+            addCriterion("trace_point_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointTimeIsNotNull() {
+            addCriterion("trace_point_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointTimeEqualTo(Date value) {
+            addCriterion("trace_point_time =", value, "tracePointTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointTimeNotEqualTo(Date value) {
+            addCriterion("trace_point_time <>", value, "tracePointTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointTimeGreaterThan(Date value) {
+            addCriterion("trace_point_time >", value, "tracePointTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("trace_point_time >=", value, "tracePointTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointTimeLessThan(Date value) {
+            addCriterion("trace_point_time <", value, "tracePointTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointTimeLessThanOrEqualTo(Date value) {
+            addCriterion("trace_point_time <=", value, "tracePointTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointTimeIn(List<Date> values) {
+            addCriterion("trace_point_time in", values, "tracePointTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointTimeNotIn(List<Date> values) {
+            addCriterion("trace_point_time not in", values, "tracePointTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointTimeBetween(Date value1, Date value2) {
+            addCriterion("trace_point_time between", value1, value2, "tracePointTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointTimeNotBetween(Date value1, Date value2) {
+            addCriterion("trace_point_time not between", value1, value2, "tracePointTime");
             return (Criteria) this;
         }
     }
