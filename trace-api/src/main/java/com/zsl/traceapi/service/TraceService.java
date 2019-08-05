@@ -176,7 +176,7 @@ public interface TraceService {
      * @param subCodeList
      * @return
      */
-    int relationOutCode(String outCode,List<String> subCodeList);
+    CommonResult relationOutCode(String outCode,List<String> subCodeList);
 
     /**
      * 单独内码变外码
@@ -225,5 +225,5 @@ public interface TraceService {
      * @param sid
      * @return
      */
-    ZslTraceSubcode getSubCodeById(Long sid);
+    CommonResult getSubCodeById(Long sid);
 }

@@ -87,6 +87,8 @@ public class TraceServiceImpl implements TraceService {
     @Autowired
     private ZslScanRecordMapper zslScanRecordMapper;
 
+    private Integer count;
+
     @Override
     public ZslTraceVo getZslTraceById(Integer id) {
         return zslTraceDao.getZslTraceDetailById(id);
@@ -948,12 +950,28 @@ public class TraceServiceImpl implements TraceService {
     }
 
     @Override
-    public int relationOutCode(String outCode, List<String> subCodeList) {
+    public CommonResult relationOutCode(String outCode, List<String> subCodeList) {
         ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectBySubCode(outCode);
+        ZslTraceSubcode updateLevel = new ZslTraceSubcode();
+        Set<String> traceCodeNumberSet = new HashSet<>();
+        if(zslTraceSubcode == null){
+            return CommonResult.failed("外码不存在");
+        }else if("Y".equals(zslTraceSubcode.getIsLeaf())){
+            return CommonResult.failed("该外码还不是外码");
+        }
         Integer nodeLevel = 1;
         List<TraceOutCodeUpdateParam> traceOutCodeUpdateParams = new ArrayList<>();
+        List<String> errorCode = new ArrayList<>();
         for(String subCode : subCodeList){
             ZslTraceSubcode zslTraceSubcodeItem = zslTraceSubcodeDao.selectBySubCode(subCode);
+            if(zslTraceSubcodeItem == null){
+                errorCode.add(subCode);
+                continue;
+            }
+            if(outCode.equals(subCode)){
+                return CommonResult.failed("不能关联自己");
+            }
+            traceCodeNumberSet.add(zslTraceSubcodeItem.getTraceCodeNumber());
             //关联子码
             if(zslTraceSubcodeItem.getNodeLevel() > nodeLevel){
                 nodeLevel = zslTraceSubcodeItem.getNodeLevel();
@@ -963,17 +981,28 @@ public class TraceServiceImpl implements TraceService {
             traceOutCodeUpdateParam.setId(zslTraceSubcodeItem.getId());
             traceOutCodeUpdateParams.add(traceOutCodeUpdateParam);
         }
-        ZslTraceSubcode updateLevel = new ZslTraceSubcode();
+        if(errorCode.size() > 0){
+            return CommonResult.failed(errorCode,"以下内码或外码不存在");
+        }
+        if(traceCodeNumberSet.size() >= 2){
+            return CommonResult.failed("只能关联同一个批次号的编码");
+        }
         updateLevel.setId(zslTraceSubcode.getId());
         updateLevel.setNodeLevel(nodeLevel + 1);
+        Iterator<String> it = traceCodeNumberSet.iterator();
+        if(it.hasNext())
+          updateLevel.setTraceCodeNumber(it.next());
         int i = zslTraceSubcodeDao.updateOutCodeBatch(traceOutCodeUpdateParams);
         zslTraceSubcodeMapper.updateByPrimaryKeySelective(updateLevel);
-        return i;
+        return CommonResult.success("关联成功");
     }
 
     @Override
     public int changeOutCode(String outCode) {
         ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectBySubCode(outCode);
+        if(zslTraceSubcode == null){
+            return -3;//编码不存在
+        }
         if("N".equals(zslTraceSubcode.getIsLeaf())){
             return -1;//该码已经为外码
         }
@@ -1066,10 +1095,23 @@ public class TraceServiceImpl implements TraceService {
             if("Y".equals(zslTraceSubcode.getIsLeaf())){
                 directDeliver(zslTraceSubcode,bussName);
             }else{
-                List<ZslTraceSubcode> children = zslTraceSubcodeDao.selectByParenId(zslTraceSubcode.getParentId());
+                List<ZslTraceSubcode> children = zslTraceSubcodeDao.selectByParenId(zslTraceSubcode.getId());
                 getTreeList(children,bussName);
             }
         }
+    }
+
+    public boolean checkCode(List<ZslTraceSubcode> traceSubcodes){
+        for(ZslTraceSubcode zslTraceSubcode : traceSubcodes){
+            if("Y".equals(zslTraceSubcode.getIsLeaf())){
+            }else{
+                List<ZslTraceSubcode> children = zslTraceSubcodeDao.selectByParenId(zslTraceSubcode.getId());
+                if(CollectionUtils.isEmpty(children)){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
 
@@ -1084,7 +1126,13 @@ public class TraceServiceImpl implements TraceService {
                 result =  directDeliver(zslTraceSubcode,deliverGoods.getBussName());
             }else{
                 List<ZslTraceSubcode> digui = new ArrayList<>();
+                if(StringUtils.isBlank(zslTraceSubcode.getTraceCodeNumber())){
+                    return -2; //外码还没有关联内码
+                }
                 digui.add(zslTraceSubcode);
+                if(!checkCode(digui)){
+                    return -3; //请先关联内码
+                }
                 getTreeList(digui,deliverGoods.getBussName());
                 result = 1;
             }
@@ -1202,10 +1250,30 @@ public class TraceServiceImpl implements TraceService {
     }
 
     @Override
-    public ZslTraceSubcode getSubCodeById(Long sid) {
-        return zslTraceSubcodeDao.selectById(sid);
+    public CommonResult getSubCodeById(Long sid) {
+        count = 0;
+        ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectById(sid);
+        if(zslTraceSubcode == null){
+            return CommonResult.failed("编码不存在");
+        }
+        countCode(zslTraceSubcode);
+        ZslTraceSubcodeVo result  = new ZslTraceSubcodeVo();
+        BeanUtils.copyProperties(zslTraceSubcode,result);
+        result.setCount(count);
+        return CommonResult.success(result);
     }
 
+    void countCode(ZslTraceSubcode zslTraceSubcode){
+        if("Y".equals(zslTraceSubcode.getIsLeaf())){
+           count++;
+        }else{
+            //取出关联的子码
+            List<ZslTraceSubcode> children = zslTraceSubcodeDao.selectByParenId(zslTraceSubcode.getId());
+            for(ZslTraceSubcode item : children){
+                countCode(item);
+            }
+        }
+    }
 
     class OutCodeThread extends Thread{
         private String traceCodeNumber;

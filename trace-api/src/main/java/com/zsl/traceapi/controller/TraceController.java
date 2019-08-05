@@ -499,12 +499,7 @@ public class TraceController {
     @PostMapping("/relationOutCode")
     @ResponseBody
     public CommonResult relationOutCode(@RequestBody RelationOutCode relationOutCode){
-        int i = traceService.relationOutCode(relationOutCode.getOutCode(),relationOutCode.getSubCodeList());
-        if(i < 0){
-            return CommonResult.failed("关联失败");
-        }else{
-            return CommonResult.success("关联成功");
-        }
+        return traceService.relationOutCode(relationOutCode.getOutCode(),relationOutCode.getSubCodeList());
     }
 
 
@@ -521,6 +516,8 @@ public class TraceController {
             return CommonResult.failed("该码已经为外码");
         }else if(i == -2){
             return CommonResult.failed("转换失败");
+        }else if(i == -3){
+            return CommonResult.failed("编码不存在");
         }else{
             return CommonResult.success("转换成功");
         }
@@ -545,6 +542,10 @@ public class TraceController {
         int i = traceService.deliverGoods(deliverGoods);
         if(i > 0){
             return CommonResult.success("发货成功");
+        }else if(i == -2){
+            return CommonResult.failed("外码还没有关联内码");
+        }else if(i == -3){
+            return CommonResult.failed("请先关联内码");
         }else{
             return CommonResult.failed("发货失败");
         }
@@ -557,7 +558,7 @@ public class TraceController {
      */
     @GetMapping("getSubCodeById")
     public CommonResult getSubCodeById(Long sid){
-        return CommonResult.success(traceService.getSubCodeById(sid));
+        return traceService.getSubCodeById(sid);
     }
 
     /**
