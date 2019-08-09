@@ -7,6 +7,7 @@ import com.zsl.traceapi.dao.ZslTraceSubcodeDao;
 import com.zsl.traceapi.dto.TraceCodeRelation;
 import com.zsl.traceapi.dto.TraceSubcodeUpdateParam;
 import com.zsl.traceapi.service.RedisService;
+import com.zsl.tracedb.model.ZslTraceSubcode;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,12 @@ public class TraceApiApplicationTests {
 
     @Test
     public void contextLoads() {
-        try {
+        String code = "1";
+        String traceCodeNumber = "zs1565082819008000574943893";
+        List<ZslTraceSubcode> zslTraceSubcode = zslTraceSubcodeDao.searchByIndexOrCode(code,traceCodeNumber);
+        System.out.println("结果："+zslTraceSubcode);
+
+       /* try {
             TraceCodeRelation traceCodeRelation = new TraceCodeRelation();
             traceCodeRelation.setFromNumber(1001L);
             traceCodeRelation.setToNumber(4444L);
@@ -44,7 +50,7 @@ public class TraceApiApplicationTests {
             traceUpdateProducer.sendMessage(sendJsonStr,100);
         }catch (Exception e){
 
-        }
+        }*/
       /*  Long start = System.currentTimeMillis();
         Long fromNumber = 1001L;
         Long toNumber = 4444L;

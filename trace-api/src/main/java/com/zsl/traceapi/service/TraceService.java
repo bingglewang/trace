@@ -226,4 +226,18 @@ public interface TraceService {
      * @return
      */
     CommonResult getSubCodeById(Long sid);
+
+    /**
+     * 分页获取外码和内码
+     * @param traceSubCode
+     * @return
+     */
+    CommonResult getIdByPage(String traceCodeNumber,String traceSubCode);
+
+    /**
+     * 根据sid获取追溯点记录
+     * @param sid
+     * @return
+     */
+    CommonResult getTracePointRecordBySid(Long sid);
 }

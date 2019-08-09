@@ -15,6 +15,7 @@ import com.zsl.traceapi.dto.*;
 import com.zsl.traceapi.service.TraceService;
 import com.zsl.traceapi.util.*;
 import com.zsl.traceapi.vo.*;
+import com.zsl.tracecommon.CommonPage;
 import com.zsl.tracecommon.CommonResult;
 import com.zsl.tracedb.mapper.*;
 import com.zsl.tracedb.model.*;
@@ -89,6 +90,8 @@ public class TraceServiceImpl implements TraceService {
 
     private Integer count;
 
+    private List<ZslTraceSubcode> totalSubCode;
+
     @Override
     public ZslTraceVo getZslTraceById(Integer id) {
         return zslTraceDao.getZslTraceDetailById(id);
@@ -145,6 +148,13 @@ public class TraceServiceImpl implements TraceService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int update(ZslTrace zslTrace) {
+        ZslTrace zslTraceDetail = zslTraceMapper.selectByPrimaryKey(zslTrace.getTraceId());
+        if(zslTraceDetail == null){
+            return -2; // 追溯码不存在
+        }
+        if(zslTraceDetail.getTraceHandleStatus() - 1 != 0){
+            return -3; // 追溯信息已被处理，无法修改
+        }
         return zslTraceMapper.updateByPrimaryKeySelective(zslTrace);
     }
 
@@ -168,24 +178,43 @@ public class TraceServiceImpl implements TraceService {
                 if (merchant.getCertificationToPay() != 1) {
                     return -7;//商家未认证
                 }
-                //判断纸质标签是否超过上限
-                Long totalApplyCount = zslTraceDao.busiTotalTraceCount(merchant.getMerchantId());
+               /* //判断纸质标签是否超过上限
+                Long totalApplyCount = zslTraceDao.busiTotalTraceCount(merchant.getMerchantId());*/
+                //商家剩余免费纸质标签数量
+                Long bussiPaperCount = merchant.getPaperLabelUpper();
+                //需要扣除的纸质数量
+                Long requirePaperCount = 0L;
+                if(bussiPaperCount - 0 != 0){
+                    Merchant updatePaperCount = new Merchant();
+                    updatePaperCount.setMerchantId(merchant.getMerchantId());
+                    if(bussiPaperCount - zslTraceInfo.getTraceApplyCount() < 0 ){
+                        // 将商家纸质标签数量设置为0
+                        updatePaperCount.setPaperLabelUpper(0L);
+                        requirePaperCount = zslTraceInfo.getTraceApplyCount() - bussiPaperCount;
+                    }else{
+                        updatePaperCount.setPaperLabelUpper(bussiPaperCount - zslTraceInfo.getTraceApplyCount());
+                    }
+                    //修改商家纸质标签上限
+                    merchantMapper.updateByPrimaryKeySelective(updatePaperCount);
+                }else{
+                    requirePaperCount = zslTraceInfo.getTraceApplyCount();
+                }
 
-                if (zslTraceInfo.getTraceApplyType() == 1 && (totalApplyCount - merchant.getPaperLabelUpper() > 0) && merchant.getMerchantCoin() - ((zslTraceInfo.getTraceApplyCount() - merchant.getPaperLabelUpper()) * integralDeductRatio.getIntegralRatio()) < 0) {
+                if (zslTraceInfo.getTraceApplyType() == 1 && (requirePaperCount > 0) && merchant.getMerchantCoin() - ((requirePaperCount) * integralDeductRatio.getIntegralRatio()) < 0) {
                     return -4; // 积分不够，请进行充值
                 }
 
-                if (zslTraceInfo.getTraceApplyType() == 1 && (totalApplyCount - merchant.getPaperLabelUpper() > 0) &&  merchant.getMerchantCoin() - ((zslTraceInfo.getTraceApplyCount() - merchant.getPaperLabelUpper()) * integralDeductRatio.getIntegralRatio()) > 0) {
+                if (zslTraceInfo.getTraceApplyType() == 1 && (requirePaperCount > 0) &&  merchant.getMerchantCoin() - ((requirePaperCount) * integralDeductRatio.getIntegralRatio()) > 0) {
                     Merchant merchantUdate = new Merchant();
                     merchantUdate.setMerchantId(zslTraceInfo.getTraceBusinessId());
-                    Long kouchu = (zslTraceInfo.getTraceApplyCount() - merchant.getPaperLabelUpper()) * integralDeductRatio.getIntegralRatio();
+                    Long kouchu = (requirePaperCount) * integralDeductRatio.getIntegralRatio();
                     merchantUdate.setMerchantCoin(Integer.parseInt((merchant.getMerchantCoin() - (kouchu)) + ""));
                     int update = merchantMapper.updateByPrimaryKeySelective(merchantUdate);
                     if (update < 0) {
                         return -6; //积分扣除失败
                     }
                     IntegralLog integralLog = new IntegralLog();
-                    integralLog.setDeductIntegral(Integer.parseInt(((zslTraceInfo.getTraceApplyCount() - merchant.getPaperLabelUpper()) * integralDeductRatio.getIntegralRatio()) + ""));//当前扣除的积分
+                    integralLog.setDeductIntegral(Integer.parseInt(((requirePaperCount) * integralDeductRatio.getIntegralRatio()) + ""));//当前扣除的积分
                     integralLog.setFunctionId(zslTraceInfo.getTraceId());//操作业务主键id
                     integralLog.setFunctionType(ServiceEnum.APPLY_PAPER.getId());
                     integralLog.setMerchantId(zslTraceInfo.getTraceBusinessId());//商家id
@@ -327,14 +356,23 @@ public class TraceServiceImpl implements TraceService {
                 return -1;//商品不存在
             }
 
+            // 拆入追溯记录
+            ZslTraceRecord insertRecord = new ZslTraceRecord();
+            insertRecord.setTraceToNumber(item.getTraceToNumber());
+            insertRecord.setTraceFromNumber(item.getTraceFromNumber());
+            insertRecord.setTraceCodeNumber(item.getTraceCodeNumber());
+            insertRecord.setTraceGoodId(item.getTraceGoodId());
+            insertRecord.setTraceStallId(item.getTraceStallId());
+            zslTraceRecordMapper.insert(insertRecord);
+
             //扣除积分
             IntegralDeductRatio integralDeductRatio = integralDeductRatioMapper.selectByPrimaryKey(IntegralEnum.INTEGRAL_DECUCT_RATIO_TYPE_2.getId());
             IntegralLog integralLog = new IntegralLog();
             if (item.getTraceToNumber() - item.getTraceFromNumber() >= 0) {
-                integralLog.setDeductIntegral(Integer.parseInt((integralDeductRatio.getIntegralRatio() * (item.getTraceFromNumber() - item.getTraceToNumber() + 1)) + ""));//当前扣除的积分
+                integralLog.setDeductIntegral(Integer.parseInt((integralDeductRatio.getIntegralRatio() * (item.getTraceToNumber() - item.getTraceFromNumber() + 1)) + ""));//当前扣除的积分
                 decutPoint += Integer.parseInt((integralDeductRatio.getIntegralRatio() * (item.getTraceToNumber() - item.getTraceFromNumber() + 1)) + "");
             }
-            integralLog.setFunctionId(traceId);//操作业务主键id
+            integralLog.setFunctionId(insertRecord.getTraceRecordId());//操作业务主键id(追溯记录id)
             integralLog.setFunctionType(ServiceEnum.TRACE_RECORD.getId());
             integralLog.setMerchantId(zslTrace.get(0).getTraceBusinessId());//商家id
             integralLog.setDeductStatus(1);//未扣减
@@ -347,8 +385,9 @@ public class TraceServiceImpl implements TraceService {
         updateTrace.setTraceId(traceId);
         updateTrace.setTraceBack1(upZslTrace.getTraceBack1()+Integer.parseInt(haveRelationCount + "")); //已经关联数量
         updateTrace.setTraceEnableCount(upZslTrace.getTraceEnableCount() - Integer.parseInt(haveRelationCount + ""));//剩余数量
-        zslTraceMapper.updateByPrimaryKeySelective(updateTrace);
-        int i = zslTraceRecordDao.insertList(traceRecordInsertParamList);
+        int i = zslTraceMapper.updateByPrimaryKeySelective(updateTrace);
+        //插入追溯记录
+       //
         if (i > 0) {
             return decutPoint;
         } else {
@@ -1261,6 +1300,69 @@ public class TraceServiceImpl implements TraceService {
         BeanUtils.copyProperties(zslTraceSubcode,result);
         result.setCount(count);
         return CommonResult.success(result);
+    }
+
+    @Override
+    public CommonResult getIdByPage(String traceCodeNumber,String traceSubCode) {
+        if(StringUtils.isBlank(traceCodeNumber)){
+            return CommonResult.failed("追溯码不能为空");
+        }
+
+        ZslTraceExample zslTraceExample = new ZslTraceExample();
+        ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
+        criteria.andTraceCodeNumberEqualTo(traceCodeNumber);
+        List<ZslTrace> zslTraceList = zslTraceMapper.selectByExample(zslTraceExample);
+        if(CollectionUtils.isEmpty(zslTraceList)){
+            return CommonResult.failed("追溯码不存在");
+        }
+
+        List<ZslTraceSubcode> zslTraceSubcodeList = zslTraceSubcodeDao.searchByIndexOrCode(traceSubCode,traceCodeNumber);
+        if(CollectionUtils.isEmpty(zslTraceSubcodeList)){
+            return CommonResult.success(null);
+        }
+
+        totalSubCode = new ArrayList<>();
+        ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeList.get(0);
+        searchTreeNode(zslTraceSubcode);
+
+        List<ZslTreeNode> treeNodes = new ArrayList<>();
+        for(ZslTraceSubcode item: totalSubCode){
+            ZslTreeNode node = new ZslTreeNode();
+            BeanUtils.copyProperties(item,node);
+            treeNodes.add(node);
+        }
+        List<ZslTreeNode> list = null;
+        try {
+            list  =   TreeUtils.buildTree(treeNodes,"com.zsl.traceapi.util.ZslTreeNode","id","parentId","children");
+        }catch (Exception e){
+            e.printStackTrace();
+            return CommonResult.failed();
+        }
+        return CommonResult.success(list);
+    }
+
+    @Override
+    public CommonResult getTracePointRecordBySid(Long sid) {
+        ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectById(sid);
+        List<ZslTracePoint> tracePointList = zslTraceSubcodeDao.selectTracePointNodes(zslTraceSubcode.getTraceGoodId(),zslTraceSubcode.getTraceIndex(),zslTraceSubcode.getTraceCodeNumber());
+        List<ZslTracePointVo> result = new ArrayList<>();
+        for(ZslTracePoint zslTracePoint : tracePointList){
+            ZslTracePointVo resultItem  = new ZslTracePointVo();
+            BeanUtils.copyProperties(zslTracePoint,resultItem);
+            Goods goods = goodsMapper.selectByPrimaryKey(resultItem.getTraceGoodsId());
+            if(goods != null)
+            resultItem.setGoodsName(goods.getGoodsName());
+            result.add(resultItem);
+        }
+        return CommonResult.success(result);
+    }
+
+    public void searchTreeNode(ZslTraceSubcode zslTraceSubcode){
+        totalSubCode.add(zslTraceSubcode);
+        List<ZslTraceSubcode> subcodeList = zslTraceSubcodeDao.selectByParenId(zslTraceSubcode.getId());
+        for(ZslTraceSubcode forItem : subcodeList){
+            searchTreeNode(forItem);
+        }
     }
 
     void countCode(ZslTraceSubcode zslTraceSubcode){

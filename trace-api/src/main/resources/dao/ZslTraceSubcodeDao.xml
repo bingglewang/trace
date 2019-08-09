@@ -135,4 +135,16 @@
         ORDER BY trace_point_time ASC
     </select>
 
+    <select id="searchByIndexOrCode" resultMap="BaseResultMap">
+        SELECT *
+        FROM zsl_trace_subcode
+        where
+        trace_code_number = #{traceCodeNumber}
+        and
+        (id = #{traceIndexOrCode}+0
+        or trace_sub_code_number = #{traceIndexOrCode}
+        or id = (SELECT id from zsl_trace_subcode where trace_index = #{traceIndexOrCode}+0 and trace_code_number = #{traceCodeNumber})
+        )
+    </select>
+
 </mapper>

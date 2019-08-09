@@ -15,16 +15,16 @@ spring:
         timeout: 3000ms # 连接超时时间（毫秒）
   #rabbitmq
   rabbitmq:
-#     host: 39.108.139.140
-#     port: 5672
-#     virtual-host: /traceMall
-#     username: traceMall
-#     password: traceMall
-     host: 193.112.186.190
+     host: 39.108.139.140
      port: 5672
-     virtual-host: /
-     username: admin
-     password: admin
+     virtual-host: /traceMall
+     username: traceMall
+     password: traceMall
+#     host: 193.112.186.190
+#     port: 5672
+#     virtual-host: /
+#     username: admin
+#     password: admin
      publisher-confirms: true #如果对异步消息需要回调必须设置为true
      listener:
            simple:

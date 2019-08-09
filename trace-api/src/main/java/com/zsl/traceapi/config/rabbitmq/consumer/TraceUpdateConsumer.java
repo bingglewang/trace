@@ -1,6 +1,5 @@
 package com.zsl.traceapi.config.rabbitmq.consumer;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zsl.traceapi.dao.ZslTraceSubcodeDao;
 import com.zsl.traceapi.dto.TraceCodeRelation;

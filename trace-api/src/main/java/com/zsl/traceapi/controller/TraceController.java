@@ -22,7 +22,6 @@ import com.zsl.tracedb.model.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -84,6 +83,17 @@ public class TraceController {
         return CommonResult.success(CommonPage.restPage(result));
     }
 
+
+    /**
+     * 搜索获取外码和内码
+     * @return
+     */
+    @GetMapping("/searchSubCodeTree")
+    @ResponseBody
+    public CommonResult getIdByPage(String traceCodeNumber, String sidOrSubCode) {
+        return traceService.getIdByPage(traceCodeNumber,sidOrSubCode);
+    }
+
     @ApiOperation(value = "分页获取追溯记录")
     @GetMapping("/getTraceRecordByPage")
     @ResponseBody
@@ -135,8 +145,8 @@ public class TraceController {
         //根据商家id查询加盟商/公司
         Merchant merchant = merchantMapper.selectByPrimaryKey(insertParam.getTraceBusinessId());
         //判断是否需要扣除积分
-        Long totalApplyCount = zslTraceDao.busiTotalTraceCount(zslTraceAddAndUpdateParam.getTraceBusinessId());
-        if(zslTraceAddAndUpdateParam.getTraceApplyType() == 1 &&  totalApplyCount - merchant.getPaperLabelUpper() > 0){
+        //Long totalApplyCount = zslTraceDao.busiTotalTraceCount(zslTraceAddAndUpdateParam.getTraceBusinessId());
+        if(zslTraceAddAndUpdateParam.getTraceApplyType() == 1 &&  zslTraceAddAndUpdateParam.getTraceApplyCount() - merchant.getPaperLabelUpper() > 0){
             resultStr = "申请成功，免费标签超过额度，需要扣除积分";
         }
         if (merchant == null) {
@@ -182,7 +192,11 @@ public class TraceController {
         int i = traceService.update(insertParam);
         if (i > 0) {
             return CommonResult.success(null, "编辑成功");
-        } else {
+        } else if(i == -2){
+            return CommonResult.failed("追溯码不存在");
+        }else if(i == -3){
+            return CommonResult.failed("追溯信息已被处理,无法修改");
+        }else{
             return CommonResult.failed("编辑失败");
         }
     }
@@ -384,6 +398,8 @@ public class TraceController {
         }
         return CommonResult.success(result);
     }
+
+
 
     /**
      * 追溯编码导出
@@ -594,5 +610,15 @@ public class TraceController {
     @GetMapping("getTraceGoodInfo")
     public CommonResult getTraceGoodInfo(Long sid,HttpServletRequest request){
         return traceService.getTraceGoodInfo(sid,request);
+    }
+
+    /**
+     * 根据sid获取追溯点记录
+     * @param sid
+     * @return
+     */
+    @GetMapping("getTracePointRecordBySid")
+    public  CommonResult getTracePointRecordBySid(Long sid){
+        return traceService.getTracePointRecordBySid(sid);
     }
 }
