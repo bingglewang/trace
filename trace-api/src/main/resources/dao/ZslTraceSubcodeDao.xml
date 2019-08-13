@@ -147,4 +147,27 @@
         )
     </select>
 
+    <select id="getSuCodeByPage" resultMap="BaseResultMap">
+       SELECT *
+       from zsl_trace_subcode
+       where
+       (
+             id BETWEEN
+            (SELECT id FROM `zsl_trace_subcode` where trace_index = #{fromNumber} and trace_code_number = #{traceCodeNumber})
+            and
+            (SELECT id FROM `zsl_trace_subcode` where trace_index = #{toNumber} and trace_code_number = #{traceCodeNumber})
+        )
+        and parent_id is null
+        ORDER BY node_level desc
+        LIMIT #{pageSize}
+    </select>
+
+    <select id="getTotalCount" resultType="java.lang.Long">
+        SELECT count(id) from zsl_trace_subcode where (id BETWEEN
+        (SELECT id FROM `zsl_trace_subcode` where trace_index = #{fromNumber} and trace_code_number = #{traceCodeNumber})
+        and
+        (SELECT id FROM `zsl_trace_subcode` where trace_index = #{toNumber} and trace_code_number = #{traceCodeNumber}))
+        and parent_id is null
+    </select>
+
 </mapper>

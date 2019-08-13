@@ -240,4 +240,13 @@ public interface TraceService {
      * @return
      */
     CommonResult getTracePointRecordBySid(Long sid);
+
+    /**
+     * 分页获取内码或外码树
+     * @param pageNum
+     * @param pageSize
+     * @param traceCodeNumber
+     * @return
+     */
+    CommonResult getSuCodeByPage(Integer pageNum,Integer pageSize,String traceCodeNumber);
 }

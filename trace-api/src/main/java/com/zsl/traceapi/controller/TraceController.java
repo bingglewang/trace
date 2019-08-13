@@ -94,6 +94,17 @@ public class TraceController {
         return traceService.getIdByPage(traceCodeNumber,sidOrSubCode);
     }
 
+
+    /**
+     * 分页获取内码或外码
+     * @return
+     */
+    @GetMapping("/getSuCodeByPage")
+    @ResponseBody
+    public CommonResult getSuCodeByPage(String traceCodeNumber,Integer pageNum,Integer pageSize) {
+        return traceService.getSuCodeByPage(pageNum,pageSize,traceCodeNumber);
+    }
+
     @ApiOperation(value = "分页获取追溯记录")
     @GetMapping("/getTraceRecordByPage")
     @ResponseBody

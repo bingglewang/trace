@@ -15,16 +15,11 @@ spring:
         timeout: 3000ms # 连接超时时间（毫秒）
   #rabbitmq
   rabbitmq:
-     host: 39.108.139.140
+     host: 193.112.186.190
      port: 5672
-     virtual-host: /traceMall
-     username: traceMall
-     password: traceMall
-#     host: 193.112.186.190
-#     port: 5672
-#     virtual-host: /
-#     username: admin
-#     password: admin
+     virtual-host: /
+     username: dabing
+     password: dabing
      publisher-confirms: true #如果对异步消息需要回调必须设置为true
      listener:
            simple:
@@ -33,6 +28,26 @@ spring:
                max-attempts: 5
                initial-interval: 2000
              default-requeue-rejected: false
+  #kafka
+  kafka:
+     bootstrap-servers: 127.0.0.1:9092,127.0.0.2:9092,127.0.0.3:9092
+     #生产者
+     producer:
+       retries: 0
+       batch-size: 16384
+       buffer-memory: 33554432
+       key-serializer: org.apache.kafka.common.serialization.StringSerializer
+       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+       properties:
+         linger.ms: 1
+     #消费者
+     consumer:
+       enable-auto-commit: false
+       auto-commit-interval: 100ms
+       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+       properties:
+         session.timeout.ms: 15000
   datasource:
     url: jdbc:mysql://cdb-puhlb3l3.gz.tencentcdb.com:10076/traceability_platform?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root

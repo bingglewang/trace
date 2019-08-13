@@ -12,6 +12,7 @@ import com.zsl.traceapi.dao.ZslTraceDao;
 import com.zsl.traceapi.dao.ZslTraceRecordDao;
 import com.zsl.traceapi.dao.ZslTraceSubcodeDao;
 import com.zsl.traceapi.dto.*;
+import com.zsl.traceapi.service.RedisService;
 import com.zsl.traceapi.service.TraceService;
 import com.zsl.traceapi.util.*;
 import com.zsl.traceapi.vo.*;
@@ -43,6 +44,9 @@ import static com.zsl.traceapi.util.IntegralEnum.INTEGRAL_DECUCT_RATIO_TYPE_2;
 
 @Service
 public class TraceServiceImpl implements TraceService {
+    @Autowired
+    private RedisService redisService;
+
     @Autowired
     private ZslTraceMapper zslTraceMapper;
 
@@ -1356,6 +1360,67 @@ public class TraceServiceImpl implements TraceService {
         }
         return CommonResult.success(result);
     }
+
+    @Override
+    public CommonResult getSuCodeByPage(Integer pageNum, Integer pageSize,String traceCodeNumber) {
+        Integer fromNumber = (pageNum > 1 ? (pageNum - 1) * pageSize : 1);
+        Integer toNumber = fromNumber + pageSize;
+        List<ZslTraceSubcode> pageList = zslTraceSubcodeDao.getSuCodeByPage(pageSize,toNumber,fromNumber,traceCodeNumber);
+
+        List<List<ZslTreeNode>> result = new ArrayList<>();
+        for(ZslTraceSubcode item : pageList){
+            List<ZslTreeNode> resultItem = transeTreeNode(item);
+            if(resultItem != null){
+                result.add(resultItem);
+            }
+        }
+        CommonPage pageResult = new CommonPage();
+        pageResult.setList(result);
+        pageResult.setPageNum(pageNum);
+        pageResult.setPageSize(pageSize);
+        String totalCountStr = redisService.get(traceCodeNumber);
+        Long totalCount = 0L;
+        if(StringUtils.isBlank(totalCountStr)){
+            ZslTraceExample zslTraceExample = new ZslTraceExample();
+            ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
+            criteria.andTraceCodeNumberEqualTo(traceCodeNumber);
+            List<ZslTrace> traces = zslTraceMapper.selectByExample(zslTraceExample);
+            if(!CollectionUtils.isEmpty(traces)) {
+                totalCount = zslTraceSubcodeDao.getTotalCount(Integer.parseInt(traces.get(0).getTraceApplyCount() + ""), fromNumber, traceCodeNumber);
+                redisService.set(traceCodeNumber,totalCount+"");
+                // 重新刷新token时间
+                redisService.expire(traceCodeNumber,7200);
+            }
+        }else{
+            totalCount = Long.parseLong(totalCountStr);
+        }
+        pageResult.setTotal(totalCount);
+        Long totalPage = (totalCount + pageSize - 1) / pageSize;
+        pageResult.setTotalPage(Integer.parseInt(totalPage+""));
+        return CommonResult.success(pageResult);
+    }
+
+    List<ZslTreeNode> transeTreeNode(ZslTraceSubcode zslTraceSubcode){
+        totalSubCode = new ArrayList<>();
+        searchTreeNode(zslTraceSubcode);
+
+        List<ZslTreeNode> treeNodes = new ArrayList<>();
+        for(ZslTraceSubcode item: totalSubCode){
+            ZslTreeNode node = new ZslTreeNode();
+            BeanUtils.copyProperties(item,node);
+            treeNodes.add(node);
+        }
+        List<ZslTreeNode> list = null;
+        try {
+            list  =   TreeUtils.buildTree(treeNodes,"com.zsl.traceapi.util.ZslTreeNode","id","parentId","children");
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        return list;
+    }
+
+
 
     public void searchTreeNode(ZslTraceSubcode zslTraceSubcode){
         totalSubCode.add(zslTraceSubcode);
