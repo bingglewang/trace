@@ -72,6 +72,17 @@
         </foreach>
     </update>
 
+    <update id="updateOutCodeById" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE zsl_trace_subcode
+            <set>
+                is_leaf = 'N'
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
 
     <select id="selectByCodeNumber" resultMap="BaseResultMap">
         SELECT *  FROM `zsl_trace_subcode` WHERE trace_code_number = #{traceCodeNumber} LIMIT 1;
@@ -158,6 +169,7 @@
             (SELECT id FROM `zsl_trace_subcode` where trace_index = #{toNumber} and trace_code_number = #{traceCodeNumber})
         )
         and parent_id is null
+        and trace_good_id is not null
         ORDER BY node_level desc
         LIMIT #{pageSize}
     </select>
@@ -168,6 +180,7 @@
         and
         (SELECT id FROM `zsl_trace_subcode` where trace_index = #{toNumber} and trace_code_number = #{traceCodeNumber}))
         and parent_id is null
+        and trace_good_id is not null
     </select>
 
 </mapper>

@@ -30,7 +30,7 @@ spring:
                  default-requeue-rejected: false
   #kafka
   kafka:
-     bootstrap-servers: 127.0.0.1:9092,127.0.0.2:9092,127.0.0.3:9092
+     bootstrap-servers: 172.16.0.37:9092
      #生产者
      producer:
        retries: 0
@@ -48,6 +48,7 @@ spring:
        value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
        properties:
          session.timeout.ms: 15000
+       group-id: ckafka-0larvru5
   datasource:
     url: jdbc:mysql://cdb-puhlb3l3.gz.tencentcdb.com:10076/traceability_platform?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root

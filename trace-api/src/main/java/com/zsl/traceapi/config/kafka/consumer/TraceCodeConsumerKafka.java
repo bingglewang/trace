@@ -1,6 +1,6 @@
 package com.zsl.traceapi.config.kafka.consumer;
 
-import com.zsl.traceapi.config.rabbitmq.producer.TraceCodeProducer;
+import com.zsl.traceapi.config.kafka.producer.TraceCodeProducerKafka;
 import com.zsl.traceapi.dao.ZslTraceSubcodeDao;
 import com.zsl.traceapi.dto.TraceSubcodeInsertParam;
 import com.zsl.traceapi.util.RandomUtil;
@@ -11,8 +11,6 @@ import com.zsl.tracedb.model.ZslTraceSubcode;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.annotation.RabbitHandler;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -35,9 +33,9 @@ public class TraceCodeConsumerKafka {
     private ZslTraceSubcodeDao zslTraceSubcodeDao;
 
     @Autowired
-    private TraceCodeProducer traceCodeProducer;
+    private TraceCodeProducerKafka traceCodeProducerKafka;
 
-    @KafkaListener(topics = "test")
+    @KafkaListener(topics = "traceInsert")
     public void handle(ConsumerRecord<?, ?> record){
         String traceCodeNumber = record.value().toString();
         new MyThread(traceCodeNumber).start();
@@ -95,7 +93,7 @@ public class TraceCodeConsumerKafka {
             }catch (Exception e){
                 logger.info("处理失败:{}", traceCodeNumber);
                 try {
-                    traceCodeProducer.sendMessage(traceCodeNumber, 100);
+                    traceCodeProducerKafka.sendMessage(traceCodeNumber);
                 }catch (Exception e1){
                 }
             }

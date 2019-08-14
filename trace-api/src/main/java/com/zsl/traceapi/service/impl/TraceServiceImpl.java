@@ -4,6 +4,8 @@ import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
+import com.zsl.traceapi.config.kafka.producer.TraceCodeProducerKafka;
+import com.zsl.traceapi.config.kafka.producer.TraceUpdateProducerKafka;
 import com.zsl.traceapi.config.rabbitmq.producer.TraceCodeProducer;
 import com.zsl.traceapi.config.rabbitmq.producer.TraceUpdateProducer;
 import com.zsl.traceapi.context.RequestContext;
@@ -78,10 +80,10 @@ public class TraceServiceImpl implements TraceService {
     private ZslTraceRecordMapper zslTraceRecordMapper;
 
     @Autowired
-    private TraceCodeProducer traceCodeProducer;
+    private TraceCodeProducerKafka traceCodeProducerKafka;
 
     @Autowired
-    private TraceUpdateProducer traceUpdateProducer;
+    private TraceUpdateProducerKafka traceUpdateProducerKafka;
 
     @Autowired
     private ZslTraceSubcodeDao zslTraceSubcodeDao;
@@ -156,7 +158,7 @@ public class TraceServiceImpl implements TraceService {
         if(zslTraceDetail == null){
             return -2; // 追溯码不存在
         }
-        if(zslTraceDetail.getTraceHandleStatus() - 1 != 0){
+        if(zslTraceDetail.getTraceHandleStatus() - 2 != 0){
             return -3; // 追溯信息已被处理，无法修改
         }
         return zslTraceMapper.updateByPrimaryKeySelective(zslTrace);
@@ -231,7 +233,7 @@ public class TraceServiceImpl implements TraceService {
                 }
                 //将追溯批次号放入队列
                 try {
-                    traceCodeProducer.sendMessage(passParam.getTraceCodeNumber(), 100);
+                    traceCodeProducerKafka.sendMessage(passParam.getTraceCodeNumber());
                 }catch (Exception e){
                     return -8;  //追溯码生成错误
                 }
@@ -353,7 +355,7 @@ public class TraceServiceImpl implements TraceService {
                 //将关联信息放入队列
                 try {
                     String sendJsonStr = JSONObject.toJSONString(traceCodeRelation);
-                    traceUpdateProducer.sendMessage(sendJsonStr,100);
+                    traceUpdateProducerKafka.sendMessage(sendJsonStr);
                 }catch (Exception e){
                 }
             } else {
@@ -1076,6 +1078,7 @@ public class TraceServiceImpl implements TraceService {
         if(CollectionUtils.isEmpty(conflictSids)){
             //进行内码转外码
             List<TraceOutCodeUpdateParam> traceOutCodeUpdateParams = new ArrayList<>();
+            List<TraceOutCodeUpdateParam> traceOutCodeUpdateParamParent = new ArrayList<>();
             Long outCodeNum = outCodeBatch.getOutCodeStart();
             for(Long m = outCodeBatch.getInCodeStart();m <= outCodeBatch.getInCodeEnd();m++){
                 if(!isRepeat.add(m)){
@@ -1085,9 +1088,13 @@ public class TraceServiceImpl implements TraceService {
                     traceOutCodeUpdateParam.setId(m);
                     traceOutCodeUpdateParam.setParentId(outCodeNum);
                     traceOutCodeUpdateParams.add(traceOutCodeUpdateParam);
+                    TraceOutCodeUpdateParam updateParent = new TraceOutCodeUpdateParam();
+                    updateParent.setId(outCodeNum);
+                    traceOutCodeUpdateParamParent.add(updateParent);
                     outCodeNum++;
                 }
             }
+            int j = zslTraceSubcodeDao.updateOutCodeById(traceOutCodeUpdateParamParent);
             int i = zslTraceSubcodeDao.updateOutCodeBatch(traceOutCodeUpdateParams);
             return CommonResult.success("转换成功");
         }else{
@@ -1367,11 +1374,11 @@ public class TraceServiceImpl implements TraceService {
         Integer toNumber = fromNumber + pageSize;
         List<ZslTraceSubcode> pageList = zslTraceSubcodeDao.getSuCodeByPage(pageSize,toNumber,fromNumber,traceCodeNumber);
 
-        List<List<ZslTreeNode>> result = new ArrayList<>();
+        List<ZslTreeNode> result = new ArrayList<>();
         for(ZslTraceSubcode item : pageList){
             List<ZslTreeNode> resultItem = transeTreeNode(item);
             if(resultItem != null){
-                result.add(resultItem);
+                result.addAll(resultItem);
             }
         }
         CommonPage pageResult = new CommonPage();

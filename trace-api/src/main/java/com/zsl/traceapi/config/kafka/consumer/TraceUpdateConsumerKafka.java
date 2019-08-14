@@ -23,7 +23,7 @@ public class TraceUpdateConsumerKafka {
     private ZslTraceSubcodeDao zslTraceSubcodeDao;
 
 
-    @KafkaListener(topics = "test")
+    @KafkaListener(topics = "traceUpdate")
     public void handle(ConsumerRecord<?, ?> record){
         logger.info("接受到的json字符串:{}", record.value());
         String traceCodeJson = record.value().toString();
