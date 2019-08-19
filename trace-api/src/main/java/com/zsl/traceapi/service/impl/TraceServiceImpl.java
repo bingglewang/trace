@@ -1051,6 +1051,15 @@ public class TraceServiceImpl implements TraceService {
         if("N".equals(zslTraceSubcode.getIsLeaf())){
             return -1;//该码已经为外码
         }
+        ZslTraceExample zslTraceExample = new ZslTraceExample();
+        ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
+        criteria.andTraceCodeNumberEqualTo(zslTraceSubcode.getTraceCodeNumber());
+        List<ZslTrace> zslTraceList = zslTraceMapper.selectByExample(zslTraceExample);
+        if(!CollectionUtils.isEmpty(zslTraceList)){
+            if("N".equals(zslTraceList.get(0).getTraceBack4())){
+                return -4; //该批次号不能在小程序端操作
+            }
+        }
         ZslTraceSubcode update = new ZslTraceSubcode();
         update.setId(zslTraceSubcode.getId());
         update.setIsLeaf("N");
@@ -1066,16 +1075,27 @@ public class TraceServiceImpl implements TraceService {
         //判断需要转成外码的内码，本身是否为外码
         Set<Long> isRepeat = new HashSet<>();
         List<Long> conflictSids = new ArrayList<>();
+        String traceCodeNumber = "";
         for(Long i = outCodeBatch.getOutCodeStart();i <= outCodeBatch.getOutCodeEnd();i++ ){
             if(!isRepeat.add(i)){
                 return CommonResult.failed("编号不能交叉");
             }
             ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectById(i);
+            traceCodeNumber = zslTraceSubcode.getTraceCodeNumber();
             if("N".equals(zslTraceSubcode.getIsLeaf())){
                 conflictSids.add(i);
             }
         }
         if(CollectionUtils.isEmpty(conflictSids)){
+            ZslTraceExample zslTraceExample = new ZslTraceExample();
+            ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
+            criteria.andTraceCodeNumberEqualTo(traceCodeNumber);
+            List<ZslTrace> zslTraceList = zslTraceMapper.selectByExample(zslTraceExample);
+            if(!CollectionUtils.isEmpty(zslTraceList)){
+                if("N".equals(zslTraceList.get(0).getTraceBack4())){
+                    return CommonResult.failed("该批次号不能在小程序端操作");
+                }
+            }
             //进行内码转外码
             List<TraceOutCodeUpdateParam> traceOutCodeUpdateParams = new ArrayList<>();
             List<TraceOutCodeUpdateParam> traceOutCodeUpdateParamParent = new ArrayList<>();

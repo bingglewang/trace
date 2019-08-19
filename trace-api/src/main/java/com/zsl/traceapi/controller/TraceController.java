@@ -545,6 +545,8 @@ public class TraceController {
             return CommonResult.failed("转换失败");
         }else if(i == -3){
             return CommonResult.failed("编码不存在");
+        }else if(i == -4){
+            return CommonResult.failed("该批次号不能在小程序端操作");
         }else{
             return CommonResult.success("转换成功");
         }
