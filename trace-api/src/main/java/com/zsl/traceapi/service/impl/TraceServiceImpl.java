@@ -6,12 +6,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.zsl.traceapi.config.kafka.producer.TraceCodeProducerKafka;
 import com.zsl.traceapi.config.kafka.producer.TraceUpdateProducerKafka;
-import com.zsl.traceapi.config.rabbitmq.producer.TraceCodeProducer;
-import com.zsl.traceapi.config.rabbitmq.producer.TraceUpdateProducer;
 import com.zsl.traceapi.context.RequestContext;
 import com.zsl.traceapi.context.RequestContextMgr;
 import com.zsl.traceapi.dao.ZslTraceDao;
-import com.zsl.traceapi.dao.ZslTraceRecordDao;
 import com.zsl.traceapi.dao.ZslTraceSubcodeDao;
 import com.zsl.traceapi.dto.*;
 import com.zsl.traceapi.service.RedisService;
@@ -22,11 +19,7 @@ import com.zsl.tracecommon.CommonPage;
 import com.zsl.tracecommon.CommonResult;
 import com.zsl.tracedb.mapper.*;
 import com.zsl.tracedb.model.*;
-import io.swagger.models.auth.In;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.jdbc.Null;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.BeanUtils;
@@ -39,10 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
 import java.util.*;
-
-import static com.zsl.traceapi.util.IntegralEnum.INTEGRAL_DECUCT_RATIO_TYPE_2;
 
 @Service
 public class TraceServiceImpl implements TraceService {
@@ -54,9 +44,6 @@ public class TraceServiceImpl implements TraceService {
 
     @Autowired
     private ZslTraceDao zslTraceDao;
-
-    @Autowired
-    private ZslTraceRecordDao zslTraceRecordDao;
 
     @Autowired
     private ZslTracePointMapper zslTracePointMapper;
@@ -1376,16 +1363,22 @@ public class TraceServiceImpl implements TraceService {
     public CommonResult getTracePointRecordBySid(Long sid) {
         ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectById(sid);
         List<ZslTracePoint> tracePointList = zslTraceSubcodeDao.selectTracePointNodes(zslTraceSubcode.getTraceGoodId(),zslTraceSubcode.getTraceIndex(),zslTraceSubcode.getTraceCodeNumber());
+        Map<String,Object> resultMap = new HashMap<>();
         List<ZslTracePointVo> result = new ArrayList<>();
+        String goodsName = "";
         for(ZslTracePoint zslTracePoint : tracePointList){
             ZslTracePointVo resultItem  = new ZslTracePointVo();
             BeanUtils.copyProperties(zslTracePoint,resultItem);
             Goods goods = goodsMapper.selectByPrimaryKey(resultItem.getTraceGoodsId());
             if(goods != null)
             resultItem.setGoodsName(goods.getGoodsName());
+            goodsName = goods.getGoodsName();
             result.add(resultItem);
         }
-        return CommonResult.success(result);
+        resultMap.put("list",result);
+        resultMap.put("code",zslTraceSubcode.getTraceSubCodeNumber());
+        resultMap.put("goodsName",goodsName);
+        return CommonResult.success(resultMap);
     }
 
     @Override

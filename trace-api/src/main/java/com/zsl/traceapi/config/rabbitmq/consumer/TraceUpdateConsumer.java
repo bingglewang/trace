@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
-@RabbitListener(queues = "trace.code.update")
+//@Component
+//@RabbitListener(queues = "trace.code.update")
 public class TraceUpdateConsumer {
     private static Logger logger = LoggerFactory.getLogger(TraceUpdateConsumer.class);
 
@@ -23,7 +23,7 @@ public class TraceUpdateConsumer {
     private ZslTraceSubcodeDao zslTraceSubcodeDao;
 
 
-    @RabbitHandler
+    //@RabbitHandler
     public void handle(String traceCodeJson){
         logger.info("接受到的json字符串:{}", traceCodeJson);
         try {

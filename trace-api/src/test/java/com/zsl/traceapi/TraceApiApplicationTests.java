@@ -34,23 +34,23 @@ public class TraceApiApplicationTests {
 
     @Test
     public void contextLoads() {
-        String code = "1";
+      /*  String code = "1";
         String traceCodeNumber = "zs1565082819008000574943893";
         List<ZslTraceSubcode> zslTraceSubcode = zslTraceSubcodeDao.searchByIndexOrCode(code,traceCodeNumber);
-        System.out.println("结果："+zslTraceSubcode);
+        System.out.println("结果："+zslTraceSubcode);*/
 
-       /* try {
+        try {
             TraceCodeRelation traceCodeRelation = new TraceCodeRelation();
-            traceCodeRelation.setFromNumber(1001L);
-            traceCodeRelation.setToNumber(4444L);
+            traceCodeRelation.setFromNumber(1L);
+            traceCodeRelation.setToNumber(10L);
             traceCodeRelation.setGoodsId(123);
             traceCodeRelation.setStallId(123);
-            traceCodeRelation.setTraceCodeNumber("zs1563958663716000574946324");
+            traceCodeRelation.setTraceCodeNumber("zs1566272640215000574946242");
             String sendJsonStr = JSONObject.toJSONString(traceCodeRelation);
             traceUpdateProducer.sendMessage(sendJsonStr,100);
         }catch (Exception e){
 
-        }*/
+        }
       /*  Long start = System.currentTimeMillis();
         Long fromNumber = 1001L;
         Long toNumber = 4444L;
