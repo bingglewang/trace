@@ -15,6 +15,7 @@ public interface ZslTraceSubcodeDao {
     int insertCodeBatch1(@Param("list") List<TraceOutCodeByCount> traceOutCodeByCounts);
     ZslTraceSubcode selectByCodeNumber(@Param("traceCodeNumber") String traceCodeNumber);
     List<ZslTraceSubcode> selectByParenId(@Param("parentId") Long parentId);
+    int deleteCodeRelation(@Param("id") Long id);
     ZslTraceSubcode selectBySubCode(@Param("traceSubCode") String traceSubCode);
     ZslTraceSubcode selectById(@Param("id") Long id);
     int deleteByCodeNumber(@Param("traceCodeNumber") String traceCodeNumber);

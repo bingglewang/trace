@@ -249,4 +249,17 @@ public interface TraceService {
      * @return
      */
     CommonResult getSuCodeByPage(Integer pageNum,Integer pageSize,String traceCodeNumber);
+
+    /**
+     * 删除关联
+     * @param id
+     * @return
+     */
+    CommonResult deleteCodeRelation(Long id);
+
+    /**
+     * 根据数组获取树结构
+     * @return
+     */
+    CommonResult getTreeListCode(RelationOutCode relationOutCode);
 }

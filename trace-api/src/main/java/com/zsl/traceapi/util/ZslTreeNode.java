@@ -9,4 +9,5 @@ import java.util.List;
 @Data
 public class ZslTreeNode extends ZslTraceSubcode {
     protected List<TreeNode> children = new ArrayList<TreeNode>();
+    private String name;
 }

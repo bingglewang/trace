@@ -547,6 +547,8 @@ public class TraceController {
             return CommonResult.failed("编码不存在");
         }else if(i == -4){
             return CommonResult.failed("该批次号不能在小程序端操作");
+        }else if(i == -5){
+            return CommonResult.failed("该码已经发过货了");
         }else{
             return CommonResult.success("转换成功");
         }
@@ -623,6 +625,24 @@ public class TraceController {
     @GetMapping("getTraceGoodInfo")
     public CommonResult getTraceGoodInfo(Long sid,HttpServletRequest request){
         return traceService.getTraceGoodInfo(sid,request);
+    }
+
+    /**
+     * 删除关联
+     * @return
+     */
+    @PostMapping("deleteCode/{id:[0-9]+}")
+    public CommonResult deleteCodeRelation(@PathVariable Long id){
+        return traceService.deleteCodeRelation(id);
+    }
+
+    /**
+     * 根据追溯码数组获取树结构
+     * @return
+     */
+    @PostMapping("getTreeListCode")
+    public CommonResult getTreeListCode(@RequestBody RelationOutCode relationOutCode){
+        return traceService.getTreeListCode(relationOutCode);
     }
 
     /**

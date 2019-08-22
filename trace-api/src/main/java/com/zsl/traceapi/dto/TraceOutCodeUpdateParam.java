@@ -6,4 +6,5 @@ import lombok.Data;
 public class TraceOutCodeUpdateParam {
     private Long parentId; //父码的id
     private Long id; //主键
+    private Integer nodeLevel; //节点层级
 }

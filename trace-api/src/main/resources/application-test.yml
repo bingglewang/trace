@@ -2,7 +2,7 @@ server:
   port: 8088
 spring:
   redis:
-        host: 172.16.0.30 # Redis服务器地址
+        host: 193.112.186.190 # Redis服务器地址
         database: 0 # Redis数据库索引（默认为0）
         port: 6379 # Redis服务器连接端口
         password: adminfeng5148@ # Redis服务器连接密码（默认为空）
@@ -15,22 +15,22 @@ spring:
         timeout: 3000ms # 连接超时时间（毫秒）
   #rabbitmq
 #  rabbitmq:
-#    host: 193.112.186.190
-#    port: 5672
-#    virtual-host: /
-#    username: dabing
-#    password: dabing
-#    publisher-confirms: true #如果对异步消息需要回调必须设置为true
-#    listener:
-#               simple:
-#                 retry:
-#                   enabled: true
-#                   max-attempts: 5
-#                   initial-interval: 2000
-#                 default-requeue-rejected: false
-  #kafka
+#     host: 39.108.139.140
+#     port: 5672
+#     virtual-host: /traceMall
+#     username: traceMall
+#     password: traceMall
+#     publisher-confirms: true #如果对异步消息需要回调必须设置为true
+#     listener:
+#           simple:
+#             retry:
+#               enabled: true
+#               max-attempts: 5
+#               initial-interval: 2000
+#             default-requeue-rejected: false
+#  #kafka
   kafka:
-     bootstrap-servers: 172.16.0.37:9092
+     bootstrap-servers: 193.112.186.190:9092
      #生产者
      producer:
        retries: 3
@@ -49,11 +49,11 @@ spring:
        value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
        properties:
          session.timeout.ms: 15000
-       group-id: ckafka-0larvru5
+       group-id: test-consumer-group
   datasource:
-    url: jdbc:mysql://172.16.0.8:2890/traceability_platform?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    url: jdbc:mysql://cdb-puhlb3l3.gz.tencentcdb.com:10076/traceability_platform?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root
-    password: zs-mall24
+    password: adminfeng5148@
     druid:
       initial-size: 5 #连接池初始化大小
       min-idle: 10 #最小空闲连接数
@@ -67,4 +67,6 @@ spring:
     serialization:
       write-dates-as-timestamps: true
 logging:
-  path: /var/logs #配置日志生成路径
+  level:
+    root: info #日志配置DEBUG,INFO,WARN,ERROR
+    com.zsl.traceapi: debug

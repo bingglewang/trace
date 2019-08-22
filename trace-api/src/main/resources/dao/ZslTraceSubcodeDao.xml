@@ -76,7 +76,8 @@
         <foreach collection="list" item="item" index="index" open="" close="" separator=";">
             UPDATE zsl_trace_subcode
             <set>
-                is_leaf = 'N'
+                is_leaf = 'N',
+                node_level = #{item.nodeLevel}
             </set>
             <where>
                 id = #{item.id}
@@ -91,6 +92,16 @@
     <select id="selectByParenId" resultMap="BaseResultMap">
         SELECT * FROM `zsl_trace_subcode` where parent_id = #{parentId};
     </select>
+
+    <update id="deleteCodeRelation">
+        UPDATE zsl_trace_subcode
+        <set>
+            parent_id  = null
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
 
     <select id="selectBySubCode" resultMap="BaseResultMap">
         SELECT *  FROM `zsl_trace_subcode` WHERE trace_sub_code_number = #{traceSubCode} LIMIT 1;

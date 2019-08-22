@@ -177,7 +177,7 @@ public class TraceServiceImpl implements TraceService {
                 Long bussiPaperCount = merchant.getPaperLabelUpper();
                 //需要扣除的纸质数量
                 Long requirePaperCount = 0L;
-                if(bussiPaperCount - 0 != 0){
+                if(bussiPaperCount - 0 != 0 && zslTraceInfo.getTraceApplyType() == 1){
                     Merchant updatePaperCount = new Merchant();
                     updatePaperCount.setMerchantId(merchant.getMerchantId());
                     if(bussiPaperCount - zslTraceInfo.getTraceApplyCount() < 0 ){
@@ -989,7 +989,7 @@ public class TraceServiceImpl implements TraceService {
         if(zslTraceSubcode == null){
             return CommonResult.failed("外码不存在");
         }else if("Y".equals(zslTraceSubcode.getIsLeaf())){
-            return CommonResult.failed("该外码还不是外码");
+            return CommonResult.failed("该码还不是外码");
         }
         Integer nodeLevel = 1;
         List<TraceOutCodeUpdateParam> traceOutCodeUpdateParams = new ArrayList<>();
@@ -1002,6 +1002,10 @@ public class TraceServiceImpl implements TraceService {
             }
             if(outCode.equals(subCode)){
                 return CommonResult.failed("不能关联自己");
+            }
+            //判断是否循环关联
+            if(zslTraceSubcode.getParentId() != null && zslTraceSubcode.getParentId() - zslTraceSubcodeItem.getId() == 0){
+                return CommonResult.failed("不能循环关联");
             }
             traceCodeNumberSet.add(zslTraceSubcodeItem.getTraceCodeNumber());
             //关联子码
@@ -1026,6 +1030,8 @@ public class TraceServiceImpl implements TraceService {
           updateLevel.setTraceCodeNumber(it.next());
         int i = zslTraceSubcodeDao.updateOutCodeBatch(traceOutCodeUpdateParams);
         zslTraceSubcodeMapper.updateByPrimaryKeySelective(updateLevel);
+        //修改为小程序端
+        updateTraceBack4(updateLevel.getTraceCodeNumber());
         return CommonResult.success("关联成功");
     }
 
@@ -1037,6 +1043,10 @@ public class TraceServiceImpl implements TraceService {
         }
         if("N".equals(zslTraceSubcode.getIsLeaf())){
             return -1;//该码已经为外码
+        }
+        List<ZslTracePoint> tracePointList = zslTraceSubcodeDao.selectTracePointNodes(zslTraceSubcode.getTraceGoodId(),zslTraceSubcode.getTraceIndex(),zslTraceSubcode.getTraceCodeNumber());
+        if(tracePointList.size() - 1 > 0){
+            return -5;//该码已经发过货了
         }
         ZslTraceExample zslTraceExample = new ZslTraceExample();
         ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
@@ -1054,7 +1064,23 @@ public class TraceServiceImpl implements TraceService {
         if(i < 0){
             return -2;
         }
+        updateTraceBack4(zslTraceList.get(0).getTraceCodeNumber());
         return i;
+    }
+
+    //判断编码是否存在
+    public boolean isCodeExist(OutCodeBatch outCodeBatch){
+        for(Long i = outCodeBatch.getOutCodeStart();i <= outCodeBatch.getOutCodeEnd();i++ ){
+            ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectById(i);
+            if(zslTraceSubcode == null)
+                return false;
+        }
+        for(Long m = outCodeBatch.getInCodeStart();m <= outCodeBatch.getInCodeEnd();m++){
+            ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectById(m);
+            if(zslTraceSubcode == null)
+                return false;
+        }
+        return true;
     }
 
     @Override
@@ -1062,16 +1088,24 @@ public class TraceServiceImpl implements TraceService {
         //判断需要转成外码的内码，本身是否为外码
         Set<Long> isRepeat = new HashSet<>();
         List<Long> conflictSids = new ArrayList<>();
+        List<Long> confilctSidPoint = new ArrayList<>();
         String traceCodeNumber = "";
         for(Long i = outCodeBatch.getOutCodeStart();i <= outCodeBatch.getOutCodeEnd();i++ ){
             if(!isRepeat.add(i)){
                 return CommonResult.failed("编号不能交叉");
             }
             ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectById(i);
+            List<ZslTracePoint> tracePointList = zslTraceSubcodeDao.selectTracePointNodes(zslTraceSubcode.getTraceGoodId(),zslTraceSubcode.getTraceIndex(),zslTraceSubcode.getTraceCodeNumber());
+            if(tracePointList.size() - 1 > 0){
+                confilctSidPoint.add(i);
+            }
             traceCodeNumber = zslTraceSubcode.getTraceCodeNumber();
             if("N".equals(zslTraceSubcode.getIsLeaf())){
                 conflictSids.add(i);
             }
+        }
+        if(!CollectionUtils.isEmpty(confilctSidPoint)){
+            return CommonResult.failed(confilctSidPoint,"这些编号已经发过货了");
         }
         if(CollectionUtils.isEmpty(conflictSids)){
             ZslTraceExample zslTraceExample = new ZslTraceExample();
@@ -1097,12 +1131,21 @@ public class TraceServiceImpl implements TraceService {
                     traceOutCodeUpdateParams.add(traceOutCodeUpdateParam);
                     TraceOutCodeUpdateParam updateParent = new TraceOutCodeUpdateParam();
                     updateParent.setId(outCodeNum);
+                    ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectById(m);
+                    updateParent.setNodeLevel(zslTraceSubcode.getNodeLevel() + 1);
                     traceOutCodeUpdateParamParent.add(updateParent);
                     outCodeNum++;
                 }
             }
+            boolean isCodeExist = isCodeExist(outCodeBatch);
+            //判断编码是否存在
+            if(!isCodeExist){
+                return CommonResult.failed("编号不存在");
+            }
             int j = zslTraceSubcodeDao.updateOutCodeById(traceOutCodeUpdateParamParent);
             int i = zslTraceSubcodeDao.updateOutCodeBatch(traceOutCodeUpdateParams);
+            //修改为小程序端
+            updateTraceBack4(zslTraceList.get(0).getTraceCodeNumber());
             return CommonResult.success("转换成功");
         }else{
             return CommonResult.failed(conflictSids,"这些编号已经为外码了");
@@ -1194,20 +1237,24 @@ public class TraceServiceImpl implements TraceService {
                 result = 1;
             }
             if( result > 0){
-                //修改追溯状态为小程序端（字段back4） Y
-                ZslTraceExample zslTraceExample = new ZslTraceExample();
-                ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
-                criteria.andTraceCodeNumberEqualTo(zslTraceSubcode.getTraceCodeNumber());
-                List<ZslTrace> zslTraceList = zslTraceMapper.selectByExample(zslTraceExample);
-                if(!CollectionUtils.isEmpty(zslTraceList)){
-                    ZslTrace traceUpdate = new ZslTrace();
-                    traceUpdate.setTraceId(zslTraceList.get(0).getTraceId());
-                    traceUpdate.setTraceBack4("Y");
-                    zslTraceMapper.updateByPrimaryKeySelective(traceUpdate);
-                }
+                updateTraceBack4(zslTraceSubcode.getTraceCodeNumber());
             }
         }
         return result;
+    }
+
+    //修改追溯状态为小程序端（字段back4） Y
+    public void updateTraceBack4(String traceCodeNumber){
+        ZslTraceExample zslTraceExample = new ZslTraceExample();
+        ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
+        criteria.andTraceCodeNumberEqualTo(traceCodeNumber);
+        List<ZslTrace> zslTraceList = zslTraceMapper.selectByExample(zslTraceExample);
+        if(!CollectionUtils.isEmpty(zslTraceList)){
+            ZslTrace traceUpdate = new ZslTrace();
+            traceUpdate.setTraceId(zslTraceList.get(0).getTraceId());
+            traceUpdate.setTraceBack4("Y");
+            zslTraceMapper.updateByPrimaryKeySelective(traceUpdate);
+        }
     }
 
     @Override
@@ -1313,10 +1360,28 @@ public class TraceServiceImpl implements TraceService {
         if(zslTraceSubcode == null){
             return CommonResult.failed("编码不存在");
         }
+        if(zslTraceSubcode.getTraceGoodId() == null){
+            return CommonResult.failed("该码还没录入");
+        }
+        ZslTraceExample zslTraceExample = new ZslTraceExample();
+        ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
+        criteria.andTraceCodeNumberEqualTo(zslTraceSubcode.getTraceCodeNumber());
+        List<ZslTrace> traceList = zslTraceMapper.selectByExample(zslTraceExample);
+        if(traceList.size() > 0){
+            if("N".equals(traceList.get(0).getTraceBack4())){
+                return CommonResult.failed("该批次号非小程序端");
+            }
+        }
         countCode(zslTraceSubcode);
         ZslTraceSubcodeVo result  = new ZslTraceSubcodeVo();
         BeanUtils.copyProperties(zslTraceSubcode,result);
         result.setCount(count);
+        List<ZslTracePoint> tracePointList = zslTraceSubcodeDao.selectTracePointNodes(zslTraceSubcode.getTraceGoodId(),zslTraceSubcode.getTraceIndex(),zslTraceSubcode.getTraceCodeNumber());
+        if(tracePointList.size() - 1 > 0){
+            result.setIsEnable(-1); //该码已经发过货
+        }else{
+            result.setIsEnable(1); //正常
+        }
         return CommonResult.success(result);
     }
 
@@ -1387,6 +1452,13 @@ public class TraceServiceImpl implements TraceService {
         Integer toNumber = fromNumber + pageSize;
         List<ZslTraceSubcode> pageList = zslTraceSubcodeDao.getSuCodeByPage(pageSize,toNumber,fromNumber,traceCodeNumber);
 
+        if(pageList.size() - 20 < 0){
+            Integer fromNumberItem = toNumber + 1;
+            Integer toNumberItem = fromNumberItem + pageSize;
+            List<ZslTraceSubcode> pageListItem =  zslTraceSubcodeDao.getSuCodeByPage(pageSize,toNumberItem,fromNumberItem,traceCodeNumber);
+
+        }
+
         List<ZslTreeNode> result = new ArrayList<>();
         for(ZslTraceSubcode item : pageList){
             List<ZslTreeNode> resultItem = transeTreeNode(item);
@@ -1420,6 +1492,33 @@ public class TraceServiceImpl implements TraceService {
         return CommonResult.success(pageResult);
     }
 
+    @Override
+    public CommonResult deleteCodeRelation(Long id) {
+        int i = zslTraceSubcodeDao.deleteCodeRelation(id);
+        if(i > 0){
+            return CommonResult.success("修改成功");
+        }else{
+            return CommonResult.failed("修改失败");
+        }
+    }
+
+    @Override
+    public CommonResult getTreeListCode(RelationOutCode relationOutCode) {
+        List<ZslTraceSubcode> pageList = new ArrayList<>();
+        for(String subCode : relationOutCode.getSubCodeList()){
+            ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectBySubCode(subCode);
+            pageList.add(zslTraceSubcode);
+        }
+        List<ZslTreeNode> result = new ArrayList<>();
+        for(ZslTraceSubcode item : pageList){
+            List<ZslTreeNode> resultItem = transeTreeNode(item);
+            if(resultItem != null){
+                result.addAll(resultItem);
+            }
+        }
+        return CommonResult.success(result);
+    }
+
     List<ZslTreeNode> transeTreeNode(ZslTraceSubcode zslTraceSubcode){
         totalSubCode = new ArrayList<>();
         searchTreeNode(zslTraceSubcode);
@@ -1428,6 +1527,7 @@ public class TraceServiceImpl implements TraceService {
         for(ZslTraceSubcode item: totalSubCode){
             ZslTreeNode node = new ZslTreeNode();
             BeanUtils.copyProperties(item,node);
+            node.setName(item.getTraceSubCodeNumber());
             treeNodes.add(node);
         }
         List<ZslTreeNode> list = null;
