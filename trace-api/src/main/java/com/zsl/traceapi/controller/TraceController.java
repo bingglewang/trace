@@ -549,6 +549,8 @@ public class TraceController {
             return CommonResult.failed("该批次号不能在小程序端操作");
         }else if(i == -5){
             return CommonResult.failed("该码已经发过货了");
+        }else if(i == -6){
+            return CommonResult.failed("只能操作自己追溯码");
         }else{
             return CommonResult.success("转换成功");
         }
@@ -577,6 +579,12 @@ public class TraceController {
             return CommonResult.failed("外码还没有关联内码");
         }else if(i == -3){
             return CommonResult.failed("请先关联内码");
+        }else if(i == -4){
+            return CommonResult.failed("不要重复发货");
+        }else if(i == -5){
+            return CommonResult.failed("发货码为空");
+        }else if(i == -6){
+            return CommonResult.failed("只能操作自己追溯码");
         }else{
             return CommonResult.failed("发货失败");
         }

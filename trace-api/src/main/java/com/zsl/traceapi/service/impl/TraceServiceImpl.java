@@ -85,6 +85,10 @@ public class TraceServiceImpl implements TraceService {
 
     private List<ZslTraceSubcode> totalSubCode;
 
+    private List<ZslTraceSubcode> pageList;
+
+    private Integer searchCount;
+
     @Override
     public ZslTraceVo getZslTraceById(Integer id) {
         return zslTraceDao.getZslTraceDetailById(id);
@@ -991,6 +995,11 @@ public class TraceServiceImpl implements TraceService {
         }else if("Y".equals(zslTraceSubcode.getIsLeaf())){
             return CommonResult.failed("该码还不是外码");
         }
+
+        if(CollectionUtils.isEmpty(subCodeList)){
+            return CommonResult.failed("关联码不能为空");
+        }
+
         Integer nodeLevel = 1;
         List<TraceOutCodeUpdateParam> traceOutCodeUpdateParams = new ArrayList<>();
         List<String> errorCode = new ArrayList<>();
@@ -1023,11 +1032,15 @@ public class TraceServiceImpl implements TraceService {
         if(traceCodeNumberSet.size() >= 2){
             return CommonResult.failed("只能关联同一个批次号的编码");
         }
+
         updateLevel.setId(zslTraceSubcode.getId());
         updateLevel.setNodeLevel(nodeLevel + 1);
         Iterator<String> it = traceCodeNumberSet.iterator();
         if(it.hasNext())
           updateLevel.setTraceCodeNumber(it.next());
+        if(!isBussiSelf(updateLevel.getTraceCodeNumber())){
+            return CommonResult.failed("只能操作自己追溯码");
+        }
         int i = zslTraceSubcodeDao.updateOutCodeBatch(traceOutCodeUpdateParams);
         zslTraceSubcodeMapper.updateByPrimaryKeySelective(updateLevel);
         //修改为小程序端
@@ -1040,6 +1053,9 @@ public class TraceServiceImpl implements TraceService {
         ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectBySubCode(outCode);
         if(zslTraceSubcode == null){
             return -3;//编码不存在
+        }
+        if(!isBussiSelf(zslTraceSubcode.getTraceCodeNumber())){
+            return -6; //只能操作自己追溯码
         }
         if("N".equals(zslTraceSubcode.getIsLeaf())){
             return -1;//该码已经为外码
@@ -1095,6 +1111,9 @@ public class TraceServiceImpl implements TraceService {
                 return CommonResult.failed("编号不能交叉");
             }
             ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectById(i);
+            if(!isBussiSelf(zslTraceSubcode.getTraceCodeNumber())){
+                return CommonResult.failed("只能操作自己追溯码");
+            }
             List<ZslTracePoint> tracePointList = zslTraceSubcodeDao.selectTracePointNodes(zslTraceSubcode.getTraceGoodId(),zslTraceSubcode.getTraceIndex(),zslTraceSubcode.getTraceCodeNumber());
             if(tracePointList.size() - 1 > 0){
                 confilctSidPoint.add(i);
@@ -1215,10 +1234,91 @@ public class TraceServiceImpl implements TraceService {
     }
 
 
+    //判断是否为商家得批次号
+    public boolean isBussiSelf(String traceCodeNumber){
+        //获取用户登录信息
+        RequestContext requestContext = RequestContextMgr.getLocalContext();
+        JSONObject loginUser = requestContext.getJsonObject();
+        Integer accountType = Integer.parseInt(loginUser.get("accountType").toString());
+        int merchantId = 0;
+        if (accountType == 2) {
+            //商家
+            merchantId = Integer.parseInt((loginUser.getJSONObject("merchant").get("merchantId")).toString());
+        }
+        ZslTraceExample zslTraceExample = new ZslTraceExample();
+        ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
+        criteria.andTraceCodeNumberEqualTo(traceCodeNumber);
+        List<ZslTrace> traces = zslTraceMapper.selectByExample(zslTraceExample);
+        if(!CollectionUtils.isEmpty(traces)){
+            if(traces.get(0).getTraceBusinessId() - merchantId == 0){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        return true;
+    }
+
+    //判断是否发过货
+    public boolean isDeliverGoods(List<String> codeList){
+        boolean result = false;
+        for(int i = 0;i < codeList.size();i++){
+            ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectBySubCode(codeList.get(i));
+            // 是否为内码
+            if("Y".equals(zslTraceSubcode.getIsLeaf())){
+                result =  hasTracePoint(zslTraceSubcode);
+            }else{
+                List<ZslTraceSubcode> digui = new ArrayList<>();
+                digui.add(zslTraceSubcode);
+                result = getChildTracePoint(digui);
+            }
+        }
+        return result;
+    }
+
+    public boolean getChildTracePoint(List<ZslTraceSubcode> zslTraceSubcodeList){
+        for(ZslTraceSubcode zslTraceSubcode : zslTraceSubcodeList){
+            if("Y".equals(zslTraceSubcode.getIsLeaf())){
+                return  hasTracePoint(zslTraceSubcode);
+            }else{
+                List<ZslTraceSubcode> children = zslTraceSubcodeDao.selectByParenId(zslTraceSubcode.getId());
+                return getChildTracePoint(children);
+            }
+        }
+        return false;
+    }
+
+    public boolean hasTracePoint(ZslTraceSubcode zslTraceSubcode){
+        List<ZslTracePoint> tracePointList = zslTraceSubcodeDao.selectTracePointNodes(zslTraceSubcode.getTraceGoodId(),zslTraceSubcode.getTraceIndex(),zslTraceSubcode.getTraceCodeNumber());
+        if(tracePointList.size() - 1 > 0){
+            return true;
+        }else{
+           return false;
+        }
+    }
+
     @Override
     public int deliverGoods(DeliverGoods deliverGoods) {
         List<String> codeList = deliverGoods.getCodeNumber();
         int result = -1;
+
+        if(CollectionUtils.isEmpty(deliverGoods.getCodeNumber())){
+            return -5; //发货码为空
+        }
+
+        for(String subCode : codeList){
+            ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectBySubCode(subCode);
+            if(!isBussiSelf(zslTraceSubcode.getTraceCodeNumber())){
+                return -6; //只能操作自己追溯码
+            }
+        }
+
+
+        //判断是否已经发过货
+        if(isDeliverGoods(codeList)){
+            return -4; //不要重复发货
+        }
+
         for(int i = 0;i < codeList.size();i++){
             ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectBySubCode(codeList.get(i));
             // 是否为内码
@@ -1360,6 +1460,11 @@ public class TraceServiceImpl implements TraceService {
         if(zslTraceSubcode == null){
             return CommonResult.failed("编码不存在");
         }
+
+        if(!isBussiSelf(zslTraceSubcode.getTraceCodeNumber())){
+            return CommonResult.failed("只能操作自己追溯码");
+        }
+
         if(zslTraceSubcode.getTraceGoodId() == null){
             return CommonResult.failed("该码还没录入");
         }
@@ -1376,8 +1481,10 @@ public class TraceServiceImpl implements TraceService {
         ZslTraceSubcodeVo result  = new ZslTraceSubcodeVo();
         BeanUtils.copyProperties(zslTraceSubcode,result);
         result.setCount(count);
-        List<ZslTracePoint> tracePointList = zslTraceSubcodeDao.selectTracePointNodes(zslTraceSubcode.getTraceGoodId(),zslTraceSubcode.getTraceIndex(),zslTraceSubcode.getTraceCodeNumber());
-        if(tracePointList.size() - 1 > 0){
+        List<String> codeList = new ArrayList<>();
+        codeList.add(zslTraceSubcode.getTraceSubCodeNumber());
+        //判断是否已经发过货
+        if(isDeliverGoods(codeList)){
             result.setIsEnable(-1); //该码已经发过货
         }else{
             result.setIsEnable(1); //正常
@@ -1446,18 +1553,31 @@ public class TraceServiceImpl implements TraceService {
         return CommonResult.success(resultMap);
     }
 
+    public void getCodePageRecursion(Integer pageSize,Integer toNumber,Integer fromNumber,String traceCodeNumber){
+        List<ZslTraceSubcode> itemList = zslTraceSubcodeDao.getSuCodeByPage(pageSize,toNumber,fromNumber,traceCodeNumber);
+        if((searchCount - 100 >= 0) && CollectionUtils.isEmpty(itemList))
+            return ;
+
+        pageList.addAll(itemList);
+
+        if(pageList.size() - pageSize < 0){
+            searchCount++;
+            Integer fromNumberItem = toNumber + 1;
+            Integer toNumberItem = fromNumberItem + pageSize;
+            getCodePageRecursion(pageSize,toNumberItem,fromNumberItem,traceCodeNumber);
+        }else{
+            pageList = pageList.subList(0,pageSize);
+            return ;
+        }
+    }
+
     @Override
     public CommonResult getSuCodeByPage(Integer pageNum, Integer pageSize,String traceCodeNumber) {
         Integer fromNumber = (pageNum > 1 ? (pageNum - 1) * pageSize : 1);
         Integer toNumber = fromNumber + pageSize;
-        List<ZslTraceSubcode> pageList = zslTraceSubcodeDao.getSuCodeByPage(pageSize,toNumber,fromNumber,traceCodeNumber);
-
-        if(pageList.size() - 20 < 0){
-            Integer fromNumberItem = toNumber + 1;
-            Integer toNumberItem = fromNumberItem + pageSize;
-            List<ZslTraceSubcode> pageListItem =  zslTraceSubcodeDao.getSuCodeByPage(pageSize,toNumberItem,fromNumberItem,traceCodeNumber);
-
-        }
+        pageList = new ArrayList<>();
+        searchCount = 0;
+        getCodePageRecursion(pageSize,toNumber,fromNumber,traceCodeNumber);
 
         List<ZslTreeNode> result = new ArrayList<>();
         for(ZslTraceSubcode item : pageList){
@@ -1494,6 +1614,10 @@ public class TraceServiceImpl implements TraceService {
 
     @Override
     public CommonResult deleteCodeRelation(Long id) {
+        ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectById(id);
+        if(!isBussiSelf(zslTraceSubcode.getTraceCodeNumber())){
+         return CommonResult.failed("只能操作自己追溯码");
+        }
         int i = zslTraceSubcodeDao.deleteCodeRelation(id);
         if(i > 0){
             return CommonResult.success("修改成功");
@@ -1505,6 +1629,14 @@ public class TraceServiceImpl implements TraceService {
     @Override
     public CommonResult getTreeListCode(RelationOutCode relationOutCode) {
         List<ZslTraceSubcode> pageList = new ArrayList<>();
+        //外码树结构
+        ZslTraceSubcode outSubCode = zslTraceSubcodeDao.selectBySubCode(relationOutCode.getOutCode());
+        if(outSubCode != null){
+            List<ZslTraceSubcode> pageListOutCode =  zslTraceSubcodeDao.selectByParenId(outSubCode.getId());
+            pageList.addAll(pageListOutCode);
+        }
+
+        //子码树结构
         for(String subCode : relationOutCode.getSubCodeList()){
             ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectBySubCode(subCode);
             pageList.add(zslTraceSubcode);
