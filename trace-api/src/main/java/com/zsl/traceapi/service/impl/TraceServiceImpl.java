@@ -997,7 +997,14 @@ public class TraceServiceImpl implements TraceService {
         }
 
         if(CollectionUtils.isEmpty(subCodeList)){
-            return CommonResult.failed("关联码不能为空");
+            return CommonResult.failed("没有新的子码,请点击关联子码添加新的子码");
+        }
+
+        //判断是否发过货
+        List<String> codeList = new ArrayList<>();
+        codeList.add(zslTraceSubcode.getTraceSubCodeNumber());
+        if(isDeliverGoods(codeList)){
+            return CommonResult.failed("该码已经发过货,不能再关联"); //该码已经发过货
         }
 
         Integer nodeLevel = 1;
@@ -1553,7 +1560,7 @@ public class TraceServiceImpl implements TraceService {
         return CommonResult.success(resultMap);
     }
 
-    public void getCodePageRecursion(Integer pageSize,Integer toNumber,Integer fromNumber,String traceCodeNumber){
+    public void getCodePageRecursion(Integer pageNum,Integer pageSize,Integer toNumber,Integer fromNumber,String traceCodeNumber){
         List<ZslTraceSubcode> itemList = zslTraceSubcodeDao.getSuCodeByPage(pageSize,toNumber,fromNumber,traceCodeNumber);
         if((searchCount - 100 >= 0) && CollectionUtils.isEmpty(itemList))
             return ;
@@ -1564,8 +1571,19 @@ public class TraceServiceImpl implements TraceService {
             searchCount++;
             Integer fromNumberItem = toNumber + 1;
             Integer toNumberItem = fromNumberItem + pageSize;
-            getCodePageRecursion(pageSize,toNumberItem,fromNumberItem,traceCodeNumber);
+            getCodePageRecursion(pageNum,pageSize,toNumberItem,fromNumberItem,traceCodeNumber);
         }else{
+            int redisPageNum = 1;
+            if(fromNumber / pageSize == 0){
+                redisPageNum = fromNumber / pageSize;
+            }else{
+                redisPageNum = fromNumber / pageSize + 1;
+            }
+            if(redisPageNum - pageNum != 0) {
+                redisService.set("YM" + traceCodeNumber, redisPageNum + "");
+                // 重新刷新token时间
+                redisService.expire("YM" + traceCodeNumber, 7200);
+            }
             pageList = pageList.subList(0,pageSize);
             return ;
         }
@@ -1573,11 +1591,19 @@ public class TraceServiceImpl implements TraceService {
 
     @Override
     public CommonResult getSuCodeByPage(Integer pageNum, Integer pageSize,String traceCodeNumber) {
-        Integer fromNumber = (pageNum > 1 ? (pageNum - 1) * pageSize : 1);
+        String redisPageNumStr = redisService.get("YM"+traceCodeNumber);
+        Integer pageNum1 = 0;
+        if(StringUtils.isNotBlank(redisPageNumStr)){
+            pageNum1 = Integer.parseInt(redisPageNumStr);
+        }else{
+            pageNum1 = pageNum;
+        }
+
+        Integer fromNumber = (pageNum1 > 1 ? (pageNum1 - 1) * pageSize : 1);
         Integer toNumber = fromNumber + pageSize;
         pageList = new ArrayList<>();
         searchCount = 0;
-        getCodePageRecursion(pageSize,toNumber,fromNumber,traceCodeNumber);
+        getCodePageRecursion(pageNum,pageSize,toNumber,fromNumber,traceCodeNumber);
 
         List<ZslTreeNode> result = new ArrayList<>();
         for(ZslTraceSubcode item : pageList){
@@ -1618,6 +1644,14 @@ public class TraceServiceImpl implements TraceService {
         if(!isBussiSelf(zslTraceSubcode.getTraceCodeNumber())){
          return CommonResult.failed("只能操作自己追溯码");
         }
+
+        //判断是否发过货
+        List<String> codeList = new ArrayList<>();
+        codeList.add(zslTraceSubcode.getTraceSubCodeNumber());
+        if(isDeliverGoods(codeList)){
+            return CommonResult.failed("已经发过货，不能删除"); //该码已经发过货
+        }
+
         int i = zslTraceSubcodeDao.deleteCodeRelation(id);
         if(i > 0){
             return CommonResult.success("修改成功");
