@@ -19,7 +19,7 @@ public interface ZslTraceSubcodeDao {
     ZslTraceSubcode selectBySubCode(@Param("traceSubCode") String traceSubCode);
     ZslTraceSubcode selectById(@Param("id") Long id);
     int deleteByCodeNumber(@Param("traceCodeNumber") String traceCodeNumber);
-    List<ExcelTraceCode> exportExcel(@Param("fromIndex") Long fromIndex,@Param("toIndex") Long toIndex,@Param("traceCodeNumber") String traceCodeNumber);
+    List<Long> exportExcel(@Param("fromIndex") Long fromIndex,@Param("toIndex") Long toIndex,@Param("traceCodeNumber") String traceCodeNumber);
     List<ZslTraceSubcode> searchByIndexOrCode(@Param("traceIndexOrCode") String traceIndexOrCode,@Param("traceCodeNumber") String traceCodeNumber);
     List<ZslTraceSubcode> getSuCodeByPage(@Param("pageSize") Integer pageSize,@Param("toNumber") Integer toNumber,@Param("fromNumber") Integer fromNumber,@Param("traceCodeNumber") String traceCodeNumber);
     Long getTotalCount(@Param("toNumber") Integer toNumber,@Param("fromNumber") Integer fromNumber,@Param("traceCodeNumber") String traceCodeNumber);

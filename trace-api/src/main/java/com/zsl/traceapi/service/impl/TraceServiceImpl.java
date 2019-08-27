@@ -544,10 +544,19 @@ public class TraceServiceImpl implements TraceService {
             }else{
                 toIndex = new Long(currentPage*100000);
             }
-            List<ExcelTraceCode> list =  zslTraceSubcodeDao.exportExcel(fromIndex,toIndex,traceCode);
+            List<Long> subIds = zslTraceSubcodeDao.exportExcel(fromIndex,toIndex,traceCode);
+            List<ExcelTraceCode> list = new ArrayList<>();
+            for(Long idItem : subIds){
+                ExcelTraceCode excelTraceCode = new ExcelTraceCode();
+                StringBuffer stringBuffer = new StringBuffer();
+                stringBuffer.append("https://scode.cntracechain.com/#/Produce?SID=");
+                stringBuffer.append(idItem);
+                excelTraceCode.setCode(stringBuffer.toString());
+                list.add(excelTraceCode);
+            }
             workbook = ExcelExportUtil.exportBigExcel(params,ExcelTraceCode.class,list);
             Row row = workbook.getSheetAt(0).getRow(0);
-            workbook.getSheetAt(0).setColumnWidth(0, 6000);
+            workbook.getSheetAt(0).setColumnWidth(0, 16000);
         }
         ExcelExportUtil.closeExportBigExcel();
 
@@ -1560,50 +1569,65 @@ public class TraceServiceImpl implements TraceService {
         return CommonResult.success(resultMap);
     }
 
-    public void getCodePageRecursion(Integer pageNum,Integer pageSize,Integer toNumber,Integer fromNumber,String traceCodeNumber){
+    public void getCodePageRecursion(Long applyCount,Integer pageNum,Integer pageSize,Integer toNumber,Integer fromNumber,String traceCodeNumber){
         List<ZslTraceSubcode> itemList = zslTraceSubcodeDao.getSuCodeByPage(pageSize,toNumber,fromNumber,traceCodeNumber);
-        if((searchCount - 100 >= 0) && CollectionUtils.isEmpty(itemList))
+        if((searchCount - 100 >= 0) && CollectionUtils.isEmpty(itemList)){
+            pageList = getSubCode(pageNum,pageSize);
             return ;
-
+        }
         pageList.addAll(itemList);
 
-        if(pageList.size() - pageSize < 0){
+        if(fromNumber - applyCount >= 0){
+            pageList = getSubCode(pageNum,pageSize);
+            return ;
+        }
+
+        if(pageList.size() - (pageSize * pageNum) < 0){
             searchCount++;
             Integer fromNumberItem = toNumber + 1;
+            if(fromNumberItem - applyCount >= 0){
+                fromNumberItem = Integer.parseInt(applyCount.toString());
+            }
             Integer toNumberItem = fromNumberItem + pageSize;
-            getCodePageRecursion(pageNum,pageSize,toNumberItem,fromNumberItem,traceCodeNumber);
+            if(toNumberItem - applyCount >= 0){
+                toNumberItem = Integer.parseInt(applyCount.toString());
+            }
+            getCodePageRecursion(applyCount,pageNum,pageSize,toNumberItem,fromNumberItem,traceCodeNumber);
         }else{
-            int redisPageNum = 1;
-            if(fromNumber / pageSize == 0){
-                redisPageNum = fromNumber / pageSize;
-            }else{
-                redisPageNum = fromNumber / pageSize + 1;
-            }
-            if(redisPageNum - pageNum != 0) {
-                redisService.set("YM" + traceCodeNumber, redisPageNum + "");
-                // 重新刷新token时间
-                redisService.expire("YM" + traceCodeNumber, 7200);
-            }
-            pageList = pageList.subList(0,pageSize);
+            pageList = getSubCode(pageNum,pageSize);
             return ;
         }
     }
 
+
+    List<ZslTraceSubcode> getSubCode(Integer pageNum,Integer pageSize){
+        int startIndex = (pageNum - 1)*pageSize;
+        int endIndex = pageNum*pageSize;
+        if(pageNum*pageSize - pageList.size() >= 0){
+            endIndex = pageList.size();
+        }
+        if(startIndex - pageList.size() >= 0){
+            startIndex = pageList.size();
+        }
+        return pageList.subList(startIndex,endIndex);
+    }
+
     @Override
     public CommonResult getSuCodeByPage(Integer pageNum, Integer pageSize,String traceCodeNumber) {
-        String redisPageNumStr = redisService.get("YM"+traceCodeNumber);
-        Integer pageNum1 = 0;
-        if(StringUtils.isNotBlank(redisPageNumStr)){
-            pageNum1 = Integer.parseInt(redisPageNumStr);
-        }else{
-            pageNum1 = pageNum;
+        ZslTraceExample zslTraceExample = new ZslTraceExample();
+        ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
+        criteria.andTraceCodeNumberEqualTo(traceCodeNumber);
+        List<ZslTrace> traces = zslTraceMapper.selectByExample(zslTraceExample);
+        Long applyCount = 0L;
+        if(!CollectionUtils.isEmpty(traces)) {
+            applyCount = traces.get(0).getTraceApplyCount();
         }
-
-        Integer fromNumber = (pageNum1 > 1 ? (pageNum1 - 1) * pageSize : 1);
+        //Integer fromNumber = (pageNum > 1 ? (pageNum - 1) * pageSize : 1);
+        Integer fromNumber = 1;
         Integer toNumber = fromNumber + pageSize;
         pageList = new ArrayList<>();
         searchCount = 0;
-        getCodePageRecursion(pageNum,pageSize,toNumber,fromNumber,traceCodeNumber);
+        getCodePageRecursion(applyCount,pageNum,pageSize,toNumber,fromNumber,traceCodeNumber);
 
         List<ZslTreeNode> result = new ArrayList<>();
         for(ZslTraceSubcode item : pageList){
@@ -1616,13 +1640,10 @@ public class TraceServiceImpl implements TraceService {
         pageResult.setList(result);
         pageResult.setPageNum(pageNum);
         pageResult.setPageSize(pageSize);
-        String totalCountStr = redisService.get(traceCodeNumber);
-        Long totalCount = 0L;
-        if(StringUtils.isBlank(totalCountStr)){
-            ZslTraceExample zslTraceExample = new ZslTraceExample();
-            ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
-            criteria.andTraceCodeNumberEqualTo(traceCodeNumber);
-            List<ZslTrace> traces = zslTraceMapper.selectByExample(zslTraceExample);
+       // String totalCountStr = redisService.get(traceCodeNumber);
+        //Long totalCount = 0L;
+        Long totalCount = zslTraceSubcodeDao.getTotalCount(Integer.parseInt(traces.get(0).getTraceApplyCount() + ""), fromNumber, traceCodeNumber);
+       /* if(StringUtils.isBlank(totalCountStr)){
             if(!CollectionUtils.isEmpty(traces)) {
                 totalCount = zslTraceSubcodeDao.getTotalCount(Integer.parseInt(traces.get(0).getTraceApplyCount() + ""), fromNumber, traceCodeNumber);
                 redisService.set(traceCodeNumber,totalCount+"");
@@ -1631,7 +1652,7 @@ public class TraceServiceImpl implements TraceService {
             }
         }else{
             totalCount = Long.parseLong(totalCountStr);
-        }
+        }*/
         pageResult.setTotal(totalCount);
         Long totalPage = (totalCount + pageSize - 1) / pageSize;
         pageResult.setTotalPage(Integer.parseInt(totalPage+""));

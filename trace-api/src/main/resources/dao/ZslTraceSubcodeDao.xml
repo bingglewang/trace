@@ -27,7 +27,7 @@
     </resultMap>
 
     <resultMap id="BaseResultMapSub" type="com.zsl.traceapi.dto.ExcelTraceCode">
-        <result column="trace_sub_code_number" jdbcType="VARCHAR" property="code" />
+        <result column="id" jdbcType="BIGINT" property="code" />
     </resultMap>
 
     <insert id="insertCodeBatch">
@@ -96,7 +96,7 @@
     <update id="deleteCodeRelation">
         UPDATE zsl_trace_subcode
         <set>
-            parent_id  = null
+            parent_id  = -1
         </set>
         <where>
             id = #{id}
@@ -111,8 +111,8 @@
         SELECT *  FROM `zsl_trace_subcode` WHERE id = #{id} LIMIT 1;
     </select>
 
-    <select id="exportExcel" resultMap="BaseResultMapSub">
-        SELECT trace_sub_code_number
+    <select id="exportExcel" resultType="java.lang.Long">
+        SELECT id
         FROM `zsl_trace_subcode`
         where id BETWEEN
         (SELECT id from zsl_trace_subcode where trace_index = #{fromIndex} and trace_code_number = #{traceCodeNumber})
@@ -179,18 +179,17 @@
             and
             (SELECT id FROM `zsl_trace_subcode` where trace_index = #{toNumber} and trace_code_number = #{traceCodeNumber})
         )
-        and parent_id is null
+        and parent_id = -1
         and trace_good_id is not null
         ORDER BY node_level desc
-        LIMIT #{pageSize}
     </select>
 
     <select id="getTotalCount" resultType="java.lang.Long">
-        SELECT count(id) from zsl_trace_subcode where (id BETWEEN
+        SELECT count(parent_id) from zsl_trace_subcode where (id BETWEEN
         (SELECT id FROM `zsl_trace_subcode` where trace_index = #{fromNumber} and trace_code_number = #{traceCodeNumber})
         and
         (SELECT id FROM `zsl_trace_subcode` where trace_index = #{toNumber} and trace_code_number = #{traceCodeNumber}))
-        and parent_id is null
+        and parent_id = -1
         and trace_good_id is not null
     </select>
 
