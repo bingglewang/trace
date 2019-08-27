@@ -1126,6 +1126,11 @@ public class TraceServiceImpl implements TraceService {
             if(!isRepeat.add(i)){
                 return CommonResult.failed("编号不能交叉");
             }
+            boolean isCodeExist = isCodeExist(outCodeBatch);
+            //判断编码是否存在
+            if(!isCodeExist){
+                return CommonResult.failed("编号不存在");
+            }
             ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectById(i);
             if(!isBussiSelf(zslTraceSubcode.getTraceCodeNumber())){
                 return CommonResult.failed("只能操作自己追溯码");
@@ -1293,15 +1298,16 @@ public class TraceServiceImpl implements TraceService {
     }
 
     public boolean getChildTracePoint(List<ZslTraceSubcode> zslTraceSubcodeList){
+        boolean result = false;
         for(ZslTraceSubcode zslTraceSubcode : zslTraceSubcodeList){
             if("Y".equals(zslTraceSubcode.getIsLeaf())){
-                return  hasTracePoint(zslTraceSubcode);
+                result =  hasTracePoint(zslTraceSubcode);
             }else{
                 List<ZslTraceSubcode> children = zslTraceSubcodeDao.selectByParenId(zslTraceSubcode.getId());
-                return getChildTracePoint(children);
+                result = getChildTracePoint(children);
             }
         }
-        return false;
+        return result;
     }
 
     public boolean hasTracePoint(ZslTraceSubcode zslTraceSubcode){
