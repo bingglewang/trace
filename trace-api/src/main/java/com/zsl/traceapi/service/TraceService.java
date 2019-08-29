@@ -262,4 +262,10 @@ public interface TraceService {
      * @return
      */
     CommonResult getTreeListCode(RelationOutCode relationOutCode);
+
+    /**
+     * 判断是否扣除追溯记录积分
+     * @return
+     */
+    int hasDeductionIntegral(TraceRecordPointParam traceRecordPointParam);
 }

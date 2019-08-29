@@ -1712,6 +1712,43 @@ public class TraceServiceImpl implements TraceService {
         return CommonResult.success(result);
     }
 
+    @Override
+    public int hasDeductionIntegral(TraceRecordPointParam traceRecordPointParam) {
+        ZslTracePointExample zslTracePointExample = new ZslTracePointExample();
+        ZslTracePointExample.Criteria criteria = zslTracePointExample.createCriteria();
+        criteria.andTraceParentIdIsNull();
+        criteria.andTracePointIdEqualTo(traceRecordPointParam.getTraceParentId());
+        List<ZslTracePoint> zslTracePoints = zslTracePointMapper.selectByExample(zslTracePointExample);
+        if(CollectionUtils.isEmpty(zslTracePoints)){
+            return 1; //正常
+        }
+        //拿到追溯记录id
+        ZslTraceRecordExample zslTraceRecordExample = new ZslTraceRecordExample();
+        ZslTraceRecordExample.Criteria criteria1 = zslTraceRecordExample.createCriteria();
+        criteria1.andTraceCodeNumberEqualTo(zslTracePoints.get(0).getTraceCodeNumber());//批次号
+        criteria1.andTraceGoodIdEqualTo(zslTracePoints.get(0).getTraceGoodsId());//商品id
+        criteria1.andTraceFromNumberEqualTo(zslTracePoints.get(0).getTracePointFromNumber());
+        criteria1.andTraceToNumberEqualTo(zslTracePoints.get(0).getTracePointToNumber());
+        List<ZslTraceRecord> zslTraceRecordList = zslTraceRecordMapper.selectByExample(zslTraceRecordExample);
+        if(CollectionUtils.isEmpty(zslTraceRecordList)){
+            return -1;//父节点错误
+        }
+
+        //扣除积分列表查询是否扣除了积分
+        IntegralLogExample integralLogExample = new IntegralLogExample();
+        IntegralLogExample.Criteria criteria2 = integralLogExample.createCriteria();
+        criteria2.andFunctionIdEqualTo(zslTraceRecordList.get(0).getTraceRecordId());
+        criteria2.andFunctionTypeEqualTo(ServiceEnum.TRACE_RECORD.getId());
+        List<IntegralLog> integralLogs = integralLogMapper.selectByExample(integralLogExample);
+        if(CollectionUtils.isEmpty(integralLogs)){
+            return -2; //积分错误
+        }
+        if(integralLogs.get(0).getDeductStatus() != null && (integralLogs.get(0).getDeductStatus() - 2) != 0  ){
+            return -3; //积分为扣除
+        }
+        return 1;//正常
+    }
+
     List<ZslTreeNode> transeTreeNode(ZslTraceSubcode zslTraceSubcode){
         totalSubCode = new ArrayList<>();
         searchTreeNode(zslTraceSubcode);

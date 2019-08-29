@@ -311,6 +311,14 @@ public class TraceController {
         if(!repeat.equals("编码没有冲突")){
             return CommonResult.failed(repeat);
         }
+        int hasDeduct = traceService.hasDeductionIntegral(traceRecordPointParam);
+        if(hasDeduct == -1){
+            return CommonResult.failed("父节点错误");
+        }else if(hasDeduct == -2){
+            return CommonResult.failed("积分错误");
+        }else if(hasDeduct == -3){
+            return CommonResult.failed("请先扣除追溯记录积分");
+        }
         int count = traceService.traceRecordPointInsert(traceRecordPointParam);
         if (count > 0) {
             return CommonResult.success(count);
