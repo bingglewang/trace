@@ -39,8 +39,10 @@ public class MerchantAgent implements Serializable {
 
     private Date createTime;
 
+    @ApiModelProperty(value = "代理途径")
     private Byte agentPath;
 
+    @ApiModelProperty(value = "代理商品")
     private String agentGoods;
 
     private static final long serialVersionUID = 1L;

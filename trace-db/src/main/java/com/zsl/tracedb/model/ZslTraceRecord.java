@@ -22,6 +22,9 @@ public class ZslTraceRecord implements Serializable {
     @ApiModelProperty(value = "关联摊位id（没有则为非农贸）")
     private Integer traceStallId;
 
+    @ApiModelProperty(value = "已经扫过的产品数量")
+    private Long traceScanCount;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getTraceRecordId() {
@@ -72,6 +75,14 @@ public class ZslTraceRecord implements Serializable {
         this.traceStallId = traceStallId;
     }
 
+    public Long getTraceScanCount() {
+        return traceScanCount;
+    }
+
+    public void setTraceScanCount(Long traceScanCount) {
+        this.traceScanCount = traceScanCount;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -84,6 +95,7 @@ public class ZslTraceRecord implements Serializable {
         sb.append(", traceToNumber=").append(traceToNumber);
         sb.append(", traceFromNumber=").append(traceFromNumber);
         sb.append(", traceStallId=").append(traceStallId);
+        sb.append(", traceScanCount=").append(traceScanCount);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

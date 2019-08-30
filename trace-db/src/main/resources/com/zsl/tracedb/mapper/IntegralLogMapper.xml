@@ -11,6 +11,7 @@
     <result column="deduct_time" jdbcType="TIMESTAMP" property="deductTime" />
     <result column="deduct_status" jdbcType="INTEGER" property="deductStatus" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="mq_json_str" jdbcType="VARCHAR" property="mqJsonStr" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -72,7 +73,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, merchant_id, function_type, function_id, deduct_integral, surplus_integral, deduct_time, 
-    deduct_status, create_time
+    deduct_status, create_time, mq_json_str
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.IntegralLogExample" resultMap="BaseResultMap">
     select
@@ -110,10 +111,12 @@
     </selectKey>
     insert into integral_log (merchant_id, function_type, function_id, 
       deduct_integral, surplus_integral, deduct_time, 
-      deduct_status, create_time)
+      deduct_status, create_time, mq_json_str
+      )
     values (#{merchantId,jdbcType=INTEGER}, #{functionType,jdbcType=INTEGER}, #{functionId,jdbcType=INTEGER}, 
       #{deductIntegral,jdbcType=INTEGER}, #{surplusIntegral,jdbcType=INTEGER}, #{deductTime,jdbcType=TIMESTAMP}, 
-      #{deductStatus,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+      #{deductStatus,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{mqJsonStr,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.IntegralLog">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -145,6 +148,9 @@
       <if test="createTime != null">
         create_time,
       </if>
+      <if test="mqJsonStr != null">
+        mq_json_str,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="merchantId != null">
@@ -170,6 +176,9 @@
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mqJsonStr != null">
+        #{mqJsonStr,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -209,6 +218,9 @@
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.mqJsonStr != null">
+        mq_json_str = #{record.mqJsonStr,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -224,7 +236,8 @@
       surplus_integral = #{record.surplusIntegral,jdbcType=INTEGER},
       deduct_time = #{record.deductTime,jdbcType=TIMESTAMP},
       deduct_status = #{record.deductStatus,jdbcType=INTEGER},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      mq_json_str = #{record.mqJsonStr,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -256,6 +269,9 @@
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="mqJsonStr != null">
+        mq_json_str = #{mqJsonStr,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -268,7 +284,8 @@
       surplus_integral = #{surplusIntegral,jdbcType=INTEGER},
       deduct_time = #{deductTime,jdbcType=TIMESTAMP},
       deduct_status = #{deductStatus,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      mq_json_str = #{mqJsonStr,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

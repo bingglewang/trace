@@ -1,6 +1,8 @@
 package com.zsl.traceapi.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.zsl.traceapi.config.kafka.producer.TraceUpdateProducerKafka;
+import com.zsl.traceapi.config.rabbitmq.producer.TraceUpdateProducer;
 import com.zsl.traceapi.context.RequestContext;
 import com.zsl.traceapi.context.RequestContextMgr;
 import com.zsl.traceapi.dao.ZslTraceDao;
@@ -55,7 +57,7 @@ public class TraceController {
     private ZslTracePointMapper zslTracePointMapper;
 
     @Autowired
-    private ZslTraceDao zslTraceDao;
+    private TraceUpdateProducer traceUpdateProducer;
 
     @GetMapping("/{id:[0-9]+}")
     @ApiOperation("根据id获取追溯信息")
@@ -173,7 +175,7 @@ public class TraceController {
             AllianceBusiness allianceBusiness = allianceBusinessMapper.selectByPrimaryKey(jiamenId);
             if (allianceBusiness != null) {
                 //如果加盟商禁用，则属于总部
-                if(allianceBusiness.getAllianceBusinessStatus() == 1){
+                if(allianceBusiness.getAllianceBusinessStatus() == 0){
                     insertParam.setTraceCompanyName(Constant.ZONGBU);
                     insertParam.setTraceBack2(null); //总部加盟商id
                 }else{
@@ -593,7 +595,13 @@ public class TraceController {
             return CommonResult.failed("发货码为空");
         }else if(i == -6){
             return CommonResult.failed("只能操作自己追溯码");
-        }else{
+        }else if(i == -7){
+            return CommonResult.failed("积分不够，请进行充值");
+        }
+        else if(i == -8){
+            return CommonResult.failed("追溯码不存在");
+        }
+        else{
             return CommonResult.failed("发货失败");
         }
     }
@@ -670,4 +678,20 @@ public class TraceController {
     public  CommonResult getTracePointRecordBySid(Long sid){
         return traceService.getTracePointRecordBySid(sid);
     }
+
+    /**
+     * mq关联子码(积分扣除的时候调用)
+     * @return
+     */
+    @PostMapping("relationMqSubCode")
+    public CommonResult relationMqSubCode(@RequestBody RelationMqSuCodeParam relationMqSuCodeParam){
+        try {
+            traceUpdateProducer.sendMessage(relationMqSuCodeParam.getMqJsonStr(),100);
+            return CommonResult.success("发送成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return CommonResult.failed("发送失败");
+        }
+    }
 }
+

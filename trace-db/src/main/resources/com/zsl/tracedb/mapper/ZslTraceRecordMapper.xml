@@ -8,6 +8,7 @@
     <result column="trace_to_number" jdbcType="INTEGER" property="traceToNumber" />
     <result column="trace_from_number" jdbcType="INTEGER" property="traceFromNumber" />
     <result column="trace_stall_id" jdbcType="INTEGER" property="traceStallId" />
+    <result column="trace_scan_count" jdbcType="BIGINT" property="traceScanCount" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,7 +70,7 @@
   </sql>
   <sql id="Base_Column_List">
     trace_record_id, trace_code_number, trace_good_id, trace_to_number, trace_from_number, 
-    trace_stall_id
+    trace_stall_id, trace_scan_count
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.ZslTraceRecordExample" resultMap="BaseResultMap">
     select
@@ -106,9 +107,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into zsl_trace_record (trace_code_number, trace_good_id, trace_to_number, 
-      trace_from_number, trace_stall_id)
+      trace_from_number, trace_stall_id, trace_scan_count
+      )
     values (#{traceCodeNumber,jdbcType=VARCHAR}, #{traceGoodId,jdbcType=INTEGER}, #{traceToNumber,jdbcType=INTEGER}, 
-      #{traceFromNumber,jdbcType=INTEGER}, #{traceStallId,jdbcType=INTEGER})
+      #{traceFromNumber,jdbcType=INTEGER}, #{traceStallId,jdbcType=INTEGER}, #{traceScanCount,jdbcType=BIGINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.ZslTraceRecord">
     <selectKey keyProperty="traceRecordId" order="AFTER" resultType="java.lang.Integer">
@@ -131,6 +134,9 @@
       <if test="traceStallId != null">
         trace_stall_id,
       </if>
+      <if test="traceScanCount != null">
+        trace_scan_count,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="traceCodeNumber != null">
@@ -147,6 +153,9 @@
       </if>
       <if test="traceStallId != null">
         #{traceStallId,jdbcType=INTEGER},
+      </if>
+      <if test="traceScanCount != null">
+        #{traceScanCount,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -177,6 +186,9 @@
       <if test="record.traceStallId != null">
         trace_stall_id = #{record.traceStallId,jdbcType=INTEGER},
       </if>
+      <if test="record.traceScanCount != null">
+        trace_scan_count = #{record.traceScanCount,jdbcType=BIGINT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -189,7 +201,8 @@
       trace_good_id = #{record.traceGoodId,jdbcType=INTEGER},
       trace_to_number = #{record.traceToNumber,jdbcType=INTEGER},
       trace_from_number = #{record.traceFromNumber,jdbcType=INTEGER},
-      trace_stall_id = #{record.traceStallId,jdbcType=INTEGER}
+      trace_stall_id = #{record.traceStallId,jdbcType=INTEGER},
+      trace_scan_count = #{record.traceScanCount,jdbcType=BIGINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -212,6 +225,9 @@
       <if test="traceStallId != null">
         trace_stall_id = #{traceStallId,jdbcType=INTEGER},
       </if>
+      <if test="traceScanCount != null">
+        trace_scan_count = #{traceScanCount,jdbcType=BIGINT},
+      </if>
     </set>
     where trace_record_id = #{traceRecordId,jdbcType=INTEGER}
   </update>
@@ -221,7 +237,8 @@
       trace_good_id = #{traceGoodId,jdbcType=INTEGER},
       trace_to_number = #{traceToNumber,jdbcType=INTEGER},
       trace_from_number = #{traceFromNumber,jdbcType=INTEGER},
-      trace_stall_id = #{traceStallId,jdbcType=INTEGER}
+      trace_stall_id = #{traceStallId,jdbcType=INTEGER},
+      trace_scan_count = #{traceScanCount,jdbcType=BIGINT}
     where trace_record_id = #{traceRecordId,jdbcType=INTEGER}
   </update>
 </mapper>

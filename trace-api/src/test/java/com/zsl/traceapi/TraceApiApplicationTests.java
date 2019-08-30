@@ -2,6 +2,7 @@ package com.zsl.traceapi;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.zsl.traceapi.config.kafka.producer.TraceUpdateProducerKafka;
 import com.zsl.traceapi.config.rabbitmq.producer.TraceUpdateProducer;
 import com.zsl.traceapi.dao.ZslTraceSubcodeDao;
 import com.zsl.traceapi.dto.TraceCodeRelation;
@@ -27,7 +28,7 @@ public class TraceApiApplicationTests {
     private ZslTraceSubcodeDao zslTraceSubcodeDao;
 
     @Autowired
-    private TraceUpdateProducer traceUpdateProducer;
+    private TraceUpdateProducerKafka traceUpdateProducer;
 
     @Autowired
     ApplicationContext applicationContext;
@@ -47,7 +48,7 @@ public class TraceApiApplicationTests {
             traceCodeRelation.setStallId(123);
             traceCodeRelation.setTraceCodeNumber("zs1566272640215000574946242");
             String sendJsonStr = JSONObject.toJSONString(traceCodeRelation);
-            traceUpdateProducer.sendMessage(sendJsonStr,100);
+            traceUpdateProducer.sendMessage(sendJsonStr);
         }catch (Exception e){
 
         }

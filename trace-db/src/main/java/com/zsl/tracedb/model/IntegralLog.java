@@ -31,6 +31,9 @@ public class IntegralLog implements Serializable {
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
 
+    @ApiModelProperty(value = "用于mqjson进行关联子码参数")
+    private String mqJsonStr;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -105,6 +108,14 @@ public class IntegralLog implements Serializable {
         this.createTime = createTime;
     }
 
+    public String getMqJsonStr() {
+        return mqJsonStr;
+    }
+
+    public void setMqJsonStr(String mqJsonStr) {
+        this.mqJsonStr = mqJsonStr;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -120,6 +131,7 @@ public class IntegralLog implements Serializable {
         sb.append(", deductTime=").append(deductTime);
         sb.append(", deductStatus=").append(deductStatus);
         sb.append(", createTime=").append(createTime);
+        sb.append(", mqJsonStr=").append(mqJsonStr);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

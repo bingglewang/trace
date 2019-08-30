@@ -644,6 +644,76 @@ public class IntegralLogExample {
             addCriterion("create_time not between", value1, value2, "createTime");
             return (Criteria) this;
         }
+
+        public Criteria andMqJsonStrIsNull() {
+            addCriterion("mq_json_str is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMqJsonStrIsNotNull() {
+            addCriterion("mq_json_str is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMqJsonStrEqualTo(String value) {
+            addCriterion("mq_json_str =", value, "mqJsonStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andMqJsonStrNotEqualTo(String value) {
+            addCriterion("mq_json_str <>", value, "mqJsonStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andMqJsonStrGreaterThan(String value) {
+            addCriterion("mq_json_str >", value, "mqJsonStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andMqJsonStrGreaterThanOrEqualTo(String value) {
+            addCriterion("mq_json_str >=", value, "mqJsonStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andMqJsonStrLessThan(String value) {
+            addCriterion("mq_json_str <", value, "mqJsonStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andMqJsonStrLessThanOrEqualTo(String value) {
+            addCriterion("mq_json_str <=", value, "mqJsonStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andMqJsonStrLike(String value) {
+            addCriterion("mq_json_str like", value, "mqJsonStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andMqJsonStrNotLike(String value) {
+            addCriterion("mq_json_str not like", value, "mqJsonStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andMqJsonStrIn(List<String> values) {
+            addCriterion("mq_json_str in", values, "mqJsonStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andMqJsonStrNotIn(List<String> values) {
+            addCriterion("mq_json_str not in", values, "mqJsonStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andMqJsonStrBetween(String value1, String value2) {
+            addCriterion("mq_json_str between", value1, value2, "mqJsonStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andMqJsonStrNotBetween(String value1, String value2) {
+            addCriterion("mq_json_str not between", value1, value2, "mqJsonStr");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -67,6 +67,4 @@ spring:
     serialization:
       write-dates-as-timestamps: true
 logging:
-  level:
-    root: info #日志配置DEBUG,INFO,WARN,ERROR
-    com.zsl.traceapi: debug
+  path: /data/logs #配置日志生成路径

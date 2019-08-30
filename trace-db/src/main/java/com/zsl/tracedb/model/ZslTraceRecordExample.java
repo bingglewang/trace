@@ -473,6 +473,66 @@ public class ZslTraceRecordExample {
             addCriterion("trace_stall_id not between", value1, value2, "traceStallId");
             return (Criteria) this;
         }
+
+        public Criteria andTraceScanCountIsNull() {
+            addCriterion("trace_scan_count is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceScanCountIsNotNull() {
+            addCriterion("trace_scan_count is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceScanCountEqualTo(Long value) {
+            addCriterion("trace_scan_count =", value, "traceScanCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceScanCountNotEqualTo(Long value) {
+            addCriterion("trace_scan_count <>", value, "traceScanCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceScanCountGreaterThan(Long value) {
+            addCriterion("trace_scan_count >", value, "traceScanCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceScanCountGreaterThanOrEqualTo(Long value) {
+            addCriterion("trace_scan_count >=", value, "traceScanCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceScanCountLessThan(Long value) {
+            addCriterion("trace_scan_count <", value, "traceScanCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceScanCountLessThanOrEqualTo(Long value) {
+            addCriterion("trace_scan_count <=", value, "traceScanCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceScanCountIn(List<Long> values) {
+            addCriterion("trace_scan_count in", values, "traceScanCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceScanCountNotIn(List<Long> values) {
+            addCriterion("trace_scan_count not in", values, "traceScanCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceScanCountBetween(Long value1, Long value2) {
+            addCriterion("trace_scan_count between", value1, value2, "traceScanCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceScanCountNotBetween(Long value1, Long value2) {
+            addCriterion("trace_scan_count not between", value1, value2, "traceScanCount");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
