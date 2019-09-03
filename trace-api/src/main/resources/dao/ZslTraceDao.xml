@@ -37,6 +37,23 @@
         <result column="trace_refuse_remark" jdbcType="VARCHAR" property="traceRefuseRemark"></result>
     </resultMap>
 
+    <select id="getChartData" resultMap="zslTraceIDetailResultMap">
+        SELECT *
+        from merchant m
+        LEFT JOIN zsl_trace z
+        on z.trace_business_id = m.merchant_id
+        where
+        z.trace_handle_status = 1
+        and date_format(z.trace_review_date,'%Y-%m-%e %H:%i:%S') &lt;= date_format(#{endDate},'%Y-%m-%e %H:%i:%S')
+        and date_format(z.trace_review_date,'%Y-%m-%e %H:%i:%S') &gt;= date_format(#{startDate},'%Y-%m-%e %H:%i:%S')
+        <if test="companyId == 0">
+            and m.alliance_business_id is null
+        </if>
+        <if test="companyId != null and companyId != 0">
+            and m.alliance_business_id = #{companyId}
+        </if>
+    </select>
+
     <select id="getMerchantRankList" resultMap="getMerchantRank">
         SELECT m.merchant_id,m.merchant_name,
         sum(

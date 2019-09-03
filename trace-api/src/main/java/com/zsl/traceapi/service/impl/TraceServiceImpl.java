@@ -698,13 +698,10 @@ public class TraceServiceImpl implements TraceService {
                 for (int i = 1; i <= 12; i++) {
                     chartTitleList.add(i);
                     Long traceCount = 0L;
-                    ZslTraceExample zslTraceExample = new ZslTraceExample();
-                    ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
-                    criteria.andTraceHandleStatusEqualTo(1);//审核通过
-                    criteria.andTraceReviewDateGreaterThanOrEqualTo(DateUtil.getFirstDayOfMonth1(i));
-                    criteria.andTraceReviewDateLessThanOrEqualTo(DateUtil.getLastDayOfMonth1(i));
-                    List<ZslTrace> yestCount = zslTraceMapper.selectByExample(zslTraceExample);
-                    for (ZslTrace zslTraceyYest : yestCount) {
+                    String startDate = DateUtil.DateToString(DateUtil.getFirstDayOfMonth1(i),"yyyy-MM-dd HH:mm:ss");
+                    String endDate = DateUtil.DateToString(DateUtil.getLastDayOfMonth1(i),"yyyy-MM-dd HH:mm:ss");
+                    List<ZslTraceVo> yestCount =zslTraceDao.getChartData(companyId,startDate ,endDate );
+                    for (ZslTraceVo zslTraceyYest : yestCount) {
                         traceCount += zslTraceyYest.getTraceApplyCount();
                     }
                     chartDataList.add(traceCount);
@@ -716,13 +713,10 @@ public class TraceServiceImpl implements TraceService {
                     int mDay = cal.get(Calendar.DAY_OF_MONTH);//获取当前月份的日期号码
                     chartTitleList.add(mDay);
                     Long traceCount = 0L;
-                    ZslTraceExample zslTraceExample = new ZslTraceExample();
-                    ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
-                    criteria.andTraceHandleStatusEqualTo(1);//审核通过
-                    criteria.andTraceReviewDateGreaterThanOrEqualTo(DateUtil.getStart(itemDate));
-                    criteria.andTraceReviewDateLessThanOrEqualTo(DateUtil.getEnd(itemDate));
-                    List<ZslTrace> yestCount = zslTraceMapper.selectByExample(zslTraceExample);
-                    for (ZslTrace zslTraceyYest : yestCount) {
+                    String startDate = DateUtil.DateToString(DateUtil.getStart(itemDate),"yyyy-MM-dd HH:mm:ss");
+                    String endDate = DateUtil.DateToString(DateUtil.getEnd(itemDate),"yyyy-MM-dd HH:mm:ss");
+                    List<ZslTraceVo> yestCount =zslTraceDao.getChartData(companyId,startDate ,endDate );
+                    for (ZslTraceVo zslTraceyYest : yestCount) {
                         traceCount += zslTraceyYest.getTraceApplyCount();
                     }
                     chartDataList.add(traceCount);
@@ -733,14 +727,10 @@ public class TraceServiceImpl implements TraceService {
                 for (int i = 1; i <= 12; i++) {
                     chartTitleList.add(i);
                     Long traceCount = 0L;
-                    ZslTraceExample zslTraceExample = new ZslTraceExample();
-                    ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
-                    criteria.andTraceBack2IsNull();
-                    criteria.andTraceHandleStatusEqualTo(1);//审核通过
-                    criteria.andTraceReviewDateGreaterThanOrEqualTo(DateUtil.getFirstDayOfMonth1(i));
-                    criteria.andTraceReviewDateLessThanOrEqualTo(DateUtil.getLastDayOfMonth1(i));
-                    List<ZslTrace> yestCount = zslTraceMapper.selectByExample(zslTraceExample);
-                    for (ZslTrace zslTraceyYest : yestCount) {
+                    String startDate = DateUtil.DateToString(DateUtil.getFirstDayOfMonth1(i),"yyyy-MM-dd HH:mm:ss");
+                    String endDate = DateUtil.DateToString(DateUtil.getLastDayOfMonth1(i),"yyyy-MM-dd HH:mm:ss");
+                    List<ZslTraceVo> yestCount =zslTraceDao.getChartData(companyId,startDate ,endDate );
+                    for (ZslTraceVo zslTraceyYest : yestCount) {
                         traceCount += zslTraceyYest.getTraceApplyCount();
                     }
                     chartDataList.add(traceCount);
@@ -752,14 +742,10 @@ public class TraceServiceImpl implements TraceService {
                     int mDay = cal.get(Calendar.DAY_OF_MONTH);//获取当前月份的日期号码
                     chartTitleList.add(mDay);
                     Long traceCount = 0L;
-                    ZslTraceExample zslTraceExample = new ZslTraceExample();
-                    ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
-                    criteria.andTraceBack2IsNull();
-                    criteria.andTraceHandleStatusEqualTo(1);//审核通过
-                    criteria.andTraceReviewDateGreaterThanOrEqualTo(DateUtil.getStart(itemDate));
-                    criteria.andTraceReviewDateLessThanOrEqualTo(DateUtil.getEnd(itemDate));
-                    List<ZslTrace> yestCount = zslTraceMapper.selectByExample(zslTraceExample);
-                    for (ZslTrace zslTraceyYest : yestCount) {
+                    String startDate = DateUtil.DateToString(DateUtil.getStart(itemDate),"yyyy-MM-dd HH:mm:ss");
+                    String endDate = DateUtil.DateToString(DateUtil.getEnd(itemDate),"yyyy-MM-dd HH:mm:ss");
+                    List<ZslTraceVo> yestCount =zslTraceDao.getChartData(companyId,startDate ,endDate );
+                    for (ZslTraceVo zslTraceyYest : yestCount) {
                         traceCount += zslTraceyYest.getTraceApplyCount();
                     }
                     chartDataList.add(traceCount);
@@ -770,14 +756,10 @@ public class TraceServiceImpl implements TraceService {
                 for (int i = 1; i <= 12; i++) {
                     chartTitleList.add(i);
                     Long traceCount = 0L;
-                    ZslTraceExample zslTraceExample = new ZslTraceExample();
-                    ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
-                    criteria.andTraceBack2EqualTo(companyId);
-                    criteria.andTraceHandleStatusEqualTo(1);//审核通过
-                    criteria.andTraceReviewDateGreaterThanOrEqualTo(DateUtil.getFirstDayOfMonth1(i));
-                    criteria.andTraceReviewDateLessThanOrEqualTo(DateUtil.getLastDayOfMonth1(i));
-                    List<ZslTrace> yestCount = zslTraceMapper.selectByExample(zslTraceExample);
-                    for (ZslTrace zslTraceyYest : yestCount) {
+                    String startDate = DateUtil.DateToString(DateUtil.getFirstDayOfMonth1(i),"yyyy-MM-dd HH:mm:ss");
+                    String endDate = DateUtil.DateToString(DateUtil.getLastDayOfMonth1(i),"yyyy-MM-dd HH:mm:ss");
+                    List<ZslTraceVo> yestCount =zslTraceDao.getChartData(companyId,startDate ,endDate );
+                    for (ZslTraceVo zslTraceyYest : yestCount) {
                         traceCount += zslTraceyYest.getTraceApplyCount();
                     }
                     chartDataList.add(traceCount);
@@ -789,14 +771,10 @@ public class TraceServiceImpl implements TraceService {
                     int mDay = cal.get(Calendar.DAY_OF_MONTH);//获取当前月份的日期号码
                     chartTitleList.add(mDay);
                     Long traceCount = 0L;
-                    ZslTraceExample zslTraceExample = new ZslTraceExample();
-                    ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
-                    criteria.andTraceBack2EqualTo(companyId);
-                    criteria.andTraceHandleStatusEqualTo(1);//审核通过
-                    criteria.andTraceReviewDateGreaterThanOrEqualTo(DateUtil.getStart(itemDate));
-                    criteria.andTraceReviewDateLessThanOrEqualTo(DateUtil.getEnd(itemDate));
-                    List<ZslTrace> yestCount = zslTraceMapper.selectByExample(zslTraceExample);
-                    for (ZslTrace zslTraceyYest : yestCount) {
+                    String startDate = DateUtil.DateToString(DateUtil.getStart(itemDate),"yyyy-MM-dd HH:mm:ss");
+                    String endDate = DateUtil.DateToString(DateUtil.getEnd(itemDate),"yyyy-MM-dd HH:mm:ss");
+                    List<ZslTraceVo> yestCount =zslTraceDao.getChartData(companyId,startDate ,endDate );
+                    for (ZslTraceVo zslTraceyYest : yestCount) {
                         traceCount += zslTraceyYest.getTraceApplyCount();
                     }
                     chartDataList.add(traceCount);

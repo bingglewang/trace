@@ -9,6 +9,7 @@ import com.zsl.traceapi.dao.ZslTraceDao;
 import com.zsl.traceapi.dto.*;
 import com.zsl.traceapi.service.TraceService;
 import com.zsl.traceapi.util.Constant;
+import com.zsl.traceapi.util.IntegralEnum;
 import com.zsl.traceapi.util.TreeNode;
 import com.zsl.traceapi.util.TreeUtils;
 import com.zsl.traceapi.vo.TracePointTreeVo;
@@ -16,10 +17,7 @@ import com.zsl.traceapi.vo.TraceRecordVo;
 import com.zsl.traceapi.vo.ZslTraceVo;
 import com.zsl.tracecommon.CommonPage;
 import com.zsl.tracecommon.CommonResult;
-import com.zsl.tracedb.mapper.AllianceBusinessMapper;
-import com.zsl.tracedb.mapper.GoodsMapper;
-import com.zsl.tracedb.mapper.MerchantMapper;
-import com.zsl.tracedb.mapper.ZslTracePointMapper;
+import com.zsl.tracedb.mapper.*;
 import com.zsl.tracedb.model.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -55,6 +53,9 @@ public class TraceController {
 
     @Autowired
     private ZslTracePointMapper zslTracePointMapper;
+
+    @Autowired
+    private IntegralDeductRatioMapper integralDeductRatioMapper;
 
     @Autowired
     private TraceUpdateProducer traceUpdateProducer;
@@ -160,6 +161,13 @@ public class TraceController {
         //判断是否需要扣除积分
         //Long totalApplyCount = zslTraceDao.busiTotalTraceCount(zslTraceAddAndUpdateParam.getTraceBusinessId());
         if(zslTraceAddAndUpdateParam.getTraceApplyType() == 1 &&  zslTraceAddAndUpdateParam.getTraceApplyCount() - merchant.getPaperLabelUpper() > 0){
+            //判断积分是否充足
+            //积分判断
+            IntegralDeductRatio integralDeductRatio = integralDeductRatioMapper.selectByPrimaryKey(IntegralEnum.INTEGRAL_DECUCT_RATIO_TYPE_3.getId());
+            Long kouchu = (zslTraceAddAndUpdateParam.getTraceApplyCount() - merchant.getPaperLabelUpper()) * integralDeductRatio.getIntegralRatio();
+            if(merchant.getMerchantCoin() - kouchu < 0){
+                return CommonResult.failed("积分不足，请充值");
+            }
             resultStr = "申请成功，免费标签超过额度，需要扣除积分";
         }
         if (merchant == null) {

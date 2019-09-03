@@ -23,6 +23,8 @@ public interface ZslTraceDao {
 
     List<MerchantRankVo> getMerchantRankList(@Param("companyId")Integer companyId, @Param("startDate") String startDate, @Param("endDate") String endDate);
 
+    List<ZslTraceVo> getChartData(@Param("companyId")Integer companyId, @Param("startDate") String startDate, @Param("endDate") String endDate);
+
     List<GoodsTracePieVo> getPieChart(@Param("companyId")Integer companyId);
 
     List<NewTraceRecordVo> getNewTraceRecord(@Param("allianceBusinessId")Integer allianceBusinessId,@Param("merchantId")Integer merchantId);
