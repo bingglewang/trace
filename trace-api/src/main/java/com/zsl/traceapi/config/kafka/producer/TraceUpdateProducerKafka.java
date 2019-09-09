@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
-//@Component
+@Component
 public class TraceUpdateProducerKafka {
     private static Logger logger = LoggerFactory.getLogger(TraceUpdateProducerKafka.class);
 
-    //@Autowired
+    @Autowired
     KafkaTemplate kafkaTemplate;
 
     public void sendMessage(String traceCodeJson) throws Exception{

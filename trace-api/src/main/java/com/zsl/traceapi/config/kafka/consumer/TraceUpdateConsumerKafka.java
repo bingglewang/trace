@@ -15,15 +15,15 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-//@Component
+@Component
 public class TraceUpdateConsumerKafka {
     private static Logger logger = LoggerFactory.getLogger(TraceUpdateConsumerKafka.class);
 
-    //@Autowired
+    @Autowired
     private ZslTraceSubcodeDao zslTraceSubcodeDao;
 
 
-    //@KafkaListener(topics = "traceUpdate")
+    @KafkaListener(topics = "traceUpdate")
     public void handle(ConsumerRecord<?, ?> record){
         logger.info("接受到的json字符串:{}", record.value());
         String traceCodeJson = record.value().toString();

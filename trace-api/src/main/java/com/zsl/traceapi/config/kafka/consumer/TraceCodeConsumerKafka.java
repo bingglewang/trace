@@ -22,20 +22,20 @@ import java.util.List;
 /**
  * 追溯子码监听消费者
  */
-//@Component
+@Component
 public class TraceCodeConsumerKafka {
     private static Logger logger = LoggerFactory.getLogger(TraceCodeConsumerKafka.class);
 
-    //@Autowired
+    @Autowired
     private ZslTraceMapper zslTraceMapper;
 
-   // @Autowired
+    @Autowired
     private ZslTraceSubcodeDao zslTraceSubcodeDao;
 
-    //@Autowired
+    @Autowired
     private TraceCodeProducerKafka traceCodeProducerKafka;
 
-    //@KafkaListener(topics = "traceInsert")
+    @KafkaListener(topics = "traceInsert")
     public void handle(ConsumerRecord<?, ?> record){
         String traceCodeNumber = record.value().toString();
         new MyThread(traceCodeNumber).start();

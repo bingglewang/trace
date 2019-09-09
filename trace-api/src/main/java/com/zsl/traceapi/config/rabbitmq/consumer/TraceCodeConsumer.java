@@ -22,21 +22,21 @@ import java.util.List;
 /**
  * 追溯子码监听消费者
  */
-@Component
-@RabbitListener(queues = "trace.code.generator")
+//@Component
+//@RabbitListener(queues = "trace.code.generator")
 public class TraceCodeConsumer {
     private static Logger logger = LoggerFactory.getLogger(TraceCodeConsumer.class);
 
-    @Autowired
+    //@Autowired
     private ZslTraceMapper zslTraceMapper;
 
-    @Autowired
+    //@Autowired
     private ZslTraceSubcodeDao zslTraceSubcodeDao;
 
-    @Autowired
+    //@Autowired
     private TraceCodeProducer traceCodeProducer;
 
-    @RabbitHandler
+    //@RabbitHandler
     public void handle(String traceCodeNumber){
         new MyThread(traceCodeNumber).start();
     }

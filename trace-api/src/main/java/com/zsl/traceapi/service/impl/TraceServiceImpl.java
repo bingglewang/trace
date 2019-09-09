@@ -34,11 +34,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class TraceServiceImpl implements TraceService {
-    @Autowired
-    private RedisService redisService;
 
     @Autowired
     private ZslTraceMapper zslTraceMapper;
@@ -67,11 +66,8 @@ public class TraceServiceImpl implements TraceService {
     @Autowired
     private ZslTraceRecordMapper zslTraceRecordMapper;
 
-   /* @Autowired
-    private TraceCodeProducerKafka traceCodeProducerKafka;*/
-
     @Autowired
-    private TraceCodeProducer traceCodeProducer;
+    private TraceCodeProducerKafka traceCodeProducerKafka;
 
     @Autowired
     private ZslTraceSubcodeDao zslTraceSubcodeDao;
@@ -228,7 +224,7 @@ public class TraceServiceImpl implements TraceService {
                 }
                 //将追溯批次号放入队列
                 try {
-                    traceCodeProducer.sendMessage(passParam.getTraceCodeNumber(),100);
+                    traceCodeProducerKafka.sendMessage(passParam.getTraceCodeNumber());
                 }catch (Exception e){
                     return -8;  //追溯码生成错误
                 }
@@ -331,6 +327,7 @@ public class TraceServiceImpl implements TraceService {
                 zslTracePoint.setTracePointToNumber(item.getTraceToNumber()); //起始编码
                 zslTracePoint.setTracePointFromNumber(item.getTraceFromNumber());  //结束编码
                 zslTracePoint.setTraceCodeNumber(item.getTraceCodeNumber());//追溯批次码
+                zslTracePoint.setTracePointTime(new Date());
                 if (item.getTraceToNumber() - item.getTraceFromNumber() >= 0)
                     haveRelationCount += item.getTraceToNumber() - item.getTraceFromNumber() + 1;
                 zslTracePoint.setTraceGoodsId(item.getTraceGoodId()); // 所属商品id
@@ -1445,6 +1442,8 @@ public class TraceServiceImpl implements TraceService {
         zslScanRecord.setSid(scanRecordInsertParam.getSid());
         if(scanRecordInsertParam.getScanTime() != null && StringUtils.isNotBlank(scanRecordInsertParam.getScanTime().toString())){
             zslScanRecord.setScanTime(new Date(scanRecordInsertParam.getScanTime()));
+        }else{
+            zslScanRecord.setScanTime(new Date(scanRecordInsertParam.getScanTime()));
         }
         int i = zslScanRecordMapper.insert(zslScanRecord);
         return i;
@@ -1460,9 +1459,14 @@ public class TraceServiceImpl implements TraceService {
         for(ZslScanRecord zslScanRecord : scanRecordList){
             ScanRecordQueryParam scanRecordQueryParam = new ScanRecordQueryParam();
             scanRecordQueryParam.setScanAddress(zslScanRecord.getScanAddress());
-            scanRecordQueryParam.setScanTime(DateUtil.DateToString(zslScanRecord.getScanTime(),"yyyy-MM-dd HH:mm:ss"));
+            if(zslScanRecord.getScanTime() != null ){
+                scanRecordQueryParam.setScanTime(DateUtil.DateToString(zslScanRecord.getScanTime(),"yyyy-MM-dd HH:mm:ss"));
+            }else{
+                scanRecordQueryParam.setScanTime("");
+            }
             result.add(scanRecordQueryParam);
         }
+        result = result.stream().sorted((s1,s2) -> DateUtil.compare(s1.getScanTime(),s2.getScanTime())).collect(Collectors.toList());
         return result;
     }
 
@@ -1472,9 +1476,9 @@ public class TraceServiceImpl implements TraceService {
         if(zslTraceSubcode != null && "Y".equals(zslTraceSubcode.getIsLeaf())){
             Map<String,Object> result = new HashMap<>();
             //没有被扫过的
-            Long notScannedCount = zslTraceSubcodeDao.goodsScanCount(zslTraceSubcode.getTraceGoodId());
+            Long notScannedCount = zslTraceSubcodeDao.goodsScanCount(zslTraceSubcode.getTraceGoodId(),zslTraceSubcode.getTraceCodeNumber());
             // 总共的
-            Long TotalCount = zslTraceSubcodeDao.goodsTotalCount(zslTraceSubcode.getTraceGoodId());
+            Long TotalCount = zslTraceSubcodeDao.goodsTotalCount(zslTraceSubcode.getTraceGoodId(),zslTraceSubcode.getTraceCodeNumber());
             String traceCode = zslTraceSubcode.getTraceSubCodeNumber();
             // 第几次扫码
             Long  scanCount  = zslTraceSubcode.getScanCount() + 1;
@@ -1528,6 +1532,7 @@ public class TraceServiceImpl implements TraceService {
             updateScanCount.setId(zslTraceSubcode.getId());
             updateScanCount.setScanCount(zslTraceSubcode.getScanCount() + 1);
             zslTraceSubcodeMapper.updateByPrimaryKeySelective(updateScanCount);
+
             return CommonResult.success(result);
         }else{
             return CommonResult.failed("编码错误");
@@ -1687,7 +1692,6 @@ public class TraceServiceImpl implements TraceService {
         if(!CollectionUtils.isEmpty(traces)) {
             applyCount = traces.get(0).getTraceApplyCount();
         }
-        //Integer fromNumber = (pageNum > 1 ? (pageNum - 1) * pageSize : 1);
         Integer fromNumber = 1;
         Integer toNumber = fromNumber + pageSize;
         pageList = new ArrayList<>();
@@ -1705,19 +1709,7 @@ public class TraceServiceImpl implements TraceService {
         pageResult.setList(result);
         pageResult.setPageNum(pageNum);
         pageResult.setPageSize(pageSize);
-       // String totalCountStr = redisService.get(traceCodeNumber);
-        //Long totalCount = 0L;
         Long totalCount = zslTraceSubcodeDao.getTotalCount(Integer.parseInt(traces.get(0).getTraceApplyCount() + ""), fromNumber, traceCodeNumber);
-       /* if(StringUtils.isBlank(totalCountStr)){
-            if(!CollectionUtils.isEmpty(traces)) {
-                totalCount = zslTraceSubcodeDao.getTotalCount(Integer.parseInt(traces.get(0).getTraceApplyCount() + ""), fromNumber, traceCodeNumber);
-                redisService.set(traceCodeNumber,totalCount+"");
-                // 重新刷新token时间
-                redisService.expire(traceCodeNumber,7200);
-            }
-        }else{
-            totalCount = Long.parseLong(totalCountStr);
-        }*/
         pageResult.setTotal(totalCount);
         Long totalPage = (totalCount + pageSize - 1) / pageSize;
         pageResult.setTotalPage(Integer.parseInt(totalPage+""));

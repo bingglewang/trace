@@ -6,7 +6,7 @@ import org.springframework.amqp.core.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+//@Configuration
 public class RabbitmqConfig {
 
 
@@ -15,7 +15,7 @@ public class RabbitmqConfig {
      * @return
      */
 
-    @Bean
+    //@Bean
     DirectExchange traceCodeDirect(){
         return (DirectExchange) ExchangeBuilder
                 .directExchange(QueueEnum.QUEUE_TRACE_CODE.getExchange())
@@ -29,12 +29,12 @@ public class RabbitmqConfig {
      * @return
      */
 
-    @Bean
+   // @Bean
     public Queue traceCodeQueue(){
         return new Queue(QueueEnum.QUEUE_TRACE_CODE.getName(),true,false,false);
     }
 
-    @Bean
+   // @Bean
     public Queue traceUpdateQueue(){
         return new Queue(QueueEnum.QUEUE_UPDATE_CODE.getName(),true,false,false);
     }
@@ -47,7 +47,7 @@ public class RabbitmqConfig {
      * @return
      */
 
-    @Bean
+   // @Bean
     Binding traceCodeBinding(DirectExchange traceCodeDirect,Queue traceCodeQueue){
         return BindingBuilder
                 .bind(traceCodeQueue)
@@ -63,7 +63,7 @@ public class RabbitmqConfig {
      * @return
      */
 
-    @Bean
+   // @Bean
     Binding traceUpdateBinding(DirectExchange traceCodeDirect,Queue traceUpdateQueue){
         return BindingBuilder
                 .bind(traceUpdateQueue)

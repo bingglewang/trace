@@ -1,5 +1,6 @@
 package com.zsl.traceapi.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -33,6 +34,31 @@ public class DateUtil {
         System.out.println("本年开始点时间：" + getCurrentYearStartTime().toLocaleString());
         System.out.println("本年结束点时间：" + getCurrentYearEndTime().toLocaleString());
         System.out.println("上年开始点时间：" + getLastYearStartTime().toLocaleString());*/
+    }
+
+
+    public static int compare(String time1,String time2)
+    {
+        //如果想比较日期则写成"yyyy-MM-dd"就可以了
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        //将字符串形式的时间转化为Date类型的时间
+        Date a= null;
+        try {
+            a = sdf.parse(time1);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Date b= null;
+        try {
+            b = sdf.parse(time2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        //Date类的一个方法，如果a早于b返回true，否则返回false
+        if(a.before(b))
+            return 1;
+        else
+            return -1;
     }
 
     public static String DateToString(Date date, String dateFormat) {

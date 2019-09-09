@@ -58,7 +58,7 @@ public class TraceController {
     private IntegralDeductRatioMapper integralDeductRatioMapper;
 
     @Autowired
-    private TraceUpdateProducer traceUpdateProducer;
+    private TraceUpdateProducerKafka traceUpdateProducerKafka;
 
     @GetMapping("/{id:[0-9]+}")
     @ApiOperation("根据id获取追溯信息")
@@ -694,7 +694,7 @@ public class TraceController {
     @PostMapping("relationMqSubCode")
     public CommonResult relationMqSubCode(@RequestBody RelationMqSuCodeParam relationMqSuCodeParam){
         try {
-            traceUpdateProducer.sendMessage(relationMqSuCodeParam.getMqJsonStr(),100);
+            traceUpdateProducerKafka.sendMessage(relationMqSuCodeParam.getMqJsonStr());
             return CommonResult.success("发送成功");
         } catch (Exception e) {
             e.printStackTrace();

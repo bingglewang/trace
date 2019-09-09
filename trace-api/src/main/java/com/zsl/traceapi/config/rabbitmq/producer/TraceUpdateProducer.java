@@ -11,11 +11,11 @@ import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class TraceUpdateProducer {
     private static Logger logger = LoggerFactory.getLogger(TraceUpdateProducer.class);
 
-    @Autowired
+    //@Autowired
     private AmqpTemplate amqpTemplate;
 
     public void sendMessage(String traceCodeJson,final long delayTimes) throws Exception{
