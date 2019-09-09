@@ -3,6 +3,7 @@ package com.zsl.traceapi.util;
 public enum ServiceEnum {
     TRACE_RECORD(1,"申请追溯关联商品"),
     INSERT_TRACE_POINT(2,"新增追溯节点"),
+    SCODE_RECORD(6,"用户扫码追溯查询"),
     APPLY_PAPER(3,"申请纸质标签");
 
     private Integer id;

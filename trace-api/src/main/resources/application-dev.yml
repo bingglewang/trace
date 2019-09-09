@@ -30,7 +30,7 @@ spring:
 #             default-requeue-rejected: false
 #  #kafka
   kafka:
-     bootstrap-servers: 39.108.139.140:9092
+     bootstrap-servers: 193.112.186.190:9092
      #生产者
      producer:
        retries: 3

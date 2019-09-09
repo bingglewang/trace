@@ -12,6 +12,7 @@ import com.zsl.traceapi.util.Constant;
 import com.zsl.traceapi.util.IntegralEnum;
 import com.zsl.traceapi.util.TreeNode;
 import com.zsl.traceapi.util.TreeUtils;
+import com.zsl.traceapi.validator.RequestLimit;
 import com.zsl.traceapi.vo.TracePointTreeVo;
 import com.zsl.traceapi.vo.TraceRecordVo;
 import com.zsl.traceapi.vo.ZslTraceVo;
@@ -630,6 +631,7 @@ public class TraceController {
      * @return
      */
     @PostMapping("insertScanRecord")
+   // @RequestLimit(count=2,time=60)
     public CommonResult insertScanRecord(@RequestBody ScanRecordInsertParam scanRecordInsertParam){
         int i = traceService.insertScanRecord(scanRecordInsertParam);
         if(i > 0){
@@ -655,6 +657,7 @@ public class TraceController {
      * @return
      */
     @GetMapping("getTraceGoodInfo")
+    @RequestLimit(count=2,time=60)
     public CommonResult getTraceGoodInfo(Long sid,HttpServletRequest request){
         return traceService.getTraceGoodInfo(sid,request);
     }
