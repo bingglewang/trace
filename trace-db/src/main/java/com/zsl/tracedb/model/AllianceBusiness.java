@@ -19,7 +19,7 @@ public class AllianceBusiness implements Serializable {
     @ApiModelProperty(value = "加盟商入驻时间")
     private Date allianceBusinessEnterTime;
 
-    @ApiModelProperty(value = "加盟商状态：0正常 1：禁用")
+    @ApiModelProperty(value = "加盟商状态：0禁用 1：正常")
     private Byte allianceBusinessStatus;
 
     @ApiModelProperty(value = "一级行政ID")

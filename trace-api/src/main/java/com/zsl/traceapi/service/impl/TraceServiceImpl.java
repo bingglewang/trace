@@ -64,6 +64,9 @@ public class TraceServiceImpl implements TraceService {
     private IntegralLogMapper integralLogMapper;
 
     @Autowired
+    private CodeTraceIntegralLogMapper codeTraceIntegralLogMapper;
+
+    @Autowired
     private ZslTraceRecordMapper zslTraceRecordMapper;
 
     @Autowired
@@ -429,7 +432,7 @@ public class TraceServiceImpl implements TraceService {
         }
 
         for (TraceRecordInsertParam insertParam : traceRecordInsertParamList) {
-            if (insertParam.getTraceToNumber() <= 0 || insertParam.getTraceFromNumber() <= 0 || insertParam.getTraceToNumber() > zslTrace.get(0).getTraceApplyCount() || insertParam.getTraceFromNumber() >= zslTrace.get(0).getTraceApplyCount()) {
+            if (insertParam.getTraceToNumber() <= 0 || insertParam.getTraceFromNumber() <= 0 || insertParam.getTraceToNumber() > zslTrace.get(0).getTraceApplyCount() || insertParam.getTraceFromNumber() > zslTrace.get(0).getTraceApplyCount()) {
                 Goods goods = goodsMapper.selectByPrimaryKey(insertParam.getTraceGoodId());
                 if (goods != null)
                     return goods.getGoodsName() + "的编码不在申请数量范围内";
@@ -1482,15 +1485,14 @@ public class TraceServiceImpl implements TraceService {
             merchantUdate.setMerchantCoin(merchant.getMerchantCoin() - needCoin);
             int update = merchantMapper.updateByPrimaryKeySelective(merchantUdate);
             //扣除积分
-            IntegralLog integralLog = new IntegralLog();
+            CodeTraceIntegralLog integralLog = new CodeTraceIntegralLog();
             integralLog.setDeductIntegral(needCoin);//当前扣除的积分
-            integralLog.setFunctionId(zslTraceList.get(0).getTraceId());//操作业务主键id
-            integralLog.setFunctionType(ServiceEnum.SCODE_RECORD.getId());
+            integralLog.setFunctionId(Integer.parseInt(zslTraceSubcode.getId()+""));//操作业务主键id
             integralLog.setMerchantId(zslTraceList.get(0).getTraceBusinessId());//商家id
             integralLog.setDeductStatus(2);//已经扣减
             integralLog.setCreateTime(new Date());//创建时间
             integralLog.setDeductTime(new Date()); //扣减时间
-            int integLogInsert = integralLogMapper.insert(integralLog);
+            int integLogInsert = codeTraceIntegralLogMapper.insert(integralLog);
 
             //更新扫码次数
             ZslTraceSubcode updateScanCount = new ZslTraceSubcode();
@@ -1531,7 +1533,7 @@ public class TraceServiceImpl implements TraceService {
                         "            \"country\": \"XX\",\n" +
                         "            \"isp_id\": \"local\",\n" +
                         "            \"city\": \"内网IP\",\n" +
-                        "            \"ip\": \"192.168.2.173\",\n" +
+                        "            \"ip\": \""+ip+"\",\n" +
                         "            \"isp\": \"无法识别\",\n" +
                         "            \"county\": \"内网IP\",\n" +
                         "            \"region_id\": \"xx\",\n" +
@@ -1713,6 +1715,9 @@ public class TraceServiceImpl implements TraceService {
         }
         Integer fromNumber = 1;
         Integer toNumber = fromNumber + pageSize;
+        if(toNumber - applyCount >= 0){
+            toNumber = Integer.parseInt(applyCount+"");
+        }
         pageList = new ArrayList<>();
         searchCount = 0;
         getCodePageRecursion(applyCount,pageNum,pageSize,toNumber,fromNumber,traceCodeNumber);

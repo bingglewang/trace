@@ -31,7 +31,7 @@ public class RequestLimitAspect {
         String ip = IpUtil.getRequestIp(request);
         boolean isLimit = testLogin(ip,limit.time(),limit.count());
         if(!isLimit){
-            throw new RequestLimitException("不要频繁操作！！！！");
+            throw new RequestLimitException("不要频繁操作,60秒后再试");
         }
     }
 

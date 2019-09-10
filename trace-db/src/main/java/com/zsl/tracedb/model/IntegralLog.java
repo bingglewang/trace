@@ -10,7 +10,7 @@ public class IntegralLog implements Serializable {
     @ApiModelProperty(value = "商家id")
     private Integer merchantId;
 
-    @ApiModelProperty(value = "操作业务：1申请追溯关联商品、2新增追溯节点、3申请纸质标签、4录入商品、5编辑商品、6用户扫码追溯查询")
+    @ApiModelProperty(value = "操作业务：1申请追溯关联商品、2新增追溯节点、3申请纸质标签、4录入商品、5编辑商品")
     private Integer functionType;
 
     @ApiModelProperty(value = "操作业务主键id")

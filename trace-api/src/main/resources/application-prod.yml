@@ -67,4 +67,4 @@ spring:
     serialization:
       write-dates-as-timestamps: true
 logging:
-  path: /var/logs #配置日志生成路径
+  path: /data/logs #配置日志生成路径
