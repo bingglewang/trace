@@ -29,7 +29,7 @@ public class RequestLimitAspect {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         String ip = IpUtil.getRequestIp(request);
-        boolean isLimit = testLogin(ip,limit.time(),limit.count());
+        boolean isLimit = testLogin(ip,limit.time(),limit.count(), request.getSession().getId());
         if(!isLimit){
             throw new RequestLimitException("不要频繁操作,60秒后再试");
         }
@@ -40,11 +40,11 @@ public class RequestLimitAspect {
      * @param ip
      * @return
      */
-    public boolean testLogin(String ip,Long time,Integer count) {
-        String value = redisService.get(ip);
+    public boolean testLogin(String ip,Long time,Integer count,String session) {
+        String value = redisService.get(session+ip);
         if(value==null){
-            redisService.set(ip, "1");
-            redisService.expire(ip, time);
+            redisService.set(session+ip, "1");
+            redisService.expire(session+ip, time);
             return true;
         }else{
             int parseInt = Integer.parseInt(value);
@@ -52,7 +52,7 @@ public class RequestLimitAspect {
                 System.out.println("访问受限！！！！");
                 return false;
             }
-            redisService.increment(ip,1);
+            redisService.increment(session+ip,1);
         }
         return true;
     }

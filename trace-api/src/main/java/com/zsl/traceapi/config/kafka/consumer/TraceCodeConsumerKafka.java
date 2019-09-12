@@ -88,6 +88,8 @@ public class TraceCodeConsumerKafka {
                     updateTrace.setTraceId(zslTraceList.get(0).getTraceId());
                     updateTrace.setTraceBack3("Y");
                     zslTraceMapper.updateByPrimaryKeySelective(updateTrace);
+                    //调用生成三维码接口
+
                 }
                 logger.info("已经完成的批次号:{}", traceCodeNumber);
             }catch (Exception e){

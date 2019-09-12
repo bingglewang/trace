@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = RequestLimitException.class)
     public CommonResult requestLimitException(RequestLimitException e) {
-        return CommonResult.failed(e.getMessage());
+        return CommonResult.failed("",e.getMessage());
     }
 
     /**

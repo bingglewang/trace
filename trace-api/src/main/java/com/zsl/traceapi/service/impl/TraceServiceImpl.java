@@ -1514,39 +1514,46 @@ public class TraceServiceImpl implements TraceService {
             for(ZslTracePoint zslTracePoint : tracePointList){
                 ScanPointQueryParam scanPointQueryParam = new ScanPointQueryParam();
                 scanPointQueryParam.setTracePointName(zslTracePoint.getTracePointName());
-                scanPointQueryParam.setTracePointTime(DateUtil.DateToString(zslTracePoint.getTracePointTime(),"yyyy-MM-dd HH:mm:ss"));
+                if(zslTracePoint.getTracePointTime() != null){
+                    scanPointQueryParam.setTracePointTime(DateUtil.DateToString(zslTracePoint.getTracePointTime(),"yyyy-MM-dd HH:mm:ss"));
+                }else{
+                    scanPointQueryParam.setTracePointTime("");
+                }
                 tracePointNodes.add(scanPointQueryParam);
             }
             ClientInfo clientInfo =  ClientInfoUtil.get(request.getHeader("user-agent"));
-            AddressUtils addressUtils = new AddressUtils();
+           /* AddressUtils addressUtils = new AddressUtils();
+            String ip = IpUtil.getRequestIp(request);*/
             String ip = IpUtil.getRequestIp(request);
             String address = "";
-            try {
-                address = addressUtils.getAddresses("ip=" + ip, "utf-8");
+            address = "{\n" +
+                    "            \"area\": \"\",\n" +
+                    "            \"country\": \"XX\",\n" +
+                    "            \"isp_id\": \"local\",\n" +
+                    "            \"city\": \"内网IP\",\n" +
+                    "            \"ip\": \""+ip+"\",\n" +
+                    "            \"isp\": \"无法识别\",\n" +
+                    "            \"county\": \"内网IP\",\n" +
+                    "            \"region_id\": \"xx\",\n" +
+                    "            \"area_id\": \"\",\n" +
+                    "            \"county_id\": \"local\",\n" +
+                    "            \"region\": \"XX\",\n" +
+                    "            \"country_id\": \"xx\",\n" +
+                    "            \"city_id\": \"local\"\n" +
+                    "        }";
+            JSONObject jsonObject = JSONObject.parseObject(address);
+            result.put("netAndAddressInfo",jsonObject);
+           /* try {
+              *//*  address = addressUtils.getAddresses("ip=" + ip, "utf-8");
                 JSONObject jsonObject = JSONObject.parseObject(address);
                 jsonObject = jsonObject.getJSONObject("data");
-                result.put("netAndAddressInfo",jsonObject);
+                result.put("netAndAddressInfo",jsonObject);*//*
+
             }
             catch (Exception e) {
-                address = "{\n" +
-                        "            \"area\": \"\",\n" +
-                        "            \"country\": \"XX\",\n" +
-                        "            \"isp_id\": \"local\",\n" +
-                        "            \"city\": \"内网IP\",\n" +
-                        "            \"ip\": \""+ip+"\",\n" +
-                        "            \"isp\": \"无法识别\",\n" +
-                        "            \"county\": \"内网IP\",\n" +
-                        "            \"region_id\": \"xx\",\n" +
-                        "            \"area_id\": \"\",\n" +
-                        "            \"county_id\": \"local\",\n" +
-                        "            \"region\": \"XX\",\n" +
-                        "            \"country_id\": \"xx\",\n" +
-                        "            \"city_id\": \"local\"\n" +
-                        "        }";
-                JSONObject jsonObject = JSONObject.parseObject(address);
-                result.put("netAndAddressInfo",jsonObject);
+
                // e.printStackTrace();
-            }
+            }*/
             result.put("clientInfo",clientInfo);
             result.put("notScannedCount",notScannedCount);
             result.put("TotalCount",TotalCount);

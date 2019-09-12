@@ -23,7 +23,8 @@ public class AddressUtils {
     public static String getAddresses(String content, String encodingString)
             throws UnsupportedEncodingException {
         // 这里调用淘宝API
-        String urlStr = "http://ip.taobao.com/service/getIpInfo.php";
+        String urlStr = "http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js";
+        //String urlStr = "http://ip.taobao.com/service/getIpInfo.php";
         // 从http://whois.pconline.com.cn取得IP所在的省市区信息
         String returnStr = getResult(urlStr, content, encodingString);
         if (returnStr != null) {
