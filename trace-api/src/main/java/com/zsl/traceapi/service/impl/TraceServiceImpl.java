@@ -10,6 +10,7 @@ import com.zsl.traceapi.config.rabbitmq.producer.TraceCodeProducer;
 import com.zsl.traceapi.context.RequestContext;
 import com.zsl.traceapi.context.RequestContextMgr;
 import com.zsl.traceapi.dao.ZslTraceDao;
+import com.zsl.traceapi.dao.ZslTraceSidDao;
 import com.zsl.traceapi.dao.ZslTraceSubcodeDao;
 import com.zsl.traceapi.dto.*;
 import com.zsl.traceapi.service.RedisService;
@@ -81,6 +82,12 @@ public class TraceServiceImpl implements TraceService {
     @Autowired
     private ZslScanRecordMapper zslScanRecordMapper;
 
+    @Autowired
+    private ZslTraceSidDao zslTraceSidDao;
+
+    @Autowired
+    private ZslTraceSidMapper zslTraceSidMapper;
+
     private Integer count;
 
     private Integer countIntegral;
@@ -90,6 +97,51 @@ public class TraceServiceImpl implements TraceService {
     private List<ZslTraceSubcode> pageList;
 
     private Integer searchCount;
+
+    private static final Long INIT_SID_START_INDES = 18000000L;
+
+    @Override
+    public CommonResult preCreatePaperCode(Long preCreateCount) {
+        //插入之前首先获取最新的记录
+        ZslTraceSid newZslTraceSid = zslTraceSidDao.selectNewPrePaperCode();
+        Long sidStartIndex = 0L;
+        Long sidEndIndex = 0L;
+
+        ZslTraceSid zslTraceSid = new ZslTraceSid();
+        if(newZslTraceSid != null){
+            sidStartIndex = newZslTraceSid.getSidCurrentIndex() + 1; //起始下标
+            sidEndIndex = newZslTraceSid.getSidCurrentIndex() + preCreateCount; //结束下标
+            zslTraceSid.setSidCurrentIndex(newZslTraceSid.getSidCurrentIndex()); //sid当前下标
+            zslTraceSid.setCurrentEIndex(newZslTraceSid.getCurrentEIndex()); //当前电子下标
+        }else{
+            ZslTraceSid eTraceSid = zslTraceSidDao.selectByStartAndEndIndex();
+            if(eTraceSid == null) {
+                sidStartIndex = INIT_SID_START_INDES;//起始下标
+                sidEndIndex = INIT_SID_START_INDES + preCreateCount - 1; //结束下标
+                zslTraceSid.setCurrentEIndex(sidEndIndex + 1);
+                zslTraceSid.setSidCurrentIndex(sidStartIndex);
+            }else{
+                sidStartIndex = eTraceSid.getCurrentEIndex() + 1;
+                sidEndIndex = eTraceSid.getCurrentEIndex() + preCreateCount;
+                zslTraceSid.setCurrentEIndex(sidEndIndex + 1);
+                zslTraceSid.setSidCurrentIndex(sidStartIndex);
+            }
+        }
+        zslTraceSid.setCreateTime(new Date()); //生成时间
+        zslTraceSid.setSidStartIndex(sidStartIndex); //sid起始下标
+        zslTraceSid.setSidEndIndex(sidEndIndex); //sid结束下标
+        int i = zslTraceSidMapper.insert(zslTraceSid);
+        if(i > 0){
+            try {
+                traceCodeProducerKafka.sendMessage(zslTraceSid.getId().toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return CommonResult.success(sidStartIndex);
+        }else{
+            return CommonResult.failed("预生成失败");
+        }
+    }
 
     @Override
     public ZslTraceVo getZslTraceById(Integer id) {
@@ -1469,6 +1521,10 @@ public class TraceServiceImpl implements TraceService {
     public CommonResult getTraceGoodInfo(Long sid,HttpServletRequest request) {
         ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectById(sid);
         if(zslTraceSubcode != null && "Y".equals(zslTraceSubcode.getIsLeaf())){
+           if(zslTraceSubcode.getTraceGoodId() == null){
+               return CommonResult.failed("该追溯码尚未录入信息");
+           }
+
             //扣除商家积分
             IntegralDeductRatio integralDeductRatio = integralDeductRatioMapper.selectByPrimaryKey(IntegralEnum.INTEGRAL_DECUCT_RATIO_TYPE_5.getId());
             ZslTraceExample zslTraceExample = new ZslTraceExample();
@@ -1479,11 +1535,15 @@ public class TraceServiceImpl implements TraceService {
                 return CommonResult.failed("追溯码错误");
             }
             int needCoin = Integer.parseInt(integralDeductRatio.getIntegralRatio()+"");
-            Merchant merchant = merchantMapper.selectByPrimaryKey(zslTraceList.get(0).getTraceBusinessId());
-            Merchant merchantUdate = new Merchant();
-            merchantUdate.setMerchantId(zslTraceList.get(0).getTraceBusinessId());
-            merchantUdate.setMerchantCoin(merchant.getMerchantCoin() - needCoin);
-            int update = merchantMapper.updateByPrimaryKeySelective(merchantUdate);
+            if(zslTraceSubcode.getScanCount() == 0) {
+                Merchant merchant = merchantMapper.selectByPrimaryKey(zslTraceList.get(0).getTraceBusinessId());
+                Merchant merchantUdate = new Merchant();
+                merchantUdate.setMerchantId(zslTraceList.get(0).getTraceBusinessId());
+                merchantUdate.setMerchantCoin(merchant.getMerchantCoin() - needCoin);
+                int update = merchantMapper.updateByPrimaryKeySelective(merchantUdate);
+            }else{
+                needCoin = 0;
+            }
             //扣除积分
             CodeTraceIntegralLog integralLog = new CodeTraceIntegralLog();
             integralLog.setDeductIntegral(needCoin);//当前扣除的积分

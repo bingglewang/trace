@@ -164,6 +164,66 @@ public class ZslTraceSubcodeExample {
             return (Criteria) this;
         }
 
+        public Criteria andTraceSidIsNull() {
+            addCriterion("trace_sid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceSidIsNotNull() {
+            addCriterion("trace_sid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceSidEqualTo(Long value) {
+            addCriterion("trace_sid =", value, "traceSid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceSidNotEqualTo(Long value) {
+            addCriterion("trace_sid <>", value, "traceSid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceSidGreaterThan(Long value) {
+            addCriterion("trace_sid >", value, "traceSid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceSidGreaterThanOrEqualTo(Long value) {
+            addCriterion("trace_sid >=", value, "traceSid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceSidLessThan(Long value) {
+            addCriterion("trace_sid <", value, "traceSid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceSidLessThanOrEqualTo(Long value) {
+            addCriterion("trace_sid <=", value, "traceSid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceSidIn(List<Long> values) {
+            addCriterion("trace_sid in", values, "traceSid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceSidNotIn(List<Long> values) {
+            addCriterion("trace_sid not in", values, "traceSid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceSidBetween(Long value1, Long value2) {
+            addCriterion("trace_sid between", value1, value2, "traceSid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceSidNotBetween(Long value1, Long value2) {
+            addCriterion("trace_sid not between", value1, value2, "traceSid");
+            return (Criteria) this;
+        }
+
         public Criteria andTraceIndexIsNull() {
             addCriterion("trace_index is null");
             return (Criteria) this;

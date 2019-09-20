@@ -3,6 +3,7 @@
 <mapper namespace="com.zsl.tracedb.mapper.ZslTraceSubcodeMapper">
   <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.ZslTraceSubcode">
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="trace_sid" jdbcType="BIGINT" property="traceSid" />
     <result column="trace_index" jdbcType="BIGINT" property="traceIndex" />
     <result column="trace_code_number" jdbcType="VARCHAR" property="traceCodeNumber" />
     <result column="trace_sub_code_number" jdbcType="VARCHAR" property="traceSubCodeNumber" />
@@ -72,8 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, trace_index, trace_code_number, trace_sub_code_number, trace_good_id, trace_stall_id, 
-    parent_id, is_leaf, node_level, scan_count
+    id, trace_sid, trace_index, trace_code_number, trace_sub_code_number, trace_good_id, 
+    trace_stall_id, parent_id, is_leaf, node_level, scan_count
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.ZslTraceSubcodeExample" resultMap="BaseResultMap">
     select
@@ -109,14 +110,14 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into zsl_trace_subcode (trace_index, trace_code_number, trace_sub_code_number, 
-      trace_good_id, trace_stall_id, parent_id, 
-      is_leaf, node_level, scan_count
-      )
-    values (#{traceIndex,jdbcType=BIGINT}, #{traceCodeNumber,jdbcType=VARCHAR}, #{traceSubCodeNumber,jdbcType=VARCHAR}, 
-      #{traceGoodId,jdbcType=INTEGER}, #{traceStallId,jdbcType=INTEGER}, #{parentId,jdbcType=BIGINT}, 
-      #{isLeaf,jdbcType=CHAR}, #{nodeLevel,jdbcType=INTEGER}, #{scanCount,jdbcType=BIGINT}
-      )
+    insert into zsl_trace_subcode (trace_sid, trace_index, trace_code_number, 
+      trace_sub_code_number, trace_good_id, trace_stall_id, 
+      parent_id, is_leaf, node_level, 
+      scan_count)
+    values (#{traceSid,jdbcType=BIGINT}, #{traceIndex,jdbcType=BIGINT}, #{traceCodeNumber,jdbcType=VARCHAR}, 
+      #{traceSubCodeNumber,jdbcType=VARCHAR}, #{traceGoodId,jdbcType=INTEGER}, #{traceStallId,jdbcType=INTEGER}, 
+      #{parentId,jdbcType=BIGINT}, #{isLeaf,jdbcType=CHAR}, #{nodeLevel,jdbcType=INTEGER}, 
+      #{scanCount,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.ZslTraceSubcode">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -124,6 +125,9 @@
     </selectKey>
     insert into zsl_trace_subcode
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="traceSid != null">
+        trace_sid,
+      </if>
       <if test="traceIndex != null">
         trace_index,
       </if>
@@ -153,6 +157,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="traceSid != null">
+        #{traceSid,jdbcType=BIGINT},
+      </if>
       <if test="traceIndex != null">
         #{traceIndex,jdbcType=BIGINT},
       </if>
@@ -194,6 +201,9 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
+      <if test="record.traceSid != null">
+        trace_sid = #{record.traceSid,jdbcType=BIGINT},
+      </if>
       <if test="record.traceIndex != null">
         trace_index = #{record.traceIndex,jdbcType=BIGINT},
       </if>
@@ -229,6 +239,7 @@
   <update id="updateByExample" parameterType="map">
     update zsl_trace_subcode
     set id = #{record.id,jdbcType=BIGINT},
+      trace_sid = #{record.traceSid,jdbcType=BIGINT},
       trace_index = #{record.traceIndex,jdbcType=BIGINT},
       trace_code_number = #{record.traceCodeNumber,jdbcType=VARCHAR},
       trace_sub_code_number = #{record.traceSubCodeNumber,jdbcType=VARCHAR},
@@ -245,6 +256,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.ZslTraceSubcode">
     update zsl_trace_subcode
     <set>
+      <if test="traceSid != null">
+        trace_sid = #{traceSid,jdbcType=BIGINT},
+      </if>
       <if test="traceIndex != null">
         trace_index = #{traceIndex,jdbcType=BIGINT},
       </if>
@@ -277,7 +291,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.ZslTraceSubcode">
     update zsl_trace_subcode
-    set trace_index = #{traceIndex,jdbcType=BIGINT},
+    set trace_sid = #{traceSid,jdbcType=BIGINT},
+      trace_index = #{traceIndex,jdbcType=BIGINT},
       trace_code_number = #{traceCodeNumber,jdbcType=VARCHAR},
       trace_sub_code_number = #{traceSubCodeNumber,jdbcType=VARCHAR},
       trace_good_id = #{traceGoodId,jdbcType=INTEGER},

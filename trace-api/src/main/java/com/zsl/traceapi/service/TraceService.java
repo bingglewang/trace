@@ -7,6 +7,7 @@ import com.zsl.traceapi.vo.ZslTraceVo;
 import com.zsl.tracecommon.CommonResult;
 import com.zsl.tracedb.model.Goods;
 import com.zsl.tracedb.model.ZslTrace;
+import com.zsl.tracedb.model.ZslTraceSid;
 import com.zsl.tracedb.model.ZslTraceSubcode;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface TraceService {
+    /**
+     * 纸质标签预生成
+     * @param preCreateCount
+     * @return
+     */
+    CommonResult preCreatePaperCode(Long preCreateCount);
     /**
      * 根据id获取追溯
      * @param id

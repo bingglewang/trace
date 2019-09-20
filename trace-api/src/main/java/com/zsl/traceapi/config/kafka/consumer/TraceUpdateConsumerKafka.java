@@ -1,9 +1,16 @@
 package com.zsl.traceapi.config.kafka.consumer;
 
 import com.alibaba.fastjson.JSONObject;
+import com.zsl.traceapi.dao.ZslTraceSidDao;
 import com.zsl.traceapi.dao.ZslTraceSubcodeDao;
 import com.zsl.traceapi.dto.TraceCodeRelation;
 import com.zsl.traceapi.dto.TraceSubcodeUpdateParam;
+import com.zsl.traceapi.dto.TraceSubcodeUpdateParamSid;
+import com.zsl.tracedb.mapper.ZslTraceMapper;
+import com.zsl.tracedb.model.ZslTrace;
+import com.zsl.tracedb.model.ZslTraceExample;
+import com.zsl.tracedb.model.ZslTraceSid;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +29,12 @@ public class TraceUpdateConsumerKafka {
     @Autowired
     private ZslTraceSubcodeDao zslTraceSubcodeDao;
 
+    @Autowired
+    private ZslTraceMapper zslTraceMapper;
+
+    @Autowired
+    private ZslTraceSidDao zslTraceSidDao;
+
 
     @KafkaListener(topics = "traceUpdate")
     public void handle(ConsumerRecord<?, ?> record){
@@ -34,6 +47,17 @@ public class TraceUpdateConsumerKafka {
             int goodsId = traceCodeRelation.getGoodsId();
             int stallId = traceCodeRelation.getStallId();
             String traceCodeNumber = traceCodeRelation.getTraceCodeNumber();
+
+            //判断是纸质还是电子
+            ZslTraceExample zslTraceExample = new ZslTraceExample();
+            ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
+            criteria.andTraceCodeNumberEqualTo(traceCodeNumber);
+            List<ZslTrace> zslTraceList = zslTraceMapper.selectByExample(zslTraceExample);
+            boolean isPaperType = false;
+            if(CollectionUtils.isNotEmpty(zslTraceList) && zslTraceList.get(0).getTraceApplyType() - 1 == 0){
+                isPaperType = true;
+            }
+
             Long count = toNumber - fromNumber + 1;
             int totalPage = (int)Math.ceil((double)count/1000);
             for(int currentPage = 1; currentPage <= totalPage; currentPage++){
@@ -45,16 +69,41 @@ public class TraceUpdateConsumerKafka {
                 }else{
                     toIndex = new Long(currentPage*1000)+fromNumber;
                 }
-                List<Long> traceCodeIds = zslTraceSubcodeDao.selectByRange(fromIndex,toIndex,traceCodeNumber);
-                List<TraceSubcodeUpdateParam> updateParams = new ArrayList<>();
-                for(int i = 0;i < traceCodeIds.size();i++ ){
-                    TraceSubcodeUpdateParam traceSubcodeUpdateParam = new TraceSubcodeUpdateParam();
-                    traceSubcodeUpdateParam.setGoodsId(goodsId);
-                    traceSubcodeUpdateParam.setStallId(stallId);
-                    traceSubcodeUpdateParam.setId(traceCodeIds.get(i));
-                    updateParams.add(traceSubcodeUpdateParam);
+                // 区分纸质和电子
+                List<Long> traceCodeIds = null;
+                if(isPaperType){
+                    ZslTraceSid zslTraceSid = zslTraceSidDao.selectNewPrePaperCode();
+                    Long start = zslTraceSid.getSidCurrentIndex() + 1;
+                    Long end = zslTraceSid.getSidCurrentIndex() + count;
+                    traceCodeIds = zslTraceSubcodeDao.selectBySidRange(start,end);
+
+                    List<TraceSubcodeUpdateParamSid> updateSidParams = new ArrayList<>();
+                    for(int i = 0;i < traceCodeIds.size();i++ ){
+                        TraceSubcodeUpdateParamSid traceSubcodeUpdateParamSid = new TraceSubcodeUpdateParamSid();
+                       // traceSubcodeUpdateParamSid.setTraceIndex();
+                        traceSubcodeUpdateParamSid.setTraceCodeNumber(zslTraceList.get(0).getTraceCodeNumber());
+                        traceSubcodeUpdateParamSid.setGoodsId(goodsId);
+                        traceSubcodeUpdateParamSid.setStallId(stallId);
+                        traceSubcodeUpdateParamSid.setId(traceCodeIds.get(i));
+                        updateSidParams.add(traceSubcodeUpdateParamSid);
+                    }
+                   // new MyThread(updateParams).start();
+
+                }else{
+                    traceCodeIds = zslTraceSubcodeDao.selectByRange(fromIndex,toIndex,traceCodeNumber);
+
+                    List<TraceSubcodeUpdateParam> updateParams = new ArrayList<>();
+                    for(int i = 0;i < traceCodeIds.size();i++ ){
+                        TraceSubcodeUpdateParam traceSubcodeUpdateParam = new TraceSubcodeUpdateParam();
+                        traceSubcodeUpdateParam.setGoodsId(goodsId);
+                        traceSubcodeUpdateParam.setStallId(stallId);
+                        traceSubcodeUpdateParam.setId(traceCodeIds.get(i));
+                        updateParams.add(traceSubcodeUpdateParam);
+                    }
+                    new MyThread(updateParams).start();
                 }
-                new MyThread(updateParams).start();
+
+
             }
         }catch (Exception e){
 
@@ -66,6 +115,8 @@ public class TraceUpdateConsumerKafka {
         MyThread(List<TraceSubcodeUpdateParam> updateParams){
             this.updateParams = updateParams;
         }
+
+        @Override
         public void run (){
             int j = zslTraceSubcodeDao.updateGoodsAndStall(updateParams);
         }

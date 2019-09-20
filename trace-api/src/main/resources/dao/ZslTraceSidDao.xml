@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsl.traceapi.dao.ZslTraceSidDao">
+    <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.ZslTraceSid">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="sid_start_index" jdbcType="BIGINT" property="sidStartIndex" />
+        <result column="sid_end_index" jdbcType="BIGINT" property="sidEndIndex" />
+        <result column="sid_current_index" jdbcType="BIGINT" property="sidCurrentIndex" />
+        <result column="sid_pre_create" jdbcType="TINYINT" property="sidPreCreate" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="current_E_index" jdbcType="BIGINT" property="currentEIndex" />
+    </resultMap>
+
+    <select id="selectNewPrePaperCode" resultMap="BaseResultMap">
+        select * from zsl_trace_sid
+        where sid_pre_create = 1
+        ORDER BY create_time desc limit 1
+    </select>
+
+    <select id="selectByStartAndEndIndex" resultMap="BaseResultMap">
+        select * from zsl_trace_sid
+        where sid_start_index = 0 and sid_end_index = 0
+    </select>
+
+</mapper>

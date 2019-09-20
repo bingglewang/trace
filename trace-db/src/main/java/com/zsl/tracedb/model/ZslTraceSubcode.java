@@ -7,6 +7,9 @@ public class ZslTraceSubcode implements Serializable {
     @ApiModelProperty(value = "主键")
     private Long id;
 
+    @ApiModelProperty(value = "追溯sid")
+    private Long traceSid;
+
     @ApiModelProperty(value = "编码序号")
     private Long traceIndex;
 
@@ -42,6 +45,14 @@ public class ZslTraceSubcode implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getTraceSid() {
+        return traceSid;
+    }
+
+    public void setTraceSid(Long traceSid) {
+        this.traceSid = traceSid;
     }
 
     public Long getTraceIndex() {
@@ -123,6 +134,7 @@ public class ZslTraceSubcode implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", traceSid=").append(traceSid);
         sb.append(", traceIndex=").append(traceIndex);
         sb.append(", traceCodeNumber=").append(traceCodeNumber);
         sb.append(", traceSubCodeNumber=").append(traceSubCodeNumber);

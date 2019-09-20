@@ -13,6 +13,7 @@ import java.util.List;
 public interface ZslTraceSubcodeDao {
     int insertCodeBatch(@Param("list") List<TraceSubcodeInsertParam> traceSubcodeInsertParams);
     int insertCodeBatch1(@Param("list") List<TraceOutCodeByCount> traceOutCodeByCounts);
+    int insertCodePreSidBatch(@Param("list") List<TracePreSidInsertParam> tracePreSidInsertParams);
     ZslTraceSubcode selectByCodeNumber(@Param("traceCodeNumber") String traceCodeNumber);
     List<ZslTraceSubcode> selectByParenId(@Param("parentId") Long parentId);
     int deleteCodeRelation(@Param("id") Long id);
@@ -24,7 +25,9 @@ public interface ZslTraceSubcodeDao {
     List<ZslTraceSubcode> getSuCodeByPage(@Param("pageSize") Integer pageSize,@Param("toNumber") Integer toNumber,@Param("fromNumber") Integer fromNumber,@Param("traceCodeNumber") String traceCodeNumber);
     Long getTotalCount(@Param("toNumber") Integer toNumber,@Param("fromNumber") Integer fromNumber,@Param("traceCodeNumber") String traceCodeNumber);
     List<Long> selectByRange(@Param("fromIndex") Long fromIndex,@Param("toIndex") Long toIndex,@Param("traceCodeNumber") String traceCodeNumber);
+    List<Long> selectBySidRange(@Param("startSidIndex") Long startSidIndex,@Param("endSidIndex") Long endSidIndex);
     int updateGoodsAndStall(@Param(value = "list") List<TraceSubcodeUpdateParam> traceSubcodeUpdateParams);
+    int updateGoodsAndStallSid(@Param(value = "list") List<TraceSubcodeUpdateParamSid> traceSubcodeUpdateParams);
     int updateOutCodeBatch(@Param(value = "list") List<TraceOutCodeUpdateParam> traceOutCodeUpdateParams);
     int updateOutCodeById(@Param("list") List<TraceOutCodeUpdateParam> traceOutCodeUpdateParams);
     Long goodsScanCount(@Param("goodsId") Integer goodsId,@Param("traceCodeNumber") String traceCodeNumber);

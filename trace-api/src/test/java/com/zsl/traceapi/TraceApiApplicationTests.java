@@ -9,6 +9,7 @@ import com.zsl.traceapi.dto.TraceCodeRelation;
 import com.zsl.traceapi.dto.TraceSubcodeUpdateParam;
 import com.zsl.traceapi.service.RedisService;
 import com.zsl.tracedb.model.ZslTraceSubcode;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import java.util.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class TraceApiApplicationTests {
-    @Autowired
+ /*   @Autowired
     private RedisService redisService;
 
     @Autowired
@@ -31,16 +32,18 @@ public class TraceApiApplicationTests {
     private TraceUpdateProducerKafka traceUpdateProducer;
 
     @Autowired
-    ApplicationContext applicationContext;
+    ApplicationContext applicationContext;*/
 
     @Test
     public void contextLoads() {
+        //new NewTopic("traceCodeImage",1, (short) 1);
+
       /*  String code = "1";
         String traceCodeNumber = "zs1565082819008000574943893";
         List<ZslTraceSubcode> zslTraceSubcode = zslTraceSubcodeDao.searchByIndexOrCode(code,traceCodeNumber);
         System.out.println("结果："+zslTraceSubcode);*/
 
-        try {
+      /*  try {
             TraceCodeRelation traceCodeRelation = new TraceCodeRelation();
             traceCodeRelation.setFromNumber(1L);
             traceCodeRelation.setToNumber(10L);
@@ -51,7 +54,7 @@ public class TraceApiApplicationTests {
             traceUpdateProducer.sendMessage(sendJsonStr);
         }catch (Exception e){
 
-        }
+        }*/
       /*  Long start = System.currentTimeMillis();
         Long fromNumber = 1001L;
         Long toNumber = 4444L;
@@ -195,7 +198,7 @@ public class TraceApiApplicationTests {
     }
 
 
-    class MyThread extends Thread {
+   /* class MyThread extends Thread {
         List<TraceSubcodeUpdateParam> updateParams;
         MyThread(List<TraceSubcodeUpdateParam> updateParams){
             this.updateParams = updateParams;
@@ -204,5 +207,5 @@ public class TraceApiApplicationTests {
             int j = zslTraceSubcodeDao.updateGoodsAndStall(updateParams);
         }
 
-    }
+    }*/
 }

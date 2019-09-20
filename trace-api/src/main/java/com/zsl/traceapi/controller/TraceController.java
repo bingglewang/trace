@@ -704,5 +704,15 @@ public class TraceController {
             return CommonResult.failed("发送失败");
         }
     }
+
+    /**
+     * 纸质标签预生成
+     * @param preCreateCount
+     * @return
+     */
+    @GetMapping("preCreatePaperCode")
+    CommonResult preCreatePaperCode(Long preCreateCount){
+        return traceService.preCreatePaperCode(preCreateCount);
+    }
 }
 

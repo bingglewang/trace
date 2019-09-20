@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsl.tracedb.mapper.ZslTraceSidMapper">
+  <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.ZslTraceSid">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sid_start_index" jdbcType="BIGINT" property="sidStartIndex" />
+    <result column="sid_end_index" jdbcType="BIGINT" property="sidEndIndex" />
+    <result column="sid_current_index" jdbcType="BIGINT" property="sidCurrentIndex" />
+    <result column="sid_pre_create" jdbcType="TINYINT" property="sidPreCreate" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="current_E_index" jdbcType="BIGINT" property="currentEIndex" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, sid_start_index, sid_end_index, sid_current_index, sid_pre_create, create_time, 
+    current_E_index
+  </sql>
+  <select id="selectByExample" parameterType="com.zsl.tracedb.model.ZslTraceSidExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from zsl_trace_sid
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from zsl_trace_sid
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from zsl_trace_sid
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zsl.tracedb.model.ZslTraceSidExample">
+    delete from zsl_trace_sid
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zsl.tracedb.model.ZslTraceSid">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into zsl_trace_sid (sid_start_index, sid_end_index, sid_current_index, 
+      sid_pre_create, create_time, current_E_index
+      )
+    values (#{sidStartIndex,jdbcType=BIGINT}, #{sidEndIndex,jdbcType=BIGINT}, #{sidCurrentIndex,jdbcType=BIGINT}, 
+      #{sidPreCreate,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{currentEIndex,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zsl.tracedb.model.ZslTraceSid">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into zsl_trace_sid
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sidStartIndex != null">
+        sid_start_index,
+      </if>
+      <if test="sidEndIndex != null">
+        sid_end_index,
+      </if>
+      <if test="sidCurrentIndex != null">
+        sid_current_index,
+      </if>
+      <if test="sidPreCreate != null">
+        sid_pre_create,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="currentEIndex != null">
+        current_E_index,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sidStartIndex != null">
+        #{sidStartIndex,jdbcType=BIGINT},
+      </if>
+      <if test="sidEndIndex != null">
+        #{sidEndIndex,jdbcType=BIGINT},
+      </if>
+      <if test="sidCurrentIndex != null">
+        #{sidCurrentIndex,jdbcType=BIGINT},
+      </if>
+      <if test="sidPreCreate != null">
+        #{sidPreCreate,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="currentEIndex != null">
+        #{currentEIndex,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zsl.tracedb.model.ZslTraceSidExample" resultType="java.lang.Integer">
+    select count(*) from zsl_trace_sid
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update zsl_trace_sid
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.sidStartIndex != null">
+        sid_start_index = #{record.sidStartIndex,jdbcType=BIGINT},
+      </if>
+      <if test="record.sidEndIndex != null">
+        sid_end_index = #{record.sidEndIndex,jdbcType=BIGINT},
+      </if>
+      <if test="record.sidCurrentIndex != null">
+        sid_current_index = #{record.sidCurrentIndex,jdbcType=BIGINT},
+      </if>
+      <if test="record.sidPreCreate != null">
+        sid_pre_create = #{record.sidPreCreate,jdbcType=TINYINT},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.currentEIndex != null">
+        current_E_index = #{record.currentEIndex,jdbcType=BIGINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update zsl_trace_sid
+    set id = #{record.id,jdbcType=BIGINT},
+      sid_start_index = #{record.sidStartIndex,jdbcType=BIGINT},
+      sid_end_index = #{record.sidEndIndex,jdbcType=BIGINT},
+      sid_current_index = #{record.sidCurrentIndex,jdbcType=BIGINT},
+      sid_pre_create = #{record.sidPreCreate,jdbcType=TINYINT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      current_E_index = #{record.currentEIndex,jdbcType=BIGINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.ZslTraceSid">
+    update zsl_trace_sid
+    <set>
+      <if test="sidStartIndex != null">
+        sid_start_index = #{sidStartIndex,jdbcType=BIGINT},
+      </if>
+      <if test="sidEndIndex != null">
+        sid_end_index = #{sidEndIndex,jdbcType=BIGINT},
+      </if>
+      <if test="sidCurrentIndex != null">
+        sid_current_index = #{sidCurrentIndex,jdbcType=BIGINT},
+      </if>
+      <if test="sidPreCreate != null">
+        sid_pre_create = #{sidPreCreate,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="currentEIndex != null">
+        current_E_index = #{currentEIndex,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.ZslTraceSid">
+    update zsl_trace_sid
+    set sid_start_index = #{sidStartIndex,jdbcType=BIGINT},
+      sid_end_index = #{sidEndIndex,jdbcType=BIGINT},
+      sid_current_index = #{sidCurrentIndex,jdbcType=BIGINT},
+      sid_pre_create = #{sidPreCreate,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      current_E_index = #{currentEIndex,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
