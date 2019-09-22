@@ -50,12 +50,13 @@ public class TraceCodeConsumerKafka {
     @Autowired
     private TraceCodeImageProducerKafka traceCodeImageProducerKafka;
 
+
     @KafkaListener(topics = "traceInsert")
     public void handle(ConsumerRecord<?, ?> record){
         String traceCodeNumber = record.value().toString();
         try {
             Long zslTradeSid = Long.parseLong(traceCodeNumber);
-            new TraceSidThread(zslTradeSid);
+            new TraceSidThread(zslTradeSid).start();
         }catch (Exception e){
             new MyThread(traceCodeNumber).start();
         }
@@ -125,6 +126,9 @@ public class TraceCodeConsumerKafka {
                     logger.info(zslTraceSubcode + "的删除结果:{}", j);
                 }
 
+                //拿到最新sid信息
+                ZslTraceSid zslTraceSid = zslTraceSidDao.selectNewPrePaperCode();
+
                 //拿到追溯信息
                 ZslTraceExample zslTraceExample = new ZslTraceExample();
                 ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
@@ -135,8 +139,6 @@ public class TraceCodeConsumerKafka {
                     List<TraceSubcodeInsertParam> insertParams = new ArrayList<>();
                     Long currentTimeStamp = System.currentTimeMillis() * 1000;
 
-                    //拿到最新sid信息
-                    ZslTraceSid zslTraceSid = zslTraceSidDao.selectNewPrePaperCode();
                     Long sidStart = 18000000L;
                     if(zslTraceSid == null){
                         //插入一个记录电子下标的记录
@@ -175,6 +177,13 @@ public class TraceCodeConsumerKafka {
                     updateTrace.setTraceId(zslTraceList.get(0).getTraceId());
                     updateTrace.setTraceBack3("Y");
                     zslTraceMapper.updateByPrimaryKeySelective(updateTrace);
+                    //更改当前电子指针位置
+                    if(zslTraceSid != null){
+                        ZslTraceSid updateE = new ZslTraceSid();
+                        updateE.setId(zslTraceSid.getId());
+                        updateE.setCurrentEIndex(zslTraceSid.getCurrentEIndex() + zslTraceList.get(0).getTraceApplyCount() - 1);
+                        zslTraceSidMapper.updateByPrimaryKeySelective(updateE);
+                    }
                     //调用生成三维码接口
                     traceCodeImageProducerKafka.sendMessage(traceCodeNumber);
                 }

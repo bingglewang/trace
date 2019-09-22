@@ -277,11 +277,13 @@ public class TraceServiceImpl implements TraceService {
                         return -5;  //积分处理失败
                     }
                 }
-                //将追溯批次号放入队列
-                try {
-                    traceCodeProducerKafka.sendMessage(passParam.getTraceCodeNumber());
-                }catch (Exception e){
-                    return -8;  //追溯码生成错误
+                //将追溯批次号放入队列(电子才放入队列)
+                if(zslTraceInfo.getTraceApplyType() == 2) {
+                    try {
+                        traceCodeProducerKafka.sendMessage(passParam.getTraceCodeNumber());
+                    } catch (Exception e) {
+                        return -8;  //追溯码生成错误
+                    }
                 }
                 int i = zslTraceMapper.updateByPrimaryKeySelective(passParam);
                 if (i > 0) {

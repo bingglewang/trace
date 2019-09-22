@@ -7,6 +7,7 @@ import com.zsl.traceapi.dto.TraceCodeRelation;
 import com.zsl.traceapi.dto.TraceSubcodeUpdateParam;
 import com.zsl.traceapi.dto.TraceSubcodeUpdateParamSid;
 import com.zsl.tracedb.mapper.ZslTraceMapper;
+import com.zsl.tracedb.mapper.ZslTraceSidMapper;
 import com.zsl.tracedb.model.ZslTrace;
 import com.zsl.tracedb.model.ZslTraceExample;
 import com.zsl.tracedb.model.ZslTraceSid;
@@ -34,6 +35,9 @@ public class TraceUpdateConsumerKafka {
 
     @Autowired
     private ZslTraceSidDao zslTraceSidDao;
+
+    @Autowired
+    private ZslTraceSidMapper zslTraceSidMapper;
 
 
     @KafkaListener(topics = "traceUpdate")
@@ -75,19 +79,32 @@ public class TraceUpdateConsumerKafka {
                     ZslTraceSid zslTraceSid = zslTraceSidDao.selectNewPrePaperCode();
                     Long start = zslTraceSid.getSidCurrentIndex() + 1;
                     Long end = zslTraceSid.getSidCurrentIndex() + count;
+                    if(end > zslTraceSid.getSidEndIndex()){
+                        logger.info("预生成的纸质码不足:{}", zslTraceSid.getId());
+                        return;
+                    }
                     traceCodeIds = zslTraceSubcodeDao.selectBySidRange(start,end);
 
                     List<TraceSubcodeUpdateParamSid> updateSidParams = new ArrayList<>();
+                    Long countTemp = fromNumber;
                     for(int i = 0;i < traceCodeIds.size();i++ ){
                         TraceSubcodeUpdateParamSid traceSubcodeUpdateParamSid = new TraceSubcodeUpdateParamSid();
-                       // traceSubcodeUpdateParamSid.setTraceIndex();
+                        traceSubcodeUpdateParamSid.setTraceIndex(countTemp);
                         traceSubcodeUpdateParamSid.setTraceCodeNumber(zslTraceList.get(0).getTraceCodeNumber());
                         traceSubcodeUpdateParamSid.setGoodsId(goodsId);
                         traceSubcodeUpdateParamSid.setStallId(stallId);
                         traceSubcodeUpdateParamSid.setId(traceCodeIds.get(i));
                         updateSidParams.add(traceSubcodeUpdateParamSid);
+                        countTemp++;
                     }
-                   // new MyThread(updateParams).start();
+                    new MyThreadSid(updateSidParams).start();
+                    //更改当前纸质指针位置
+                    if(zslTraceSid != null){
+                        ZslTraceSid updateE = new ZslTraceSid();
+                        updateE.setId(zslTraceSid.getId());
+                        updateE.setSidCurrentIndex(zslTraceSid.getSidCurrentIndex() + count - 1);
+                        zslTraceSidMapper.updateByPrimaryKeySelective(updateE);
+                    }
 
                 }else{
                     traceCodeIds = zslTraceSubcodeDao.selectByRange(fromIndex,toIndex,traceCodeNumber);
@@ -108,6 +125,19 @@ public class TraceUpdateConsumerKafka {
         }catch (Exception e){
 
         }
+    }
+
+    class MyThreadSid extends Thread {
+        List<TraceSubcodeUpdateParamSid> updateParams;
+        MyThreadSid(List<TraceSubcodeUpdateParamSid> updateParams){
+            this.updateParams = updateParams;
+        }
+
+        @Override
+        public void run (){
+            int j = zslTraceSubcodeDao.updateGoodsAndStallSid(updateParams);
+        }
+
     }
 
     class MyThread extends Thread {
