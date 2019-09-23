@@ -24,6 +24,7 @@ public interface ZslTraceSubcodeDao {
     List<ZslTraceSubcode> searchByIndexOrCode(@Param("traceIndexOrCode") String traceIndexOrCode,@Param("traceCodeNumber") String traceCodeNumber);
     List<ZslTraceSubcode> getSuCodeByPage(@Param("pageSize") Integer pageSize,@Param("toNumber") Integer toNumber,@Param("fromNumber") Integer fromNumber,@Param("traceCodeNumber") String traceCodeNumber);
     Long getTotalCount(@Param("toNumber") Integer toNumber,@Param("fromNumber") Integer fromNumber,@Param("traceCodeNumber") String traceCodeNumber);
+    Long selectMaxToNumberByRecord(@Param("traceCodeNumber") String traceCodeNumber);
     List<Long> selectByRange(@Param("fromIndex") Long fromIndex,@Param("toIndex") Long toIndex,@Param("traceCodeNumber") String traceCodeNumber);
     List<Long> selectBySidRange(@Param("startSidIndex") Long startSidIndex,@Param("endSidIndex") Long endSidIndex);
     int updateGoodsAndStall(@Param(value = "list") List<TraceSubcodeUpdateParam> traceSubcodeUpdateParams);

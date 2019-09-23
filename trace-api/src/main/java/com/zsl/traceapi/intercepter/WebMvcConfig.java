@@ -15,6 +15,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/trace/insertScanRecord")
                 .excludePathPatterns("/trace/getScanRecordBySid")
                 .excludePathPatterns("/trace/getTraceGoodInfo")
+                .excludePathPatterns("/trace/preCreatePaperCode")
                 .excludePathPatterns("/error")
                 .excludePathPatterns("/getIpInfo.php");
     }

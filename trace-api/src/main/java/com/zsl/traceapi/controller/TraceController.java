@@ -6,6 +6,7 @@ import com.zsl.traceapi.config.rabbitmq.producer.TraceUpdateProducer;
 import com.zsl.traceapi.context.RequestContext;
 import com.zsl.traceapi.context.RequestContextMgr;
 import com.zsl.traceapi.dao.ZslTraceDao;
+import com.zsl.traceapi.dao.ZslTraceSidDao;
 import com.zsl.traceapi.dto.*;
 import com.zsl.traceapi.service.TraceService;
 import com.zsl.traceapi.util.Constant;
@@ -60,6 +61,7 @@ public class TraceController {
 
     @Autowired
     private TraceUpdateProducerKafka traceUpdateProducerKafka;
+
 
     @GetMapping("/{id:[0-9]+}")
     @ApiOperation("根据id获取追溯信息")
@@ -251,6 +253,8 @@ public class TraceController {
         }
         else if(i == -8){
             return CommonResult.failed("追溯码生成错误");
+        }else if(i == -9){
+            return CommonResult.failed("预生成的纸质码不足");
         }
         else {
             return CommonResult.failed("审核失败，服务器错误");
@@ -299,6 +303,12 @@ public class TraceController {
        if(!repeat.equals("编码没有冲突")){
            return CommonResult.failed(repeat);
        }
+
+       String hasPreCreate = traceService.hasPreCreate(traceRecordInsertParamList);
+        if(!hasPreCreate.equals("预留编码足够")){
+            return CommonResult.failed(hasPreCreate);
+        }
+
         int count = traceService.traceRecordInsert(traceRecordInsertParamList);
         if (count > 0) {
             return CommonResult.success(count);
@@ -508,6 +518,7 @@ public class TraceController {
     }
 
 
+    // 暂时没用
     @ApiOperation("设置生成外码")
     @PostMapping("/generateOutCode")
     @ResponseBody
@@ -520,7 +531,7 @@ public class TraceController {
         }
     }
 
-
+    // 暂时没用
     /**
      * 根据数量生成外码
      * @param count

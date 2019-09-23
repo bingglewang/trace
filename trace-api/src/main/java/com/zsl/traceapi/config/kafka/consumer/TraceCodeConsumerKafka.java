@@ -181,7 +181,7 @@ public class TraceCodeConsumerKafka {
                     if(zslTraceSid != null){
                         ZslTraceSid updateE = new ZslTraceSid();
                         updateE.setId(zslTraceSid.getId());
-                        updateE.setCurrentEIndex(zslTraceSid.getCurrentEIndex() + zslTraceList.get(0).getTraceApplyCount() - 1);
+                        updateE.setCurrentEIndex(zslTraceSid.getCurrentEIndex() + zslTraceList.get(0).getTraceApplyCount());
                         zslTraceSidMapper.updateByPrimaryKeySelective(updateE);
                     }
                     //调用生成三维码接口

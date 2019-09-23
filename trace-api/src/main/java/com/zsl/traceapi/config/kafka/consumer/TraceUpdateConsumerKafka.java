@@ -39,6 +39,8 @@ public class TraceUpdateConsumerKafka {
     @Autowired
     private ZslTraceSidMapper zslTraceSidMapper;
 
+    private static final Long INIT_SID_START_INDES = 18000000L;
+
 
     @KafkaListener(topics = "traceUpdate")
     public void handle(ConsumerRecord<?, ?> record){
@@ -77,8 +79,18 @@ public class TraceUpdateConsumerKafka {
                 List<Long> traceCodeIds = null;
                 if(isPaperType){
                     ZslTraceSid zslTraceSid = zslTraceSidDao.selectNewPrePaperCode();
-                    Long start = zslTraceSid.getSidCurrentIndex() + 1;
-                    Long end = zslTraceSid.getSidCurrentIndex() + count;
+                    if(zslTraceSid == null){
+                        return ;
+                    }
+                    Long start = 0L;
+                    Long end = 0L;
+                    if(INIT_SID_START_INDES - zslTraceSid.getSidCurrentIndex() == 0){
+                        start = zslTraceSid.getSidCurrentIndex();
+                        end = zslTraceSid.getSidCurrentIndex() + count -1;
+                    }else{
+                        start = zslTraceSid.getSidCurrentIndex() + 1;
+                        end = zslTraceSid.getSidCurrentIndex() + count;
+                    }
                     if(end > zslTraceSid.getSidEndIndex()){
                         logger.info("预生成的纸质码不足:{}", zslTraceSid.getId());
                         return;
@@ -102,7 +114,7 @@ public class TraceUpdateConsumerKafka {
                     if(zslTraceSid != null){
                         ZslTraceSid updateE = new ZslTraceSid();
                         updateE.setId(zslTraceSid.getId());
-                        updateE.setSidCurrentIndex(zslTraceSid.getSidCurrentIndex() + count - 1);
+                        updateE.setSidCurrentIndex(end);
                         zslTraceSidMapper.updateByPrimaryKeySelective(updateE);
                     }
 
