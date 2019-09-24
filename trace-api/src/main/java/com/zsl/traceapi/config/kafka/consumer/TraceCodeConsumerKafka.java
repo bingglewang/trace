@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.zsl.traceapi.dto.InitPaperStart.INIT_SID_START_INDES;
+
 /**
  * 追溯子码监听消费者
  */
@@ -139,7 +141,7 @@ public class TraceCodeConsumerKafka {
                     List<TraceSubcodeInsertParam> insertParams = new ArrayList<>();
                     Long currentTimeStamp = System.currentTimeMillis() * 1000;
 
-                    Long sidStart = 18000000L;
+                    Long sidStart = INIT_SID_START_INDES;
                     if(zslTraceSid == null){
                         //插入一个记录电子下标的记录
                         ZslTraceSid insertE = new ZslTraceSid();

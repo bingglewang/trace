@@ -213,10 +213,11 @@
        where
        (
              id BETWEEN
-            (SELECT id FROM `zsl_trace_subcode` where trace_index = #{fromNumber} and trace_code_number = #{traceCodeNumber})
+            (SELECT id FROM `zsl_trace_subcode` where trace_index = #{fromNumber} and trace_code_number = #{traceCodeNumber}  and trace_good_id is not null)
             and
-            (SELECT id FROM `zsl_trace_subcode` where trace_index = #{toNumber} and trace_code_number = #{traceCodeNumber})
+            (SELECT id FROM `zsl_trace_subcode` where trace_index = #{toNumber} and trace_code_number = #{traceCodeNumber}  and trace_good_id is not null)
         )
+        and trace_code_number = #{traceCodeNumber}
         and parent_id = -1
         and trace_good_id is not null
         ORDER BY node_level desc
@@ -224,9 +225,10 @@
 
     <select id="getTotalCount" resultType="java.lang.Long">
         SELECT count(parent_id) from zsl_trace_subcode where (id BETWEEN
-        (SELECT id FROM `zsl_trace_subcode` where trace_index = #{fromNumber} and trace_code_number = #{traceCodeNumber})
+        (SELECT id FROM `zsl_trace_subcode` where trace_index = #{fromNumber} and trace_code_number = #{traceCodeNumber}  and trace_good_id is not null)
         and
-        (SELECT id FROM `zsl_trace_subcode` where trace_index = #{toNumber} and trace_code_number = #{traceCodeNumber}))
+        (SELECT id FROM `zsl_trace_subcode` where trace_index = #{toNumber} and trace_code_number = #{traceCodeNumber} and trace_good_id is not null))
+        and trace_code_number = #{traceCodeNumber}
         and parent_id = -1
         and trace_good_id is not null
     </select>
@@ -236,4 +238,7 @@
         SELECT MAX(trace_to_number) FROM `zsl_trace_record` where trace_code_number = #{traceCodeNumber}
     </select>
 
+    <select id="selectMinFromNumberByRecord" resultType="java.lang.Long">
+        SELECT min(trace_from_number) FROM `zsl_trace_record` where trace_code_number = #{traceCodeNumber}
+    </select>
 </mapper>

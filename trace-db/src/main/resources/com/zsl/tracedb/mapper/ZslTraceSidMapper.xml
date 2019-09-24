@@ -9,6 +9,7 @@
     <result column="sid_pre_create" jdbcType="TINYINT" property="sidPreCreate" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="current_E_index" jdbcType="BIGINT" property="currentEIndex" />
+    <result column="enable_count" jdbcType="BIGINT" property="enableCount" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -70,7 +71,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, sid_start_index, sid_end_index, sid_current_index, sid_pre_create, create_time, 
-    current_E_index
+    current_E_index, enable_count
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.ZslTraceSidExample" resultMap="BaseResultMap">
     select
@@ -107,11 +108,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into zsl_trace_sid (sid_start_index, sid_end_index, sid_current_index, 
-      sid_pre_create, create_time, current_E_index
-      )
+      sid_pre_create, create_time, current_E_index, 
+      enable_count)
     values (#{sidStartIndex,jdbcType=BIGINT}, #{sidEndIndex,jdbcType=BIGINT}, #{sidCurrentIndex,jdbcType=BIGINT}, 
-      #{sidPreCreate,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{currentEIndex,jdbcType=BIGINT}
-      )
+      #{sidPreCreate,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{currentEIndex,jdbcType=BIGINT}, 
+      #{enableCount,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.ZslTraceSid">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -137,6 +138,9 @@
       <if test="currentEIndex != null">
         current_E_index,
       </if>
+      <if test="enableCount != null">
+        enable_count,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="sidStartIndex != null">
@@ -156,6 +160,9 @@
       </if>
       <if test="currentEIndex != null">
         #{currentEIndex,jdbcType=BIGINT},
+      </if>
+      <if test="enableCount != null">
+        #{enableCount,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -189,6 +196,9 @@
       <if test="record.currentEIndex != null">
         current_E_index = #{record.currentEIndex,jdbcType=BIGINT},
       </if>
+      <if test="record.enableCount != null">
+        enable_count = #{record.enableCount,jdbcType=BIGINT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -202,7 +212,8 @@
       sid_current_index = #{record.sidCurrentIndex,jdbcType=BIGINT},
       sid_pre_create = #{record.sidPreCreate,jdbcType=TINYINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      current_E_index = #{record.currentEIndex,jdbcType=BIGINT}
+      current_E_index = #{record.currentEIndex,jdbcType=BIGINT},
+      enable_count = #{record.enableCount,jdbcType=BIGINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -228,6 +239,9 @@
       <if test="currentEIndex != null">
         current_E_index = #{currentEIndex,jdbcType=BIGINT},
       </if>
+      <if test="enableCount != null">
+        enable_count = #{enableCount,jdbcType=BIGINT},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -238,7 +252,8 @@
       sid_current_index = #{sidCurrentIndex,jdbcType=BIGINT},
       sid_pre_create = #{sidPreCreate,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      current_E_index = #{currentEIndex,jdbcType=BIGINT}
+      current_E_index = #{currentEIndex,jdbcType=BIGINT},
+      enable_count = #{enableCount,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

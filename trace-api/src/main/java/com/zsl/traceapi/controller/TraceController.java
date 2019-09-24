@@ -150,9 +150,9 @@ public class TraceController {
         // 默认为待审核状态
         insertParam.setTraceHandleStatus(2);
         // 剩余数量（）
-        insertParam.setTraceEnableCount(Integer.parseInt(zslTraceAddAndUpdateParam.getTraceApplyCount()+""));
+        //insertParam.setTraceEnableCount(Integer.parseInt(zslTraceAddAndUpdateParam.getTraceApplyCount()+""));
         // 已经关联数量（0）
-        insertParam.setTraceBack1(0);
+        //insertParam.setTraceBack1(0);
 
         //获取用户登录信息
         RequestContext requestContext = RequestContextMgr.getLocalContext();

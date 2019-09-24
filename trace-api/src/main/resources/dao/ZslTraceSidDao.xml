@@ -9,6 +9,7 @@
         <result column="sid_pre_create" jdbcType="TINYINT" property="sidPreCreate" />
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
         <result column="current_E_index" jdbcType="BIGINT" property="currentEIndex" />
+        <result column="enable_count" jdbcType="BIGINT" property="enableCount" />
     </resultMap>
 
     <select id="selectNewPrePaperCode" resultMap="BaseResultMap">

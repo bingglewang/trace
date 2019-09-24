@@ -26,6 +26,9 @@ public class ZslTraceSid implements Serializable {
     @ApiModelProperty(value = "当前电子使用下标")
     private Long currentEIndex;
 
+    @ApiModelProperty(value = "剩余数量")
+    private Long enableCount;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -84,6 +87,14 @@ public class ZslTraceSid implements Serializable {
         this.currentEIndex = currentEIndex;
     }
 
+    public Long getEnableCount() {
+        return enableCount;
+    }
+
+    public void setEnableCount(Long enableCount) {
+        this.enableCount = enableCount;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -97,6 +108,7 @@ public class ZslTraceSid implements Serializable {
         sb.append(", sidPreCreate=").append(sidPreCreate);
         sb.append(", createTime=").append(createTime);
         sb.append(", currentEIndex=").append(currentEIndex);
+        sb.append(", enableCount=").append(enableCount);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

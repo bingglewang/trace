@@ -23,6 +23,8 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.zsl.traceapi.dto.InitPaperStart.INIT_SID_START_INDES;
+
 @Component
 public class TraceUpdateConsumerKafka {
     private static Logger logger = LoggerFactory.getLogger(TraceUpdateConsumerKafka.class);
@@ -38,8 +40,6 @@ public class TraceUpdateConsumerKafka {
 
     @Autowired
     private ZslTraceSidMapper zslTraceSidMapper;
-
-    private static final Long INIT_SID_START_INDES = 18000000L;
 
 
     @KafkaListener(topics = "traceUpdate")
@@ -84,7 +84,7 @@ public class TraceUpdateConsumerKafka {
                     }
                     Long start = 0L;
                     Long end = 0L;
-                    if(INIT_SID_START_INDES - zslTraceSid.getSidCurrentIndex() == 0){
+                    if(zslTraceSid.getSidStartIndex() - zslTraceSid.getSidCurrentIndex() == 0){
                         start = zslTraceSid.getSidCurrentIndex();
                         end = zslTraceSid.getSidCurrentIndex() + count -1;
                     }else{

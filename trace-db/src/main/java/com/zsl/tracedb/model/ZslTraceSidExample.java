@@ -524,6 +524,66 @@ public class ZslTraceSidExample {
             addCriterion("current_E_index not between", value1, value2, "currentEIndex");
             return (Criteria) this;
         }
+
+        public Criteria andEnableCountIsNull() {
+            addCriterion("enable_count is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableCountIsNotNull() {
+            addCriterion("enable_count is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableCountEqualTo(Long value) {
+            addCriterion("enable_count =", value, "enableCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableCountNotEqualTo(Long value) {
+            addCriterion("enable_count <>", value, "enableCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableCountGreaterThan(Long value) {
+            addCriterion("enable_count >", value, "enableCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableCountGreaterThanOrEqualTo(Long value) {
+            addCriterion("enable_count >=", value, "enableCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableCountLessThan(Long value) {
+            addCriterion("enable_count <", value, "enableCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableCountLessThanOrEqualTo(Long value) {
+            addCriterion("enable_count <=", value, "enableCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableCountIn(List<Long> values) {
+            addCriterion("enable_count in", values, "enableCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableCountNotIn(List<Long> values) {
+            addCriterion("enable_count not in", values, "enableCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableCountBetween(Long value1, Long value2) {
+            addCriterion("enable_count between", value1, value2, "enableCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableCountNotBetween(Long value1, Long value2) {
+            addCriterion("enable_count not between", value1, value2, "enableCount");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
