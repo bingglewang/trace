@@ -8,5 +8,5 @@ package com.zsl.traceapi.dto;
  * @Version 1.0
  **/
 public interface InitPaperStart {
-     Long INIT_SID_START_INDES = 18100000L;
+     Long INIT_SID_START_INDES = 19000000L;
 }
