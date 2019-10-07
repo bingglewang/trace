@@ -21,9 +21,11 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 import static com.zsl.traceapi.dto.InitPaperStart.INIT_SID_START_INDES;
 
@@ -45,6 +47,9 @@ public class TraceCodeConsumerKafka {
 
     @Autowired
     private ZslTraceSidMapper zslTraceSidMapper;
+
+    @Resource(name = "consumerTraceThreadPool")
+    private ExecutorService service;
 
     @Autowired
     private TraceCodeProducerKafka traceCodeProducerKafka;

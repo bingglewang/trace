@@ -2,17 +2,11 @@ package com.zsl.traceapi.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zsl.traceapi.config.kafka.producer.TraceUpdateProducerKafka;
-import com.zsl.traceapi.config.rabbitmq.producer.TraceUpdateProducer;
 import com.zsl.traceapi.context.RequestContext;
 import com.zsl.traceapi.context.RequestContextMgr;
-import com.zsl.traceapi.dao.ZslTraceDao;
-import com.zsl.traceapi.dao.ZslTraceSidDao;
 import com.zsl.traceapi.dto.*;
 import com.zsl.traceapi.service.TraceService;
-import com.zsl.traceapi.util.Constant;
-import com.zsl.traceapi.util.IntegralEnum;
-import com.zsl.traceapi.util.TreeNode;
-import com.zsl.traceapi.util.TreeUtils;
+import com.zsl.traceapi.util.*;
 import com.zsl.traceapi.validator.RequestLimit;
 import com.zsl.traceapi.vo.TracePointTreeVo;
 import com.zsl.traceapi.vo.TraceRecordVo;
@@ -32,8 +26,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.OutputStream;
-import java.net.URLEncoder;
 import java.util.*;
 
 @Api(tags = "TraceController", description = "追溯模块")
@@ -55,9 +47,6 @@ public class TraceController {
 
     @Autowired
     private ZslTracePointMapper zslTracePointMapper;
-
-    @Autowired
-    private IntegralDeductRatioMapper integralDeductRatioMapper;
 
     @Autowired
     private TraceUpdateProducerKafka traceUpdateProducerKafka;
@@ -163,7 +152,7 @@ public class TraceController {
         Merchant merchant = merchantMapper.selectByPrimaryKey(insertParam.getTraceBusinessId());
         //判断是否需要扣除积分
         //Long totalApplyCount = zslTraceDao.busiTotalTraceCount(zslTraceAddAndUpdateParam.getTraceBusinessId());
-        if(zslTraceAddAndUpdateParam.getTraceApplyType() == 1 &&  zslTraceAddAndUpdateParam.getTraceApplyCount() - merchant.getPaperLabelUpper() > 0){
+     /*   if(zslTraceAddAndUpdateParam.getTraceApplyType() == 1 &&  zslTraceAddAndUpdateParam.getTraceApplyCount() - merchant.getPaperLabelUpper() > 0){
             //判断积分是否充足
             //积分判断
             IntegralDeductRatio integralDeductRatio = integralDeductRatioMapper.selectByPrimaryKey(IntegralEnum.INTEGRAL_DECUCT_RATIO_TYPE_3.getId());
@@ -172,7 +161,7 @@ public class TraceController {
                 return CommonResult.failed("积分不足，请充值");
             }
             resultStr = "申请成功，免费标签超过额度，需要扣除积分";
-        }
+        }*/
         if (merchant == null) {
             return CommonResult.failed("商家不存在");
         }else if(merchant.getCertificationToPay() != 1 && accountType == 2){
@@ -228,8 +217,8 @@ public class TraceController {
     @PutMapping("/pass/{id:[0-9]+}")
     @ApiOperation("通过申请")
     @ResponseBody
-    public CommonResult pass(@PathVariable Integer id) {
-        int i = traceService.pass(id);
+    public CommonResult pass(@PathVariable Integer id,Long sid) {
+        int i = traceService.pass(id,sid);
         if (i > 0) {
             return CommonResult.success(null, "通过成功");
         } else if (i == -1) {
@@ -255,6 +244,8 @@ public class TraceController {
             return CommonResult.failed("追溯码生成错误");
         }else if(i == -9){
             return CommonResult.failed("预生成的纸质码不足");
+        }else if(i == -10){
+            return CommonResult.failed("空闲码段不足");
         }
         else {
             return CommonResult.failed("审核失败，服务器错误");
@@ -724,6 +715,24 @@ public class TraceController {
     @GetMapping("preCreatePaperCode")
     CommonResult preCreatePaperCode(Long preCreateCount){
         return traceService.preCreatePaperCode(preCreateCount);
+    }
+
+    /**
+     * 测试
+     */
+    @PostMapping("testTraceUpdate")
+    CommonResult testTraceUpdate(@RequestBody RelationMqSuCodeParam relationMqSuCodeParam){
+        String traceCodeJson = relationMqSuCodeParam.getMqJsonStr();
+        new CoreThread(traceCodeJson).start();
+        return CommonResult.success("");
+    }
+
+    /**
+     * 根据sid和追溯id获取覆盖码段
+     */
+    @GetMapping("getCodePartBySid")
+    CommonResult getCodePartBySid(Long sid,Integer id){
+        return traceService.getCodePartBySid(sid,id);
     }
 }
 

@@ -2,6 +2,8 @@ package com.zsl.traceapi.dao;
 
 import com.zsl.tracedb.model.ZslTraceSid;
 
+import java.util.List;
+
 /**
  * @ClassName ZslTraceSidDao
  * @Description sid操作
@@ -12,4 +14,6 @@ import com.zsl.tracedb.model.ZslTraceSid;
 public interface ZslTraceSidDao {
     ZslTraceSid selectNewPrePaperCode();
     ZslTraceSid selectByStartAndEndIndex();
+    List<ZslTraceSid> listByCount();
+    List<ZslTraceSid> listBlankCodePart();
 }

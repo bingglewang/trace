@@ -23,4 +23,15 @@
         where sid_start_index = 0 and sid_end_index = 0
     </select>
 
+    <select id="listByCount" resultMap="BaseResultMap">
+          select * from zsl_trace_sid
+        where sid_pre_create = 1 and enable_count > 0
+    </select>
+    
+    <select id="listBlankCodePart" resultMap="BaseResultMap">
+           select * from zsl_trace_sid
+        where sid_pre_create = -1
+        order  by sid_start_index asc
+    </select>
+
 </mapper>

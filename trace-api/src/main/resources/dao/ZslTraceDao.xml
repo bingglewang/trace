@@ -186,9 +186,9 @@
         <if test="queryParam.isMiniProgram != null and queryParam.isMiniProgram != ''">
             and z.trace_back4 is null or z.trace_back4 = '' or z.trace_back4 = #{queryParam.isMiniProgram}
         </if>
-        <if test="queryParam.isZongBu != null and queryParam.isZongBu != ''">
+        <!--<if test="queryParam.isZongBu != null and queryParam.isZongBu != ''">
             and (SELECT alliance_business_id FROM `merchant` where merchant_id = z.trace_business_id) is null
-        </if>
+        </if>-->
         <if test="queryParam.merchantId != null and queryParam.merchantId != 0">
           and z.trace_business_id = #{queryParam.merchantId}
         </if>

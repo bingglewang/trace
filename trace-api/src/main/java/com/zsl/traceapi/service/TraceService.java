@@ -56,7 +56,7 @@ public interface TraceService {
      * @param id
      * @return
      */
-    int pass(Integer id);
+    int pass(Integer id,Long sid);
 
     /**
      * 撤回申请
@@ -282,4 +282,12 @@ public interface TraceService {
      * @return
      */
     int hasDeductionIntegral(TraceRecordPointParam traceRecordPointParam);
+
+    /**
+     * 根据sid获取覆盖码段
+     * @param sid
+     * @param traceId
+     * @return
+     */
+    CommonResult getCodePartBySid(Long sid,Integer traceId);
 }
