@@ -102,13 +102,6 @@ public interface TraceService {
     String isCodeRepeat(List<TraceRecordInsertParam> traceRecordInsertParamList);
 
     /**
-     * 判断预生成是否足够
-     * @param traceRecordInsertParamList
-     * @return
-     */
-    String hasPreCreate(List<TraceRecordInsertParam> traceRecordInsertParamList);
-
-    /**
      * 判断追溯点编码冲突
      * @param traceRecordPointParam
      * @return
@@ -290,4 +283,10 @@ public interface TraceService {
      * @return
      */
     CommonResult getCodePartBySid(Long sid,Integer traceId);
+
+    /**
+     * 根据sid和追溯id获取覆盖码段
+     * @param traceCodeNumber
+     */
+    CommonResult getNextSidByCodeNumber(String traceCodeNumber);
 }

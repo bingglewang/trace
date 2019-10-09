@@ -17,6 +17,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/trace/getTraceGoodInfo")
                 .excludePathPatterns("/trace/preCreatePaperCode") //不开放
                 .excludePathPatterns("/trace/testTraceUpdate")  //不开放
+                .excludePathPatterns("/trace/testTraceCreate")  //不开放
+                .excludePathPatterns("/trace/getCodePartBySid")  //不开放
+                .excludePathPatterns("/trace/getNextSidByCodeNumber")  //不开放
                 .excludePathPatterns("/trace/relationMqSubCode")
                 .excludePathPatterns("/error")
                 .excludePathPatterns("/getIpInfo.php");

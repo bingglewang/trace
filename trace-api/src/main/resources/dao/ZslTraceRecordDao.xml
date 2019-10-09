@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zsl.traceapi.dao.ZslTraceRecordDao">
+    <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.ZslTraceRecord">
+        <id column="trace_record_id" jdbcType="INTEGER" property="traceRecordId" />
+        <result column="trace_code_number" jdbcType="VARCHAR" property="traceCodeNumber" />
+        <result column="trace_good_id" jdbcType="INTEGER" property="traceGoodId" />
+        <result column="trace_to_number" jdbcType="INTEGER" property="traceToNumber" />
+        <result column="trace_from_number" jdbcType="INTEGER" property="traceFromNumber" />
+        <result column="trace_stall_id" jdbcType="INTEGER" property="traceStallId" />
+        <result column="trace_scan_count" jdbcType="BIGINT" property="traceScanCount" />
+    </resultMap>
+
     <insert id="insertList">
         insert into zsl_trace_record (trace_code_number, trace_good_id,trace_to_number,trace_from_number,trace_stall_id) values
         <foreach collection="list" item="item" separator="," index="index">
@@ -11,4 +21,13 @@
             #{item.traceStallId,jdbcType=INTEGER})
         </foreach>
     </insert>
+
+    <select id="selectRecordForProduct" resultMap="BaseResultMap">
+          select *
+        from zsl_trace_record
+         where (#{traceIndex} BETWEEN trace_from_number and trace_to_number)
+        and trace_code_number = #{traceCodeNumber}
+        and trace_good_id = #{traceGoodsId}
+        limit 1
+    </select>
 </mapper>

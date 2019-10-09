@@ -135,6 +135,15 @@
         <table tableName="zsl_trace_papper">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
+        <table tableName="zsl_trace_relation">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="zsl_trace_production_link">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="zsl_production_image">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
         <table tableName="zsl_scan_record">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>

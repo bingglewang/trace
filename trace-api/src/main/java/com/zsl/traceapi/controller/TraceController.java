@@ -138,10 +138,6 @@ public class TraceController {
         BeanUtils.copyProperties(zslTraceAddAndUpdateParam, insertParam);
         // 默认为待审核状态
         insertParam.setTraceHandleStatus(2);
-        // 剩余数量（）
-        //insertParam.setTraceEnableCount(Integer.parseInt(zslTraceAddAndUpdateParam.getTraceApplyCount()+""));
-        // 已经关联数量（0）
-        //insertParam.setTraceBack1(0);
 
         //获取用户登录信息
         RequestContext requestContext = RequestContextMgr.getLocalContext();
@@ -246,6 +242,8 @@ public class TraceController {
             return CommonResult.failed("预生成的纸质码不足");
         }else if(i == -10){
             return CommonResult.failed("空闲码段不足");
+        }else if(i == -11){
+            return CommonResult.failed("编码不在范围内");
         }
         else {
             return CommonResult.failed("审核失败，服务器错误");
@@ -294,11 +292,6 @@ public class TraceController {
        if(!repeat.equals("编码没有冲突")){
            return CommonResult.failed(repeat);
        }
-
-       String hasPreCreate = traceService.hasPreCreate(traceRecordInsertParamList);
-        if(!hasPreCreate.equals("预留编码足够")){
-            return CommonResult.failed(hasPreCreate);
-        }
 
         int count = traceService.traceRecordInsert(traceRecordInsertParamList);
         if (count > 0) {
@@ -718,13 +711,36 @@ public class TraceController {
     }
 
     /**
-     * 测试
+     * 测试（更新）
      */
     @PostMapping("testTraceUpdate")
     CommonResult testTraceUpdate(@RequestBody RelationMqSuCodeParam relationMqSuCodeParam){
         String traceCodeJson = relationMqSuCodeParam.getMqJsonStr();
         new CoreThread(traceCodeJson).start();
         return CommonResult.success("");
+    }
+
+
+    /**
+     * 测试(生成)
+     */
+    @GetMapping("testTraceCreate")
+    CommonResult testTraceCreate(String traceCodeNumber){
+        try {
+            Long zslTradeSid = Long.parseLong(traceCodeNumber);
+            new TraceSidThread(zslTradeSid).start();
+        }catch (Exception e){
+            new MyThread(traceCodeNumber).start();
+        }
+        return CommonResult.success("");
+    }
+
+    /**
+     * 根据追溯批次号获取下一个sid
+     */
+    @GetMapping("getNextSidByCodeNumber")
+    CommonResult getNextSidByCodeNumber(String traceCodeNumber){
+        return traceService.getNextSidByCodeNumber(traceCodeNumber);
     }
 
     /**

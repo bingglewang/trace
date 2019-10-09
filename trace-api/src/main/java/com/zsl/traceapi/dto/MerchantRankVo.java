@@ -4,6 +4,13 @@ import lombok.Data;
 
 @Data
 public class MerchantRankVo {
-    private String merchantName; //商家名称
-    private Long traceCount; //追溯额数量
+    /**
+     * 商家名称
+     */
+    private String merchantName;
+
+    /**
+     * 追溯额数量
+     */
+    private Long traceCount;
 }

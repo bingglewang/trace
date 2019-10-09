@@ -5,7 +5,6 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="sid_start_index" jdbcType="BIGINT" property="sidStartIndex" />
     <result column="sid_end_index" jdbcType="BIGINT" property="sidEndIndex" />
-    <result column="sid_current_index" jdbcType="BIGINT" property="sidCurrentIndex" />
     <result column="sid_pre_create" jdbcType="TINYINT" property="sidPreCreate" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="current_E_index" jdbcType="BIGINT" property="currentEIndex" />
@@ -70,8 +69,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, sid_start_index, sid_end_index, sid_current_index, sid_pre_create, create_time, 
-    current_E_index, enable_count
+    id, sid_start_index, sid_end_index, sid_pre_create, create_time, current_E_index, 
+    enable_count
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.ZslTraceSidExample" resultMap="BaseResultMap">
     select
@@ -107,12 +106,12 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into zsl_trace_sid (sid_start_index, sid_end_index, sid_current_index, 
-      sid_pre_create, create_time, current_E_index, 
-      enable_count)
-    values (#{sidStartIndex,jdbcType=BIGINT}, #{sidEndIndex,jdbcType=BIGINT}, #{sidCurrentIndex,jdbcType=BIGINT}, 
-      #{sidPreCreate,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{currentEIndex,jdbcType=BIGINT}, 
-      #{enableCount,jdbcType=BIGINT})
+    insert into zsl_trace_sid (sid_start_index, sid_end_index, sid_pre_create, 
+      create_time, current_E_index, enable_count
+      )
+    values (#{sidStartIndex,jdbcType=BIGINT}, #{sidEndIndex,jdbcType=BIGINT}, #{sidPreCreate,jdbcType=TINYINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{currentEIndex,jdbcType=BIGINT}, #{enableCount,jdbcType=BIGINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.ZslTraceSid">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -125,9 +124,6 @@
       </if>
       <if test="sidEndIndex != null">
         sid_end_index,
-      </if>
-      <if test="sidCurrentIndex != null">
-        sid_current_index,
       </if>
       <if test="sidPreCreate != null">
         sid_pre_create,
@@ -148,9 +144,6 @@
       </if>
       <if test="sidEndIndex != null">
         #{sidEndIndex,jdbcType=BIGINT},
-      </if>
-      <if test="sidCurrentIndex != null">
-        #{sidCurrentIndex,jdbcType=BIGINT},
       </if>
       <if test="sidPreCreate != null">
         #{sidPreCreate,jdbcType=TINYINT},
@@ -184,9 +177,6 @@
       <if test="record.sidEndIndex != null">
         sid_end_index = #{record.sidEndIndex,jdbcType=BIGINT},
       </if>
-      <if test="record.sidCurrentIndex != null">
-        sid_current_index = #{record.sidCurrentIndex,jdbcType=BIGINT},
-      </if>
       <if test="record.sidPreCreate != null">
         sid_pre_create = #{record.sidPreCreate,jdbcType=TINYINT},
       </if>
@@ -209,7 +199,6 @@
     set id = #{record.id,jdbcType=BIGINT},
       sid_start_index = #{record.sidStartIndex,jdbcType=BIGINT},
       sid_end_index = #{record.sidEndIndex,jdbcType=BIGINT},
-      sid_current_index = #{record.sidCurrentIndex,jdbcType=BIGINT},
       sid_pre_create = #{record.sidPreCreate,jdbcType=TINYINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       current_E_index = #{record.currentEIndex,jdbcType=BIGINT},
@@ -226,9 +215,6 @@
       </if>
       <if test="sidEndIndex != null">
         sid_end_index = #{sidEndIndex,jdbcType=BIGINT},
-      </if>
-      <if test="sidCurrentIndex != null">
-        sid_current_index = #{sidCurrentIndex,jdbcType=BIGINT},
       </if>
       <if test="sidPreCreate != null">
         sid_pre_create = #{sidPreCreate,jdbcType=TINYINT},
@@ -249,7 +235,6 @@
     update zsl_trace_sid
     set sid_start_index = #{sidStartIndex,jdbcType=BIGINT},
       sid_end_index = #{sidEndIndex,jdbcType=BIGINT},
-      sid_current_index = #{sidCurrentIndex,jdbcType=BIGINT},
       sid_pre_create = #{sidPreCreate,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       current_E_index = #{currentEIndex,jdbcType=BIGINT},

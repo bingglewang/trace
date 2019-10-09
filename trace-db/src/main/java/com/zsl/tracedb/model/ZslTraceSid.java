@@ -14,9 +14,6 @@ public class ZslTraceSid implements Serializable {
     @ApiModelProperty(value = "sid结束下标")
     private Long sidEndIndex;
 
-    @ApiModelProperty(value = "sid当前关联了的下标")
-    private Long sidCurrentIndex;
-
     @ApiModelProperty(value = "纸质sid是否预生成完成（1：完成，-1：未完成）")
     private Byte sidPreCreate;
 
@@ -53,14 +50,6 @@ public class ZslTraceSid implements Serializable {
 
     public void setSidEndIndex(Long sidEndIndex) {
         this.sidEndIndex = sidEndIndex;
-    }
-
-    public Long getSidCurrentIndex() {
-        return sidCurrentIndex;
-    }
-
-    public void setSidCurrentIndex(Long sidCurrentIndex) {
-        this.sidCurrentIndex = sidCurrentIndex;
     }
 
     public Byte getSidPreCreate() {
@@ -104,7 +93,6 @@ public class ZslTraceSid implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", sidStartIndex=").append(sidStartIndex);
         sb.append(", sidEndIndex=").append(sidEndIndex);
-        sb.append(", sidCurrentIndex=").append(sidCurrentIndex);
         sb.append(", sidPreCreate=").append(sidPreCreate);
         sb.append(", createTime=").append(createTime);
         sb.append(", currentEIndex=").append(currentEIndex);

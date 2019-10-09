@@ -6,6 +6,13 @@ import java.util.List;
 
 @Data
 public class DeliverGoods {
-    private List<String> codeNumber;//外码或内码
-    private String bussName; // 商家名称
+    /**
+     * 外码或内码
+     */
+    private List<String> codeNumber;
+
+    /**
+     * 商家名称
+     */
+    private String bussName;
 }

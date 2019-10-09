@@ -7,10 +7,10 @@ import com.zsl.traceapi.dto.TraceCodeRelation;
 import com.zsl.traceapi.dto.TraceSubcodeUpdateParam;
 import com.zsl.traceapi.dto.TraceSubcodeUpdateParamSid;
 import com.zsl.tracedb.mapper.ZslTraceMapper;
+import com.zsl.tracedb.mapper.ZslTracePapperMapper;
+import com.zsl.tracedb.mapper.ZslTraceRelationMapper;
 import com.zsl.tracedb.mapper.ZslTraceSidMapper;
-import com.zsl.tracedb.model.ZslTrace;
-import com.zsl.tracedb.model.ZslTraceExample;
-import com.zsl.tracedb.model.ZslTraceSid;
+import com.zsl.tracedb.model.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,9 +32,9 @@ public class CoreThread extends Thread {
 
     private ZslTraceMapper zslTraceMapper = (ZslTraceMapper) SpringContextUtil.getBean(ZslTraceMapper.class);
 
-    private ZslTraceSidDao zslTraceSidDao = (ZslTraceSidDao) SpringContextUtil.getBean(ZslTraceSidDao.class);
+    private ZslTracePapperMapper zslTracePapperMapper = (ZslTracePapperMapper) SpringContextUtil.getBean(ZslTracePapperMapper.class);
 
-    private ZslTraceSidMapper zslTraceSidMapper= (ZslTraceSidMapper) SpringContextUtil.getBean(ZslTraceSidMapper.class);
+    private ZslTraceRelationMapper zslTraceRelationMapper = (ZslTraceRelationMapper) SpringContextUtil.getBean(ZslTraceRelationMapper.class);
 
     private ExecutorService service = (ExecutorService) SpringContextUtil.getBean("consumerTraceThreadPool");
 
@@ -46,11 +46,12 @@ public class CoreThread extends Thread {
     }
 
     /**
-     *  判断是纸质还是电子
+     * 判断是纸质还是电子
+     *
      * @param traceCodeNumber
      * @return
      */
-    private  boolean isPapperOrElectric(String traceCodeNumber){
+    private boolean isPapperOrElectric(String traceCodeNumber) {
         ZslTraceExample zslTraceExample = new ZslTraceExample();
         ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
         criteria.andTraceCodeNumberEqualTo(traceCodeNumber);
@@ -59,6 +60,93 @@ public class CoreThread extends Thread {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 根据批次号获取申请的纸质码段
+     *
+     * @param traceCodeNumber
+     * @return
+     */
+    private List<ZslTracePapper> getTracePaperByTraceCodeNumber(String traceCodeNumber) {
+        ZslTracePapperExample zslTracePapperExample = new ZslTracePapperExample();
+        ZslTracePapperExample.Criteria criteria = zslTracePapperExample.createCriteria();
+        criteria.andTraceCodeNumberEqualTo(traceCodeNumber);
+        zslTracePapperExample.setOrderByClause("trace_num_start asc");
+        return zslTracePapperMapper.selectByExample(zslTracePapperExample);
+    }
+
+    /**
+     * 根据批次号获取当前关联指针
+     * @param traceCodeNumber
+     * @return
+     */
+    private ZslTraceRelation getRelationByTraceCodeNumber(String traceCodeNumber) {
+        ZslTraceRelationExample zslTraceRelationExample = new ZslTraceRelationExample();
+        ZslTraceRelationExample.Criteria criteria = zslTraceRelationExample.createCriteria();
+        criteria.andTraceCodeNumberEqualTo(traceCodeNumber);
+        List<ZslTraceRelation> result = zslTraceRelationMapper.selectByExample(zslTraceRelationExample);
+        if (CollectionUtils.isNotEmpty(result)) {
+            return result.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * 获取数量和修改当前关联指针
+     * @param count
+     * @param traceCodeNumber
+     * @return
+     */
+    private List<ZslTracePapper> getTracePaperBy(long count, String traceCodeNumber){
+        //
+        List<ZslTracePapper> relationPaperList = getTracePaperByTraceCodeNumber(traceCodeNumber);
+        if (CollectionUtils.isNotEmpty(relationPaperList)) {
+            //统计数量
+            Long countRelation = 0L;
+            List<ZslTracePapper> relationParam = new ArrayList<>();
+            for (int j = 0; j < relationPaperList.size(); j++) {
+                long startN = 0L;
+                long endN = 0L;
+                ZslTracePapper zslTracePapper = new ZslTracePapper();
+                //获取当前已经关联的下标
+                ZslTraceRelation zslTraceRelation = getRelationByTraceCodeNumber(traceCodeNumber);
+                if(zslTraceRelation != null && j == 0){
+                    startN = zslTraceRelation.getCurrentIndexRelation()+1;
+                }else{
+                    startN =relationPaperList.get(j).getTraceNumStart();
+                }
+                endN = relationPaperList.get(j).getTraceNumEnd();
+                zslTracePapper.setTraceNumStart(startN);
+                zslTracePapper.setTraceNumEnd(endN);
+                for(long n = startN; n <= endN;n++) {
+                    if(countRelation - count == 0){
+                        //已经足够
+                        zslTracePapper.setTraceNumEnd(n-1);
+                        //更新关联指针
+                        if(zslTraceRelation == null){
+                            ZslTraceRelation relaTionInsert = new ZslTraceRelation();
+                            relaTionInsert.setTraceCodeNumber(traceCodeNumber);
+                            relaTionInsert.setCurrentIndexRelation(n-1);
+                            zslTraceRelationMapper.insert(relaTionInsert);
+                        }else{
+                            ZslTraceRelation relationUpdate = new ZslTraceRelation();
+                            relationUpdate.setId(zslTraceRelation.getId());
+                            relationUpdate.setCurrentIndexRelation(n-1);
+                            zslTraceRelationMapper.updateByPrimaryKeySelective(relationUpdate);
+                        }
+                        relationParam.add(zslTracePapper);
+                        return relationParam;
+                    }
+                    countRelation++;
+                }
+                relationParam.add(zslTracePapper);
+            }
+            return relationParam;
+        }else{
+            return null;
+        }
     }
 
     @Override
@@ -73,75 +161,51 @@ public class CoreThread extends Thread {
 
             //判断是纸质还是电子
             boolean isPaperType = isPapperOrElectric(traceCodeNumber);
-
             Long count = toNumber - fromNumber + 1;
-            int totalPage = (int) Math.ceil((double) count / 1000);
-            Long start = 0L;
-            Long end = 0L;
-            ZslTraceSid zslTraceSid = zslTraceSidDao.selectNewPrePaperCode();
-
-            if (zslTraceSid.getSidStartIndex() - zslTraceSid.getSidCurrentIndex() == 0) {
-                start = zslTraceSid.getSidCurrentIndex();
-                end = zslTraceSid.getSidCurrentIndex() + count - 1;
-            } else {
-                start = zslTraceSid.getSidCurrentIndex() + 1;
-                end = zslTraceSid.getSidCurrentIndex() + count;
-            }
-
             if (isPaperType) {
-                //更改当前纸质指针位置
-                if (zslTraceSid != null) {
-                    ZslTraceSid updateE = new ZslTraceSid();
-                    updateE.setId(zslTraceSid.getId());
-                    updateE.setSidCurrentIndex(end);
-                    zslTraceSidMapper.updateByPrimaryKeySelective(updateE);
+                List<ZslTracePapper> papperList = getTracePaperBy(count,traceCodeNumber);
+                if(papperList != null){
+                    long countTemp = fromNumber;
+                    for(int i = 0;i < papperList.size();i++){
+                        long start = papperList.get(i).getTraceNumStart();
+                        long end = papperList.get(i).getTraceNumEnd();
+                        //关联操作
+                        List<Long> traceCodeIdsPaper = zslTraceSubcodeDao.selectBySidRange(start, end);
+                        List<TraceSubcodeUpdateParamSid> updateSidParams = new ArrayList<>();
+                        for (int j = 0; j < traceCodeIdsPaper.size(); j++) {
+                            TraceSubcodeUpdateParamSid traceSubcodeUpdateParamSid = new TraceSubcodeUpdateParamSid(countTemp, traceCodeNumber, goodsId, stallId, traceCodeIdsPaper.get(j));
+                            updateSidParams.add(traceSubcodeUpdateParamSid);
+                            if(updateSidParams.size() % 1000 == 0){
+                                int m = zslTraceSubcodeDao.updateGoodsAndStallSid(updateSidParams);
+                                updateSidParams.clear();
+                            }
+                            countTemp++;
+                        }
+                        if (updateSidParams.size() > 0) {
+                            zslTraceSubcodeDao.updateGoodsAndStallSid(updateSidParams);
+                        }
+                    }
                 }
-            }
-            for (int currentPage = 1; currentPage <= totalPage; currentPage++) {
-                Long fromIndex = 0L;
-                Long toIndex = 0L;
-                fromIndex = new Long((currentPage - 1) * 1000 + fromNumber);
-                if (currentPage - totalPage == 0) {
-                    toIndex = toNumber;
-                } else {
-                    toIndex = new Long(currentPage * 1000) + fromNumber;
-                }
-                // 区分纸质和电子
-                List<Long> traceCodeIds = null;
-                if (isPaperType) {
-
-                    if (zslTraceSid == null) {
-                        return;
+            } else {
+                //电子
+                int totalPage = (int) Math.ceil((double) count / 1000);
+                for (int currentPage = 1; currentPage <= totalPage; currentPage++) {
+                    Long fromIndex = 0L;
+                    Long toIndex = 0L;
+                    fromIndex = new Long((currentPage - 1) * 1000 + fromNumber);
+                    if (currentPage - totalPage == 0) {
+                        toIndex = toNumber;
+                    } else {
+                        toIndex = new Long(currentPage * 1000) + fromNumber;
                     }
 
-                    if (end > zslTraceSid.getSidEndIndex()) {
-                        logger.info("预生成的纸质码不足:{}", zslTraceSid.getId());
-                        return;
-                    }
-                    traceCodeIds = zslTraceSubcodeDao.selectBySidRange(start, end);
-                    List<TraceSubcodeUpdateParamSid> updateSidParams = new ArrayList<>();
-                    Long countTemp = fromNumber;
-                    for (int i = 0; i < traceCodeIds.size(); i++) {
-                        TraceSubcodeUpdateParamSid traceSubcodeUpdateParamSid = new TraceSubcodeUpdateParamSid(countTemp,traceCodeNumber,goodsId,stallId,traceCodeIds.get(i));
-                        updateSidParams.add(traceSubcodeUpdateParamSid);
-                        countTemp++;
-                    }
-                   // service.execute(() -> {
-                        logger.info("纸质线程：" + updateSidParams);
-                        int j = zslTraceSubcodeDao.updateGoodsAndStallSid(updateSidParams);
-                        logger.info("结果：" + j);
-                  //  });
-                } else {
-                    //电子
-                    traceCodeIds = zslTraceSubcodeDao.selectByRange(fromIndex, toIndex, traceCodeNumber);
+                    List<Long> traceCodeIds = zslTraceSubcodeDao.selectByRange(fromIndex, toIndex, traceCodeNumber);
                     List<TraceSubcodeUpdateParam> updateParams = new ArrayList<>();
                     for (int i = 0; i < traceCodeIds.size(); i++) {
-                        TraceSubcodeUpdateParam traceSubcodeUpdateParam = new TraceSubcodeUpdateParam(goodsId,stallId,traceCodeIds.get(i));
+                        TraceSubcodeUpdateParam traceSubcodeUpdateParam = new TraceSubcodeUpdateParam(goodsId, stallId, traceCodeIds.get(i));
                         updateParams.add(traceSubcodeUpdateParam);
                     }
-                   // service.execute(() -> {
-                        int j = zslTraceSubcodeDao.updateGoodsAndStall(updateParams);
-                   // });
+                    int j = zslTraceSubcodeDao.updateGoodsAndStall(updateParams);
                 }
             }
         } catch (Exception e) {

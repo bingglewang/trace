@@ -285,66 +285,6 @@ public class ZslTraceSidExample {
             return (Criteria) this;
         }
 
-        public Criteria andSidCurrentIndexIsNull() {
-            addCriterion("sid_current_index is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andSidCurrentIndexIsNotNull() {
-            addCriterion("sid_current_index is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andSidCurrentIndexEqualTo(Long value) {
-            addCriterion("sid_current_index =", value, "sidCurrentIndex");
-            return (Criteria) this;
-        }
-
-        public Criteria andSidCurrentIndexNotEqualTo(Long value) {
-            addCriterion("sid_current_index <>", value, "sidCurrentIndex");
-            return (Criteria) this;
-        }
-
-        public Criteria andSidCurrentIndexGreaterThan(Long value) {
-            addCriterion("sid_current_index >", value, "sidCurrentIndex");
-            return (Criteria) this;
-        }
-
-        public Criteria andSidCurrentIndexGreaterThanOrEqualTo(Long value) {
-            addCriterion("sid_current_index >=", value, "sidCurrentIndex");
-            return (Criteria) this;
-        }
-
-        public Criteria andSidCurrentIndexLessThan(Long value) {
-            addCriterion("sid_current_index <", value, "sidCurrentIndex");
-            return (Criteria) this;
-        }
-
-        public Criteria andSidCurrentIndexLessThanOrEqualTo(Long value) {
-            addCriterion("sid_current_index <=", value, "sidCurrentIndex");
-            return (Criteria) this;
-        }
-
-        public Criteria andSidCurrentIndexIn(List<Long> values) {
-            addCriterion("sid_current_index in", values, "sidCurrentIndex");
-            return (Criteria) this;
-        }
-
-        public Criteria andSidCurrentIndexNotIn(List<Long> values) {
-            addCriterion("sid_current_index not in", values, "sidCurrentIndex");
-            return (Criteria) this;
-        }
-
-        public Criteria andSidCurrentIndexBetween(Long value1, Long value2) {
-            addCriterion("sid_current_index between", value1, value2, "sidCurrentIndex");
-            return (Criteria) this;
-        }
-
-        public Criteria andSidCurrentIndexNotBetween(Long value1, Long value2) {
-            addCriterion("sid_current_index not between", value1, value2, "sidCurrentIndex");
-            return (Criteria) this;
-        }
-
         public Criteria andSidPreCreateIsNull() {
             addCriterion("sid_pre_create is null");
             return (Criteria) this;
