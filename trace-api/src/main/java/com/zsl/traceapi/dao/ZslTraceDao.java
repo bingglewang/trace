@@ -30,4 +30,8 @@ public interface ZslTraceDao {
     List<NewTraceRecordVo> getNewTraceRecord(@Param("allianceBusinessId")Integer allianceBusinessId,@Param("merchantId")Integer merchantId);
 
     Long busiTotalTraceCount(@Param("traceBusinessId") Integer traceBusinessId);
+
+    Long selectScanTotalCount(@Param("companyId")Integer companyId);
+
+    Long selectScanYestCount(@Param("companyId")Integer companyId);
 }

@@ -26,6 +26,7 @@ import com.zsl.tracedb.model.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.omg.CORBA.INTERNAL;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -785,6 +786,17 @@ public class TraceServiceImpl implements TraceService {
                 return "编码已经被使用过";
             }
         }
+        return result;
+    }
+
+    @Override
+    public Object getTraceScanCountAndYest(Integer companyId){
+        Map<String, Object> result = new HashMap<>();
+
+        Long totalScanCount = zslTraceDao.selectScanTotalCount(companyId);
+        Long yestScanCount = zslTraceDao.selectScanYestCount(companyId);
+        result.put("totalScanCount", totalScanCount);
+        result.put("yestScanCount", yestScanCount);
         return result;
     }
 
@@ -1898,6 +1910,28 @@ public class TraceServiceImpl implements TraceService {
         }
         return pageList.subList(startIndex,endIndex);
     }
+
+
+    @Override
+    public CommonResult getSuCodeByPage1(Integer pageNum, Integer pageSize,String traceCodeNumber){
+        //设置排序，大小，页数
+        PageHelper.startPage(pageNum, pageSize, null);
+        List<ZslTraceSubcode> itemList = zslTraceSubcodeDao.getSuCodeByPage1(traceCodeNumber);
+
+        CommonPage commonPage =  CommonPage.restPage(itemList);
+
+        // 用于转换树结构
+        List<ZslTreeNode> result = new ArrayList<>();
+        for(ZslTraceSubcode item : itemList){
+            List<ZslTreeNode> resultItem = transeTreeNode(item);
+            if(resultItem != null){
+                result.addAll(resultItem);
+            }
+        }
+        commonPage.setList(result);
+        return CommonResult.success(commonPage);
+    }
+
 
     @Override
     public CommonResult getSuCodeByPage(Integer pageNum, Integer pageSize,String traceCodeNumber) {

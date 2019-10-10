@@ -5,7 +5,6 @@
         <id column="id" jdbcType="BIGINT" property="id" />
         <result column="sid_start_index" jdbcType="BIGINT" property="sidStartIndex" />
         <result column="sid_end_index" jdbcType="BIGINT" property="sidEndIndex" />
-        <result column="sid_current_index" jdbcType="BIGINT" property="sidCurrentIndex" />
         <result column="sid_pre_create" jdbcType="TINYINT" property="sidPreCreate" />
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
         <result column="current_E_index" jdbcType="BIGINT" property="currentEIndex" />

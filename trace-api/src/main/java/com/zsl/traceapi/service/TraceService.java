@@ -115,6 +115,12 @@ public interface TraceService {
     Object getTraceTotalCountAndPrice(Integer companyId);
 
     /**
+     * 首页扫码数量
+     * @return
+     */
+    Object getTraceScanCountAndYest(Integer companyId);
+
+    /**
      * 首页图表统计
      * @param chartType
      * @return
@@ -256,6 +262,16 @@ public interface TraceService {
      * @return
      */
     CommonResult getSuCodeByPage(Integer pageNum,Integer pageSize,String traceCodeNumber);
+
+
+    /**
+     * 分页获取内码或外码树（使用pageHelper）
+     * @param pageNum
+     * @param pageSize
+     * @param traceCodeNumber
+     * @return
+     */
+    CommonResult getSuCodeByPage1(Integer pageNum,Integer pageSize,String traceCodeNumber);
 
     /**
      * 删除关联

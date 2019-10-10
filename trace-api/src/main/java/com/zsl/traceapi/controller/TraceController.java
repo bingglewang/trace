@@ -97,7 +97,7 @@ public class TraceController {
     @GetMapping("/getSuCodeByPage")
     @ResponseBody
     public CommonResult getSuCodeByPage(String traceCodeNumber,Integer pageNum,Integer pageSize) {
-        return traceService.getSuCodeByPage(pageNum,pageSize,traceCodeNumber);
+        return traceService.getSuCodeByPage1(pageNum,pageSize,traceCodeNumber);
     }
 
     @ApiOperation(value = "分页获取追溯记录")
@@ -451,6 +451,14 @@ public class TraceController {
     @GetMapping("getTraceTotalCountAndYest")
     public CommonResult getTraceTotalCountAndPrice(Integer companyId){
         return CommonResult.success(traceService.getTraceTotalCountAndPrice(companyId));
+    }
+
+    /**
+     * 首页扫码数量
+     */
+    @GetMapping("getTraceScanCountAndYest")
+    public CommonResult getTraceScanCountAndYest(Integer companyId){
+        return CommonResult.success(traceService.getTraceScanCountAndYest(companyId));
     }
 
     /**

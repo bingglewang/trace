@@ -23,6 +23,7 @@ public interface ZslTraceSubcodeDao {
     List<Long> exportExcel(@Param("fromIndex") Long fromIndex,@Param("toIndex") Long toIndex,@Param("traceCodeNumber") String traceCodeNumber);
     List<ZslTraceSubcode> searchByIndexOrCode(@Param("traceIndexOrCode") String traceIndexOrCode,@Param("traceCodeNumber") String traceCodeNumber);
     List<ZslTraceSubcode> getSuCodeByPage(@Param("pageSize") Integer pageSize,@Param("toNumber") Integer toNumber,@Param("fromNumber") Integer fromNumber,@Param("traceCodeNumber") String traceCodeNumber);
+    List<ZslTraceSubcode> getSuCodeByPage1(@Param("traceCodeNumber") String traceCodeNumber);
     Long getTotalCount(@Param("toNumber") Integer toNumber,@Param("fromNumber") Integer fromNumber,@Param("traceCodeNumber") String traceCodeNumber);
     Long selectMaxToNumberByRecord(@Param("traceCodeNumber") String traceCodeNumber);
     Long selectMinFromNumberByRecord(@Param("traceCodeNumber") String traceCodeNumber);

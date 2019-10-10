@@ -170,20 +170,26 @@
     </delete>
 
     <select id="goodsScanCount" resultType="java.lang.Long">
-        SELECT count(id)
-        FROM `zsl_trace_subcode`
-        where (trace_index BETWEEN (select trace_from_number from zsl_trace_record where trace_good_id = #{goodsId} and trace_code_number = #{traceCodeNumber}) and (select trace_to_number from zsl_trace_record where trace_good_id = #{goodsId} and trace_code_number = #{traceCodeNumber}))
-        and is_leaf = 'Y'
-        and trace_code_number = #{traceCodeNumber}
-        and scan_count = 0;
+        SELECT
+	      count(id)
+        FROM
+            zsl_trace_subcode
+        WHERE
+            trace_code_number =  #{traceCodeNumber}
+        and scan_count = 0
+        and trace_good_id is not null
+        and is_leaf = 'Y';
     </select>
 
     <select id="goodsTotalCount" resultType="java.lang.Long">
-        SELECT count(id)
-        FROM `zsl_trace_subcode`
-        where (trace_index BETWEEN (select trace_from_number from zsl_trace_record where trace_good_id = #{goodsId} and trace_code_number = #{traceCodeNumber}) and (select trace_to_number from zsl_trace_record where trace_good_id = #{goodsId} and trace_code_number = #{traceCodeNumber}))
-        and trace_code_number = #{traceCodeNumber}
-        and is_leaf = 'Y'
+          SELECT
+	      count(id)
+        FROM
+            zsl_trace_subcode
+        WHERE
+            trace_code_number =  #{traceCodeNumber}
+        and trace_good_id is not null
+        and is_leaf = 'Y';
     </select>
 
     <select id="selectTracePointNodes" resultMap="PointResultMap">
@@ -222,6 +228,20 @@
         and trace_good_id is not null
         ORDER BY node_level desc
     </select>
+
+    <select id="getSuCodeByPage1" resultMap="BaseResultMap">
+        SELECT
+                *
+            FROM
+                zsl_trace_subcode
+            WHERE
+				trace_code_number = #{traceCodeNumber}
+			AND parent_id = - 1
+			AND trace_good_id IS NOT NULL
+			ORDER BY
+				node_level DESC
+    </select>
+
 
     <select id="getTotalCount" resultType="java.lang.Long">
         SELECT count(parent_id) from zsl_trace_subcode where (id BETWEEN

@@ -11,6 +11,8 @@
     <result column="trace_stall_id" jdbcType="INTEGER" property="traceStallId" />
     <result column="trace_code_number" jdbcType="VARCHAR" property="traceCodeNumber" />
     <result column="trace_point_time" jdbcType="TIMESTAMP" property="tracePointTime" />
+    <result column="trace_point_service_id" jdbcType="INTEGER" property="tracePointServiceId" />
+    <result column="trace_point_service_type" jdbcType="INTEGER" property="tracePointServiceType" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -72,7 +74,8 @@
   </sql>
   <sql id="Base_Column_List">
     trace_point_id, trace_goods_id, trace_point_name, trace_point_to_number, trace_point_from_number, 
-    trace_parent_id, trace_stall_id, trace_code_number, trace_point_time
+    trace_parent_id, trace_stall_id, trace_code_number, trace_point_time, trace_point_service_id, 
+    trace_point_service_type
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.ZslTracePointExample" resultMap="BaseResultMap">
     select
@@ -110,10 +113,12 @@
     </selectKey>
     insert into zsl_trace_point (trace_goods_id, trace_point_name, trace_point_to_number, 
       trace_point_from_number, trace_parent_id, trace_stall_id, 
-      trace_code_number, trace_point_time)
+      trace_code_number, trace_point_time, trace_point_service_id, 
+      trace_point_service_type)
     values (#{traceGoodsId,jdbcType=INTEGER}, #{tracePointName,jdbcType=VARCHAR}, #{tracePointToNumber,jdbcType=INTEGER}, 
       #{tracePointFromNumber,jdbcType=INTEGER}, #{traceParentId,jdbcType=INTEGER}, #{traceStallId,jdbcType=INTEGER}, 
-      #{traceCodeNumber,jdbcType=VARCHAR}, #{tracePointTime,jdbcType=TIMESTAMP})
+      #{traceCodeNumber,jdbcType=VARCHAR}, #{tracePointTime,jdbcType=TIMESTAMP}, #{tracePointServiceId,jdbcType=INTEGER}, 
+      #{tracePointServiceType,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.ZslTracePoint">
     <selectKey keyProperty="tracePointId" order="AFTER" resultType="java.lang.Integer">
@@ -145,6 +150,12 @@
       <if test="tracePointTime != null">
         trace_point_time,
       </if>
+      <if test="tracePointServiceId != null">
+        trace_point_service_id,
+      </if>
+      <if test="tracePointServiceType != null">
+        trace_point_service_type,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="traceGoodsId != null">
@@ -170,6 +181,12 @@
       </if>
       <if test="tracePointTime != null">
         #{tracePointTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tracePointServiceId != null">
+        #{tracePointServiceId,jdbcType=INTEGER},
+      </if>
+      <if test="tracePointServiceType != null">
+        #{tracePointServiceType,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -209,6 +226,12 @@
       <if test="record.tracePointTime != null">
         trace_point_time = #{record.tracePointTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.tracePointServiceId != null">
+        trace_point_service_id = #{record.tracePointServiceId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tracePointServiceType != null">
+        trace_point_service_type = #{record.tracePointServiceType,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -224,7 +247,9 @@
       trace_parent_id = #{record.traceParentId,jdbcType=INTEGER},
       trace_stall_id = #{record.traceStallId,jdbcType=INTEGER},
       trace_code_number = #{record.traceCodeNumber,jdbcType=VARCHAR},
-      trace_point_time = #{record.tracePointTime,jdbcType=TIMESTAMP}
+      trace_point_time = #{record.tracePointTime,jdbcType=TIMESTAMP},
+      trace_point_service_id = #{record.tracePointServiceId,jdbcType=INTEGER},
+      trace_point_service_type = #{record.tracePointServiceType,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -256,6 +281,12 @@
       <if test="tracePointTime != null">
         trace_point_time = #{tracePointTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="tracePointServiceId != null">
+        trace_point_service_id = #{tracePointServiceId,jdbcType=INTEGER},
+      </if>
+      <if test="tracePointServiceType != null">
+        trace_point_service_type = #{tracePointServiceType,jdbcType=INTEGER},
+      </if>
     </set>
     where trace_point_id = #{tracePointId,jdbcType=INTEGER}
   </update>
@@ -268,7 +299,9 @@
       trace_parent_id = #{traceParentId,jdbcType=INTEGER},
       trace_stall_id = #{traceStallId,jdbcType=INTEGER},
       trace_code_number = #{traceCodeNumber,jdbcType=VARCHAR},
-      trace_point_time = #{tracePointTime,jdbcType=TIMESTAMP}
+      trace_point_time = #{tracePointTime,jdbcType=TIMESTAMP},
+      trace_point_service_id = #{tracePointServiceId,jdbcType=INTEGER},
+      trace_point_service_type = #{tracePointServiceType,jdbcType=INTEGER}
     where trace_point_id = #{tracePointId,jdbcType=INTEGER}
   </update>
 </mapper>

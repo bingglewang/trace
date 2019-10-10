@@ -664,6 +664,126 @@ public class ZslTracePointExample {
             addCriterion("trace_point_time not between", value1, value2, "tracePointTime");
             return (Criteria) this;
         }
+
+        public Criteria andTracePointServiceIdIsNull() {
+            addCriterion("trace_point_service_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointServiceIdIsNotNull() {
+            addCriterion("trace_point_service_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointServiceIdEqualTo(Integer value) {
+            addCriterion("trace_point_service_id =", value, "tracePointServiceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointServiceIdNotEqualTo(Integer value) {
+            addCriterion("trace_point_service_id <>", value, "tracePointServiceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointServiceIdGreaterThan(Integer value) {
+            addCriterion("trace_point_service_id >", value, "tracePointServiceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointServiceIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("trace_point_service_id >=", value, "tracePointServiceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointServiceIdLessThan(Integer value) {
+            addCriterion("trace_point_service_id <", value, "tracePointServiceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointServiceIdLessThanOrEqualTo(Integer value) {
+            addCriterion("trace_point_service_id <=", value, "tracePointServiceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointServiceIdIn(List<Integer> values) {
+            addCriterion("trace_point_service_id in", values, "tracePointServiceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointServiceIdNotIn(List<Integer> values) {
+            addCriterion("trace_point_service_id not in", values, "tracePointServiceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointServiceIdBetween(Integer value1, Integer value2) {
+            addCriterion("trace_point_service_id between", value1, value2, "tracePointServiceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointServiceIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("trace_point_service_id not between", value1, value2, "tracePointServiceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointServiceTypeIsNull() {
+            addCriterion("trace_point_service_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointServiceTypeIsNotNull() {
+            addCriterion("trace_point_service_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointServiceTypeEqualTo(Integer value) {
+            addCriterion("trace_point_service_type =", value, "tracePointServiceType");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointServiceTypeNotEqualTo(Integer value) {
+            addCriterion("trace_point_service_type <>", value, "tracePointServiceType");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointServiceTypeGreaterThan(Integer value) {
+            addCriterion("trace_point_service_type >", value, "tracePointServiceType");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointServiceTypeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("trace_point_service_type >=", value, "tracePointServiceType");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointServiceTypeLessThan(Integer value) {
+            addCriterion("trace_point_service_type <", value, "tracePointServiceType");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointServiceTypeLessThanOrEqualTo(Integer value) {
+            addCriterion("trace_point_service_type <=", value, "tracePointServiceType");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointServiceTypeIn(List<Integer> values) {
+            addCriterion("trace_point_service_type in", values, "tracePointServiceType");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointServiceTypeNotIn(List<Integer> values) {
+            addCriterion("trace_point_service_type not in", values, "tracePointServiceType");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointServiceTypeBetween(Integer value1, Integer value2) {
+            addCriterion("trace_point_service_type between", value1, value2, "tracePointServiceType");
+            return (Criteria) this;
+        }
+
+        public Criteria andTracePointServiceTypeNotBetween(Integer value1, Integer value2) {
+            addCriterion("trace_point_service_type not between", value1, value2, "tracePointServiceType");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

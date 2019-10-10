@@ -223,4 +223,37 @@
     <select id="busiTotalTraceCount" resultType="java.lang.Long">
         SELECT sum(trace_apply_count) FROM `zsl_trace` where trace_business_id = #{traceBusinessId};
     </select>
+
+    <select id="selectScanYestCount" resultType="java.lang.Long">
+        SELECT
+        count(*)
+        FROM
+            code_trace_integral_log cl
+        LEFT JOIN zsl_trace_subcode ze ON ze.id = cl.function_id
+        LEFT JOIN zsl_trace z ON z.trace_code_number = ze.trace_code_number
+        where TO_DAYS(NOW()) - TO_DAYS(create_time) = 1
+        <if test="companyId != null and companyId != 0 ">
+            and (SELECT alliance_business_id FROM `merchant` where merchant_id = z.trace_business_id) = #{companyId}
+        </if>
+        <if test="companyId == 0 ">
+            and (SELECT alliance_business_id FROM `merchant` where merchant_id = z.trace_business_id) is null
+        </if>
+    </select>
+
+    <select id="selectScanTotalCount" resultType="java.lang.Long">
+        SELECT
+        count(*)
+        FROM
+        code_trace_integral_log cl
+        LEFT JOIN zsl_trace_subcode ze ON ze.id = cl.function_id
+        LEFT JOIN zsl_trace z ON z.trace_code_number = ze.trace_code_number
+        where 1 = 1
+        <if test="companyId != null and companyId != 0 ">
+            and (SELECT alliance_business_id FROM `merchant` where merchant_id = z.trace_business_id) = #{companyId}
+        </if>
+        <if test="companyId == 0 ">
+            and (SELECT alliance_business_id FROM `merchant` where merchant_id = z.trace_business_id) is null
+        </if>
+    </select>
+
 </mapper>
