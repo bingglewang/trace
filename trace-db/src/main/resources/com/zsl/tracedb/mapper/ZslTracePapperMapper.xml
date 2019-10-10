@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsl.tracedb.mapper.ZslTracePapperMapper">
+  <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.ZslTracePapper">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="trace_num_start" jdbcType="BIGINT" property="traceNumStart" />
+    <result column="trace_num_end" jdbcType="BIGINT" property="traceNumEnd" />
+    <result column="trace_code_number" jdbcType="VARCHAR" property="traceCodeNumber" />
+    <result column="trace_count" jdbcType="BIGINT" property="traceCount" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, trace_num_start, trace_num_end, trace_code_number, trace_count
+  </sql>
+  <select id="selectByExample" parameterType="com.zsl.tracedb.model.ZslTracePapperExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from zsl_trace_papper
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from zsl_trace_papper
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from zsl_trace_papper
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zsl.tracedb.model.ZslTracePapperExample">
+    delete from zsl_trace_papper
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zsl.tracedb.model.ZslTracePapper">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into zsl_trace_papper (trace_num_start, trace_num_end, trace_code_number, 
+      trace_count)
+    values (#{traceNumStart,jdbcType=BIGINT}, #{traceNumEnd,jdbcType=BIGINT}, #{traceCodeNumber,jdbcType=VARCHAR}, 
+      #{traceCount,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zsl.tracedb.model.ZslTracePapper">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into zsl_trace_papper
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="traceNumStart != null">
+        trace_num_start,
+      </if>
+      <if test="traceNumEnd != null">
+        trace_num_end,
+      </if>
+      <if test="traceCodeNumber != null">
+        trace_code_number,
+      </if>
+      <if test="traceCount != null">
+        trace_count,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="traceNumStart != null">
+        #{traceNumStart,jdbcType=BIGINT},
+      </if>
+      <if test="traceNumEnd != null">
+        #{traceNumEnd,jdbcType=BIGINT},
+      </if>
+      <if test="traceCodeNumber != null">
+        #{traceCodeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="traceCount != null">
+        #{traceCount,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zsl.tracedb.model.ZslTracePapperExample" resultType="java.lang.Integer">
+    select count(*) from zsl_trace_papper
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update zsl_trace_papper
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.traceNumStart != null">
+        trace_num_start = #{record.traceNumStart,jdbcType=BIGINT},
+      </if>
+      <if test="record.traceNumEnd != null">
+        trace_num_end = #{record.traceNumEnd,jdbcType=BIGINT},
+      </if>
+      <if test="record.traceCodeNumber != null">
+        trace_code_number = #{record.traceCodeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.traceCount != null">
+        trace_count = #{record.traceCount,jdbcType=BIGINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update zsl_trace_papper
+    set id = #{record.id,jdbcType=INTEGER},
+      trace_num_start = #{record.traceNumStart,jdbcType=BIGINT},
+      trace_num_end = #{record.traceNumEnd,jdbcType=BIGINT},
+      trace_code_number = #{record.traceCodeNumber,jdbcType=VARCHAR},
+      trace_count = #{record.traceCount,jdbcType=BIGINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.ZslTracePapper">
+    update zsl_trace_papper
+    <set>
+      <if test="traceNumStart != null">
+        trace_num_start = #{traceNumStart,jdbcType=BIGINT},
+      </if>
+      <if test="traceNumEnd != null">
+        trace_num_end = #{traceNumEnd,jdbcType=BIGINT},
+      </if>
+      <if test="traceCodeNumber != null">
+        trace_code_number = #{traceCodeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="traceCount != null">
+        trace_count = #{traceCount,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.ZslTracePapper">
+    update zsl_trace_papper
+    set trace_num_start = #{traceNumStart,jdbcType=BIGINT},
+      trace_num_end = #{traceNumEnd,jdbcType=BIGINT},
+      trace_code_number = #{traceCodeNumber,jdbcType=VARCHAR},
+      trace_count = #{traceCount,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
