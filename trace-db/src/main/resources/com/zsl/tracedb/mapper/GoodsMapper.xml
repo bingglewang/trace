@@ -10,6 +10,7 @@
     <result column="goods_creat_time" jdbcType="TIMESTAMP" property="goodsCreatTime" />
     <result column="goods_update_time" jdbcType="TIMESTAMP" property="goodsUpdateTime" />
     <result column="brand_id" jdbcType="INTEGER" property="brandId" />
+    <result column="video_url" jdbcType="VARCHAR" property="videoUrl" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -71,7 +72,7 @@
   </sql>
   <sql id="Base_Column_List">
     goods_id, goods_name, merchant_id, category_id, category_full_name, goods_creat_time, 
-    goods_update_time, brand_id
+    goods_update_time, brand_id, video_url
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.GoodsExample" resultMap="BaseResultMap">
     select
@@ -109,10 +110,10 @@
     </selectKey>
     insert into goods (goods_name, merchant_id, category_id, 
       category_full_name, goods_creat_time, goods_update_time, 
-      brand_id)
+      brand_id, video_url)
     values (#{goodsName,jdbcType=VARCHAR}, #{merchantId,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER}, 
       #{categoryFullName,jdbcType=VARCHAR}, #{goodsCreatTime,jdbcType=TIMESTAMP}, #{goodsUpdateTime,jdbcType=TIMESTAMP}, 
-      #{brandId,jdbcType=INTEGER})
+      #{brandId,jdbcType=INTEGER}, #{videoUrl,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.Goods">
     <selectKey keyProperty="goodsId" order="AFTER" resultType="java.lang.Integer">
@@ -141,6 +142,9 @@
       <if test="brandId != null">
         brand_id,
       </if>
+      <if test="videoUrl != null">
+        video_url,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="goodsName != null">
@@ -163,6 +167,9 @@
       </if>
       <if test="brandId != null">
         #{brandId,jdbcType=INTEGER},
+      </if>
+      <if test="videoUrl != null">
+        #{videoUrl,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -199,6 +206,9 @@
       <if test="record.brandId != null">
         brand_id = #{record.brandId,jdbcType=INTEGER},
       </if>
+      <if test="record.videoUrl != null">
+        video_url = #{record.videoUrl,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -213,7 +223,8 @@
       category_full_name = #{record.categoryFullName,jdbcType=VARCHAR},
       goods_creat_time = #{record.goodsCreatTime,jdbcType=TIMESTAMP},
       goods_update_time = #{record.goodsUpdateTime,jdbcType=TIMESTAMP},
-      brand_id = #{record.brandId,jdbcType=INTEGER}
+      brand_id = #{record.brandId,jdbcType=INTEGER},
+      video_url = #{record.videoUrl,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -242,6 +253,9 @@
       <if test="brandId != null">
         brand_id = #{brandId,jdbcType=INTEGER},
       </if>
+      <if test="videoUrl != null">
+        video_url = #{videoUrl,jdbcType=VARCHAR},
+      </if>
     </set>
     where goods_id = #{goodsId,jdbcType=INTEGER}
   </update>
@@ -253,7 +267,8 @@
       category_full_name = #{categoryFullName,jdbcType=VARCHAR},
       goods_creat_time = #{goodsCreatTime,jdbcType=TIMESTAMP},
       goods_update_time = #{goodsUpdateTime,jdbcType=TIMESTAMP},
-      brand_id = #{brandId,jdbcType=INTEGER}
+      brand_id = #{brandId,jdbcType=INTEGER},
+      video_url = #{videoUrl,jdbcType=VARCHAR}
     where goods_id = #{goodsId,jdbcType=INTEGER}
   </update>
 </mapper>

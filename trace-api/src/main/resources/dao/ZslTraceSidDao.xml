@@ -7,20 +7,9 @@
         <result column="sid_end_index" jdbcType="BIGINT" property="sidEndIndex" />
         <result column="sid_pre_create" jdbcType="TINYINT" property="sidPreCreate" />
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-        <result column="current_E_index" jdbcType="BIGINT" property="currentEIndex" />
         <result column="enable_count" jdbcType="BIGINT" property="enableCount" />
     </resultMap>
 
-    <select id="selectNewPrePaperCode" resultMap="BaseResultMap">
-        select * from zsl_trace_sid
-        where sid_pre_create = 1
-        ORDER BY create_time desc limit 1
-    </select>
-
-    <select id="selectByStartAndEndIndex" resultMap="BaseResultMap">
-        select * from zsl_trace_sid
-        where sid_start_index = 0 and sid_end_index = 0
-    </select>
 
     <select id="listByCount" resultMap="BaseResultMap">
           select * from zsl_trace_sid

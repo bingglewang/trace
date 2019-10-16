@@ -37,6 +37,9 @@ public class ZslTraceSubcode implements Serializable {
     @ApiModelProperty(value = "扫码次数")
     private Long scanCount;
 
+    @ApiModelProperty(value = "是否已售（0：在售，1：已售）")
+    private Integer isSaled;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -127,6 +130,14 @@ public class ZslTraceSubcode implements Serializable {
         this.scanCount = scanCount;
     }
 
+    public Integer getIsSaled() {
+        return isSaled;
+    }
+
+    public void setIsSaled(Integer isSaled) {
+        this.isSaled = isSaled;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -144,6 +155,7 @@ public class ZslTraceSubcode implements Serializable {
         sb.append(", isLeaf=").append(isLeaf);
         sb.append(", nodeLevel=").append(nodeLevel);
         sb.append(", scanCount=").append(scanCount);
+        sb.append(", isSaled=").append(isSaled);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

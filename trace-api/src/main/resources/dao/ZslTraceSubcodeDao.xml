@@ -12,6 +12,7 @@
         <result column="is_leaf" jdbcType="CHAR" property="isLeaf" />
         <result column="node_level" jdbcType="INTEGER" property="nodeLevel" />
         <result column="scan_count" jdbcType="BIGINT" property="scanCount" />
+        <result column="is_saled" jdbcType="INTEGER" property="isSaled" />
     </resultMap>
 
     <resultMap id="PointResultMap" type="com.zsl.tracedb.model.ZslTracePoint">
@@ -24,6 +25,8 @@
         <result column="trace_stall_id" jdbcType="INTEGER" property="traceStallId" />
         <result column="trace_code_number" jdbcType="VARCHAR" property="traceCodeNumber" />
         <result column="trace_point_time" jdbcType="TIMESTAMP" property="tracePointTime" />
+        <result column="trace_point_service_type" jdbcType="INTEGER" property="tracePointServiceType" />
+        <result column="trace_point_service_id" jdbcType="INTEGER" property="tracePointServiceId" />
     </resultMap>
 
     <resultMap id="BaseResultMapSub" type="com.zsl.traceapi.dto.ExcelTraceCode">

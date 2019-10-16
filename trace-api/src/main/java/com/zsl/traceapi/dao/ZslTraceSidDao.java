@@ -12,8 +12,6 @@ import java.util.List;
  * @Version 1.0
  **/
 public interface ZslTraceSidDao {
-    ZslTraceSid selectNewPrePaperCode();
-    ZslTraceSid selectByStartAndEndIndex();
     List<ZslTraceSid> listByCount();
     List<ZslTraceSid> listBlankCodePart();
 }

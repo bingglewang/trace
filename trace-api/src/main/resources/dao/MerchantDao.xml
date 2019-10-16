@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsl.traceapi.dao.MerchantDao">
+    <resultMap id="BaseResultMap" type="com.zsl.traceapi.dto.MerchantPointDto">
+        <result column="tracePointName" jdbcType="VARCHAR" property="tracePointName"/>
+        <result column="detailAddress" jdbcType="VARCHAR" property="detailAddress"/>
+        <result column="contactNumber" jdbcType="VARCHAR" property="contactNumber"/>
+        <result column="personInCharge" jdbcType="VARCHAR" property="personInCharge"/>
+        <result column="serviceId" jdbcType="INTEGER" property="serviceId"/>
+        <result column="serviceType" jdbcType="INTEGER" property="serviceType"/>
+    </resultMap>
+
+    <select id="getEmployPoint" resultMap="BaseResultMap">
+           SELECT
+            CONCAT(c.country,p.province,ci.city,a.area,m.merchant_detail_site) detailAddress,
+            asb.mobile contactNumber,
+            asb.realName personInCharge,
+            m.merchant_name tracePointName,
+            asb.id  serviceId,
+            3 serviceType
+        FROM
+            merchant m
+        LEFT JOIN country c on c.countryID = SUBSTRING_INDEX(SUBSTRING_INDEX(m.administrative_division_full_site,',',1),',',- 1)
+        LEFT JOIN province p on p.provinceID = SUBSTRING_INDEX(SUBSTRING_INDEX(m.administrative_division_full_site,',',2),',',- 1)
+        LEFT JOIN city ci on ci.cityID = SUBSTRING_INDEX(SUBSTRING_INDEX(m.administrative_division_full_site,',',3),',',- 1)
+        LEFT JOIN area a on a.areaID = SUBSTRING_INDEX(SUBSTRING_INDEX(m.administrative_division_full_site,',',4),',',- 1)
+				LEFT JOIN account_sub_merchant asb on asb.account_id = m.merchant_id
+        where
+	      asb.id = #{employId}
+    </select>
+
+
+    <select id="getEmployPointByMobile" resultMap="BaseResultMap">
+           SELECT
+            CONCAT(c.country,p.province,ci.city,a.area,m.merchant_detail_site) detailAddress,
+            asb.mobile contactNumber,
+            asb.realName personInCharge,
+            m.merchant_name tracePointName,
+            asb.id  serviceId,
+            3 serviceType
+        FROM
+            merchant m
+        LEFT JOIN country c on c.countryID = SUBSTRING_INDEX(SUBSTRING_INDEX(m.administrative_division_full_site,',',1),',',- 1)
+        LEFT JOIN province p on p.provinceID = SUBSTRING_INDEX(SUBSTRING_INDEX(m.administrative_division_full_site,',',2),',',- 1)
+        LEFT JOIN city ci on ci.cityID = SUBSTRING_INDEX(SUBSTRING_INDEX(m.administrative_division_full_site,',',3),',',- 1)
+        LEFT JOIN area a on a.areaID = SUBSTRING_INDEX(SUBSTRING_INDEX(m.administrative_division_full_site,',',4),',',- 1)
+				LEFT JOIN account_sub_merchant asb on asb.account_id = m.merchant_id
+        where
+	      asb.mobile = #{mobile}
+    </select>
+
+    <select id="getMerchantPoint" resultMap="BaseResultMap">
+        SELECT
+            CONCAT(c.country,p.province,ci.city,a.area,m.merchant_detail_site) detailAddress,
+            m.contact_number contactNumber,
+            m.merchant_contact personInCharge,
+            m.merchant_name tracePointName,
+            m.merchant_id serviceId,
+            1 serviceType
+        FROM
+            merchant m
+        LEFT JOIN country c on c.countryID = SUBSTRING_INDEX(SUBSTRING_INDEX(m.administrative_division_full_site,',',1),',',- 1)
+        LEFT JOIN province p on p.provinceID = SUBSTRING_INDEX(SUBSTRING_INDEX(m.administrative_division_full_site,',',2),',',- 1)
+        LEFT JOIN city ci on ci.cityID = SUBSTRING_INDEX(SUBSTRING_INDEX(m.administrative_division_full_site,',',3),',',- 1)
+        LEFT JOIN area a on a.areaID = SUBSTRING_INDEX(SUBSTRING_INDEX(m.administrative_division_full_site,',',4),',',- 1)
+        where
+	       m.merchant_id = #{merchantId}
+    </select>
+
+
+    <select id="getMerchantPointByMobile" resultMap="BaseResultMap">
+        SELECT
+            CONCAT(c.country,p.province,ci.city,a.area,m.merchant_detail_site) detailAddress,
+            m.contact_number contactNumber,
+            m.merchant_contact personInCharge,
+            m.merchant_name tracePointName,
+            m.merchant_id serviceId,
+            3 serviceType
+        FROM
+            merchant m
+        LEFT JOIN country c on c.countryID = SUBSTRING_INDEX(SUBSTRING_INDEX(m.administrative_division_full_site,',',1),',',- 1)
+        LEFT JOIN province p on p.provinceID = SUBSTRING_INDEX(SUBSTRING_INDEX(m.administrative_division_full_site,',',2),',',- 1)
+        LEFT JOIN city ci on ci.cityID = SUBSTRING_INDEX(SUBSTRING_INDEX(m.administrative_division_full_site,',',3),',',- 1)
+        LEFT JOIN area a on a.areaID = SUBSTRING_INDEX(SUBSTRING_INDEX(m.administrative_division_full_site,',',4),',',- 1)
+        where
+	       m.contact_number = #{mobile}
+    </select>
+
+
+    <select id="getAgentPoint" resultMap="BaseResultMap">
+        SELECT
+            CONCAT(c.country,p.province,ci.city,a.area,m.agent_detail_site) detailAddress,
+            m.agent_cpntact_number contactNumber,
+            m.agent_contact personInCharge,
+            m.agent_name tracePointName,
+            m.merchant_agent_id serviceId,
+            2 serviceType
+        FROM
+            merchant_agent m
+        LEFT JOIN country c on c.countryID = SUBSTRING_INDEX(SUBSTRING_INDEX(m.fourth_administration_id,',',1),',',- 1)
+        LEFT JOIN province p on p.provinceID = SUBSTRING_INDEX(SUBSTRING_INDEX(m.fourth_administration_id,',',2),',',- 1)
+        LEFT JOIN city ci on ci.cityID = SUBSTRING_INDEX(SUBSTRING_INDEX(m.fourth_administration_id,',',3),',',- 1)
+        LEFT JOIN area a on a.areaID = SUBSTRING_INDEX(SUBSTRING_INDEX(m.fourth_administration_id,',',4),',',- 1)
+        where
+            m.merchant_agent_id = #{agentId}
+    </select>
+
+    <select id="getAgentPointByMobile" resultMap="BaseResultMap">
+        SELECT
+            CONCAT(c.country,p.province,ci.city,a.area,m.agent_detail_site) detailAddress,
+            m.agent_cpntact_number contactNumber,
+            m.agent_contact personInCharge,
+            m.agent_name tracePointName,
+            m.merchant_agent_id serviceId,
+            2 serviceType
+        FROM
+            merchant_agent m
+        LEFT JOIN country c on c.countryID = SUBSTRING_INDEX(SUBSTRING_INDEX(m.fourth_administration_id,',',1),',',- 1)
+        LEFT JOIN province p on p.provinceID = SUBSTRING_INDEX(SUBSTRING_INDEX(m.fourth_administration_id,',',2),',',- 1)
+        LEFT JOIN city ci on ci.cityID = SUBSTRING_INDEX(SUBSTRING_INDEX(m.fourth_administration_id,',',3),',',- 1)
+        LEFT JOIN area a on a.areaID = SUBSTRING_INDEX(SUBSTRING_INDEX(m.fourth_administration_id,',',4),',',- 1)
+        where
+            m.agent_cpntact_number = #{mobile}
+    </select>
+
+    <select id="getOtherPoint" resultMap="BaseResultMap">
+        SELECT
+            location detailAddress,
+            mobile contactNumber,
+            realName personInCharge,
+            trace_point tracePointName,
+            id serviceId,
+            4 serviceType
+        FROM
+            account_distribute_node
+        where id = {otherId}
+    </select>
+
+    <select id="getOtherPointByMobile" resultMap="BaseResultMap">
+        SELECT
+            location detailAddress,
+            mobile contactNumber,
+            realName personInCharge,
+            trace_point tracePointName,
+            id serviceId,
+            4 serviceType
+        FROM
+            account_distribute_node
+        where mobile = {mobile}
+    </select>
+
+</mapper>

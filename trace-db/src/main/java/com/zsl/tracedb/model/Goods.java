@@ -21,6 +21,8 @@ public class Goods implements Serializable {
 
     private Integer brandId;
 
+    private String videoUrl;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getGoodsId() {
@@ -87,6 +89,14 @@ public class Goods implements Serializable {
         this.brandId = brandId;
     }
 
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -101,6 +111,7 @@ public class Goods implements Serializable {
         sb.append(", goodsCreatTime=").append(goodsCreatTime);
         sb.append(", goodsUpdateTime=").append(goodsUpdateTime);
         sb.append(", brandId=").append(brandId);
+        sb.append(", videoUrl=").append(videoUrl);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

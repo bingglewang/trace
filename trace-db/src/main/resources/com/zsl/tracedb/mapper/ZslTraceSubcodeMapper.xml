@@ -13,6 +13,7 @@
     <result column="is_leaf" jdbcType="CHAR" property="isLeaf" />
     <result column="node_level" jdbcType="INTEGER" property="nodeLevel" />
     <result column="scan_count" jdbcType="BIGINT" property="scanCount" />
+    <result column="is_saled" jdbcType="INTEGER" property="isSaled" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -74,7 +75,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, trace_sid, trace_index, trace_code_number, trace_sub_code_number, trace_good_id, 
-    trace_stall_id, parent_id, is_leaf, node_level, scan_count
+    trace_stall_id, parent_id, is_leaf, node_level, scan_count, is_saled
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.ZslTraceSubcodeExample" resultMap="BaseResultMap">
     select
@@ -113,11 +114,11 @@
     insert into zsl_trace_subcode (trace_sid, trace_index, trace_code_number, 
       trace_sub_code_number, trace_good_id, trace_stall_id, 
       parent_id, is_leaf, node_level, 
-      scan_count)
+      scan_count, is_saled)
     values (#{traceSid,jdbcType=BIGINT}, #{traceIndex,jdbcType=BIGINT}, #{traceCodeNumber,jdbcType=VARCHAR}, 
       #{traceSubCodeNumber,jdbcType=VARCHAR}, #{traceGoodId,jdbcType=INTEGER}, #{traceStallId,jdbcType=INTEGER}, 
       #{parentId,jdbcType=BIGINT}, #{isLeaf,jdbcType=CHAR}, #{nodeLevel,jdbcType=INTEGER}, 
-      #{scanCount,jdbcType=BIGINT})
+      #{scanCount,jdbcType=BIGINT}, #{isSaled,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.ZslTraceSubcode">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -155,6 +156,9 @@
       <if test="scanCount != null">
         scan_count,
       </if>
+      <if test="isSaled != null">
+        is_saled,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="traceSid != null">
@@ -186,6 +190,9 @@
       </if>
       <if test="scanCount != null">
         #{scanCount,jdbcType=BIGINT},
+      </if>
+      <if test="isSaled != null">
+        #{isSaled,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -231,6 +238,9 @@
       <if test="record.scanCount != null">
         scan_count = #{record.scanCount,jdbcType=BIGINT},
       </if>
+      <if test="record.isSaled != null">
+        is_saled = #{record.isSaled,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -248,7 +258,8 @@
       parent_id = #{record.parentId,jdbcType=BIGINT},
       is_leaf = #{record.isLeaf,jdbcType=CHAR},
       node_level = #{record.nodeLevel,jdbcType=INTEGER},
-      scan_count = #{record.scanCount,jdbcType=BIGINT}
+      scan_count = #{record.scanCount,jdbcType=BIGINT},
+      is_saled = #{record.isSaled,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -286,6 +297,9 @@
       <if test="scanCount != null">
         scan_count = #{scanCount,jdbcType=BIGINT},
       </if>
+      <if test="isSaled != null">
+        is_saled = #{isSaled,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -300,7 +314,8 @@
       parent_id = #{parentId,jdbcType=BIGINT},
       is_leaf = #{isLeaf,jdbcType=CHAR},
       node_level = #{nodeLevel,jdbcType=INTEGER},
-      scan_count = #{scanCount,jdbcType=BIGINT}
+      scan_count = #{scanCount,jdbcType=BIGINT},
+      is_saled = #{isSaled,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

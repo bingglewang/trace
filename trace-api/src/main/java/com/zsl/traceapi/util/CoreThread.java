@@ -112,7 +112,7 @@ public class CoreThread extends Thread {
                 ZslTracePapper zslTracePapper = new ZslTracePapper();
                 //获取当前已经关联的下标
                 ZslTraceRelation zslTraceRelation = getRelationByTraceCodeNumber(traceCodeNumber);
-                if(zslTraceRelation != null && j == 0){
+                if(zslTraceRelation != null && (zslTraceRelation.getCurrentIndexRelation()+1 - relationPaperList.get(j).getTraceNumStart() >= 0 && zslTraceRelation.getCurrentIndexRelation()+1 - relationPaperList.get(j).getTraceNumEnd() <= 0)){
                     startN = zslTraceRelation.getCurrentIndexRelation()+1;
                 }else{
                     startN =relationPaperList.get(j).getTraceNumStart();
@@ -121,27 +121,39 @@ public class CoreThread extends Thread {
                 zslTracePapper.setTraceNumStart(startN);
                 zslTracePapper.setTraceNumEnd(endN);
                 for(long n = startN; n <= endN;n++) {
+                    if(zslTraceRelation != null && (n - (zslTraceRelation.getCurrentIndexRelation()+1) >= 0)){
+                        countRelation++;
+                    }else if(zslTraceRelation == null){
+                        countRelation++;
+                    }
                     if(countRelation - count == 0){
                         //已经足够
-                        zslTracePapper.setTraceNumEnd(n-1);
+                        zslTracePapper.setTraceNumEnd(n);
                         //更新关联指针
                         if(zslTraceRelation == null){
                             ZslTraceRelation relaTionInsert = new ZslTraceRelation();
                             relaTionInsert.setTraceCodeNumber(traceCodeNumber);
-                            relaTionInsert.setCurrentIndexRelation(n-1);
+                            relaTionInsert.setCurrentIndexRelation(n);
                             zslTraceRelationMapper.insert(relaTionInsert);
                         }else{
                             ZslTraceRelation relationUpdate = new ZslTraceRelation();
                             relationUpdate.setId(zslTraceRelation.getId());
-                            relationUpdate.setCurrentIndexRelation(n-1);
+                            relationUpdate.setCurrentIndexRelation(n);
                             zslTraceRelationMapper.updateByPrimaryKeySelective(relationUpdate);
                         }
-                        relationParam.add(zslTracePapper);
+                        if(zslTracePapper.getTraceNumEnd() - zslTracePapper.getTraceNumStart() >= 0){
+                            relationParam.add(zslTracePapper);
+                        }
                         return relationParam;
                     }
-                    countRelation++;
+
                 }
-                relationParam.add(zslTracePapper);
+                if(zslTracePapper.getTraceNumEnd() - zslTracePapper.getTraceNumStart() >= 0){
+                    if(zslTraceRelation != null && (zslTracePapper.getTraceNumEnd() - (zslTraceRelation.getCurrentIndexRelation()+1) < 0)){}else{
+                        relationParam.add(zslTracePapper);
+                    }
+                }
+
             }
             return relationParam;
         }else{

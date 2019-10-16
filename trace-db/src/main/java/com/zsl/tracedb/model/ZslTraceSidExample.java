@@ -405,66 +405,6 @@ public class ZslTraceSidExample {
             return (Criteria) this;
         }
 
-        public Criteria andCurrentEIndexIsNull() {
-            addCriterion("current_E_index is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentEIndexIsNotNull() {
-            addCriterion("current_E_index is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentEIndexEqualTo(Long value) {
-            addCriterion("current_E_index =", value, "currentEIndex");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentEIndexNotEqualTo(Long value) {
-            addCriterion("current_E_index <>", value, "currentEIndex");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentEIndexGreaterThan(Long value) {
-            addCriterion("current_E_index >", value, "currentEIndex");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentEIndexGreaterThanOrEqualTo(Long value) {
-            addCriterion("current_E_index >=", value, "currentEIndex");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentEIndexLessThan(Long value) {
-            addCriterion("current_E_index <", value, "currentEIndex");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentEIndexLessThanOrEqualTo(Long value) {
-            addCriterion("current_E_index <=", value, "currentEIndex");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentEIndexIn(List<Long> values) {
-            addCriterion("current_E_index in", values, "currentEIndex");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentEIndexNotIn(List<Long> values) {
-            addCriterion("current_E_index not in", values, "currentEIndex");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentEIndexBetween(Long value1, Long value2) {
-            addCriterion("current_E_index between", value1, value2, "currentEIndex");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentEIndexNotBetween(Long value1, Long value2) {
-            addCriterion("current_E_index not between", value1, value2, "currentEIndex");
-            return (Criteria) this;
-        }
-
         public Criteria andEnableCountIsNull() {
             addCriterion("enable_count is null");
             return (Criteria) this;

@@ -593,7 +593,7 @@ public class TraceController {
      * @return
      */
     @PostMapping("/deliverGoods")
-    public CommonResult deliverGoods(@RequestBody DeliverGoods deliverGoods){
+    public CommonResult deliverGoods(@Valid @RequestBody DeliverGoods deliverGoods, BindingResult bindingResult){
         int i = traceService.deliverGoods(deliverGoods);
         if(i > 0){
             return CommonResult.success("发货成功");
@@ -612,6 +612,10 @@ public class TraceController {
         }
         else if(i == -8){
             return CommonResult.failed("追溯码不存在");
+        }else if(i == -9){
+            return CommonResult.failed("流通节点信息不能为空");
+        }else if(i == -10){
+            return  CommonResult.failed("流通节点错误");
         }
         else{
             return CommonResult.failed("发货失败");

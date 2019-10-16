@@ -793,6 +793,66 @@ public class ZslTraceSubcodeExample {
             addCriterion("scan_count not between", value1, value2, "scanCount");
             return (Criteria) this;
         }
+
+        public Criteria andIsSaledIsNull() {
+            addCriterion("is_saled is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSaledIsNotNull() {
+            addCriterion("is_saled is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSaledEqualTo(Integer value) {
+            addCriterion("is_saled =", value, "isSaled");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSaledNotEqualTo(Integer value) {
+            addCriterion("is_saled <>", value, "isSaled");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSaledGreaterThan(Integer value) {
+            addCriterion("is_saled >", value, "isSaled");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSaledGreaterThanOrEqualTo(Integer value) {
+            addCriterion("is_saled >=", value, "isSaled");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSaledLessThan(Integer value) {
+            addCriterion("is_saled <", value, "isSaled");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSaledLessThanOrEqualTo(Integer value) {
+            addCriterion("is_saled <=", value, "isSaled");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSaledIn(List<Integer> values) {
+            addCriterion("is_saled in", values, "isSaled");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSaledNotIn(List<Integer> values) {
+            addCriterion("is_saled not in", values, "isSaled");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSaledBetween(Integer value1, Integer value2) {
+            addCriterion("is_saled between", value1, value2, "isSaled");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSaledNotBetween(Integer value1, Integer value2) {
+            addCriterion("is_saled not between", value1, value2, "isSaled");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
