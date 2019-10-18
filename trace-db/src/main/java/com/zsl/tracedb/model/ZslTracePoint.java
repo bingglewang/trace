@@ -31,11 +31,8 @@ public class ZslTracePoint implements Serializable {
 
     private Date tracePointTime;
 
-    @ApiModelProperty(value = "流通节点关联的业务id")
-    private Integer tracePointServiceId;
-
-    @ApiModelProperty(value = "业务类型（1：商家，2：员工，3：其他（流通节点用户））")
-    private Integer tracePointServiceType;
+    @ApiModelProperty(value = "流通节点关联的账号id")
+    private Integer tracePointAccountId;
 
     private static final long serialVersionUID = 1L;
 
@@ -111,20 +108,12 @@ public class ZslTracePoint implements Serializable {
         this.tracePointTime = tracePointTime;
     }
 
-    public Integer getTracePointServiceId() {
-        return tracePointServiceId;
+    public Integer getTracePointAccountId() {
+        return tracePointAccountId;
     }
 
-    public void setTracePointServiceId(Integer tracePointServiceId) {
-        this.tracePointServiceId = tracePointServiceId;
-    }
-
-    public Integer getTracePointServiceType() {
-        return tracePointServiceType;
-    }
-
-    public void setTracePointServiceType(Integer tracePointServiceType) {
-        this.tracePointServiceType = tracePointServiceType;
+    public void setTracePointAccountId(Integer tracePointAccountId) {
+        this.tracePointAccountId = tracePointAccountId;
     }
 
     @Override
@@ -142,8 +131,7 @@ public class ZslTracePoint implements Serializable {
         sb.append(", traceStallId=").append(traceStallId);
         sb.append(", traceCodeNumber=").append(traceCodeNumber);
         sb.append(", tracePointTime=").append(tracePointTime);
-        sb.append(", tracePointServiceId=").append(tracePointServiceId);
-        sb.append(", tracePointServiceType=").append(tracePointServiceType);
+        sb.append(", tracePointAccountId=").append(tracePointAccountId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

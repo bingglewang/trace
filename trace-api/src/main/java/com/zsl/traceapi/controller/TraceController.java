@@ -346,6 +346,12 @@ public class TraceController {
         }
         else if (count == -7) {
             return CommonResult.failed("积分日志处理失败");
+        }else if(count == -8){
+            return CommonResult.failed("流通节点错误");
+        }else if(count == -9){
+            return CommonResult.failed("流通节点信息不能为空");
+        }else if(count == -10){
+            return CommonResult.failed("节点处理错误");
         }
         return CommonResult.failed();
     }
@@ -510,7 +516,11 @@ public class TraceController {
     }
 
 
-    // 暂时没用
+    /**
+     *  暂时没用
+     * @param miniCodeList
+     * @return
+     */
     @ApiOperation("设置生成外码")
     @PostMapping("/generateOutCode")
     @ResponseBody
@@ -523,9 +533,8 @@ public class TraceController {
         }
     }
 
-    // 暂时没用
     /**
-     * 根据数量生成外码
+     * 根据数量生成外码（暂时没用）
      * @param count
      * @return
      */
@@ -638,7 +647,6 @@ public class TraceController {
      * @return
      */
     @PostMapping("insertScanRecord")
-   // @RequestLimit(count=2,time=60)
     public CommonResult insertScanRecord(@RequestBody ScanRecordInsertParam scanRecordInsertParam){
         int i = traceService.insertScanRecord(scanRecordInsertParam);
         if(i > 0){
@@ -718,7 +726,7 @@ public class TraceController {
      * @return
      */
     @GetMapping("preCreatePaperCode")
-    CommonResult preCreatePaperCode(Long preCreateCount){
+    public CommonResult preCreatePaperCode(Long preCreateCount){
         return traceService.preCreatePaperCode(preCreateCount);
     }
 
@@ -726,7 +734,7 @@ public class TraceController {
      * 测试（更新）
      */
     @PostMapping("testTraceUpdate")
-    CommonResult testTraceUpdate(@RequestBody RelationMqSuCodeParam relationMqSuCodeParam){
+    public CommonResult testTraceUpdate(@RequestBody RelationMqSuCodeParam relationMqSuCodeParam){
         String traceCodeJson = relationMqSuCodeParam.getMqJsonStr();
         new CoreThread(traceCodeJson).start();
         return CommonResult.success("");
@@ -737,7 +745,7 @@ public class TraceController {
      * 测试(生成)
      */
     @GetMapping("testTraceCreate")
-    CommonResult testTraceCreate(String traceCodeNumber){
+    public CommonResult testTraceCreate(String traceCodeNumber){
         try {
             Long zslTradeSid = Long.parseLong(traceCodeNumber);
             new TraceSidThread(zslTradeSid).start();
@@ -751,7 +759,7 @@ public class TraceController {
      * 根据追溯批次号获取下一个sid
      */
     @GetMapping("getNextSidByCodeNumber")
-    CommonResult getNextSidByCodeNumber(String traceCodeNumber){
+    public CommonResult getNextSidByCodeNumber(String traceCodeNumber){
         return traceService.getNextSidByCodeNumber(traceCodeNumber);
     }
 
@@ -759,7 +767,7 @@ public class TraceController {
      * 根据sid和追溯id获取覆盖码段
      */
     @GetMapping("getCodePartBySid")
-    CommonResult getCodePartBySid(Long sid,Integer id){
+    public CommonResult getCodePartBySid(Long sid,Integer id){
         return traceService.getCodePartBySid(sid,id);
     }
 }

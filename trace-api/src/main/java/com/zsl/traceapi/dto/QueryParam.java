@@ -7,19 +7,62 @@ import java.util.Date;
 
 @Data
 public class QueryParam {
-    private String traceCodeNumber; //追溯码批次号
-    private String traceCompanyName; //所属公司名称
+    /**
+     * 追溯码批次号
+     */
+    private String traceCodeNumber;
+
+    /**
+     * 所属公司名称
+     */
+    private String traceCompanyName;
     private Long  traceApplyStartDate;
     private Long traceApplyEndDate;
     @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
-    private Date  traceApplyStartDate1; //申请开始日期
+
+    /**
+     * 申请开始日期
+     */
+    private Date  traceApplyStartDate1;
     @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
-    private Date  traceApplyEndDate1; //申请结束日期
-    private Integer traceHandleStatus; //处理状态
-    private String merchantName; //商家名称
-    private Integer traceApplyType; //申请类型
-    private Integer merchantId; //商家id
-    private Integer allianceId; //加盟商id
-    private String isZongBu; //是否为总部运营
-    private String isMiniProgram; //是否为小程序
+
+    /**
+     * 申请结束日期
+     */
+    private Date  traceApplyEndDate1;
+
+    /**
+     * 处理状态
+     */
+    private Integer traceHandleStatus;
+
+    /**
+     * 商家名称
+     */
+    private String merchantName;
+
+    /**
+     * 申请类型
+     */
+    private Integer traceApplyType;
+
+    /**
+     * 商家id
+     */
+    private Integer merchantId;
+
+    /**
+     * 加盟商id
+     */
+    private Integer allianceId;
+
+    /**
+     * 是否为总部运营
+     */
+    private String isZongBu;
+
+    /**
+     * 是否为小程序
+     */
+    private String isMiniProgram;
 }

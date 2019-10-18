@@ -3,11 +3,9 @@
 <mapper namespace="com.zsl.tracedb.mapper.AccountDistributeNodeMapper">
   <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.AccountDistributeNode">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
-    <result column="realName" jdbcType="VARCHAR" property="realname" />
+    <result column="account_id" jdbcType="INTEGER" property="accountId" />
     <result column="trace_point" jdbcType="VARCHAR" property="tracePoint" />
     <result column="location" jdbcType="VARCHAR" property="location" />
-    <result column="status" jdbcType="INTEGER" property="status" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -69,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, mobile, realName, trace_point, location, status, create_time
+    id, account_id, trace_point, location, create_time
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.AccountDistributeNodeExample" resultMap="BaseResultMap">
     select
@@ -105,12 +103,10 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into account_distribute_node (mobile, realName, trace_point, 
-      location, status, create_time
-      )
-    values (#{mobile,jdbcType=VARCHAR}, #{realname,jdbcType=VARCHAR}, #{tracePoint,jdbcType=VARCHAR}, 
-      #{location,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
-      )
+    insert into account_distribute_node (account_id, trace_point, location, 
+      create_time)
+    values (#{accountId,jdbcType=INTEGER}, #{tracePoint,jdbcType=VARCHAR}, #{location,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.AccountDistributeNode">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -118,11 +114,8 @@
     </selectKey>
     insert into account_distribute_node
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="mobile != null">
-        mobile,
-      </if>
-      <if test="realname != null">
-        realName,
+      <if test="accountId != null">
+        account_id,
       </if>
       <if test="tracePoint != null">
         trace_point,
@@ -130,28 +123,19 @@
       <if test="location != null">
         location,
       </if>
-      <if test="status != null">
-        status,
-      </if>
       <if test="createTime != null">
         create_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="mobile != null">
-        #{mobile,jdbcType=VARCHAR},
-      </if>
-      <if test="realname != null">
-        #{realname,jdbcType=VARCHAR},
+      <if test="accountId != null">
+        #{accountId,jdbcType=INTEGER},
       </if>
       <if test="tracePoint != null">
         #{tracePoint,jdbcType=VARCHAR},
       </if>
       <if test="location != null">
         #{location,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -170,20 +154,14 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.mobile != null">
-        mobile = #{record.mobile,jdbcType=VARCHAR},
-      </if>
-      <if test="record.realname != null">
-        realName = #{record.realname,jdbcType=VARCHAR},
+      <if test="record.accountId != null">
+        account_id = #{record.accountId,jdbcType=INTEGER},
       </if>
       <if test="record.tracePoint != null">
         trace_point = #{record.tracePoint,jdbcType=VARCHAR},
       </if>
       <if test="record.location != null">
         location = #{record.location,jdbcType=VARCHAR},
-      </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=INTEGER},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -196,11 +174,9 @@
   <update id="updateByExample" parameterType="map">
     update account_distribute_node
     set id = #{record.id,jdbcType=INTEGER},
-      mobile = #{record.mobile,jdbcType=VARCHAR},
-      realName = #{record.realname,jdbcType=VARCHAR},
+      account_id = #{record.accountId,jdbcType=INTEGER},
       trace_point = #{record.tracePoint,jdbcType=VARCHAR},
       location = #{record.location,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -209,20 +185,14 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.AccountDistributeNode">
     update account_distribute_node
     <set>
-      <if test="mobile != null">
-        mobile = #{mobile,jdbcType=VARCHAR},
-      </if>
-      <if test="realname != null">
-        realName = #{realname,jdbcType=VARCHAR},
+      <if test="accountId != null">
+        account_id = #{accountId,jdbcType=INTEGER},
       </if>
       <if test="tracePoint != null">
         trace_point = #{tracePoint,jdbcType=VARCHAR},
       </if>
       <if test="location != null">
         location = #{location,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        status = #{status,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -232,11 +202,9 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.AccountDistributeNode">
     update account_distribute_node
-    set mobile = #{mobile,jdbcType=VARCHAR},
-      realName = #{realname,jdbcType=VARCHAR},
+    set account_id = #{accountId,jdbcType=INTEGER},
       trace_point = #{tracePoint,jdbcType=VARCHAR},
       location = #{location,jdbcType=VARCHAR},
-      status = #{status,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>

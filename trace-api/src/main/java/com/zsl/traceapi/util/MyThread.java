@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * @ClassName MyThread
- * @Description TODO
+ * @Description 电子吗生成线程
  * @Author binggleW
  * @Date 2019-10-08 16:26
  * @Version 1.0
@@ -30,10 +30,6 @@ public class MyThread extends Thread {
     private ZslTraceMapper zslTraceMapper = (ZslTraceMapper) SpringContextUtil.getBean(ZslTraceMapper.class);
 
     private ZslTraceSubcodeDao zslTraceSubcodeDao = (ZslTraceSubcodeDao) SpringContextUtil.getBean(ZslTraceSubcodeDao.class);
-
-    private ZslTraceSidDao zslTraceSidDao = (ZslTraceSidDao) SpringContextUtil.getBean(ZslTraceSidDao.class);
-
-    private ZslTraceSidMapper zslTraceSidMapper = (ZslTraceSidMapper) SpringContextUtil.getBean(ZslTraceSidMapper.class);
 
     private TraceCodeProducerKafka traceCodeProducerKafka = (TraceCodeProducerKafka) SpringContextUtil.getBean(TraceCodeProducerKafka.class);
 

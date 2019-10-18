@@ -25,8 +25,7 @@
         <result column="trace_stall_id" jdbcType="INTEGER" property="traceStallId" />
         <result column="trace_code_number" jdbcType="VARCHAR" property="traceCodeNumber" />
         <result column="trace_point_time" jdbcType="TIMESTAMP" property="tracePointTime" />
-        <result column="trace_point_service_type" jdbcType="INTEGER" property="tracePointServiceType" />
-        <result column="trace_point_service_id" jdbcType="INTEGER" property="tracePointServiceId" />
+        <result column="trace_point_account_id" jdbcType="INTEGER" property="tracePointAccountId" />
     </resultMap>
 
     <resultMap id="BaseResultMapSub" type="com.zsl.traceapi.dto.ExcelTraceCode">

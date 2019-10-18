@@ -8,20 +8,14 @@ public class AccountSubMerchant implements Serializable {
     @ApiModelProperty(value = "自增主键")
     private Integer id;
 
-    @ApiModelProperty(value = "主账号ID")
+    @ApiModelProperty(value = "账号ID")
     private Integer accountId;
 
-    @ApiModelProperty(value = "账号名称")
-    private String accountName;
+    @ApiModelProperty(value = "关联商家ID")
+    private Integer merchantId;
 
-    @ApiModelProperty(value = "手机号码")
-    private String mobile;
-
-    @ApiModelProperty(value = "姓名")
-    private String realname;
-
-    @ApiModelProperty(value = "状态（1：启用；0：禁用）")
-    private Integer status;
+    @ApiModelProperty(value = "地址")
+    private String location;
 
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
@@ -44,36 +38,20 @@ public class AccountSubMerchant implements Serializable {
         this.accountId = accountId;
     }
 
-    public String getAccountName() {
-        return accountName;
+    public Integer getMerchantId() {
+        return merchantId;
     }
 
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
+    public void setMerchantId(Integer merchantId) {
+        this.merchantId = merchantId;
     }
 
-    public String getMobile() {
-        return mobile;
+    public String getLocation() {
+        return location;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public String getRealname() {
-        return realname;
-    }
-
-    public void setRealname(String realname) {
-        this.realname = realname;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public Date getCreateTime() {
@@ -92,10 +70,8 @@ public class AccountSubMerchant implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", accountId=").append(accountId);
-        sb.append(", accountName=").append(accountName);
-        sb.append(", mobile=").append(mobile);
-        sb.append(", realname=").append(realname);
-        sb.append(", status=").append(status);
+        sb.append(", merchantId=").append(merchantId);
+        sb.append(", location=").append(location);
         sb.append(", createTime=").append(createTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * @ClassName TraceSubcodeUpdateParamSid
- * @Description TODO
+ * @Description 子码关联封装类
  * @Author binggleW
  * @Date 2019-09-20 18:05
  * @Version 1.0

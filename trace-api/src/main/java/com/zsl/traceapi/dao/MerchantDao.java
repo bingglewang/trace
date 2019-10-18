@@ -12,11 +12,25 @@ import org.apache.ibatis.annotations.Param;
  **/
 public interface MerchantDao {
     /**
-     * 商家
-     * @param merchantId
+     * 员工
+     * @param accountId
      * @return
      */
-    MerchantPointDto getMerchantPoint(@Param("merchantId") Integer merchantId);
+    MerchantPointDto getEmployPoint(@Param("accountId") Integer accountId);
+
+    /**
+     * 根据手机号获取员工
+     * @param mobile
+     * @return
+     */
+    MerchantPointDto getEmployPointByMobile(@Param("mobile") String mobile);
+
+    /**
+     * 商家
+     * @param accountId
+     * @return
+     */
+    MerchantPointDto getMerchantPoint(@Param("accountId") Integer accountId);
 
     /**
      * 根据手机号获取商家
@@ -25,45 +39,27 @@ public interface MerchantDao {
      */
     MerchantPointDto getMerchantPointByMobile(@Param("mobile") String mobile);
 
-    /**
-     * 代理商
-     * @param agentId
-     * @return
-     */
-    MerchantPointDto getAgentPoint(@Param("agentId") Integer agentId);
 
     /**
-     * 根据手机号获取代理商
-     * @param mobile
+     * 其他 和代理商
+     * @param accountId
      * @return
      */
-    MerchantPointDto getAgentPointByMobile(@Param("mobile") String mobile);
+    MerchantPointDto getOtherPoint(@Param("accountId") Integer accountId);
 
     /**
-     * 其他
-     * @param otherId
-     * @return
-     */
-    MerchantPointDto getOtherPoint(@Param("otherId") Integer otherId);
-
-    /**
-     * 根据手机号获取其他
+     * 根据手机号获取其他和代理商
      * @param mobile
      * @return
      */
     MerchantPointDto getOtherPointByMobile(@Param("mobile") String mobile);
 
     /**
-     * 商家员工
-     * @param employId
+     * 根据账号id更新追溯点名称
+     * @param accountId
+     * @param tracePointName
      * @return
      */
-    MerchantPointDto getEmployPoint(@Param("employId") Integer employId);
+    int updatePointNodeByAccountId(@Param("accountId") Integer accountId,@Param("tracePointName") String tracePointName);
 
-    /**
-     * 根据手机号获取商家员工
-     * @param mobile
-     * @return
-     */
-    MerchantPointDto getEmployPointByMobile(@Param("mobile") String mobile);
 }

@@ -1,5 +1,6 @@
 package com.zsl.traceapi.util;
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -16,6 +17,7 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -104,7 +106,24 @@ public class HttpClientUtil {
         return doPost(url, null);
     }
 
-    public static String doPostJson(String url, String json) {
+
+    public static void main(String[] args) {
+        String url = "http://zs-beta.cntracechain.com/accountCenter/account/add";
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("accountName","doyouname");
+        jsonObject.put("realName","哈哈哈");
+        jsonObject.put("mobile","13227355241");
+        jsonObject.put("accountType",2);
+        JSONObject role = new JSONObject();
+        role.put("id",11);
+        jsonObject.put("role",role);
+        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoie1wiaGVhZHF1YXJ0ZXJzXCI6MixcInJvbGVOYW1lXCI6XCJST0xFX0JVU0lORVNTXCIsXCJkZXNjcmlwdGlvblwiOlwi5ZWG5a62XCIsXCJpZFwiOjh9IiwiaXNzIjoiMzIwIiwiZXhwIjoxNTcxMzkwODY0LCJpYXQiOjE1NzEzODM2NjR9.P3w83n2ZtU5YTxJsAf2DgD2In-Usz2-kyskIO7Pxvvw";
+        String result =  HttpClientUtil.doPostJson(url,jsonObject.toJSONString(),token);
+        System.out.println("结果："+result);
+    }
+
+
+    public static String doPostJson(String url, String json,String token) {
         // 创建Httpclient对象
         CloseableHttpClient httpClient = HttpClients.createDefault();
         CloseableHttpResponse response = null;
@@ -115,6 +134,7 @@ public class HttpClientUtil {
             // 创建请求内容
             StringEntity entity = new StringEntity(json, ContentType.APPLICATION_JSON);
             httpPost.setEntity(entity);
+            httpPost.setHeader("token",token);
             // 执行http请求
             response = httpClient.execute(httpPost);
             resultString = EntityUtils.toString(response.getEntity(), "utf-8");

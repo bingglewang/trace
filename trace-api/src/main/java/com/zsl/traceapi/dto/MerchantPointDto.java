@@ -16,13 +16,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MerchantPointDto {
     /**
-     * 业务类型（1：商家，2：代理商，3：员工，4：其他）
+     * 账号id
      */
-    private Integer serviceType;
-    /**
-     * 商家id，员工id，代理商id，其他id
-     */
-    private Integer serviceId;
+    private Integer accountId;
     /**
      * 流通节点名称
      */

@@ -157,7 +157,7 @@ public class TreeUtils {
         // 调用pid的get方法获取n的pid值
         Object n_pid = getPid.invoke(n);
         // 根据值的类型比较是否相同
-        // TODO 先不处理类型的问题，直接用简单类型、封装类型、String判断
+        // 先不处理类型的问题，直接用简单类型、封装类型、String判断
         if (n_pid != null && n_pid.toString().equals(node_id.toString())) {
             return true;
         }
