@@ -18,6 +18,11 @@ public class RequestContext {
 	private HttpServletResponse response;
 
 	/**
+	 *token
+	 */
+	private String token;
+
+	/**
 	 * jsonObject
 	 */
 	private JSONObject jsonObject;
@@ -51,6 +56,14 @@ public class RequestContext {
 
 	public void setJsonObject(JSONObject jsonObject) {
 		this.jsonObject = jsonObject;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 }
 

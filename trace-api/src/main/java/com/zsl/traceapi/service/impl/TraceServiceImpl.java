@@ -88,9 +88,6 @@ public class TraceServiceImpl implements TraceService {
     private AccountMapper accountMapper;
 
     @Autowired
-    private RoleMapper roleMapper;
-
-    @Autowired
     private ZslTraceSubcodeDao zslTraceSubcodeDao;
 
     @Autowired
@@ -668,8 +665,7 @@ public class TraceServiceImpl implements TraceService {
 
     public Integer insertPointNodeAccount(MerchantPointDto merchantPointDto){
         RequestContext requestContext = RequestContextMgr.getLocalContext();
-        JSONObject loginUser = requestContext.getJsonObject();
-        String tokenLogin = (loginUser.get("token")).toString();
+        String tokenLogin = requestContext.getToken();
         String url = "http://zs-beta.cntracechain.com/accountCenter/account/add";
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("accountName",merchantPointDto.getContactNumber());
@@ -686,7 +682,8 @@ public class TraceServiceImpl implements TraceService {
             int statusCode =  Integer.parseInt(resultJson.get("statusCode").toString());
             if(statusCode - 200 == 0){
                 //更新
-                MerchantPointDto merchantPointUpdate = merchantDao.getOtherPointByMobile(merchantPointDto.getContactNumber());
+                String mobile = merchantPointDto.getContactNumber();
+                MerchantPointDto merchantPointUpdate = merchantDao.getOtherPointByMobile(mobile);
                 merchantDao.updatePointNodeByAccountId(merchantPointUpdate.getAccountId(),merchantPointDto.getTracePointName());
                 return merchantPointUpdate.getAccountId();
             }else{
@@ -1258,11 +1255,11 @@ public class TraceServiceImpl implements TraceService {
         ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
         criteria.andTraceCodeNumberEqualTo(zslTraceSubcode.getTraceCodeNumber());
         List<ZslTrace> zslTraceList = zslTraceMapper.selectByExample(zslTraceExample);
-        if (!CollectionUtils.isEmpty(zslTraceList)) {
+       /* if (!CollectionUtils.isEmpty(zslTraceList)) {
             if ("N".equals(zslTraceList.get(0).getTraceBack4())) {
                 return -4; //该批次号不能在小程序端操作
             }
-        }
+        }*/
         ZslTraceSubcode update = new ZslTraceSubcode();
         update.setId(zslTraceSubcode.getId());
         update.setIsLeaf("N");
@@ -1341,11 +1338,11 @@ public class TraceServiceImpl implements TraceService {
                 } else {
                     TraceOutCodeUpdateParam traceOutCodeUpdateParam = new TraceOutCodeUpdateParam();
                     traceOutCodeUpdateParam.setId(m);
-                    traceOutCodeUpdateParam.setParentId(outCodeNum);
+                    ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectById(m);
+                    traceOutCodeUpdateParam.setParentId(zslTraceSubcode.getId());
                     traceOutCodeUpdateParams.add(traceOutCodeUpdateParam);
                     TraceOutCodeUpdateParam updateParent = new TraceOutCodeUpdateParam();
                     updateParent.setId(outCodeNum);
-                    ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectById(m);
                     updateParent.setNodeLevel(zslTraceSubcode.getNodeLevel() + 1);
                     traceOutCodeUpdateParamParent.add(updateParent);
                     outCodeNum++;
@@ -1358,8 +1355,8 @@ public class TraceServiceImpl implements TraceService {
             }
             int j = zslTraceSubcodeDao.updateOutCodeById(traceOutCodeUpdateParamParent);
             int i = zslTraceSubcodeDao.updateOutCodeBatch(traceOutCodeUpdateParams);
-            //修改为小程序端
-            updateTraceBack4(zslTraceList.get(0).getTraceCodeNumber());
+           /* //修改为小程序端
+            updateTraceBack4(zslTraceList.get(0).getTraceCodeNumber());*/
             return CommonResult.success("转换成功");
         } else {
             return CommonResult.failed(conflictSids, "这些编号已经为外码了");
@@ -1831,7 +1828,8 @@ public class TraceServiceImpl implements TraceService {
      * 账号id 获取流通节点信息
      * @param accountId
      */
-    private MerchantPointDto getCirculateNodeInfo(int accountId) {
+    @Override
+    public MerchantPointDto getCirculateNodeInfo(int accountId) {
         MerchantPointDto result = null;
         Account account = accountMapper.selectByPrimaryKey(accountId);
         if(account == null){
@@ -2292,6 +2290,8 @@ public class TraceServiceImpl implements TraceService {
             }
         }
     }
+
+
 
     class OutCodeThread extends Thread {
         private String traceCodeNumber;

@@ -73,6 +73,7 @@ public class CenterAdminLoginInterceptor implements HandlerInterceptor{
 		LOGGER.info("登录字符串："+targetStr);
 		JSONObject jsonObject = JSONObject.parseObject(targetStr);
 
+		requestContext.setToken(token);
 		requestContext.setRequest(request);
 		requestContext.setResponse(response);
 		requestContext.setJsonObject(jsonObject);

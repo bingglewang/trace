@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface TraceService {
+    MerchantPointDto getCirculateNodeInfo(int accountId);
     /**
      * 纸质标签预生成
      * @param preCreateCount

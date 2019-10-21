@@ -9,4 +9,5 @@ import java.util.List;
 @Data
 public class TreeNode extends ZslTracePoint {
     protected List<TreeNode> children = new ArrayList<TreeNode>();
+    private String tracePointName;
 }

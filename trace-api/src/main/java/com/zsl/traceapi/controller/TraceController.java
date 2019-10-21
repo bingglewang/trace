@@ -414,6 +414,10 @@ public class TraceController {
                 for(ZslTracePoint item: listz){
                     TreeNode node = new TreeNode();
                     BeanUtils.copyProperties(item,node);
+                    MerchantPointDto merchantPointDto = traceService.getCirculateNodeInfo(item.getTracePointAccountId());
+                    if(merchantPointDto != null){
+                        node.setTracePointName(merchantPointDto.getTracePointName());
+                    }
                     treeNodes.add(node);
                 }
                 try {

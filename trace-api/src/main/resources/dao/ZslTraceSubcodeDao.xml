@@ -94,7 +94,7 @@
                 parent_id = #{item.parentId}
             </set>
             <where>
-                id = #{item.id}
+                trace_sid = #{item.id}
             </where>
         </foreach>
     </update>
@@ -107,7 +107,7 @@
                 node_level = #{item.nodeLevel}
             </set>
             <where>
-                id = #{item.id}
+                trace_sid = #{item.id}
             </where>
         </foreach>
     </update>
