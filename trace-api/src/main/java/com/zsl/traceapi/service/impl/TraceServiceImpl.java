@@ -442,10 +442,8 @@ public class TraceServiceImpl implements TraceService {
                 traceCodeRelation.setGoodsId(zslTracePoint.getTraceGoodsId());
                 traceCodeRelation.setStallId(zslTracePoint.getTraceStallId());
                 traceCodeRelation.setTraceCodeNumber(zslTracePoint.getTraceCodeNumber());
-                //获取用户登录信息
-                RequestContext requestContext = RequestContextMgr.getLocalContext();
-                JSONObject loginUser = requestContext.getJsonObject();
-                Integer accountId = Integer.parseInt(loginUser.get("id").toString());
+                //根据商家id获取账号id
+                Integer accountId = merchantDao.getAccountIdByBussiId(zslTrace.get(0).getTraceBusinessId());
                 zslTracePoint.setTracePointAccountId(accountId);
                 zslTracePointMapper.insert(zslTracePoint);
                 sendJsonStr = JSONObject.toJSONString(traceCodeRelation);
@@ -474,12 +472,14 @@ public class TraceServiceImpl implements TraceService {
                     zslTraceProductionLink.setTraceRecodeId(insertRecord.getTraceRecordId());
                     zslTraceProductionLinkMapper.insert(zslTraceProductionLink);
                     //插入图片
-                    for (int i = 0; i < productionLink.getProductionPicList().size(); i++) {
-                        ZslProductionImage zslProductionImage = new ZslProductionImage();
-                        zslProductionImage.setImageIndex(i);
-                        zslProductionImage.setImageUrl(productionLink.getProductionPicList().get(i));
-                        zslProductionImage.setProductionId(zslTraceProductionLink.getId());
-                        zslProductionImageMapper.insert(zslProductionImage);
+                    if(CollectionUtil.isNotEmpty(productionLink.getProductionPicList())){
+                        for (int i = 0; i < productionLink.getProductionPicList().size(); i++) {
+                            ZslProductionImage zslProductionImage = new ZslProductionImage();
+                            zslProductionImage.setImageIndex(i);
+                            zslProductionImage.setImageUrl(productionLink.getProductionPicList().get(i));
+                            zslProductionImage.setProductionId(zslTraceProductionLink.getId());
+                            zslProductionImageMapper.insert(zslProductionImage);
+                        }
                     }
                 }
             }
@@ -514,6 +514,7 @@ public class TraceServiceImpl implements TraceService {
             return -3; //追溯记录处理失败
         }
     }
+
 
     @Override
     public String isCodeRepeat(List<TraceRecordInsertParam> traceRecordInsertParamList) {
@@ -596,8 +597,10 @@ public class TraceServiceImpl implements TraceService {
                 return -9;//流通节点信息不能为空
             }
             Integer nodeAccountId = insertPointNodeAccount(traceRecordPointParam.getOtherMerchant());
-            if(nodeAccountId == null){
-                return -10;//节点处理错误
+            if(nodeAccountId == -11){
+                return -10;//节点处理错误(账号插入失败)
+            }else if(nodeAccountId == - 22){
+                return -11;//节点处理错误
             }
             accountId = nodeAccountId;
         } else {
@@ -687,10 +690,10 @@ public class TraceServiceImpl implements TraceService {
                 merchantDao.updatePointNodeByAccountId(merchantPointUpdate.getAccountId(),merchantPointDto.getTracePointName());
                 return merchantPointUpdate.getAccountId();
             }else{
-                return null;
+                return -11;//节点处理错误(账号插入失败)
             }
         }catch (Exception e){
-            return null;
+            return -22;//节点处理错误
         }
     }
 
@@ -1267,7 +1270,7 @@ public class TraceServiceImpl implements TraceService {
         if (i < 0) {
             return -2;
         }
-        updateTraceBack4(zslTraceList.get(0).getTraceCodeNumber());
+        //updateTraceBack4(zslTraceList.get(0).getTraceCodeNumber());
         return i;
     }
 
@@ -1323,11 +1326,11 @@ public class TraceServiceImpl implements TraceService {
             ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
             criteria.andTraceCodeNumberEqualTo(traceCodeNumber);
             List<ZslTrace> zslTraceList = zslTraceMapper.selectByExample(zslTraceExample);
-            if (!CollectionUtils.isEmpty(zslTraceList)) {
+            /*if (!CollectionUtils.isEmpty(zslTraceList)) {
                 if ("N".equals(zslTraceList.get(0).getTraceBack4())) {
                     return CommonResult.failed("该批次号不能在小程序端操作");
                 }
-            }
+            }*/
             //进行内码转外码
             List<TraceOutCodeUpdateParam> traceOutCodeUpdateParams = new ArrayList<>();
             List<TraceOutCodeUpdateParam> traceOutCodeUpdateParamParent = new ArrayList<>();
@@ -1337,8 +1340,9 @@ public class TraceServiceImpl implements TraceService {
                     return CommonResult.failed("编号不能交叉");
                 } else {
                     TraceOutCodeUpdateParam traceOutCodeUpdateParam = new TraceOutCodeUpdateParam();
-                    traceOutCodeUpdateParam.setId(m);
-                    ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectById(m);
+                    ZslTraceSubcode zslTraceSubcodeM = zslTraceSubcodeDao.selectById(m);
+                    traceOutCodeUpdateParam.setId(zslTraceSubcodeM.getId());
+                    ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectById(outCodeNum);
                     traceOutCodeUpdateParam.setParentId(zslTraceSubcode.getId());
                     traceOutCodeUpdateParams.add(traceOutCodeUpdateParam);
                     TraceOutCodeUpdateParam updateParent = new TraceOutCodeUpdateParam();

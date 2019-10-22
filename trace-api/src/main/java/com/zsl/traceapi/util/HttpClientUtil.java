@@ -110,14 +110,14 @@ public class HttpClientUtil {
     public static void main(String[] args) {
         String url = "http://zs-beta.cntracechain.com/accountCenter/account/add";
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("accountName","doyouname");
+        jsonObject.put("accountName","16320150321");
         jsonObject.put("realName","哈哈哈");
-        jsonObject.put("mobile","13227355241");
+        jsonObject.put("mobile","16320150321");
         jsonObject.put("accountType",2);
         JSONObject role = new JSONObject();
         role.put("id",11);
         jsonObject.put("role",role);
-        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoie1wiaGVhZHF1YXJ0ZXJzXCI6MixcInJvbGVOYW1lXCI6XCJST0xFX0JVU0lORVNTXCIsXCJkZXNjcmlwdGlvblwiOlwi5ZWG5a62XCIsXCJpZFwiOjh9IiwiaXNzIjoiMzIwIiwiZXhwIjoxNTcxMzkwODY0LCJpYXQiOjE1NzEzODM2NjR9.P3w83n2ZtU5YTxJsAf2DgD2In-Usz2-kyskIO7Pxvvw";
+        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoie1wiaGVhZHF1YXJ0ZXJzXCI6MixcInJvbGVOYW1lXCI6XCJST0xFX0JVU0lORVNTXCIsXCJkZXNjcmlwdGlvblwiOlwi5ZWG5a62XCIsXCJpZFwiOjh9IiwiaXNzIjoiMzIwIiwiZXhwIjoxNTcxNzQ1NTQ0LCJpYXQiOjE1NzE3MzgzNDR9.2aYty2xX2TFZep4oY4_IbII4m2EjZV8O5LuKO_YmJ7g";
         String result =  HttpClientUtil.doPostJson(url,jsonObject.toJSONString(),token);
         System.out.println("结果："+result);
     }

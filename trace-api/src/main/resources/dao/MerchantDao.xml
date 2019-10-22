@@ -10,6 +10,24 @@
     </resultMap>
 
 
+    <!--根据商家id获取商家账号id-->
+    <select id="getAccountIdByBussiId" resultType="java.lang.Integer">
+        SELECT
+            id
+        FROM
+            account
+        WHERE
+            account_name = (
+                SELECT
+                    merchant_account
+                FROM
+                    merchant
+                WHERE
+                    merchant_id = #{merchantId}
+            )
+    </select>
+
+
     <!--员工相关-->
     <select id="getEmployPoint" resultMap="BaseResultMap">
           SELECT

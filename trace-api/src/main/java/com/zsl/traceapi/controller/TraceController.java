@@ -351,6 +351,8 @@ public class TraceController {
         }else if(count == -9){
             return CommonResult.failed("流通节点信息不能为空");
         }else if(count == -10){
+            return CommonResult.failed("节点处理错误(账号插入失败)");
+        }else if(count == -11){
             return CommonResult.failed("节点处理错误");
         }
         return CommonResult.failed();

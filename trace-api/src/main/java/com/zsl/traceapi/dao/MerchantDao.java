@@ -12,6 +12,13 @@ import org.apache.ibatis.annotations.Param;
  **/
 public interface MerchantDao {
     /**
+     * 根据商家id获取商家账号id
+     * @param merchantId
+     * @return
+     */
+    Integer getAccountIdByBussiId(@Param("merchantId") Integer merchantId);
+
+    /**
      * 员工
      * @param accountId
      * @return

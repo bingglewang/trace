@@ -3,6 +3,7 @@
 <mapper namespace="com.zsl.traceapi.dao.ZslTraceSubcodeDao">
     <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.ZslTraceSubcode">
         <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="trace_sid" jdbcType="BIGINT" property="traceSid" />
         <result column="trace_index" jdbcType="BIGINT" property="traceIndex" />
         <result column="trace_code_number" jdbcType="VARCHAR" property="traceCodeNumber" />
         <result column="trace_sub_code_number" jdbcType="VARCHAR" property="traceSubCodeNumber" />
@@ -94,7 +95,7 @@
                 parent_id = #{item.parentId}
             </set>
             <where>
-                trace_sid = #{item.id}
+                id = #{item.id}
             </where>
         </foreach>
     </update>
@@ -107,7 +108,7 @@
                 node_level = #{item.nodeLevel}
             </set>
             <where>
-                trace_sid = #{item.id}
+                id = #{item.id}
             </where>
         </foreach>
     </update>
@@ -232,7 +233,7 @@
     </select>
 
     <select id="getSuCodeByPage1" resultMap="BaseResultMap">
-        SELECT
+          SELECT
                 *
             FROM
                 zsl_trace_subcode
