@@ -16,6 +16,7 @@ import com.zsl.tracedb.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,6 +44,8 @@ public class OtherAccountServcieImpl implements OtherAccountServcie {
     @Autowired
     private AccountSubMerchantMapper accountSubMerchantMapper;
 
+    private boolean isNewestNode = true;
+
     @Override
     public MerchantPointDto getNodeByMobile(String mobile) {
         MerchantPointDto result = null;
@@ -67,12 +70,43 @@ public class OtherAccountServcieImpl implements OtherAccountServcie {
         return result;
     }
 
+
+    public void getChildTrace(List<ZslTraceSubcode> zslTraceSubcodeList) {
+        for (ZslTraceSubcode zslTraceSubcode : zslTraceSubcodeList) {
+            if ("Y".equals(zslTraceSubcode.getIsLeaf())) {
+                boolean result1 = isnewestDigui(zslTraceSubcode);
+                if(!result1){
+                    isNewestNode = result1;
+                }
+            } else {
+                List<ZslTraceSubcode> children = zslTraceSubcodeDao.selectByParenId(zslTraceSubcode.getId());
+                getChildTrace(children);
+            }
+        }
+    }
+
+
     @Override
     public boolean isCurrentNodeNewest(Long sid) {
+        isNewestNode = true;
         ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectById(sid);
-        List<ZslTracePoint> tracePointList = zslTraceSubcodeDao.selectTracePointNodes(zslTraceSubcode.getTraceGoodId(), zslTraceSubcode.getTraceIndex(), zslTraceSubcode.getTraceCodeNumber());
-        if (CollectionUtil.isNotEmpty(tracePointList)) {
-            ZslTracePoint newestNode = tracePointList.get(tracePointList.size() - 1);
+        // 是否为内码
+        boolean result = false;
+        if ("Y".equals(zslTraceSubcode.getIsLeaf())) {
+            result = isnewestDigui(zslTraceSubcode);
+        } else {
+            List<ZslTraceSubcode> digui = new ArrayList<>();
+            digui.add(zslTraceSubcode);
+            getChildTrace(digui);
+            result = isNewestNode;
+        }
+        return result;
+    }
+
+
+    public boolean isnewestDigui(ZslTraceSubcode zslTraceSubcode){
+        ZslTracePoint newestNode = zslTraceSubcodeDao.selectNewestPointNode(zslTraceSubcode.getTraceGoodId(),zslTraceSubcode.getTraceIndex(),zslTraceSubcode.getTraceCodeNumber());
+        if (newestNode != null) {
             //获取用户登录信息
             RequestContext requestContext = RequestContextMgr.getLocalContext();
             JSONObject loginUser = requestContext.getJsonObject();
@@ -81,75 +115,59 @@ public class OtherAccountServcieImpl implements OtherAccountServcie {
             Integer accountId = Integer.parseInt(loginUser.get("id").toString());
             if (accountType == 2) {
                 //如果角色是节点，代理商，则判断账号id是否一致就行
-               if(RoleEnum.ROLE_BUSINESS_AGENT.getValue().equals(roleName) || RoleEnum.ROLE_BUSINESS_NODE.getValue().equals(roleName)){
+                if(RoleEnum.ROLE_BUSINESS_AGENT.getValue().equals(roleName) || RoleEnum.ROLE_BUSINESS_NODE.getValue().equals(roleName)){
                     if(accountId - newestNode.getTracePointAccountId() == 0){
                         return true;
                     }
-               }else if(RoleEnum.ROLE_BUSINESS.getValue().equals(roleName)){
+                }else if(RoleEnum.ROLE_BUSINESS.getValue().equals(roleName)){
                     //如果是商家得话，则可以发商家自己得，也可以发员工的
-                   Integer loginMerchantId = Integer.parseInt((loginUser.getJSONObject("merchant").get("merchantId")).toString());
-                   if(accountId - newestNode.getTracePointAccountId() == 0){
-                       return true;
-                   }else{
-                       Account account = accountMapper.selectByPrimaryKey(newestNode.getTracePointAccountId());
-                       if(account != null){
-                           //当前最新节点是员工
-                           if(account.getRoleId().equals(RoleEnum.ROLE_BUSINESS_STAFF.getId())){
+                    Integer loginMerchantId = Integer.parseInt((loginUser.getJSONObject("merchant").get("merchantId")).toString());
+                    if(accountId - newestNode.getTracePointAccountId() == 0){
+                        return true;
+                    }else{
+                        Account account = accountMapper.selectByPrimaryKey(newestNode.getTracePointAccountId());
+                        if(account != null){
+                            //当前最新节点是员工
+                            if(account.getRoleId().equals(RoleEnum.ROLE_BUSINESS_STAFF.getId())){
                                 // 根据accountId 获取员工的商家id
-                               AccountSubMerchantExample accountSubMerchantExample = new AccountSubMerchantExample();
-                               AccountSubMerchantExample.Criteria criteria = accountSubMerchantExample.createCriteria();
-                               criteria.andAccountIdEqualTo(account.getId());
-                               List<AccountSubMerchant> subMerchants = accountSubMerchantMapper.selectByExample(accountSubMerchantExample);
-                               if(CollectionUtil.isNotEmpty(subMerchants)){
-                                   Integer merchantIdOfEmploy = subMerchants.get(0).getMerchantId();
-                                   if(loginMerchantId - merchantIdOfEmploy == 0){
-                                       return true;
-                                   }
-                               }
-                           }
-                       }
-                   }
-               }else if(RoleEnum.ROLE_BUSINESS_NODE.getValue().equals(roleName)){
-                   //如果是员工的话可以发自己，也可以发商家的
-                   if(accountId - newestNode.getTracePointAccountId() == 0){
-                       return true;
-                   }else{
-                       Account account = accountMapper.selectByPrimaryKey(newestNode.getTracePointAccountId());
-                       if(account != null){
-                           if(account.getRoleId().equals(RoleEnum.ROLE_BUSINESS.getId())){
-                               // 根据accountId 获取员工的商家id
-                               AccountSubMerchantExample accountSubMerchantExample = new AccountSubMerchantExample();
-                               AccountSubMerchantExample.Criteria criteria = accountSubMerchantExample.createCriteria();
-                               criteria.andAccountIdEqualTo(accountId);
-                               List<AccountSubMerchant> subMerchants = accountSubMerchantMapper.selectByExample(accountSubMerchantExample);
-                               if(CollectionUtil.isNotEmpty(subMerchants)){
-                                   String accountName =loginUser.get("accountName").toString();
-                                   Merchant merchant = getMerchantByAccountId(accountName);
-                                   if(merchant != null){
-                                       if( subMerchants.get(0).getMerchantId() - merchant.getMerchantId() == 0){
-                                           return true;
-                                       }
-                                   }
-                               }
-                           }
-                       }
-                   }
-               }
+                                AccountSubMerchantExample accountSubMerchantExample = new AccountSubMerchantExample();
+                                AccountSubMerchantExample.Criteria criteria = accountSubMerchantExample.createCriteria();
+                                criteria.andAccountIdEqualTo(account.getId());
+                                List<AccountSubMerchant> subMerchants = accountSubMerchantMapper.selectByExample(accountSubMerchantExample);
+                                if(CollectionUtil.isNotEmpty(subMerchants)){
+                                    Integer merchantIdOfEmploy = subMerchants.get(0).getMerchantId();
+                                    if(loginMerchantId - merchantIdOfEmploy == 0){
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }else if(RoleEnum.ROLE_BUSINESS_STAFF.getValue().equals(roleName)){
+                    //如果是员工的话可以发自己，也可以发商家的
+                    if(accountId - newestNode.getTracePointAccountId() == 0){
+                        return true;
+                    }else{
+                        Account account = accountMapper.selectByPrimaryKey(newestNode.getTracePointAccountId());
+                        if(account != null){
+                            if(account.getRoleId().equals(RoleEnum.ROLE_BUSINESS.getId())){
+                                // 根据accountId 获取员工的商家id
+                                AccountSubMerchantExample accountSubMerchantExample = new AccountSubMerchantExample();
+                                AccountSubMerchantExample.Criteria criteria = accountSubMerchantExample.createCriteria();
+                                criteria.andAccountIdEqualTo(accountId);
+                                List<AccountSubMerchant> subMerchants = accountSubMerchantMapper.selectByExample(accountSubMerchantExample);
+                                if(CollectionUtil.isNotEmpty(subMerchants)){
+                                        if( subMerchants.get(0).getMerchantId() - subMerchants.get(0).getMerchantId() == 0){
+                                            return true;
+                                        }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
         return false;
-    }
-
-
-    private Merchant getMerchantByAccountId(String accountName){
-        MerchantExample merchantExample = new MerchantExample();
-        MerchantExample.Criteria criteria = merchantExample.createCriteria();
-        criteria.andMerchantAccountEqualTo(accountName);
-        List<Merchant> merchantList = merchantMapper.selectByExample(merchantExample);
-        if(CollectionUtil.isNotEmpty(merchantList)){
-            return merchantList.get(0);
-        }
-        return null;
     }
 
 }

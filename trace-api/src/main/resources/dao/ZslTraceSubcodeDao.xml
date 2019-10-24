@@ -14,6 +14,7 @@
         <result column="node_level" jdbcType="INTEGER" property="nodeLevel" />
         <result column="scan_count" jdbcType="BIGINT" property="scanCount" />
         <result column="is_saled" jdbcType="INTEGER" property="isSaled" />
+        <result column="sale_time" jdbcType="TIMESTAMP" property="saleTime" />
     </resultMap>
 
     <resultMap id="PointResultMap" type="com.zsl.tracedb.model.ZslTracePoint">
@@ -139,6 +140,42 @@
         SELECT *  FROM `zsl_trace_subcode` WHERE trace_sid = #{id} LIMIT 1;
     </select>
 
+
+    <select id="selectBetweenAllRecord" resultMap="BaseResultMap">
+         SELECT *  FROM `zsl_trace_subcode` WHERE trace_sid between #{start} and  #{end} ORDER BY trace_sid asc
+    </select>
+
+    <select id="selectBtweenCount" resultType="java.lang.Long">
+         SELECT count(id)  FROM `zsl_trace_subcode` WHERE trace_sid between #{start} and #{end}
+    </select>
+
+    <select id="onlyMyselfCode" resultType="java.lang.Long">
+       SELECT
+	count(sub.id)
+FROM
+	`zsl_trace_subcode` sub ,
+zsl_trace_point p
+
+WHERE
+	(
+		trace_sid BETWEEN #{start}
+		AND #{end}
+	)
+AND (
+	SELECT
+		a.trace_business_id
+	FROM
+		zsl_trace a
+	WHERE
+		a.trace_code_number = sub.trace_code_number
+) = #{merchantId}
+and
+(sub.trace_index BETWEEN p.trace_point_from_number and p.trace_point_to_number)
+        and p.trace_code_number = sub.trace_code_number
+        and p.trace_goods_id = sub.trace_good_id
+AND sub.is_leaf = 'Y';
+    </select>
+
     <select id="exportExcel" resultType="java.lang.Long">
         SELECT trace_sid
         FROM `zsl_trace_subcode`
@@ -202,6 +239,16 @@
         and trace_code_number = #{traceCodeNumber}
         and trace_goods_id = #{traceGoodsId}
         ORDER BY trace_point_time ASC
+    </select>
+
+
+    <select id="selectNewestPointNode" resultMap="PointResultMap">
+        select *
+        from zsl_trace_point
+        where (#{traceIndex} BETWEEN trace_point_from_number and trace_point_to_number)
+        and trace_code_number = #{traceCodeNumber}
+        and trace_goods_id = #{traceGoodsId}
+        ORDER BY trace_point_time desc limit 1
     </select>
 
     <select id="searchByIndexOrCode" resultMap="BaseResultMap">

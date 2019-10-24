@@ -5,11 +5,7 @@ import com.zsl.traceapi.vo.GoodsVo;
 import com.zsl.traceapi.vo.TraceRecordVo;
 import com.zsl.traceapi.vo.ZslTraceVo;
 import com.zsl.tracecommon.CommonResult;
-import com.zsl.tracedb.model.Goods;
 import com.zsl.tracedb.model.ZslTrace;
-import com.zsl.tracedb.model.ZslTraceSid;
-import com.zsl.tracedb.model.ZslTraceSubcode;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -36,8 +36,6 @@ public class CoreThread extends Thread {
 
     private ZslTraceRelationMapper zslTraceRelationMapper = (ZslTraceRelationMapper) SpringContextUtil.getBean(ZslTraceRelationMapper.class);
 
-    private ExecutorService service = (ExecutorService) SpringContextUtil.getBean("consumerTraceThreadPool");
-
 
     String traceCodeJson;
 
@@ -62,104 +60,9 @@ public class CoreThread extends Thread {
         return false;
     }
 
-    /**
-     * 根据批次号获取申请的纸质码段
-     *
-     * @param traceCodeNumber
-     * @return
-     */
-    private List<ZslTracePapper> getTracePaperByTraceCodeNumber(String traceCodeNumber) {
-        ZslTracePapperExample zslTracePapperExample = new ZslTracePapperExample();
-        ZslTracePapperExample.Criteria criteria = zslTracePapperExample.createCriteria();
-        criteria.andTraceCodeNumberEqualTo(traceCodeNumber);
-        zslTracePapperExample.setOrderByClause("trace_num_start asc");
-        return zslTracePapperMapper.selectByExample(zslTracePapperExample);
-    }
 
-    /**
-     * 根据批次号获取当前关联指针
-     * @param traceCodeNumber
-     * @return
-     */
-    private ZslTraceRelation getRelationByTraceCodeNumber(String traceCodeNumber) {
-        ZslTraceRelationExample zslTraceRelationExample = new ZslTraceRelationExample();
-        ZslTraceRelationExample.Criteria criteria = zslTraceRelationExample.createCriteria();
-        criteria.andTraceCodeNumberEqualTo(traceCodeNumber);
-        List<ZslTraceRelation> result = zslTraceRelationMapper.selectByExample(zslTraceRelationExample);
-        if (CollectionUtils.isNotEmpty(result)) {
-            return result.get(0);
-        } else {
-            return null;
-        }
-    }
 
-    /**
-     * 获取数量和修改当前关联指针
-     * @param count
-     * @param traceCodeNumber
-     * @return
-     */
-    private List<ZslTracePapper> getTracePaperBy(long count, String traceCodeNumber){
-        //
-        List<ZslTracePapper> relationPaperList = getTracePaperByTraceCodeNumber(traceCodeNumber);
-        if (CollectionUtils.isNotEmpty(relationPaperList)) {
-            //统计数量
-            Long countRelation = 0L;
-            List<ZslTracePapper> relationParam = new ArrayList<>();
-            for (int j = 0; j < relationPaperList.size(); j++) {
-                long startN = 0L;
-                long endN = 0L;
-                ZslTracePapper zslTracePapper = new ZslTracePapper();
-                //获取当前已经关联的下标
-                ZslTraceRelation zslTraceRelation = getRelationByTraceCodeNumber(traceCodeNumber);
-                if(zslTraceRelation != null && (zslTraceRelation.getCurrentIndexRelation()+1 - relationPaperList.get(j).getTraceNumStart() >= 0 && zslTraceRelation.getCurrentIndexRelation()+1 - relationPaperList.get(j).getTraceNumEnd() <= 0)){
-                    startN = zslTraceRelation.getCurrentIndexRelation()+1;
-                }else{
-                    startN =relationPaperList.get(j).getTraceNumStart();
-                }
-                endN = relationPaperList.get(j).getTraceNumEnd();
-                zslTracePapper.setTraceNumStart(startN);
-                zslTracePapper.setTraceNumEnd(endN);
-                for(long n = startN; n <= endN;n++) {
-                    if(zslTraceRelation != null && (n - (zslTraceRelation.getCurrentIndexRelation()+1) >= 0)){
-                        countRelation++;
-                    }else if(zslTraceRelation == null){
-                        countRelation++;
-                    }
-                    if(countRelation - count == 0){
-                        //已经足够
-                        zslTracePapper.setTraceNumEnd(n);
-                        //更新关联指针
-                        if(zslTraceRelation == null){
-                            ZslTraceRelation relaTionInsert = new ZslTraceRelation();
-                            relaTionInsert.setTraceCodeNumber(traceCodeNumber);
-                            relaTionInsert.setCurrentIndexRelation(n);
-                            zslTraceRelationMapper.insert(relaTionInsert);
-                        }else{
-                            ZslTraceRelation relationUpdate = new ZslTraceRelation();
-                            relationUpdate.setId(zslTraceRelation.getId());
-                            relationUpdate.setCurrentIndexRelation(n);
-                            zslTraceRelationMapper.updateByPrimaryKeySelective(relationUpdate);
-                        }
-                        if(zslTracePapper.getTraceNumEnd() - zslTracePapper.getTraceNumStart() >= 0){
-                            relationParam.add(zslTracePapper);
-                        }
-                        return relationParam;
-                    }
 
-                }
-                if(zslTracePapper.getTraceNumEnd() - zslTracePapper.getTraceNumStart() >= 0){
-                    if(zslTraceRelation != null && (zslTracePapper.getTraceNumEnd() - (zslTraceRelation.getCurrentIndexRelation()+1) < 0)){}else{
-                        relationParam.add(zslTracePapper);
-                    }
-                }
-
-            }
-            return relationParam;
-        }else{
-            return null;
-        }
-    }
 
     @Override
     public void run() {
@@ -175,7 +78,7 @@ public class CoreThread extends Thread {
             boolean isPaperType = isPapperOrElectric(traceCodeNumber);
             Long count = toNumber - fromNumber + 1;
             if (isPaperType) {
-                List<ZslTracePapper> papperList = getTracePaperBy(count,traceCodeNumber);
+                List<ZslTracePapper> papperList = traceCodeRelation.getTracePappers();
                 if(papperList != null){
                     long countTemp = fromNumber;
                     for(int i = 0;i < papperList.size();i++){

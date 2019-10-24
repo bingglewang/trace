@@ -2,6 +2,7 @@ package com.zsl.tracedb.model;
 
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.util.Date;
 
 public class ZslTraceSubcode implements Serializable {
     @ApiModelProperty(value = "主键")
@@ -39,6 +40,9 @@ public class ZslTraceSubcode implements Serializable {
 
     @ApiModelProperty(value = "是否已售（0：在售，1：已售）")
     private Integer isSaled;
+
+    @ApiModelProperty(value = "售出时间")
+    private Date saleTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -138,6 +142,14 @@ public class ZslTraceSubcode implements Serializable {
         this.isSaled = isSaled;
     }
 
+    public Date getSaleTime() {
+        return saleTime;
+    }
+
+    public void setSaleTime(Date saleTime) {
+        this.saleTime = saleTime;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -156,6 +168,7 @@ public class ZslTraceSubcode implements Serializable {
         sb.append(", nodeLevel=").append(nodeLevel);
         sb.append(", scanCount=").append(scanCount);
         sb.append(", isSaled=").append(isSaled);
+        sb.append(", saleTime=").append(saleTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

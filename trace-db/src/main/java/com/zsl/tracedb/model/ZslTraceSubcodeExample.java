@@ -1,6 +1,7 @@
 package com.zsl.tracedb.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ZslTraceSubcodeExample {
@@ -851,6 +852,66 @@ public class ZslTraceSubcodeExample {
 
         public Criteria andIsSaledNotBetween(Integer value1, Integer value2) {
             addCriterion("is_saled not between", value1, value2, "isSaled");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleTimeIsNull() {
+            addCriterion("sale_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleTimeIsNotNull() {
+            addCriterion("sale_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleTimeEqualTo(Date value) {
+            addCriterion("sale_time =", value, "saleTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleTimeNotEqualTo(Date value) {
+            addCriterion("sale_time <>", value, "saleTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleTimeGreaterThan(Date value) {
+            addCriterion("sale_time >", value, "saleTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("sale_time >=", value, "saleTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleTimeLessThan(Date value) {
+            addCriterion("sale_time <", value, "saleTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleTimeLessThanOrEqualTo(Date value) {
+            addCriterion("sale_time <=", value, "saleTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleTimeIn(List<Date> values) {
+            addCriterion("sale_time in", values, "saleTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleTimeNotIn(List<Date> values) {
+            addCriterion("sale_time not in", values, "saleTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleTimeBetween(Date value1, Date value2) {
+            addCriterion("sale_time between", value1, value2, "saleTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleTimeNotBetween(Date value1, Date value2) {
+            addCriterion("sale_time not between", value1, value2, "saleTime");
             return (Criteria) this;
         }
     }

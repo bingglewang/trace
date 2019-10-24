@@ -23,6 +23,24 @@ public class Goods implements Serializable {
 
     private String videoUrl;
 
+    @ApiModelProperty(value = "是否货物")
+    private Byte cargo;
+
+    @ApiModelProperty(value = "货物来源")
+    private String source;
+
+    @ApiModelProperty(value = "地址")
+    private String location;
+
+    @ApiModelProperty(value = "联系电话")
+    private String phone;
+
+    @ApiModelProperty(value = "经办人")
+    private String operator;
+
+    @ApiModelProperty(value = "货源进场检疫报告")
+    private String inspectionReport;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getGoodsId() {
@@ -97,6 +115,54 @@ public class Goods implements Serializable {
         this.videoUrl = videoUrl;
     }
 
+    public Byte getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(Byte cargo) {
+        this.cargo = cargo;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getOperator() {
+        return operator;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
+
+    public String getInspectionReport() {
+        return inspectionReport;
+    }
+
+    public void setInspectionReport(String inspectionReport) {
+        this.inspectionReport = inspectionReport;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -112,6 +178,12 @@ public class Goods implements Serializable {
         sb.append(", goodsUpdateTime=").append(goodsUpdateTime);
         sb.append(", brandId=").append(brandId);
         sb.append(", videoUrl=").append(videoUrl);
+        sb.append(", cargo=").append(cargo);
+        sb.append(", source=").append(source);
+        sb.append(", location=").append(location);
+        sb.append(", phone=").append(phone);
+        sb.append(", operator=").append(operator);
+        sb.append(", inspectionReport=").append(inspectionReport);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

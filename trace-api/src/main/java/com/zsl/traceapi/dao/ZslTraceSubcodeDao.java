@@ -18,6 +18,9 @@ public interface ZslTraceSubcodeDao {
     List<ZslTraceSubcode> selectByParenId(@Param("parentId") Long parentId);
     int deleteCodeRelation(@Param("id") Long id);
     ZslTraceSubcode selectBySubCode(@Param("traceSubCode") String traceSubCode);
+    Long selectBtweenCount(@Param("start") Long start,@Param("end") Long end);
+    List<ZslTraceSubcode> selectBetweenAllRecord(@Param("start") Long start,@Param("end") Long end);
+    Long onlyMyselfCode(@Param("start") Long start,@Param("end") Long end,@Param("merchantId") Integer merchantId);
     ZslTraceSubcode selectById(@Param("id") Long id);
     int deleteByCodeNumber(@Param("traceCodeNumber") String traceCodeNumber);
     List<Long> exportExcel(@Param("fromIndex") Long fromIndex,@Param("toIndex") Long toIndex,@Param("traceCodeNumber") String traceCodeNumber);
@@ -36,4 +39,5 @@ public interface ZslTraceSubcodeDao {
     Long goodsScanCount(@Param("goodsId") Integer goodsId,@Param("traceCodeNumber") String traceCodeNumber);
     Long goodsTotalCount(@Param("goodsId") Integer goodsId,@Param("traceCodeNumber") String traceCodeNumber);
     List<ZslTracePoint> selectTracePointNodes(@Param("traceGoodsId") Integer traceGoodsId,@Param("traceIndex") Long traceIndex,@Param("traceCodeNumber") String traceCodeNumber);
+    ZslTracePoint selectNewestPointNode(@Param("traceGoodsId") Integer traceGoodsId,@Param("traceIndex") Long traceIndex,@Param("traceCodeNumber") String traceCodeNumber);
 }

@@ -2,6 +2,7 @@ package com.zsl.traceapi;
 
 import com.zsl.traceapi.dao.MerchantDao;
 import com.zsl.traceapi.dto.MerchantPointDto;
+import com.zsl.traceapi.service.TraceService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -19,10 +20,12 @@ public class TraceApiApplicationTests {
     @Autowired
     private MerchantDao merchantDao;
 
+    @Autowired
+    private TraceService traceService;
+
     @Test
     public void contextLoads() {
-        String mobile = "15578263484";
-        MerchantPointDto merchantPointUpdate = merchantDao.getOtherPointByMobile(mobile);
+        MerchantPointDto merchantPointUpdate = traceService.getCirculateNodeInfo(499);
         System.out.println("结果："+merchantPointUpdate);
     }
 
