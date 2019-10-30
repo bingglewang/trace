@@ -210,26 +210,78 @@ AND sub.is_leaf = 'Y';
     </delete>
 
     <select id="goodsScanCount" resultType="java.lang.Long">
-        SELECT
-	      count(id)
+       SELECT
+            count(id)
         FROM
-            zsl_trace_subcode
+            zsl_trace_subcode z
         WHERE
-            trace_code_number =  #{traceCodeNumber}
-        and scan_count = 0
-        and trace_good_id is not null
-        and is_leaf = 'Y';
+            z.trace_code_number =  #{traceCodeNumber}
+        AND z.scan_count = 0
+        AND z.trace_good_id IS NOT NULL
+        AND z.is_leaf = 'Y'
+        AND (
+            z.trace_index BETWEEN (
+                SELECT
+                    r.trace_from_number
+                FROM
+                    zsl_trace_record r
+                WHERE
+                    r.trace_code_number =  #{traceCodeNumber}
+                AND (
+                    #{traceIndex} BETWEEN r.trace_from_number
+                    AND r.trace_to_number
+                )
+            )
+            AND (
+                SELECT
+                    r1.trace_to_number
+                FROM
+                    zsl_trace_record r1
+                WHERE
+                    r1.trace_code_number =  #{traceCodeNumber}
+                AND (
+                    #{traceIndex} BETWEEN r1.trace_from_number
+                    AND r1.trace_to_number
+                )
+            )
+        )
     </select>
 
     <select id="goodsTotalCount" resultType="java.lang.Long">
           SELECT
-	      count(id)
+            count(id)
         FROM
-            zsl_trace_subcode
+            zsl_trace_subcode z
         WHERE
-            trace_code_number =  #{traceCodeNumber}
-        and trace_good_id is not null
-        and is_leaf = 'Y';
+            z.trace_code_number =  #{traceCodeNumber}
+        AND z.trace_good_id IS NOT NULL
+        AND z.is_leaf = 'Y'
+        AND (
+            z.trace_index BETWEEN (
+                SELECT
+                    r.trace_from_number
+                FROM
+                    zsl_trace_record r
+                WHERE
+                    r.trace_code_number =  #{traceCodeNumber}
+                AND (
+                    #{traceIndex} BETWEEN r.trace_from_number
+                    AND r.trace_to_number
+                )
+            )
+            AND (
+                SELECT
+                    r1.trace_to_number
+                FROM
+                    zsl_trace_record r1
+                WHERE
+                    r1.trace_code_number =  #{traceCodeNumber}
+                AND (
+                    #{traceIndex} BETWEEN r1.trace_from_number
+                    AND r1.trace_to_number
+                )
+            )
+        )
     </select>
 
     <select id="selectTracePointNodes" resultMap="PointResultMap">

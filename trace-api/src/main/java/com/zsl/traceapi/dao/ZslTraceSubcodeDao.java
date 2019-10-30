@@ -36,8 +36,8 @@ public interface ZslTraceSubcodeDao {
     int updateGoodsAndStallSid(@Param(value = "list") List<TraceSubcodeUpdateParamSid> traceSubcodeUpdateParams);
     int updateOutCodeBatch(@Param(value = "list") List<TraceOutCodeUpdateParam> traceOutCodeUpdateParams);
     int updateOutCodeById(@Param("list") List<TraceOutCodeUpdateParam> traceOutCodeUpdateParams);
-    Long goodsScanCount(@Param("goodsId") Integer goodsId,@Param("traceCodeNumber") String traceCodeNumber);
-    Long goodsTotalCount(@Param("goodsId") Integer goodsId,@Param("traceCodeNumber") String traceCodeNumber);
+    Long goodsScanCount(@Param("goodsId") Integer goodsId,@Param("traceCodeNumber") String traceCodeNumber,@Param("traceIndex") Long traceIndex);
+    Long goodsTotalCount(@Param("goodsId") Integer goodsId,@Param("traceCodeNumber") String traceCodeNumber,@Param("traceIndex") Long traceIndex);
     List<ZslTracePoint> selectTracePointNodes(@Param("traceGoodsId") Integer traceGoodsId,@Param("traceIndex") Long traceIndex,@Param("traceCodeNumber") String traceCodeNumber);
     ZslTracePoint selectNewestPointNode(@Param("traceGoodsId") Integer traceGoodsId,@Param("traceIndex") Long traceIndex,@Param("traceCodeNumber") String traceCodeNumber);
 }

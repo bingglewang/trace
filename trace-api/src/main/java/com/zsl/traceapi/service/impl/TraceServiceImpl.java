@@ -777,7 +777,8 @@ public class TraceServiceImpl implements TraceService {
     public Integer insertPointNodeAccount(MerchantPointDto merchantPointDto) {
         RequestContext requestContext = RequestContextMgr.getLocalContext();
         String tokenLogin = requestContext.getToken();
-        String url = "http://zs-beta.cntracechain.com/accountCenter/account/add";
+        String url = "https://zs.cntracechain.com/accountCenter/account/add";
+        //String url = "http://zs-beta.cntracechain.com/accountCenter/account/add";
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("accountName", merchantPointDto.getContactNumber());
         jsonObject.put("realName", merchantPointDto.getPersonInCharge());
@@ -1631,12 +1632,14 @@ public class TraceServiceImpl implements TraceService {
         String traceCodeNumber = "";
         for (String subCode : codeList) {
             ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectBySubCode(subCode);
-            if (!isBussiSelf(zslTraceSubcode.getTraceCodeNumber())) {
+           /* if (!isBussiSelf(zslTraceSubcode.getTraceCodeNumber())) {
                 return -6; //只能操作自己追溯码
             } else {
                 traceCodeNumber = zslTraceSubcode.getTraceCodeNumber();
                 countCodeIntegral(zslTraceSubcode);
-            }
+            }*/
+            traceCodeNumber = zslTraceSubcode.getTraceCodeNumber();
+            countCodeIntegral(zslTraceSubcode);
         }
 
         //判断积分够不够扣除
@@ -1815,9 +1818,9 @@ public class TraceServiceImpl implements TraceService {
 
             Map<String, Object> result = new HashMap<>();
             //没有被扫过的
-            Long notScannedCount = zslTraceSubcodeDao.goodsScanCount(zslTraceSubcode.getTraceGoodId(), zslTraceSubcode.getTraceCodeNumber());
+            Long notScannedCount = zslTraceSubcodeDao.goodsScanCount(zslTraceSubcode.getTraceGoodId(), zslTraceSubcode.getTraceCodeNumber(),zslTraceSubcode.getTraceIndex());
             // 总共的
-            Long TotalCount = zslTraceSubcodeDao.goodsTotalCount(zslTraceSubcode.getTraceGoodId(), zslTraceSubcode.getTraceCodeNumber());
+            Long TotalCount = zslTraceSubcodeDao.goodsTotalCount(zslTraceSubcode.getTraceGoodId(), zslTraceSubcode.getTraceCodeNumber(),zslTraceSubcode.getTraceIndex());
             String traceCode = zslTraceSubcode.getTraceSubCodeNumber();
             // 第几次扫码
             Long scanCount = zslTraceSubcode.getScanCount() + 1;
@@ -1954,9 +1957,9 @@ public class TraceServiceImpl implements TraceService {
             return CommonResult.failed("编码不存在");
         }
 
-        if (!isBussiSelf(zslTraceSubcode.getTraceCodeNumber())) {
+       /* if (!isBussiSelf(zslTraceSubcode.getTraceCodeNumber())) {
             return CommonResult.failed("只能操作自己追溯码");
-        }
+        }*/
 
         if (zslTraceSubcode.getTraceGoodId() == null) {
             return CommonResult.failed("请先录入或扣除积分");
