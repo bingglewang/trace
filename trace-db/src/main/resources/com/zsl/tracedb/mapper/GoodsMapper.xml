@@ -10,14 +10,13 @@
     <result column="goods_creat_time" jdbcType="TIMESTAMP" property="goodsCreatTime" />
     <result column="goods_update_time" jdbcType="TIMESTAMP" property="goodsUpdateTime" />
     <result column="brand_id" jdbcType="INTEGER" property="brandId" />
-    <result column="video_name" jdbcType="VARCHAR" property="videoName" />
     <result column="video_url" jdbcType="VARCHAR" property="videoUrl" />
     <result column="cargo" jdbcType="TINYINT" property="cargo" />
     <result column="source" jdbcType="VARCHAR" property="source" />
     <result column="location" jdbcType="VARCHAR" property="location" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="operator" jdbcType="VARCHAR" property="operator" />
-    <result column="produced_time" jdbcType="TIMESTAMP" property="producedTime" />
+    <result column="inspection_report" jdbcType="VARCHAR" property="inspectionReport" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -79,8 +78,8 @@
   </sql>
   <sql id="Base_Column_List">
     goods_id, goods_name, merchant_id, category_id, category_full_name, goods_creat_time, 
-    goods_update_time, brand_id, video_name, video_url, cargo, source, location, phone, 
-    operator, produced_time
+    goods_update_time, brand_id, video_url, cargo, source, location, phone, operator, 
+    inspection_report
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.GoodsExample" resultMap="BaseResultMap">
     select
@@ -118,16 +117,14 @@
     </selectKey>
     insert into goods (goods_name, merchant_id, category_id, 
       category_full_name, goods_creat_time, goods_update_time, 
-      brand_id, video_name, video_url, 
-      cargo, source, location, 
-      phone, operator, produced_time
-      )
+      brand_id, video_url, cargo, 
+      source, location, phone, 
+      operator, inspection_report)
     values (#{goodsName,jdbcType=VARCHAR}, #{merchantId,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER}, 
       #{categoryFullName,jdbcType=VARCHAR}, #{goodsCreatTime,jdbcType=TIMESTAMP}, #{goodsUpdateTime,jdbcType=TIMESTAMP}, 
-      #{brandId,jdbcType=INTEGER}, #{videoName,jdbcType=VARCHAR}, #{videoUrl,jdbcType=VARCHAR}, 
-      #{cargo,jdbcType=TINYINT}, #{source,jdbcType=VARCHAR}, #{location,jdbcType=VARCHAR}, 
-      #{phone,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, #{producedTime,jdbcType=TIMESTAMP}
-      )
+      #{brandId,jdbcType=INTEGER}, #{videoUrl,jdbcType=VARCHAR}, #{cargo,jdbcType=TINYINT}, 
+      #{source,jdbcType=VARCHAR}, #{location,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{operator,jdbcType=VARCHAR}, #{inspectionReport,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.Goods">
     <selectKey keyProperty="goodsId" order="AFTER" resultType="java.lang.Integer">
@@ -156,9 +153,6 @@
       <if test="brandId != null">
         brand_id,
       </if>
-      <if test="videoName != null">
-        video_name,
-      </if>
       <if test="videoUrl != null">
         video_url,
       </if>
@@ -177,8 +171,8 @@
       <if test="operator != null">
         operator,
       </if>
-      <if test="producedTime != null">
-        produced_time,
+      <if test="inspectionReport != null">
+        inspection_report,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -203,9 +197,6 @@
       <if test="brandId != null">
         #{brandId,jdbcType=INTEGER},
       </if>
-      <if test="videoName != null">
-        #{videoName,jdbcType=VARCHAR},
-      </if>
       <if test="videoUrl != null">
         #{videoUrl,jdbcType=VARCHAR},
       </if>
@@ -224,8 +215,8 @@
       <if test="operator != null">
         #{operator,jdbcType=VARCHAR},
       </if>
-      <if test="producedTime != null">
-        #{producedTime,jdbcType=TIMESTAMP},
+      <if test="inspectionReport != null">
+        #{inspectionReport,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -262,9 +253,6 @@
       <if test="record.brandId != null">
         brand_id = #{record.brandId,jdbcType=INTEGER},
       </if>
-      <if test="record.videoName != null">
-        video_name = #{record.videoName,jdbcType=VARCHAR},
-      </if>
       <if test="record.videoUrl != null">
         video_url = #{record.videoUrl,jdbcType=VARCHAR},
       </if>
@@ -283,8 +271,8 @@
       <if test="record.operator != null">
         operator = #{record.operator,jdbcType=VARCHAR},
       </if>
-      <if test="record.producedTime != null">
-        produced_time = #{record.producedTime,jdbcType=TIMESTAMP},
+      <if test="record.inspectionReport != null">
+        inspection_report = #{record.inspectionReport,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -301,14 +289,13 @@
       goods_creat_time = #{record.goodsCreatTime,jdbcType=TIMESTAMP},
       goods_update_time = #{record.goodsUpdateTime,jdbcType=TIMESTAMP},
       brand_id = #{record.brandId,jdbcType=INTEGER},
-      video_name = #{record.videoName,jdbcType=VARCHAR},
       video_url = #{record.videoUrl,jdbcType=VARCHAR},
       cargo = #{record.cargo,jdbcType=TINYINT},
       source = #{record.source,jdbcType=VARCHAR},
       location = #{record.location,jdbcType=VARCHAR},
       phone = #{record.phone,jdbcType=VARCHAR},
       operator = #{record.operator,jdbcType=VARCHAR},
-      produced_time = #{record.producedTime,jdbcType=TIMESTAMP}
+      inspection_report = #{record.inspectionReport,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -337,9 +324,6 @@
       <if test="brandId != null">
         brand_id = #{brandId,jdbcType=INTEGER},
       </if>
-      <if test="videoName != null">
-        video_name = #{videoName,jdbcType=VARCHAR},
-      </if>
       <if test="videoUrl != null">
         video_url = #{videoUrl,jdbcType=VARCHAR},
       </if>
@@ -358,8 +342,8 @@
       <if test="operator != null">
         operator = #{operator,jdbcType=VARCHAR},
       </if>
-      <if test="producedTime != null">
-        produced_time = #{producedTime,jdbcType=TIMESTAMP},
+      <if test="inspectionReport != null">
+        inspection_report = #{inspectionReport,jdbcType=VARCHAR},
       </if>
     </set>
     where goods_id = #{goodsId,jdbcType=INTEGER}
@@ -373,14 +357,13 @@
       goods_creat_time = #{goodsCreatTime,jdbcType=TIMESTAMP},
       goods_update_time = #{goodsUpdateTime,jdbcType=TIMESTAMP},
       brand_id = #{brandId,jdbcType=INTEGER},
-      video_name = #{videoName,jdbcType=VARCHAR},
       video_url = #{videoUrl,jdbcType=VARCHAR},
       cargo = #{cargo,jdbcType=TINYINT},
       source = #{source,jdbcType=VARCHAR},
       location = #{location,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
       operator = #{operator,jdbcType=VARCHAR},
-      produced_time = #{producedTime,jdbcType=TIMESTAMP}
+      inspection_report = #{inspectionReport,jdbcType=VARCHAR}
     where goods_id = #{goodsId,jdbcType=INTEGER}
   </update>
 </mapper>

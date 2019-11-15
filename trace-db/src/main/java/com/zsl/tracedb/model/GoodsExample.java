@@ -605,76 +605,6 @@ public class GoodsExample {
             return (Criteria) this;
         }
 
-        public Criteria andVideoNameIsNull() {
-            addCriterion("video_name is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andVideoNameIsNotNull() {
-            addCriterion("video_name is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andVideoNameEqualTo(String value) {
-            addCriterion("video_name =", value, "videoName");
-            return (Criteria) this;
-        }
-
-        public Criteria andVideoNameNotEqualTo(String value) {
-            addCriterion("video_name <>", value, "videoName");
-            return (Criteria) this;
-        }
-
-        public Criteria andVideoNameGreaterThan(String value) {
-            addCriterion("video_name >", value, "videoName");
-            return (Criteria) this;
-        }
-
-        public Criteria andVideoNameGreaterThanOrEqualTo(String value) {
-            addCriterion("video_name >=", value, "videoName");
-            return (Criteria) this;
-        }
-
-        public Criteria andVideoNameLessThan(String value) {
-            addCriterion("video_name <", value, "videoName");
-            return (Criteria) this;
-        }
-
-        public Criteria andVideoNameLessThanOrEqualTo(String value) {
-            addCriterion("video_name <=", value, "videoName");
-            return (Criteria) this;
-        }
-
-        public Criteria andVideoNameLike(String value) {
-            addCriterion("video_name like", value, "videoName");
-            return (Criteria) this;
-        }
-
-        public Criteria andVideoNameNotLike(String value) {
-            addCriterion("video_name not like", value, "videoName");
-            return (Criteria) this;
-        }
-
-        public Criteria andVideoNameIn(List<String> values) {
-            addCriterion("video_name in", values, "videoName");
-            return (Criteria) this;
-        }
-
-        public Criteria andVideoNameNotIn(List<String> values) {
-            addCriterion("video_name not in", values, "videoName");
-            return (Criteria) this;
-        }
-
-        public Criteria andVideoNameBetween(String value1, String value2) {
-            addCriterion("video_name between", value1, value2, "videoName");
-            return (Criteria) this;
-        }
-
-        public Criteria andVideoNameNotBetween(String value1, String value2) {
-            addCriterion("video_name not between", value1, value2, "videoName");
-            return (Criteria) this;
-        }
-
         public Criteria andVideoUrlIsNull() {
             addCriterion("video_url is null");
             return (Criteria) this;
@@ -1085,63 +1015,73 @@ public class GoodsExample {
             return (Criteria) this;
         }
 
-        public Criteria andProducedTimeIsNull() {
-            addCriterion("produced_time is null");
+        public Criteria andInspectionReportIsNull() {
+            addCriterion("inspection_report is null");
             return (Criteria) this;
         }
 
-        public Criteria andProducedTimeIsNotNull() {
-            addCriterion("produced_time is not null");
+        public Criteria andInspectionReportIsNotNull() {
+            addCriterion("inspection_report is not null");
             return (Criteria) this;
         }
 
-        public Criteria andProducedTimeEqualTo(Date value) {
-            addCriterion("produced_time =", value, "producedTime");
+        public Criteria andInspectionReportEqualTo(String value) {
+            addCriterion("inspection_report =", value, "inspectionReport");
             return (Criteria) this;
         }
 
-        public Criteria andProducedTimeNotEqualTo(Date value) {
-            addCriterion("produced_time <>", value, "producedTime");
+        public Criteria andInspectionReportNotEqualTo(String value) {
+            addCriterion("inspection_report <>", value, "inspectionReport");
             return (Criteria) this;
         }
 
-        public Criteria andProducedTimeGreaterThan(Date value) {
-            addCriterion("produced_time >", value, "producedTime");
+        public Criteria andInspectionReportGreaterThan(String value) {
+            addCriterion("inspection_report >", value, "inspectionReport");
             return (Criteria) this;
         }
 
-        public Criteria andProducedTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("produced_time >=", value, "producedTime");
+        public Criteria andInspectionReportGreaterThanOrEqualTo(String value) {
+            addCriterion("inspection_report >=", value, "inspectionReport");
             return (Criteria) this;
         }
 
-        public Criteria andProducedTimeLessThan(Date value) {
-            addCriterion("produced_time <", value, "producedTime");
+        public Criteria andInspectionReportLessThan(String value) {
+            addCriterion("inspection_report <", value, "inspectionReport");
             return (Criteria) this;
         }
 
-        public Criteria andProducedTimeLessThanOrEqualTo(Date value) {
-            addCriterion("produced_time <=", value, "producedTime");
+        public Criteria andInspectionReportLessThanOrEqualTo(String value) {
+            addCriterion("inspection_report <=", value, "inspectionReport");
             return (Criteria) this;
         }
 
-        public Criteria andProducedTimeIn(List<Date> values) {
-            addCriterion("produced_time in", values, "producedTime");
+        public Criteria andInspectionReportLike(String value) {
+            addCriterion("inspection_report like", value, "inspectionReport");
             return (Criteria) this;
         }
 
-        public Criteria andProducedTimeNotIn(List<Date> values) {
-            addCriterion("produced_time not in", values, "producedTime");
+        public Criteria andInspectionReportNotLike(String value) {
+            addCriterion("inspection_report not like", value, "inspectionReport");
             return (Criteria) this;
         }
 
-        public Criteria andProducedTimeBetween(Date value1, Date value2) {
-            addCriterion("produced_time between", value1, value2, "producedTime");
+        public Criteria andInspectionReportIn(List<String> values) {
+            addCriterion("inspection_report in", values, "inspectionReport");
             return (Criteria) this;
         }
 
-        public Criteria andProducedTimeNotBetween(Date value1, Date value2) {
-            addCriterion("produced_time not between", value1, value2, "producedTime");
+        public Criteria andInspectionReportNotIn(List<String> values) {
+            addCriterion("inspection_report not in", values, "inspectionReport");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectionReportBetween(String value1, String value2) {
+            addCriterion("inspection_report between", value1, value2, "inspectionReport");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectionReportNotBetween(String value1, String value2) {
+            addCriterion("inspection_report not between", value1, value2, "inspectionReport");
             return (Criteria) this;
         }
     }

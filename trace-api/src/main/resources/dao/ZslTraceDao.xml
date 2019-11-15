@@ -127,20 +127,16 @@
         FROM zsl_trace z
         LEFT JOIN merchant m
         on m.merchant_id = z.trace_business_id
-        <where>
-            <if test="true">
-                m.merchant_status = 0
-            </if>
+        where m.merchant_status = 0
             <if test="allianceBusinessId != null and allianceBusinessId != 0">
-                (SELECT alliance_business_id FROM `merchant` where merchant_id = z.trace_business_id) = #{allianceBusinessId}
+                and (SELECT alliance_business_id FROM `merchant` where merchant_id = z.trace_business_id) = #{allianceBusinessId}
             </if>
             <if test="merchantId != null and merchantId != 0">
-                z.trace_business_id = #{merchantId}
+                and z.trace_business_id = #{merchantId}
             </if>
             <if test="merchantId == null and merchantId == null">
-                (SELECT alliance_business_id FROM `merchant` where merchant_id = z.trace_business_id) is null and z.trace_handle_status = 2
+                and (SELECT alliance_business_id FROM `merchant` where merchant_id = z.trace_business_id) is null and z.trace_handle_status = 2
             </if>
-        </where>
         ORDER BY z.trace_apply_date desc
     </select>
 
