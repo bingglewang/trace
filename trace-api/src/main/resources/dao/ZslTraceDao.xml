@@ -128,6 +128,9 @@
         LEFT JOIN merchant m
         on m.merchant_id = z.trace_business_id
         <where>
+            <if test="true">
+                m.merchant_status = 0
+            </if>
             <if test="allianceBusinessId != null and allianceBusinessId != 0">
                 (SELECT alliance_business_id FROM `merchant` where merchant_id = z.trace_business_id) = #{allianceBusinessId}
             </if>

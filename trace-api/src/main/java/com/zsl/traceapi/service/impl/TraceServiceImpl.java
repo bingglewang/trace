@@ -575,6 +575,15 @@ public class TraceServiceImpl implements TraceService {
             List<ProductionLinkParam> productionLinkParams = item.getProductionLinks();
             if (CollectionUtil.isNotEmpty(productionLinkParams)) {
                 for (ProductionLinkParam productionLink : productionLinkParams) {
+                    boolean isObjEmpty = false;
+                    try {
+                        isObjEmpty = ObjectIsNullUitl.checkFieldAllNull(productionLink);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    if(isObjEmpty){
+                        continue;
+                    }
                     ZslTraceProductionLink zslTraceProductionLink = new ZslTraceProductionLink();
                     zslTraceProductionLink.setProductionDescripe(productionLink.getProductionDescripe());
                     zslTraceProductionLink.setProductionMan(productionLink.getProductionMan());

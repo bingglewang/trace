@@ -21,6 +21,8 @@ public class Goods implements Serializable {
 
     private Integer brandId;
 
+    private String videoName;
+
     private String videoUrl;
 
     @ApiModelProperty(value = "是否货物")
@@ -38,8 +40,8 @@ public class Goods implements Serializable {
     @ApiModelProperty(value = "经办人")
     private String operator;
 
-    @ApiModelProperty(value = "货源进场检疫报告")
-    private String inspectionReport;
+    @ApiModelProperty(value = "生产日期")
+    private Date producedTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -107,6 +109,14 @@ public class Goods implements Serializable {
         this.brandId = brandId;
     }
 
+    public String getVideoName() {
+        return videoName;
+    }
+
+    public void setVideoName(String videoName) {
+        this.videoName = videoName;
+    }
+
     public String getVideoUrl() {
         return videoUrl;
     }
@@ -155,12 +165,12 @@ public class Goods implements Serializable {
         this.operator = operator;
     }
 
-    public String getInspectionReport() {
-        return inspectionReport;
+    public Date getProducedTime() {
+        return producedTime;
     }
 
-    public void setInspectionReport(String inspectionReport) {
-        this.inspectionReport = inspectionReport;
+    public void setProducedTime(Date producedTime) {
+        this.producedTime = producedTime;
     }
 
     @Override
@@ -177,13 +187,14 @@ public class Goods implements Serializable {
         sb.append(", goodsCreatTime=").append(goodsCreatTime);
         sb.append(", goodsUpdateTime=").append(goodsUpdateTime);
         sb.append(", brandId=").append(brandId);
+        sb.append(", videoName=").append(videoName);
         sb.append(", videoUrl=").append(videoUrl);
         sb.append(", cargo=").append(cargo);
         sb.append(", source=").append(source);
         sb.append(", location=").append(location);
         sb.append(", phone=").append(phone);
         sb.append(", operator=").append(operator);
-        sb.append(", inspectionReport=").append(inspectionReport);
+        sb.append(", producedTime=").append(producedTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
