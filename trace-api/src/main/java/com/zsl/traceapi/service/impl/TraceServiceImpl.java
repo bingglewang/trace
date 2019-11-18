@@ -777,8 +777,8 @@ public class TraceServiceImpl implements TraceService {
     public Integer insertPointNodeAccount(MerchantPointDto merchantPointDto) {
         RequestContext requestContext = RequestContextMgr.getLocalContext();
         String tokenLogin = requestContext.getToken();
-        String url = "https://zs.cntracechain.com/accountCenter/account/add";
-        //String url = "http://zs-beta.cntracechain.com/accountCenter/account/add";
+        //String url = "https://zs.cntracechain.com/accountCenter/account/add";
+        String url = "http://zs-beta.cntracechain.com/accountCenter/account/add";
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("accountName", merchantPointDto.getContactNumber());
         jsonObject.put("realName", merchantPointDto.getPersonInCharge());

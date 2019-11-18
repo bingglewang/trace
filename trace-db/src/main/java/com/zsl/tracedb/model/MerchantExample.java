@@ -1744,6 +1744,216 @@ public class MerchantExample {
             addCriterion("paper_label_upper not between", value1, value2, "paperLabelUpper");
             return (Criteria) this;
         }
+
+        public Criteria andSiteAbscissaIsNull() {
+            addCriterion("site_abscissa is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteAbscissaIsNotNull() {
+            addCriterion("site_abscissa is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteAbscissaEqualTo(String value) {
+            addCriterion("site_abscissa =", value, "siteAbscissa");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteAbscissaNotEqualTo(String value) {
+            addCriterion("site_abscissa <>", value, "siteAbscissa");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteAbscissaGreaterThan(String value) {
+            addCriterion("site_abscissa >", value, "siteAbscissa");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteAbscissaGreaterThanOrEqualTo(String value) {
+            addCriterion("site_abscissa >=", value, "siteAbscissa");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteAbscissaLessThan(String value) {
+            addCriterion("site_abscissa <", value, "siteAbscissa");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteAbscissaLessThanOrEqualTo(String value) {
+            addCriterion("site_abscissa <=", value, "siteAbscissa");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteAbscissaLike(String value) {
+            addCriterion("site_abscissa like", value, "siteAbscissa");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteAbscissaNotLike(String value) {
+            addCriterion("site_abscissa not like", value, "siteAbscissa");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteAbscissaIn(List<String> values) {
+            addCriterion("site_abscissa in", values, "siteAbscissa");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteAbscissaNotIn(List<String> values) {
+            addCriterion("site_abscissa not in", values, "siteAbscissa");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteAbscissaBetween(String value1, String value2) {
+            addCriterion("site_abscissa between", value1, value2, "siteAbscissa");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteAbscissaNotBetween(String value1, String value2) {
+            addCriterion("site_abscissa not between", value1, value2, "siteAbscissa");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteOrdinateIsNull() {
+            addCriterion("site_ordinate is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteOrdinateIsNotNull() {
+            addCriterion("site_ordinate is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteOrdinateEqualTo(String value) {
+            addCriterion("site_ordinate =", value, "siteOrdinate");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteOrdinateNotEqualTo(String value) {
+            addCriterion("site_ordinate <>", value, "siteOrdinate");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteOrdinateGreaterThan(String value) {
+            addCriterion("site_ordinate >", value, "siteOrdinate");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteOrdinateGreaterThanOrEqualTo(String value) {
+            addCriterion("site_ordinate >=", value, "siteOrdinate");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteOrdinateLessThan(String value) {
+            addCriterion("site_ordinate <", value, "siteOrdinate");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteOrdinateLessThanOrEqualTo(String value) {
+            addCriterion("site_ordinate <=", value, "siteOrdinate");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteOrdinateLike(String value) {
+            addCriterion("site_ordinate like", value, "siteOrdinate");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteOrdinateNotLike(String value) {
+            addCriterion("site_ordinate not like", value, "siteOrdinate");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteOrdinateIn(List<String> values) {
+            addCriterion("site_ordinate in", values, "siteOrdinate");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteOrdinateNotIn(List<String> values) {
+            addCriterion("site_ordinate not in", values, "siteOrdinate");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteOrdinateBetween(String value1, String value2) {
+            addCriterion("site_ordinate between", value1, value2, "siteOrdinate");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteOrdinateNotBetween(String value1, String value2) {
+            addCriterion("site_ordinate not between", value1, value2, "siteOrdinate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiscernSiteIsNull() {
+            addCriterion("discern_site is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiscernSiteIsNotNull() {
+            addCriterion("discern_site is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiscernSiteEqualTo(String value) {
+            addCriterion("discern_site =", value, "discernSite");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiscernSiteNotEqualTo(String value) {
+            addCriterion("discern_site <>", value, "discernSite");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiscernSiteGreaterThan(String value) {
+            addCriterion("discern_site >", value, "discernSite");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiscernSiteGreaterThanOrEqualTo(String value) {
+            addCriterion("discern_site >=", value, "discernSite");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiscernSiteLessThan(String value) {
+            addCriterion("discern_site <", value, "discernSite");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiscernSiteLessThanOrEqualTo(String value) {
+            addCriterion("discern_site <=", value, "discernSite");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiscernSiteLike(String value) {
+            addCriterion("discern_site like", value, "discernSite");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiscernSiteNotLike(String value) {
+            addCriterion("discern_site not like", value, "discernSite");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiscernSiteIn(List<String> values) {
+            addCriterion("discern_site in", values, "discernSite");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiscernSiteNotIn(List<String> values) {
+            addCriterion("discern_site not in", values, "discernSite");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiscernSiteBetween(String value1, String value2) {
+            addCriterion("discern_site between", value1, value2, "discernSite");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiscernSiteNotBetween(String value1, String value2) {
+            addCriterion("discern_site not between", value1, value2, "discernSite");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
