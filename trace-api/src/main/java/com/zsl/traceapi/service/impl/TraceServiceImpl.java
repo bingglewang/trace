@@ -1855,6 +1855,13 @@ public class TraceServiceImpl implements TraceService {
                 }
                 tracePointNodes.add(scanPointQueryParam);
             }
+            //首次查询时间和地点
+            List<ScanRecordQueryParam> scanList = getScanRecordBySid(sid);
+            if(CollectionUtils.isEmpty(scanList)){
+                result.put("firstScan","");
+            }else{
+                result.put("firstScan",scanList.get(scanList.size() - 1));
+            }
             //生产环节信息
             ZslTraceRecord zslTraceRecord = zslTraceRecordDao.selectRecordForProduct(zslTraceSubcode.getTraceGoodId(), zslTraceSubcode.getTraceIndex(), zslTraceSubcode.getTraceCodeNumber());
             if (zslTraceRecord == null) {
