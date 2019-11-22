@@ -1203,7 +1203,7 @@ public class TraceServiceImpl implements TraceService {
                 //根据摊位查询摊位名称
                 MerchantStall merchantStall = merchantStallMapper.selectByPrimaryKey(traceRecordVo.getTraceStallId());
                 if (merchantStall != null) {
-                    traceRecordVo.setTraceStallName(merchantStall.getStallName());//摊位名称
+                    traceRecordVo.setTraceStallName("");//摊位名称
                 } else {
                     traceRecordVo.setTraceStallName("");//摊位名称
                 }

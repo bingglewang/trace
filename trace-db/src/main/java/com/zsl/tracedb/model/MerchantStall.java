@@ -2,25 +2,29 @@ package com.zsl.tracedb.model;
 
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.util.Date;
 
 public class MerchantStall implements Serializable {
-    @ApiModelProperty(value = "摊位ID")
+    @ApiModelProperty(value = "自增主键")
     private Integer stallId;
 
-    @ApiModelProperty(value = "摊位名称")
-    private String stallName;
-
-    @ApiModelProperty(value = "所属商家ID")
+    @ApiModelProperty(value = "所属商家ID(农贸市场)")
     private Integer merchantId;
 
-    @ApiModelProperty(value = "摊主姓名")
-    private String stallholderName;
+    @ApiModelProperty(value = "摊位编号")
+    private String stallNo;
 
-    @ApiModelProperty(value = "摊主联系电话")
-    private String stallholderNumber;
+    @ApiModelProperty(value = "摊位状态（0：空缺；1：营业；2：歇业）")
+    private Integer status;
 
-    @ApiModelProperty(value = "绑定微信")
-    private String stallholderOpenid;
+    @ApiModelProperty(value = "创建时间")
+    private Date createTime;
+
+    @ApiModelProperty(value = "更新时间")
+    private Date updateTime;
+
+    @ApiModelProperty(value = "摊主ID")
+    private Integer stallHolderId;
 
     private static final long serialVersionUID = 1L;
 
@@ -32,14 +36,6 @@ public class MerchantStall implements Serializable {
         this.stallId = stallId;
     }
 
-    public String getStallName() {
-        return stallName;
-    }
-
-    public void setStallName(String stallName) {
-        this.stallName = stallName;
-    }
-
     public Integer getMerchantId() {
         return merchantId;
     }
@@ -48,28 +44,44 @@ public class MerchantStall implements Serializable {
         this.merchantId = merchantId;
     }
 
-    public String getStallholderName() {
-        return stallholderName;
+    public String getStallNo() {
+        return stallNo;
     }
 
-    public void setStallholderName(String stallholderName) {
-        this.stallholderName = stallholderName;
+    public void setStallNo(String stallNo) {
+        this.stallNo = stallNo;
     }
 
-    public String getStallholderNumber() {
-        return stallholderNumber;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setStallholderNumber(String stallholderNumber) {
-        this.stallholderNumber = stallholderNumber;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
-    public String getStallholderOpenid() {
-        return stallholderOpenid;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setStallholderOpenid(String stallholderOpenid) {
-        this.stallholderOpenid = stallholderOpenid;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Integer getStallHolderId() {
+        return stallHolderId;
+    }
+
+    public void setStallHolderId(Integer stallHolderId) {
+        this.stallHolderId = stallHolderId;
     }
 
     @Override
@@ -79,11 +91,12 @@ public class MerchantStall implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", stallId=").append(stallId);
-        sb.append(", stallName=").append(stallName);
         sb.append(", merchantId=").append(merchantId);
-        sb.append(", stallholderName=").append(stallholderName);
-        sb.append(", stallholderNumber=").append(stallholderNumber);
-        sb.append(", stallholderOpenid=").append(stallholderOpenid);
+        sb.append(", stallNo=").append(stallNo);
+        sb.append(", status=").append(status);
+        sb.append(", createTime=").append(createTime);
+        sb.append(", updateTime=").append(updateTime);
+        sb.append(", stallHolderId=").append(stallHolderId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

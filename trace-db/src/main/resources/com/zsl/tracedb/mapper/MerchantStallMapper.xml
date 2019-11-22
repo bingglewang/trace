@@ -3,11 +3,12 @@
 <mapper namespace="com.zsl.tracedb.mapper.MerchantStallMapper">
   <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.MerchantStall">
     <id column="stall_id" jdbcType="INTEGER" property="stallId" />
-    <result column="stall_name" jdbcType="VARCHAR" property="stallName" />
     <result column="merchant_id" jdbcType="INTEGER" property="merchantId" />
-    <result column="stallholder_name" jdbcType="VARCHAR" property="stallholderName" />
-    <result column="stallholder_number" jdbcType="VARCHAR" property="stallholderNumber" />
-    <result column="stallholder_openid" jdbcType="VARCHAR" property="stallholderOpenid" />
+    <result column="stall_no" jdbcType="VARCHAR" property="stallNo" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="stall_holder_id" jdbcType="INTEGER" property="stallHolderId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    stall_id, stall_name, merchant_id, stallholder_name, stallholder_number, stallholder_openid
+    stall_id, merchant_id, stall_no, status, create_time, update_time, stall_holder_id
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.MerchantStallExample" resultMap="BaseResultMap">
     select
@@ -104,10 +105,12 @@
     <selectKey keyProperty="stallId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into merchant_stall (stall_name, merchant_id, stallholder_name, 
-      stallholder_number, stallholder_openid)
-    values (#{stallName,jdbcType=VARCHAR}, #{merchantId,jdbcType=INTEGER}, #{stallholderName,jdbcType=VARCHAR}, 
-      #{stallholderNumber,jdbcType=VARCHAR}, #{stallholderOpenid,jdbcType=VARCHAR})
+    insert into merchant_stall (merchant_id, stall_no, status, 
+      create_time, update_time, stall_holder_id
+      )
+    values (#{merchantId,jdbcType=INTEGER}, #{stallNo,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{stallHolderId,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.MerchantStall">
     <selectKey keyProperty="stallId" order="AFTER" resultType="java.lang.Integer">
@@ -115,37 +118,43 @@
     </selectKey>
     insert into merchant_stall
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="stallName != null">
-        stall_name,
-      </if>
       <if test="merchantId != null">
         merchant_id,
       </if>
-      <if test="stallholderName != null">
-        stallholder_name,
+      <if test="stallNo != null">
+        stall_no,
       </if>
-      <if test="stallholderNumber != null">
-        stallholder_number,
+      <if test="status != null">
+        status,
       </if>
-      <if test="stallholderOpenid != null">
-        stallholder_openid,
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="stallHolderId != null">
+        stall_holder_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="stallName != null">
-        #{stallName,jdbcType=VARCHAR},
-      </if>
       <if test="merchantId != null">
         #{merchantId,jdbcType=INTEGER},
       </if>
-      <if test="stallholderName != null">
-        #{stallholderName,jdbcType=VARCHAR},
+      <if test="stallNo != null">
+        #{stallNo,jdbcType=VARCHAR},
       </if>
-      <if test="stallholderNumber != null">
-        #{stallholderNumber,jdbcType=VARCHAR},
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
       </if>
-      <if test="stallholderOpenid != null">
-        #{stallholderOpenid,jdbcType=VARCHAR},
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="stallHolderId != null">
+        #{stallHolderId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -161,20 +170,23 @@
       <if test="record.stallId != null">
         stall_id = #{record.stallId,jdbcType=INTEGER},
       </if>
-      <if test="record.stallName != null">
-        stall_name = #{record.stallName,jdbcType=VARCHAR},
-      </if>
       <if test="record.merchantId != null">
         merchant_id = #{record.merchantId,jdbcType=INTEGER},
       </if>
-      <if test="record.stallholderName != null">
-        stallholder_name = #{record.stallholderName,jdbcType=VARCHAR},
+      <if test="record.stallNo != null">
+        stall_no = #{record.stallNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.stallholderNumber != null">
-        stallholder_number = #{record.stallholderNumber,jdbcType=VARCHAR},
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
       </if>
-      <if test="record.stallholderOpenid != null">
-        stallholder_openid = #{record.stallholderOpenid,jdbcType=VARCHAR},
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.stallHolderId != null">
+        stall_holder_id = #{record.stallHolderId,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">
@@ -184,11 +196,12 @@
   <update id="updateByExample" parameterType="map">
     update merchant_stall
     set stall_id = #{record.stallId,jdbcType=INTEGER},
-      stall_name = #{record.stallName,jdbcType=VARCHAR},
       merchant_id = #{record.merchantId,jdbcType=INTEGER},
-      stallholder_name = #{record.stallholderName,jdbcType=VARCHAR},
-      stallholder_number = #{record.stallholderNumber,jdbcType=VARCHAR},
-      stallholder_openid = #{record.stallholderOpenid,jdbcType=VARCHAR}
+      stall_no = #{record.stallNo,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      stall_holder_id = #{record.stallHolderId,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -196,31 +209,35 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.MerchantStall">
     update merchant_stall
     <set>
-      <if test="stallName != null">
-        stall_name = #{stallName,jdbcType=VARCHAR},
-      </if>
       <if test="merchantId != null">
         merchant_id = #{merchantId,jdbcType=INTEGER},
       </if>
-      <if test="stallholderName != null">
-        stallholder_name = #{stallholderName,jdbcType=VARCHAR},
+      <if test="stallNo != null">
+        stall_no = #{stallNo,jdbcType=VARCHAR},
       </if>
-      <if test="stallholderNumber != null">
-        stallholder_number = #{stallholderNumber,jdbcType=VARCHAR},
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
       </if>
-      <if test="stallholderOpenid != null">
-        stallholder_openid = #{stallholderOpenid,jdbcType=VARCHAR},
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="stallHolderId != null">
+        stall_holder_id = #{stallHolderId,jdbcType=INTEGER},
       </if>
     </set>
     where stall_id = #{stallId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.MerchantStall">
     update merchant_stall
-    set stall_name = #{stallName,jdbcType=VARCHAR},
-      merchant_id = #{merchantId,jdbcType=INTEGER},
-      stallholder_name = #{stallholderName,jdbcType=VARCHAR},
-      stallholder_number = #{stallholderNumber,jdbcType=VARCHAR},
-      stallholder_openid = #{stallholderOpenid,jdbcType=VARCHAR}
+    set merchant_id = #{merchantId,jdbcType=INTEGER},
+      stall_no = #{stallNo,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      stall_holder_id = #{stallHolderId,jdbcType=INTEGER}
     where stall_id = #{stallId,jdbcType=INTEGER}
   </update>
 </mapper>

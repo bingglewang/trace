@@ -1,6 +1,7 @@
 package com.zsl.tracedb.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MerchantStallExample {
@@ -164,76 +165,6 @@ public class MerchantStallExample {
             return (Criteria) this;
         }
 
-        public Criteria andStallNameIsNull() {
-            addCriterion("stall_name is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andStallNameIsNotNull() {
-            addCriterion("stall_name is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andStallNameEqualTo(String value) {
-            addCriterion("stall_name =", value, "stallName");
-            return (Criteria) this;
-        }
-
-        public Criteria andStallNameNotEqualTo(String value) {
-            addCriterion("stall_name <>", value, "stallName");
-            return (Criteria) this;
-        }
-
-        public Criteria andStallNameGreaterThan(String value) {
-            addCriterion("stall_name >", value, "stallName");
-            return (Criteria) this;
-        }
-
-        public Criteria andStallNameGreaterThanOrEqualTo(String value) {
-            addCriterion("stall_name >=", value, "stallName");
-            return (Criteria) this;
-        }
-
-        public Criteria andStallNameLessThan(String value) {
-            addCriterion("stall_name <", value, "stallName");
-            return (Criteria) this;
-        }
-
-        public Criteria andStallNameLessThanOrEqualTo(String value) {
-            addCriterion("stall_name <=", value, "stallName");
-            return (Criteria) this;
-        }
-
-        public Criteria andStallNameLike(String value) {
-            addCriterion("stall_name like", value, "stallName");
-            return (Criteria) this;
-        }
-
-        public Criteria andStallNameNotLike(String value) {
-            addCriterion("stall_name not like", value, "stallName");
-            return (Criteria) this;
-        }
-
-        public Criteria andStallNameIn(List<String> values) {
-            addCriterion("stall_name in", values, "stallName");
-            return (Criteria) this;
-        }
-
-        public Criteria andStallNameNotIn(List<String> values) {
-            addCriterion("stall_name not in", values, "stallName");
-            return (Criteria) this;
-        }
-
-        public Criteria andStallNameBetween(String value1, String value2) {
-            addCriterion("stall_name between", value1, value2, "stallName");
-            return (Criteria) this;
-        }
-
-        public Criteria andStallNameNotBetween(String value1, String value2) {
-            addCriterion("stall_name not between", value1, value2, "stallName");
-            return (Criteria) this;
-        }
-
         public Criteria andMerchantIdIsNull() {
             addCriterion("merchant_id is null");
             return (Criteria) this;
@@ -294,213 +225,313 @@ public class MerchantStallExample {
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNameIsNull() {
-            addCriterion("stallholder_name is null");
+        public Criteria andStallNoIsNull() {
+            addCriterion("stall_no is null");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNameIsNotNull() {
-            addCriterion("stallholder_name is not null");
+        public Criteria andStallNoIsNotNull() {
+            addCriterion("stall_no is not null");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNameEqualTo(String value) {
-            addCriterion("stallholder_name =", value, "stallholderName");
+        public Criteria andStallNoEqualTo(String value) {
+            addCriterion("stall_no =", value, "stallNo");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNameNotEqualTo(String value) {
-            addCriterion("stallholder_name <>", value, "stallholderName");
+        public Criteria andStallNoNotEqualTo(String value) {
+            addCriterion("stall_no <>", value, "stallNo");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNameGreaterThan(String value) {
-            addCriterion("stallholder_name >", value, "stallholderName");
+        public Criteria andStallNoGreaterThan(String value) {
+            addCriterion("stall_no >", value, "stallNo");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNameGreaterThanOrEqualTo(String value) {
-            addCriterion("stallholder_name >=", value, "stallholderName");
+        public Criteria andStallNoGreaterThanOrEqualTo(String value) {
+            addCriterion("stall_no >=", value, "stallNo");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNameLessThan(String value) {
-            addCriterion("stallholder_name <", value, "stallholderName");
+        public Criteria andStallNoLessThan(String value) {
+            addCriterion("stall_no <", value, "stallNo");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNameLessThanOrEqualTo(String value) {
-            addCriterion("stallholder_name <=", value, "stallholderName");
+        public Criteria andStallNoLessThanOrEqualTo(String value) {
+            addCriterion("stall_no <=", value, "stallNo");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNameLike(String value) {
-            addCriterion("stallholder_name like", value, "stallholderName");
+        public Criteria andStallNoLike(String value) {
+            addCriterion("stall_no like", value, "stallNo");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNameNotLike(String value) {
-            addCriterion("stallholder_name not like", value, "stallholderName");
+        public Criteria andStallNoNotLike(String value) {
+            addCriterion("stall_no not like", value, "stallNo");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNameIn(List<String> values) {
-            addCriterion("stallholder_name in", values, "stallholderName");
+        public Criteria andStallNoIn(List<String> values) {
+            addCriterion("stall_no in", values, "stallNo");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNameNotIn(List<String> values) {
-            addCriterion("stallholder_name not in", values, "stallholderName");
+        public Criteria andStallNoNotIn(List<String> values) {
+            addCriterion("stall_no not in", values, "stallNo");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNameBetween(String value1, String value2) {
-            addCriterion("stallholder_name between", value1, value2, "stallholderName");
+        public Criteria andStallNoBetween(String value1, String value2) {
+            addCriterion("stall_no between", value1, value2, "stallNo");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNameNotBetween(String value1, String value2) {
-            addCriterion("stallholder_name not between", value1, value2, "stallholderName");
+        public Criteria andStallNoNotBetween(String value1, String value2) {
+            addCriterion("stall_no not between", value1, value2, "stallNo");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNumberIsNull() {
-            addCriterion("stallholder_number is null");
+        public Criteria andStatusIsNull() {
+            addCriterion("status is null");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNumberIsNotNull() {
-            addCriterion("stallholder_number is not null");
+        public Criteria andStatusIsNotNull() {
+            addCriterion("status is not null");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNumberEqualTo(String value) {
-            addCriterion("stallholder_number =", value, "stallholderNumber");
+        public Criteria andStatusEqualTo(Integer value) {
+            addCriterion("status =", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNumberNotEqualTo(String value) {
-            addCriterion("stallholder_number <>", value, "stallholderNumber");
+        public Criteria andStatusNotEqualTo(Integer value) {
+            addCriterion("status <>", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNumberGreaterThan(String value) {
-            addCriterion("stallholder_number >", value, "stallholderNumber");
+        public Criteria andStatusGreaterThan(Integer value) {
+            addCriterion("status >", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNumberGreaterThanOrEqualTo(String value) {
-            addCriterion("stallholder_number >=", value, "stallholderNumber");
+        public Criteria andStatusGreaterThanOrEqualTo(Integer value) {
+            addCriterion("status >=", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNumberLessThan(String value) {
-            addCriterion("stallholder_number <", value, "stallholderNumber");
+        public Criteria andStatusLessThan(Integer value) {
+            addCriterion("status <", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNumberLessThanOrEqualTo(String value) {
-            addCriterion("stallholder_number <=", value, "stallholderNumber");
+        public Criteria andStatusLessThanOrEqualTo(Integer value) {
+            addCriterion("status <=", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNumberLike(String value) {
-            addCriterion("stallholder_number like", value, "stallholderNumber");
+        public Criteria andStatusIn(List<Integer> values) {
+            addCriterion("status in", values, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNumberNotLike(String value) {
-            addCriterion("stallholder_number not like", value, "stallholderNumber");
+        public Criteria andStatusNotIn(List<Integer> values) {
+            addCriterion("status not in", values, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNumberIn(List<String> values) {
-            addCriterion("stallholder_number in", values, "stallholderNumber");
+        public Criteria andStatusBetween(Integer value1, Integer value2) {
+            addCriterion("status between", value1, value2, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNumberNotIn(List<String> values) {
-            addCriterion("stallholder_number not in", values, "stallholderNumber");
+        public Criteria andStatusNotBetween(Integer value1, Integer value2) {
+            addCriterion("status not between", value1, value2, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNumberBetween(String value1, String value2) {
-            addCriterion("stallholder_number between", value1, value2, "stallholderNumber");
+        public Criteria andCreateTimeIsNull() {
+            addCriterion("create_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderNumberNotBetween(String value1, String value2) {
-            addCriterion("stallholder_number not between", value1, value2, "stallholderNumber");
+        public Criteria andCreateTimeIsNotNull() {
+            addCriterion("create_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderOpenidIsNull() {
-            addCriterion("stallholder_openid is null");
+        public Criteria andCreateTimeEqualTo(Date value) {
+            addCriterion("create_time =", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderOpenidIsNotNull() {
-            addCriterion("stallholder_openid is not null");
+        public Criteria andCreateTimeNotEqualTo(Date value) {
+            addCriterion("create_time <>", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderOpenidEqualTo(String value) {
-            addCriterion("stallholder_openid =", value, "stallholderOpenid");
+        public Criteria andCreateTimeGreaterThan(Date value) {
+            addCriterion("create_time >", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderOpenidNotEqualTo(String value) {
-            addCriterion("stallholder_openid <>", value, "stallholderOpenid");
+        public Criteria andCreateTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("create_time >=", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderOpenidGreaterThan(String value) {
-            addCriterion("stallholder_openid >", value, "stallholderOpenid");
+        public Criteria andCreateTimeLessThan(Date value) {
+            addCriterion("create_time <", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderOpenidGreaterThanOrEqualTo(String value) {
-            addCriterion("stallholder_openid >=", value, "stallholderOpenid");
+        public Criteria andCreateTimeLessThanOrEqualTo(Date value) {
+            addCriterion("create_time <=", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderOpenidLessThan(String value) {
-            addCriterion("stallholder_openid <", value, "stallholderOpenid");
+        public Criteria andCreateTimeIn(List<Date> values) {
+            addCriterion("create_time in", values, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderOpenidLessThanOrEqualTo(String value) {
-            addCriterion("stallholder_openid <=", value, "stallholderOpenid");
+        public Criteria andCreateTimeNotIn(List<Date> values) {
+            addCriterion("create_time not in", values, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderOpenidLike(String value) {
-            addCriterion("stallholder_openid like", value, "stallholderOpenid");
+        public Criteria andCreateTimeBetween(Date value1, Date value2) {
+            addCriterion("create_time between", value1, value2, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderOpenidNotLike(String value) {
-            addCriterion("stallholder_openid not like", value, "stallholderOpenid");
+        public Criteria andCreateTimeNotBetween(Date value1, Date value2) {
+            addCriterion("create_time not between", value1, value2, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderOpenidIn(List<String> values) {
-            addCriterion("stallholder_openid in", values, "stallholderOpenid");
+        public Criteria andUpdateTimeIsNull() {
+            addCriterion("update_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderOpenidNotIn(List<String> values) {
-            addCriterion("stallholder_openid not in", values, "stallholderOpenid");
+        public Criteria andUpdateTimeIsNotNull() {
+            addCriterion("update_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderOpenidBetween(String value1, String value2) {
-            addCriterion("stallholder_openid between", value1, value2, "stallholderOpenid");
+        public Criteria andUpdateTimeEqualTo(Date value) {
+            addCriterion("update_time =", value, "updateTime");
             return (Criteria) this;
         }
 
-        public Criteria andStallholderOpenidNotBetween(String value1, String value2) {
-            addCriterion("stallholder_openid not between", value1, value2, "stallholderOpenid");
+        public Criteria andUpdateTimeNotEqualTo(Date value) {
+            addCriterion("update_time <>", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeGreaterThan(Date value) {
+            addCriterion("update_time >", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("update_time >=", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeLessThan(Date value) {
+            addCriterion("update_time <", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeLessThanOrEqualTo(Date value) {
+            addCriterion("update_time <=", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeIn(List<Date> values) {
+            addCriterion("update_time in", values, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeNotIn(List<Date> values) {
+            addCriterion("update_time not in", values, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeBetween(Date value1, Date value2) {
+            addCriterion("update_time between", value1, value2, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeNotBetween(Date value1, Date value2) {
+            addCriterion("update_time not between", value1, value2, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStallHolderIdIsNull() {
+            addCriterion("stall_holder_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStallHolderIdIsNotNull() {
+            addCriterion("stall_holder_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStallHolderIdEqualTo(Integer value) {
+            addCriterion("stall_holder_id =", value, "stallHolderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStallHolderIdNotEqualTo(Integer value) {
+            addCriterion("stall_holder_id <>", value, "stallHolderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStallHolderIdGreaterThan(Integer value) {
+            addCriterion("stall_holder_id >", value, "stallHolderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStallHolderIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("stall_holder_id >=", value, "stallHolderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStallHolderIdLessThan(Integer value) {
+            addCriterion("stall_holder_id <", value, "stallHolderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStallHolderIdLessThanOrEqualTo(Integer value) {
+            addCriterion("stall_holder_id <=", value, "stallHolderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStallHolderIdIn(List<Integer> values) {
+            addCriterion("stall_holder_id in", values, "stallHolderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStallHolderIdNotIn(List<Integer> values) {
+            addCriterion("stall_holder_id not in", values, "stallHolderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStallHolderIdBetween(Integer value1, Integer value2) {
+            addCriterion("stall_holder_id between", value1, value2, "stallHolderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStallHolderIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("stall_holder_id not between", value1, value2, "stallHolderId");
             return (Criteria) this;
         }
     }

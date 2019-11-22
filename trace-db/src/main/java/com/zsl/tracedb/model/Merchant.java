@@ -79,6 +79,18 @@ public class Merchant implements Serializable {
     @ApiModelProperty(value = "纸质标签额度上限")
     private Long paperLabelUpper;
 
+    @ApiModelProperty(value = "横坐标")
+    private String siteAbscissa;
+
+    @ApiModelProperty(value = "纵坐标")
+    private String siteOrdinate;
+
+    @ApiModelProperty(value = "识别地址")
+    private String discernSite;
+
+    @ApiModelProperty(value = "销售网址")
+    private String salesUrl;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getMerchantId() {
@@ -281,6 +293,38 @@ public class Merchant implements Serializable {
         this.paperLabelUpper = paperLabelUpper;
     }
 
+    public String getSiteAbscissa() {
+        return siteAbscissa;
+    }
+
+    public void setSiteAbscissa(String siteAbscissa) {
+        this.siteAbscissa = siteAbscissa;
+    }
+
+    public String getSiteOrdinate() {
+        return siteOrdinate;
+    }
+
+    public void setSiteOrdinate(String siteOrdinate) {
+        this.siteOrdinate = siteOrdinate;
+    }
+
+    public String getDiscernSite() {
+        return discernSite;
+    }
+
+    public void setDiscernSite(String discernSite) {
+        this.discernSite = discernSite;
+    }
+
+    public String getSalesUrl() {
+        return salesUrl;
+    }
+
+    public void setSalesUrl(String salesUrl) {
+        this.salesUrl = salesUrl;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -312,6 +356,10 @@ public class Merchant implements Serializable {
         sb.append(", merchantDesciption=").append(merchantDesciption);
         sb.append(", stallLimit=").append(stallLimit);
         sb.append(", paperLabelUpper=").append(paperLabelUpper);
+        sb.append(", siteAbscissa=").append(siteAbscissa);
+        sb.append(", siteOrdinate=").append(siteOrdinate);
+        sb.append(", discernSite=").append(discernSite);
+        sb.append(", salesUrl=").append(salesUrl);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
