@@ -5,8 +5,10 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.MessageDigest;
 
 /**
  * 根据IP地址获取详细的地域信息
@@ -156,5 +158,11 @@ public class AddressUtils {
         }
         return outBuffer.toString();
     }
+
+    public static void main(String[] args) throws Exception {
+        String traceCode = 1600000+ "+zs15716535481990005754";
+        System.out.println("hashcode："+traceCode.hashCode());
+    }
+
 }
 

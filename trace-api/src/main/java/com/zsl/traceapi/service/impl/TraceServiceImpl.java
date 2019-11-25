@@ -740,7 +740,8 @@ public class TraceServiceImpl implements TraceService {
         }
         //摊位id，如果有则为摊位id，没有则为-1（代表非农贸）
 
-        MerchantStall merchantStall = merchantStallMapper.selectByPrimaryKey(traceRecordPointParam.getTraceStallId());
+        //MerchantStall merchantStall = merchantStallMapper.selectByPrimaryKey(traceRecordPointParam.getTraceStallId());
+        MerchantStall merchantStall = null;
         if (merchantStall == null) {
             traceRecordPointParam.setTraceStallId(-1);
         }
@@ -1201,7 +1202,8 @@ public class TraceServiceImpl implements TraceService {
                 traceRecordVo.setTraceStallName("");//摊位名称
             } else {
                 //根据摊位查询摊位名称
-                MerchantStall merchantStall = merchantStallMapper.selectByPrimaryKey(traceRecordVo.getTraceStallId());
+                MerchantStall merchantStall = null;
+               // MerchantStall merchantStall = merchantStallMapper.selectByPrimaryKey(traceRecordVo.getTraceStallId());
                 if (merchantStall != null) {
                     traceRecordVo.setTraceStallName("");//摊位名称
                 } else {
@@ -1862,6 +1864,9 @@ public class TraceServiceImpl implements TraceService {
             }else{
                 result.put("firstScan",scanList.get(scanList.size() - 1));
             }
+            //哈希值
+            String hashcode = CryptoUtil.calculateHash(zslTraceSubcode.getTraceSid(),zslTraceSubcode.getTraceCodeNumber());
+            result.put("hashcode", hashcode);
             //生产环节信息
             ZslTraceRecord zslTraceRecord = zslTraceRecordDao.selectRecordForProduct(zslTraceSubcode.getTraceGoodId(), zslTraceSubcode.getTraceIndex(), zslTraceSubcode.getTraceCodeNumber());
             if (zslTraceRecord == null) {

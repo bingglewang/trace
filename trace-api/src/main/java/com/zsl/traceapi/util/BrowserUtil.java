@@ -85,4 +85,5 @@ public  final  class BrowserUtil {
 	public static boolean isChrome(HttpServletRequest request) {
 		return CHROME.equals(getCurrent(request));
 	}
+
 }
