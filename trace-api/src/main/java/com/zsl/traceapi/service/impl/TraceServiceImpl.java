@@ -1867,6 +1867,9 @@ public class TraceServiceImpl implements TraceService {
             //哈希值
             String hashcode = CryptoUtil.calculateHash(zslTraceSubcode.getTraceSid(),zslTraceSubcode.getTraceCodeNumber());
             result.put("hashcode", hashcode);
+            //所在区块
+            String block = TraceCodeUtil.generateBlock(zslTraceSubcode.getTraceSubCodeNumber(),TotalCount);
+            result.put("block", block);
             //生产环节信息
             ZslTraceRecord zslTraceRecord = zslTraceRecordDao.selectRecordForProduct(zslTraceSubcode.getTraceGoodId(), zslTraceSubcode.getTraceIndex(), zslTraceSubcode.getTraceCodeNumber());
             if (zslTraceRecord == null) {

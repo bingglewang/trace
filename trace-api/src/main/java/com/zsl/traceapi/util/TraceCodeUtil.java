@@ -28,5 +28,31 @@ public class TraceCodeUtil {
         return result;
     }
 
+    public static String generateBlock(String traceCode,Long totalCount){
+        String result = "";
+        String suffix = traceCode.substring(traceCode.length()-6);
+        Long suffixLong = Long.parseLong(suffix);
+        Long blockLong = totalCount + suffixLong;
+        String blockLongStr = blockLong.toString();
+        System.out.println("字符串:"+blockLongStr);
+        if(((blockLongStr.charAt(blockLongStr.length()-5) - '0') == 0)){
+            if(((blockLongStr.charAt(blockLongStr.length()-6) - '0') == 0)){
+                result = "1"+ blockLongStr.substring(blockLongStr.length()-5);
+            }else{
+                result = blockLongStr.substring(blockLongStr.length()-6);
+            }
+        }else{
+            result = blockLongStr.substring(blockLongStr.length()-5);
+        }
+        return result;
+    }
+
     //判断起始编码，和结束编码,(起始编码必须小于结束编码，)
+
+    public static void main(String[] args) {
+        String traceCode = "zs157171673594400050001969";
+        Long totalCount = 2000000L;
+        String block = generateBlock(traceCode,totalCount);
+        System.out.println("区块："+block);
+    }
 }
