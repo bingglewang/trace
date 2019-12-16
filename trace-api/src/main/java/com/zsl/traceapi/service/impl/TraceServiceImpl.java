@@ -787,8 +787,8 @@ public class TraceServiceImpl implements TraceService {
     public Integer insertPointNodeAccount(MerchantPointDto merchantPointDto) {
         RequestContext requestContext = RequestContextMgr.getLocalContext();
         String tokenLogin = requestContext.getToken();
-        //String url = "https://zs.cntracechain.com/accountCenter/account/add";
-        String url = "http://zs-beta.cntracechain.com/accountCenter/account/add";
+        String url = "https://zs.cntracechain.com/accountCenter/account/add";
+       // String url = "http://zs-beta.cntracechain.com/accountCenter/account/add";
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("accountName", merchantPointDto.getContactNumber());
         jsonObject.put("realName", merchantPointDto.getPersonInCharge());
@@ -1868,7 +1868,7 @@ public class TraceServiceImpl implements TraceService {
             String hashcode = CryptoUtil.calculateHash(zslTraceSubcode.getTraceSid(),zslTraceSubcode.getTraceCodeNumber());
             result.put("hashcode", hashcode);
             //所在区块
-            String block = TraceCodeUtil.generateBlock(zslTraceSubcode.getTraceSubCodeNumber(),TotalCount);
+            String block = TraceCodeUtil.generateBlock(zslTraceSubcode.getTraceCodeNumber(),TotalCount);
             result.put("block", block);
             //生产环节信息
             ZslTraceRecord zslTraceRecord = zslTraceRecordDao.selectRecordForProduct(zslTraceSubcode.getTraceGoodId(), zslTraceSubcode.getTraceIndex(), zslTraceSubcode.getTraceCodeNumber());
@@ -1945,7 +1945,7 @@ public class TraceServiceImpl implements TraceService {
 
             return CommonResult.success(result);
         } else {
-            return CommonResult.failed("编码错误");
+            return CommonResult.failed("该编码是外码");
         }
     }
 
