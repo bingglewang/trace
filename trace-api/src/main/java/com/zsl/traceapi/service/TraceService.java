@@ -167,20 +167,6 @@ public interface TraceService {
     List<GoodsVo> getGoodsByTraceCodeNumber(String traceCodeNumber);
 
     /**
-     * 设置外码比例，生成外码
-     * @param miniCodeInsertParams
-     * @return
-     */
-    Object generateOutCode(List<MiniCodeInsertParam> miniCodeInsertParams);
-
-    /**
-     * 根据数量生成外码
-     * @param count
-     * @return
-     */
-    Object generateOutCodeByCount(Integer count);
-
-    /**
      * 关联外码
      * @param outCode
      * @param subCodeList
@@ -250,15 +236,6 @@ public interface TraceService {
      * @return
      */
     CommonResult getTracePointRecordBySid(Long sid);
-
-    /**
-     * 分页获取内码或外码树
-     * @param pageNum
-     * @param pageSize
-     * @param traceCodeNumber
-     * @return
-     */
-    CommonResult getSuCodeByPage(Integer pageNum,Integer pageSize,String traceCodeNumber);
 
 
     /**

@@ -12,4 +12,6 @@ public class TraceRecordVo {
     private Integer traceFromNumber;
     private Integer traceStallId;
     private String traceStallName;
+    private Long fromSid;
+    private Long toSid;
 }

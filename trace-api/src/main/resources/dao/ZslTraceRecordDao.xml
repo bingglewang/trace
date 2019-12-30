@@ -30,4 +30,20 @@
         and trace_good_id = #{traceGoodsId}
         limit 1
     </select>
+
+    <select id="getTracePointBy" resultMap="com.zsl.tracedb.mapper.ZslTracePointMapper.BaseResultMap">
+        SELECT
+            *
+        FROM
+            `zsl_trace_point`
+        WHERE
+            trace_code_number = #{traceCodeNumber}
+        AND trace_goods_id = #{traceGoodsId}
+        and (#{traceIndex} BETWEEN trace_point_from_number and trace_point_to_number)
+        ORDER BY trace_point_time desc limit 1;
+    </select>
+
+    <select id="getTracePointByParentId" resultMap="com.zsl.tracedb.mapper.ZslTracePointMapper.BaseResultMap">
+        select * from zsl_trace_point where trace_parent_id = #{traceParentId};
+    </select>
 </mapper>

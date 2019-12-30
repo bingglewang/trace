@@ -11,6 +11,7 @@ import com.zsl.traceapi.context.RequestContext;
 import com.zsl.traceapi.context.RequestContextMgr;
 import com.zsl.traceapi.dao.*;
 import com.zsl.traceapi.dto.*;
+import com.zsl.traceapi.service.RedisService;
 import com.zsl.traceapi.service.TraceService;
 import com.zsl.traceapi.util.*;
 import com.zsl.traceapi.vo.*;
@@ -55,9 +56,6 @@ public class TraceServiceImpl implements TraceService {
 
     @Autowired
     private MerchantMapper merchantMapper;
-
-    @Autowired
-    private MerchantStallMapper merchantStallMapper;
 
     @Autowired
     private IntegralDeductRatioMapper integralDeductRatioMapper;
@@ -110,17 +108,18 @@ public class TraceServiceImpl implements TraceService {
     @Autowired
     private ZslTracePapperMapper zslTracePapperMapper;
 
-    private Integer count;
+    @Autowired
+    private RedisService redisService;
 
-    private Integer countIntegral;
+    private Integer count = 0;
+
+    private Integer countIntegral = 0;
 
     private List<ZslTraceSubcode> totalSubCode;
 
-    private List<ZslTraceSubcode> pageList;
+    private List<ZslTracePoint> deliverList;
 
-    private Integer searchCount;
-
-    private Integer isSaled;
+    private Integer isSaled = 0;
 
     @Override
     public CommonResult preCreatePaperCode(Long preCreateCount) {
@@ -692,6 +691,10 @@ public class TraceServiceImpl implements TraceService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int traceRecordPointInsert(TraceRecordPointParam traceRecordPointParam) {
+        String is_deliver = redisService.get("Deliver_"+traceRecordPointParam.getTraceCodeNumber());
+        if(StringUtils.isNotBlank(is_deliver)){
+            return -12; //该批次正在发货中。。。,请稍后再试
+        }
         Goods goods = goodsMapper.selectByPrimaryKey(traceRecordPointParam.getTraceGoodsId());
         if (goods == null) {
             return -1; //商品不存在
@@ -753,10 +756,10 @@ public class TraceServiceImpl implements TraceService {
         if(merchantPointDto != null){
             zslTracePoint.setTracePointName(merchantPointDto.getTracePointName());
         }
-        int i = zslTracePointMapper.insert(zslTracePoint);
+       /* int i = zslTracePointMapper.insert(zslTracePoint);
         if (i < 0) {
             return -5;//追溯插入失败
-        }
+        }*/
 
         Merchant merchantUdate = new Merchant();
         merchantUdate.setMerchantId(zslTrace.get(0).getTraceBusinessId());
@@ -767,7 +770,7 @@ public class TraceServiceImpl implements TraceService {
         }
         //扣除积分
 
-        IntegralLog integralLog = new IntegralLog();
+       /* IntegralLog integralLog = new IntegralLog();
         integralLog.setDeductIntegral(Integer.parseInt((integralDeductRatio.getIntegralRatio() * (traceRecordPointParam.getTracePointToNumber() - traceRecordPointParam.getTracePointFromNumber() + 1)) + ""));//当前扣除的积分
         integralLog.setFunctionId(zslTracePoint.getTracePointId());//操作业务主键id
         integralLog.setFunctionType(ServiceEnum.INSERT_TRACE_POINT.getId());
@@ -775,8 +778,21 @@ public class TraceServiceImpl implements TraceService {
         integralLog.setDeductStatus(2);//已经扣减
         integralLog.setCreateTime(new Date());//创建时间
         integralLog.setDeductTime(new Date()); //扣减时间
-        int integLogInsert = integralLogMapper.insert(integralLog);
+        int integLogInsert = integralLogMapper.insert(integralLog);*/
+        int integLogInsert = 1;
         if (integLogInsert > 0) {
+            //发送关联的内码
+            List<String> codeNumberList = zslTraceSubcodeDao.selectSubCodeByRange(new Long(traceRecordPointParam.getTracePointFromNumber()+""),new Long(traceRecordPointParam.getTracePointToNumber()+""),traceRecordPointParam.getTraceCodeNumber());
+            if(!CollectionUtils.isEmpty(codeNumberList)){
+                //新开一个线程去发货关联的内码
+                DeliverGoods deliverGoods = new DeliverGoods();
+                deliverGoods.setAccountId(accountId);
+                deliverGoods.setCodeNumber(codeNumberList);
+                deliverGoods.setMode(2);
+                new DeliverThread(deliverGoods,traceRecordPointParam.getTraceCodeNumber()).start();
+                redisService.set("Deliver_"+traceRecordPointParam.getTraceCodeNumber(),"true");
+                redisService.expire("Deliver_"+traceRecordPointParam.getTraceCodeNumber(),7200);
+            }
             return integLogInsert;
         } else {
             return -7;  //积分处理失败
@@ -787,8 +803,8 @@ public class TraceServiceImpl implements TraceService {
     public Integer insertPointNodeAccount(MerchantPointDto merchantPointDto) {
         RequestContext requestContext = RequestContextMgr.getLocalContext();
         String tokenLogin = requestContext.getToken();
-        String url = "https://zs.cntracechain.com/accountCenter/account/add";
-       // String url = "http://zs-beta.cntracechain.com/accountCenter/account/add";
+        //String url = "https://zs.cntracechain.com/accountCenter/account/add";
+        String url = "http://zs-beta.cntracechain.com/accountCenter/account/add";
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("accountName", merchantPointDto.getContactNumber());
         jsonObject.put("realName", merchantPointDto.getPersonInCharge());
@@ -1235,58 +1251,6 @@ public class TraceServiceImpl implements TraceService {
         return result;
     }
 
-    @Override
-    public Object generateOutCode(List<MiniCodeInsertParam> miniCodeInsertParams) {
-        //生成外码
-        List<String> result = new ArrayList<>();
-        for (int i = 0; i < miniCodeInsertParams.size(); i++) {
-            List<Long> subcodeIds = zslTraceSubcodeDao.selectByRange(new Long(miniCodeInsertParams.get(i).getTraceFromNumber()), new Long(miniCodeInsertParams.get(i).getTraceToNumber()), miniCodeInsertParams.get(i).getTraceCodeNumber());
-            List<TraceOutCodeUpdateParam> traceOutCodeUpdateParams = new ArrayList<>();
-            Integer radio = miniCodeInsertParams.get(i).getOutCodeRadio();
-            for (int j = 0; j < subcodeIds.size(); j++) {
-                // 批量更新子码的父码
-                TraceOutCodeUpdateParam traceOutCodeUpdateParam = new TraceOutCodeUpdateParam();
-                traceOutCodeUpdateParam.setId(subcodeIds.get(j));
-                traceOutCodeUpdateParams.add(traceOutCodeUpdateParam);
-                //生成外码
-                if ((j + 1) % radio == 0 || (j + 1) == subcodeIds.size()) {
-                    //外码
-                    StringBuffer stringBuffer = new StringBuffer();
-                    stringBuffer.append(RandomUtil.getRandNumberCode(4));
-                    stringBuffer.append(System.currentTimeMillis() * 1000);
-                    stringBuffer.append(j + 1);
-                    result.add(stringBuffer.toString());
-                    new OutCodeThread(miniCodeInsertParams.get(i).getTraceCodeNumber(), (j + 1), miniCodeInsertParams.get(i).getTraceGoodId(), miniCodeInsertParams.get(i).getTraceStallId(), traceOutCodeUpdateParams).start();
-                    //清除list
-                    traceOutCodeUpdateParams.clear();
-                }
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public Object generateOutCodeByCount(Integer count) {
-        List<String> outCodeList = new ArrayList<>();
-        List<TraceOutCodeByCount> insertParam = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            TraceOutCodeByCount traceOutCodeByCount = new TraceOutCodeByCount();
-            //外码
-            StringBuffer stringBuffer = new StringBuffer();
-            stringBuffer.append(RandomUtil.getRandNumberCode(4));
-            stringBuffer.append(System.currentTimeMillis() * 1000);
-            stringBuffer.append(i + 1);
-            outCodeList.add(stringBuffer.toString());
-            traceOutCodeByCount.setSubCodeNumber(stringBuffer.toString());
-            //是否叶子节点
-            traceOutCodeByCount.setIsLeaf("N");
-            insertParam.add(traceOutCodeByCount);
-        }
-        int m = zslTraceSubcodeDao.insertCodeBatch1(insertParam);
-        if (m < 0)
-            return null;
-        return outCodeList;
-    }
 
     @Override
     public CommonResult relationOutCode(String outCode, List<String> subCodeList) {
@@ -1455,49 +1419,33 @@ public class TraceServiceImpl implements TraceService {
     }
 
     public int directDeliver(ZslTraceSubcode zslTraceSubcode, Integer accountId, Integer businessId, Integer mode) {
+       int result = 0;
         //直接发货
         ZslTracePoint zslTracePoint = new ZslTracePoint();
         zslTracePoint.setTraceStallId(-1);
         zslTracePoint.setTraceGoodsId(zslTraceSubcode.getTraceGoodId());
         zslTracePoint.setTraceCodeNumber(zslTraceSubcode.getTraceCodeNumber());
         zslTracePoint.setTracePointAccountId(accountId); //账号id
+        zslTracePoint.setTracePointTime(new Date());
         MerchantPointDto merchantPointDto = getCirculateNodeInfo(accountId);
         if(merchantPointDto != null){
             zslTracePoint.setTracePointName(merchantPointDto.getTracePointName());
         }
-        zslTracePoint.setTracePointToNumber(Integer.parseInt(zslTraceSubcode.getTraceIndex().toString()));
-        zslTracePoint.setTracePointFromNumber(Integer.parseInt(zslTraceSubcode.getTraceIndex().toString()));
+        //下标
+        int traceIndex = Integer.parseInt(zslTraceSubcode.getTraceIndex().toString());
         //根据追溯码和编号查询父节点 商品id
-        ZslTracePoint parent = new ZslTracePoint();
-        ZslTracePointExample zslTracePointExample = new ZslTracePointExample();
-        ZslTracePointExample.Criteria criteria = zslTracePointExample.createCriteria();
-        criteria.andTraceCodeNumberEqualTo(zslTraceSubcode.getTraceCodeNumber());
-        criteria.andTraceGoodsIdEqualTo(zslTraceSubcode.getTraceGoodId());
-        criteria.andTracePointFromNumberEqualTo(Integer.parseInt(zslTraceSubcode.getTraceIndex().toString()));
-        criteria.andTracePointToNumberEqualTo(Integer.parseInt(zslTraceSubcode.getTraceIndex().toString()));
-        criteria.andTraceParentIdIsNotNull();
-        List<ZslTracePoint> zslTracePoints = zslTracePointMapper.selectByExample(zslTracePointExample);
-        if (CollectionUtils.isEmpty(zslTracePoints)) {
-            ZslTracePointExample zslTracePointExample1 = new ZslTracePointExample();
-            ZslTracePointExample.Criteria criteria1 = zslTracePointExample1.createCriteria();
-            criteria1.andTraceCodeNumberEqualTo(zslTraceSubcode.getTraceCodeNumber());
-            criteria1.andTraceGoodsIdEqualTo(zslTraceSubcode.getTraceGoodId());
-            criteria1.andTraceParentIdIsNull();
-            List<ZslTracePoint> zslTracePoints1 = zslTracePointMapper.selectByExample(zslTracePointExample1);
-            if (!(CollectionUtils.isEmpty(zslTracePoints1))) {
-                parent = zslTracePoints1.get(0);
-            }
-        } else {
-            parent = zslTracePoints.get(0);
+        ZslTracePoint parent = zslTraceRecordDao.getTracePointBy(zslTraceSubcode.getTraceGoodId(),zslTraceSubcode.getTraceIndex(),zslTraceSubcode.getTraceCodeNumber());
+        if(parent == null){
+            result = -1;
         }
-        zslTracePoint.setTracePointTime(new Date());
+        zslTracePoint.setTracePointToNumber(traceIndex);
+        zslTracePoint.setTracePointFromNumber(traceIndex);
         zslTracePoint.setTraceParentId(parent.getTracePointId());
-        int result = 0;
+
         if (mode == 2) {
             //流通节点
-            result = zslTracePointMapper.insert(zslTracePoint);
-            //扣除积分
-            deductDeliverIntegral(1, zslTracePoint.getTracePointId(), businessId);
+            deliverList.add(zslTracePoint);
+            result = 1;
         } else if (mode == 1) {
             //已经售出
             ZslTraceSubcode updateSale = new ZslTraceSubcode();
@@ -1632,6 +1580,7 @@ public class TraceServiceImpl implements TraceService {
 
     @Override
     public int deliverGoods(DeliverGoods deliverGoods) {
+        deliverList = new ArrayList<>();
         List<String> codeList = deliverGoods.getCodeNumber();
         int result = -1;
 
@@ -1703,6 +1652,37 @@ public class TraceServiceImpl implements TraceService {
                 result = 1;
             }
         }
+
+        //合并插入追溯点
+        Map<Integer, List<ZslTracePoint>> map = NumberConverUtil.groupBillingDataByExcpBatchCode(deliverList);
+        for(Integer key:map.keySet()){
+            List<ZslTracePoint> groupPoints = map.get(key);
+            Set<Integer> groupSet =  groupPoints.stream()
+                                                .map(p -> p.getTracePointFromNumber())
+                                                .collect(Collectors.toSet());
+            //获取基础追溯信息
+            ZslTracePoint baseZslPoint = null;
+            for(ZslTracePoint zslTracePoint : deliverList){
+                if(zslTracePoint.getTraceParentId() - key == 0){
+                    baseZslPoint = zslTracePoint;
+                    break;
+                }
+            }
+
+            List<String> pointStrs = NumberConverUtil.getConvertNum(groupSet);
+            for(String pstr : pointStrs){
+                ZslTracePoint insertP = new ZslTracePoint();
+                BeanUtils.copyProperties(baseZslPoint,insertP);
+                Integer fromNumber = Integer.parseInt(pstr.split("-")[0]);
+                Integer toNumber = Integer.parseInt(pstr.split("-")[1]);
+                insertP.setTracePointFromNumber(fromNumber);
+                insertP.setTracePointToNumber(toNumber);
+                zslTracePointMapper.insert(insertP);
+                deductDeliverIntegral(toNumber - fromNumber + 1,insertP.getTracePointId(),zslTrace.get(0).getTraceBusinessId());
+            }
+        }
+
+
         return result;
     }
 
@@ -2079,49 +2059,6 @@ public class TraceServiceImpl implements TraceService {
         return CommonResult.success(resultMap);
     }
 
-    public void getCodePageRecursion(Long applyCount, Integer pageNum, Integer pageSize, Integer toNumber, Integer fromNumber, String traceCodeNumber) {
-        List<ZslTraceSubcode> itemList = zslTraceSubcodeDao.getSuCodeByPage(pageSize, toNumber, fromNumber, traceCodeNumber);
-        if ((searchCount - 100 >= 0) && CollectionUtils.isEmpty(itemList)) {
-            pageList = getSubCode(pageNum, pageSize);
-            return;
-        }
-        pageList.addAll(itemList);
-
-        if (fromNumber - applyCount >= 0 || toNumber - applyCount >= 0) {
-            pageList = getSubCode(pageNum, pageSize);
-            return;
-        }
-
-        if (pageList.size() - (pageSize * pageNum) < 0) {
-            searchCount++;
-            Integer fromNumberItem = toNumber + 1;
-            if (fromNumberItem - applyCount >= 0) {
-                fromNumberItem = Integer.parseInt(applyCount.toString());
-            }
-            Integer toNumberItem = fromNumberItem + pageSize;
-            if (toNumberItem - applyCount >= 0) {
-                toNumberItem = Integer.parseInt(applyCount.toString());
-            }
-            getCodePageRecursion(applyCount, pageNum, pageSize, toNumberItem, fromNumberItem, traceCodeNumber);
-        } else {
-            pageList = getSubCode(pageNum, pageSize);
-            return;
-        }
-    }
-
-
-    List<ZslTraceSubcode> getSubCode(Integer pageNum, Integer pageSize) {
-        int startIndex = (pageNum - 1) * pageSize;
-        int endIndex = pageNum * pageSize;
-        if (pageNum * pageSize - pageList.size() >= 0) {
-            endIndex = pageList.size();
-        }
-        if (startIndex - pageList.size() >= 0) {
-            startIndex = pageList.size();
-        }
-        return pageList.subList(startIndex, endIndex);
-    }
-
 
     @Override
     public CommonResult getSuCodeByPage1(Integer pageNum, Integer pageSize, String traceCodeNumber) {
@@ -2143,48 +2080,6 @@ public class TraceServiceImpl implements TraceService {
         return CommonResult.success(commonPage);
     }
 
-
-    @Override
-    public CommonResult getSuCodeByPage(Integer pageNum, Integer pageSize, String traceCodeNumber) {
-        ZslTraceExample zslTraceExample = new ZslTraceExample();
-        ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
-        criteria.andTraceCodeNumberEqualTo(traceCodeNumber);
-        List<ZslTrace> traces = zslTraceMapper.selectByExample(zslTraceExample);
-        Long applyCount = 0L;
-        Long maxToNumber = 0L;
-        Long minFromNumber = 0L;
-        if (!CollectionUtils.isEmpty(traces)) {
-            maxToNumber = zslTraceSubcodeDao.selectMaxToNumberByRecord(traces.get(0).getTraceCodeNumber());
-            minFromNumber = zslTraceSubcodeDao.selectMinFromNumberByRecord(traces.get(0).getTraceCodeNumber());
-            applyCount = maxToNumber;
-        }
-        Integer fromNumber = 1;
-        Integer toNumber = fromNumber + pageSize;
-        if (toNumber - applyCount >= 0) {
-            toNumber = Integer.parseInt(applyCount + "");
-        }
-        pageList = new ArrayList<>();
-        searchCount = 0;
-        getCodePageRecursion(applyCount, pageNum, pageSize, toNumber, fromNumber, traceCodeNumber);
-
-        List<ZslTreeNode> result = new ArrayList<>();
-        for (ZslTraceSubcode item : pageList) {
-            List<ZslTreeNode> resultItem = transeTreeNode(item);
-            if (resultItem != null) {
-                result.addAll(resultItem);
-            }
-        }
-        CommonPage pageResult = new CommonPage();
-        pageResult.setList(result);
-        pageResult.setPageNum(pageNum);
-        pageResult.setPageSize(pageSize);
-
-        Long totalCount = zslTraceSubcodeDao.getTotalCount(Integer.parseInt(maxToNumber + ""), Integer.parseInt(minFromNumber + ""), traceCodeNumber);
-        pageResult.setTotal(totalCount);
-        Long totalPage = (totalCount + pageSize - 1) / pageSize;
-        pageResult.setTotalPage(Integer.parseInt(totalPage + ""));
-        return CommonResult.success(pageResult);
-    }
 
     @Override
     public CommonResult deleteCodeRelation(Long id) {
@@ -2416,49 +2311,6 @@ public class TraceServiceImpl implements TraceService {
             for (ZslTraceSubcode item : children) {
                 countCode(item);
             }
-        }
-    }
-
-
-    class OutCodeThread extends Thread {
-        private String traceCodeNumber;
-        private Integer number;
-        private Integer goodsId;
-        private Integer stallId;
-        List<TraceOutCodeUpdateParam> traceOutCodeUpdateParams;
-
-        OutCodeThread(String traceCodeNumber, Integer number, Integer goodsId, Integer stallId, List<TraceOutCodeUpdateParam> traceOutCodeUpdateParams) {
-            this.traceCodeNumber = traceCodeNumber;
-            this.number = number;
-            this.goodsId = goodsId;
-            this.stallId = stallId;
-            this.traceOutCodeUpdateParams = traceOutCodeUpdateParams;
-        }
-
-        public void run() {
-            ZslTraceSubcode zslTraceSubcode = new ZslTraceSubcode();
-            //追溯码
-            zslTraceSubcode.setTraceSubCodeNumber(traceCodeNumber);
-            //外码
-            StringBuffer stringBuffer = new StringBuffer();
-            stringBuffer.append(RandomUtil.getRandNumberCode(4));
-            stringBuffer.append(System.currentTimeMillis() * 1000);
-            stringBuffer.append(number);
-            zslTraceSubcode.setTraceSubCodeNumber(stringBuffer.toString());
-            //是否叶子节点
-            zslTraceSubcode.setIsLeaf("N");
-            //节点层级
-            zslTraceSubcode.setNodeLevel(2);
-            zslTraceSubcode.setTraceIndex(new Long(number));
-            //商品id和摊位id
-            zslTraceSubcode.setTraceGoodId(goodsId);
-            zslTraceSubcode.setTraceStallId(stallId);
-            int m = zslTraceSubcodeMapper.insert(zslTraceSubcode);
-            // 批量更新子码的父码
-            for (TraceOutCodeUpdateParam traceOutCodeUpdateParam1 : traceOutCodeUpdateParams) {
-                traceOutCodeUpdateParam1.setParentId(zslTraceSubcode.getId());
-            }
-            int n = zslTraceSubcodeDao.updateOutCodeBatch(traceOutCodeUpdateParams);
         }
     }
 }

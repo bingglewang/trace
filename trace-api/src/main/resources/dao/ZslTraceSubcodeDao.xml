@@ -194,6 +194,22 @@ AND sub.is_leaf = 'Y';
         (SELECT id from zsl_trace_subcode where  trace_index = #{toIndex} and trace_code_number = #{traceCodeNumber})
     </select>
 
+    <!--根据下标查询字码-->
+    <select id="selectSubCodeByRange" resultType="java.lang.String">
+        SELECT trace_sub_code_number
+        FROM `zsl_trace_subcode`
+        where (trace_sid BETWEEN
+        (SELECT trace_sid from zsl_trace_subcode where trace_index = #{fromIndex} and trace_code_number = #{traceCodeNumber})
+        and
+        (SELECT trace_sid from zsl_trace_subcode where  trace_index =  #{toIndex} and trace_code_number = #{traceCodeNumber})
+    )
+</select>
+
+   <!-- 根据下标查询sid-->
+    <select id="selectSidByIndex" resultType="java.lang.Long">
+         SELECT trace_sid from zsl_trace_subcode where trace_index = #{traceIndex} and trace_code_number =  #{traceCodeNumber} LIMIT 1
+    </select>
+
 
     <select id="selectBySidRange" resultType="java.lang.Long">
         SELECT id
@@ -290,6 +306,7 @@ AND sub.is_leaf = 'Y';
          where (#{traceIndex} BETWEEN trace_point_from_number and trace_point_to_number)
         and trace_code_number = #{traceCodeNumber}
         and trace_goods_id = #{traceGoodsId}
+        and trace_stall_id  = -1
         ORDER BY trace_point_time ASC
     </select>
 

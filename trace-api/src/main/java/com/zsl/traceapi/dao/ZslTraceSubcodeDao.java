@@ -31,6 +31,8 @@ public interface ZslTraceSubcodeDao {
     Long selectMaxToNumberByRecord(@Param("traceCodeNumber") String traceCodeNumber);
     Long selectMinFromNumberByRecord(@Param("traceCodeNumber") String traceCodeNumber);
     List<Long> selectByRange(@Param("fromIndex") Long fromIndex,@Param("toIndex") Long toIndex,@Param("traceCodeNumber") String traceCodeNumber);
+    List<String> selectSubCodeByRange(@Param("fromIndex") Long fromIndex,@Param("toIndex") Long toIndex,@Param("traceCodeNumber") String traceCodeNumber);
+    Long selectSidByIndex(@Param("traceIndex") Long traceIndex,@Param("traceCodeNumber") String traceCodeNumber);
     List<Long> selectBySidRange(@Param("startSidIndex") Long startSidIndex,@Param("endSidIndex") Long endSidIndex);
     int updateGoodsAndStall(@Param(value = "list") List<TraceSubcodeUpdateParam> traceSubcodeUpdateParams);
     int updateGoodsAndStallSid(@Param(value = "list") List<TraceSubcodeUpdateParamSid> traceSubcodeUpdateParams);

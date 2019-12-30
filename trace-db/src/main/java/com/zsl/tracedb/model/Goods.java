@@ -43,6 +43,9 @@ public class Goods implements Serializable {
     @ApiModelProperty(value = "生产日期")
     private Date producedTime;
 
+    @ApiModelProperty(value = "单品运费模版id")
+    private Integer templateId;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getGoodsId() {
@@ -173,6 +176,14 @@ public class Goods implements Serializable {
         this.producedTime = producedTime;
     }
 
+    public Integer getTemplateId() {
+        return templateId;
+    }
+
+    public void setTemplateId(Integer templateId) {
+        this.templateId = templateId;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -195,6 +206,7 @@ public class Goods implements Serializable {
         sb.append(", phone=").append(phone);
         sb.append(", operator=").append(operator);
         sb.append(", producedTime=").append(producedTime);
+        sb.append(", templateId=").append(templateId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
