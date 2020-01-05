@@ -13,6 +13,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
         // 添加拦截器
         registry.addInterceptor(centerAdminLoginInterceptor()).addPathPatterns("/**")
                 .excludePathPatterns("/trace/insertScanRecord")
+                .excludePathPatterns("/spurtCode/list")
+                .excludePathPatterns("/spurtCode/isExist")
                 .excludePathPatterns("/trace/getScanRecordBySid")
                 .excludePathPatterns("/trace/getTraceGoodInfo")
                 .excludePathPatterns("/trace/preCreatePaperCode") //不开放

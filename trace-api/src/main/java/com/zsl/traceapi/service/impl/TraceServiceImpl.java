@@ -761,13 +761,13 @@ public class TraceServiceImpl implements TraceService {
             return -5;//追溯插入失败
         }*/
 
-        Merchant merchantUdate = new Merchant();
+      /*  Merchant merchantUdate = new Merchant();
         merchantUdate.setMerchantId(zslTrace.get(0).getTraceBusinessId());
         merchantUdate.setMerchantCoin(merchant.getMerchantCoin() - needCoin);
         int update = merchantMapper.updateByPrimaryKeySelective(merchantUdate);
         if (update < 0) {
             return -6; //积分扣除失败
-        }
+        }*/
         //扣除积分
 
        /* IntegralLog integralLog = new IntegralLog();

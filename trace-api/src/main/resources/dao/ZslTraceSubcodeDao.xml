@@ -388,4 +388,25 @@ AND sub.is_leaf = 'Y';
         in (SELECT trace_from_number FROM `zsl_trace_record` where trace_code_number = #{traceCodeNumber} )
         and trace_code_number = #{traceCodeNumber}
     </select>
+
+
+    <!--喷码-->
+    <select id="getSidsByTraceCodeNumber" resultType="com.zsl.traceapi.vo.SpurtCodeVo">
+         SELECT
+              trace_code_number traceCodeNumber,
+              trace_sid sid
+        FROM `zsl_trace_subcode`
+        where trace_code_number = #{traceCodeNumber}
+        ORDER by trace_sid asc;
+    </select>
+
+    <select id="getSubCodeBySidAndCode" resultType="com.zsl.traceapi.vo.SpurtCodeVo">
+          SELECT
+              trace_code_number traceCodeNumber,
+              trace_sid sid
+        FROM `zsl_trace_subcode`
+        where trace_code_number = #{traceCodeNumber}
+        and trace_sid = #{traceSid}
+    </select>
+
 </mapper>

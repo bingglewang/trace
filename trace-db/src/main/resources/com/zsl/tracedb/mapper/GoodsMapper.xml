@@ -18,7 +18,7 @@
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="operator" jdbcType="VARCHAR" property="operator" />
     <result column="produced_time" jdbcType="TIMESTAMP" property="producedTime" />
-    <result column="template_id" jdbcType="INTEGER" property="templateId" />
+   <!-- <result column="template_id" jdbcType="INTEGER" property="templateId" />-->
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -81,7 +81,7 @@
   <sql id="Base_Column_List">
     goods_id, goods_name, merchant_id, category_id, category_full_name, goods_creat_time, 
     goods_update_time, brand_id, video_name, video_url, cargo, source, location, phone, 
-    operator, produced_time, template_id
+    operator, produced_time
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.GoodsExample" resultMap="BaseResultMap">
     select

@@ -1,6 +1,7 @@
 package com.zsl.traceapi.dao;
 
 import com.zsl.traceapi.dto.*;
+import com.zsl.traceapi.vo.SpurtCodeVo;
 import com.zsl.tracedb.model.ZslTracePoint;
 import com.zsl.tracedb.model.ZslTraceSubcode;
 import org.apache.ibatis.annotations.Param;
@@ -42,4 +43,11 @@ public interface ZslTraceSubcodeDao {
     Long goodsTotalCount(@Param("goodsId") Integer goodsId,@Param("traceCodeNumber") String traceCodeNumber,@Param("traceIndex") Long traceIndex);
     List<ZslTracePoint> selectTracePointNodes(@Param("traceGoodsId") Integer traceGoodsId,@Param("traceIndex") Long traceIndex,@Param("traceCodeNumber") String traceCodeNumber);
     ZslTracePoint selectNewestPointNode(@Param("traceGoodsId") Integer traceGoodsId,@Param("traceIndex") Long traceIndex,@Param("traceCodeNumber") String traceCodeNumber);
+
+    /**
+     * 喷码
+     */
+    List<SpurtCodeVo> getSidsByTraceCodeNumber(@Param("traceCodeNumber") String traceCodeNumber);
+
+    SpurtCodeVo getSubCodeBySidAndCode(@Param("traceCodeNumber") String traceCodeNumber,@Param("traceSid") Long traceSid);
 }
