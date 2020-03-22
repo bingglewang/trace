@@ -39,7 +39,7 @@
         FROM
             account ac
 	    LEFT JOIN account_sub_merchant asub on asub.account_id = ac.id
-        LEFT JOIN   merchant m  on m.merchant_account = ac.account_name
+        LEFT JOIN   merchant m  on m.merchant_id = asub.merchant_id
         where
 	      ac.id = #{accountId}
     </select>
