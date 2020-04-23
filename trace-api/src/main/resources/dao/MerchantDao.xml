@@ -78,6 +78,23 @@
        where a.id = #{accountId}
     </select>
 
+    <!--区分于代理商别名-->
+    <!--代理商相关-->
+    <!--流通节点账号相关-->
+    <select id="getOtherPointDiffAgent" resultMap="BaseResultMap">
+         SELECT
+            a.mobile contactNumber,
+            a.realName personInCharge,
+            adn.location detailAddress,
+            adn.trace_another_name tracePointName,
+            a.id accountId
+       FROM
+            account a
+       LEFT JOIN account_distribute_node adn ON a.id = adn.account_id
+       where a.id = #{accountId}
+    </select>
+
+
     <select id="getOtherPointByMobile" resultMap="BaseResultMap">
        SELECT
             a.mobile contactNumber,

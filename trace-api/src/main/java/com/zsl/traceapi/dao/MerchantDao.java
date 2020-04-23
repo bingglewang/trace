@@ -55,6 +55,13 @@ public interface MerchantDao {
     MerchantPointDto getOtherPoint(@Param("accountId") Integer accountId);
 
     /**
+     * 代理商 (区别于代理商别名)
+     * @param accountId
+     * @return
+     */
+    MerchantPointDto getOtherPointDiffAgent(@Param("accountId") Integer accountId);
+
+    /**
      * 根据手机号获取其他和代理商
      * @param mobile
      * @return

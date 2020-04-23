@@ -1820,7 +1820,7 @@ public class TraceServiceImpl implements TraceService {
             List<ZslTracePoint> tracePointList = zslTraceSubcodeDao.selectTracePointNodes(zslTraceSubcode.getTraceGoodId(), zslTraceSubcode.getTraceIndex(), zslTraceSubcode.getTraceCodeNumber());
             for (ZslTracePoint zslTracePoint : tracePointList) {
                 ScanPointQueryParam scanPointQueryParam = new ScanPointQueryParam();
-                MerchantPointDto merchantPointDto = getCirculateNodeInfo(zslTracePoint.getTracePointAccountId());
+                MerchantPointDto merchantPointDto = getCirculateNodeInfoDiffAgent(zslTracePoint.getTracePointAccountId());
                 if (merchantPointDto == null) {
                     scanPointQueryParam.setTracePointName(zslTracePoint.getTracePointName());
                 } else {
@@ -1929,6 +1929,32 @@ public class TraceServiceImpl implements TraceService {
         }
     }
 
+
+
+    /**
+     * 账号id 获取流通节点信息(区分于代理商别名)
+     *
+     * @param accountId
+     */
+    public MerchantPointDto getCirculateNodeInfoDiffAgent(int accountId) {
+        MerchantPointDto result = null;
+        Account account = accountMapper.selectByPrimaryKey(accountId);
+        if (account == null) {
+            return result;
+        }
+        if (account.getRoleId().equals(RoleEnum.ROLE_BUSINESS.getId())) {
+            result = merchantDao.getMerchantPoint(accountId);
+        } else if (account.getRoleId().equals(RoleEnum.ROLE_BUSINESS_STAFF.getId())) {
+            result = merchantDao.getEmployPoint(accountId);
+        } else if (account.getRoleId().equals(RoleEnum.ROLE_BUSINESS_NODE.getId())) {
+            result = merchantDao.getOtherPoint(accountId);
+        } else if(account.getRoleId().equals(RoleEnum.ROLE_BUSINESS_AGENT.getId())){
+            result = merchantDao.getOtherPointDiffAgent(accountId);
+        }
+        return result;
+    }
+
+
     /**
      * 账号id 获取流通节点信息
      *
@@ -2036,7 +2062,7 @@ public class TraceServiceImpl implements TraceService {
             }
 
             ZslTracePointVo resultItem = new ZslTracePointVo();
-            MerchantPointDto merchantPointDto = getCirculateNodeInfo(zslTracePoint.getTracePointAccountId());
+            MerchantPointDto merchantPointDto = getCirculateNodeInfoDiffAgent(zslTracePoint.getTracePointAccountId());
             if (merchantPointDto == null) {
                 resultItem.setTracePointName(zslTracePoint.getTracePointName());
             } else {
