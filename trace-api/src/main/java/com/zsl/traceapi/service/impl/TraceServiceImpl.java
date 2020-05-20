@@ -803,8 +803,8 @@ public class TraceServiceImpl implements TraceService {
     public Integer insertPointNodeAccount(MerchantPointDto merchantPointDto) {
         RequestContext requestContext = RequestContextMgr.getLocalContext();
         String tokenLogin = requestContext.getToken();
-        String url = "https://zs.cntracechain.com/accountCenter/account/add";
-        //String url = "http://zs-beta.cntracechain.com/accountCenter/account/add";
+        //String url = "https://zs.cntracechain.com/accountCenter/account/add";
+        String url = "http://zs-beta.cntracechain.com/accountCenter/account/add";
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("accountName", merchantPointDto.getContactNumber());
         jsonObject.put("realName", merchantPointDto.getPersonInCharge());
@@ -1622,8 +1622,10 @@ public class TraceServiceImpl implements TraceService {
                 return -9;//流通节点信息不能为空
             }
             Integer nodeAccountId = insertPointNodeAccount(deliverGoods.getOtherMerchant());
-            if (nodeAccountId == null) {
-                return -10;//节点处理错误
+            if (nodeAccountId == -11) {
+                return -11;//节点处理错误(账号插入失败)
+            } else if (nodeAccountId == -22) {
+                return -12;//节点处理错误
             }
             accountId = nodeAccountId;
         } else {

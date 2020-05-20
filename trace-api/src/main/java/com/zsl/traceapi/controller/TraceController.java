@@ -590,6 +590,11 @@ public class TraceController {
             return CommonResult.failed("流通节点信息不能为空");
         } else if (i == -10) {
             return CommonResult.failed("流通节点错误");
+        }else if(i == -11){
+            return CommonResult.failed("节点处理错误(账号插入失败)");
+        }
+        else if(i == -12){
+            return CommonResult.failed("节点处理错误");
         }
         else {
             return CommonResult.failed("发货失败");
