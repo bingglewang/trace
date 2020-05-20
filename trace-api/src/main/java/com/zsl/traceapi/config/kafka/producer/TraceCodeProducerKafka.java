@@ -15,7 +15,7 @@ public class TraceCodeProducerKafka {
 
     public void sendMessage(String traceCodeNumber) throws Exception{
         //给延迟队列发送消息
-        kafkaTemplate.send("traceInsert",traceCodeNumber);
+        kafkaTemplate.send("traceInsert",0,null,traceCodeNumber);
         logger.info("发送的批次号:{}",traceCodeNumber);
     }
 }

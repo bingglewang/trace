@@ -22,7 +22,7 @@ public class TraceCodeImageProducerKafka {
 
     public void sendMessage(String traceCodeNumber) throws Exception{
         //给延迟队列发送消息
-        kafkaTemplate.send("zidingyi",traceCodeNumber);
+        kafkaTemplate.send("zidingyi",0,null,traceCodeNumber);
         logger.info("要生成三维吗的批次号:{}",traceCodeNumber);
     }
 }

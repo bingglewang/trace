@@ -15,7 +15,7 @@ public class TraceUpdateProducerKafka {
 
     public void sendMessage(String traceCodeJson) throws Exception{
         //给延迟队列发送消息
-        kafkaTemplate.send("traceUpdate",traceCodeJson);
+        kafkaTemplate.send("traceUpdate",0,null,traceCodeJson);
         logger.info("发送的json字符串:{}",traceCodeJson);
     }
 }
