@@ -8,6 +8,7 @@
     <result column="category_full_name" jdbcType="VARCHAR" property="categoryFullName" />
     <result column="category_level" jdbcType="INTEGER" property="categoryLevel" />
     <result column="include_brand" jdbcType="TINYINT" property="includeBrand" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,7 +70,7 @@
   </sql>
   <sql id="Base_Column_List">
     category_id, category_super_id, category_name, category_full_name, category_level, 
-    include_brand
+    include_brand, update_time
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.CategoryExample" resultMap="BaseResultMap">
     select
@@ -106,9 +107,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into category (category_super_id, category_name, category_full_name, 
-      category_level, include_brand)
+      category_level, include_brand, update_time
+      )
     values (#{categorySuperId,jdbcType=INTEGER}, #{categoryName,jdbcType=VARCHAR}, #{categoryFullName,jdbcType=VARCHAR}, 
-      #{categoryLevel,jdbcType=INTEGER}, #{includeBrand,jdbcType=TINYINT})
+      #{categoryLevel,jdbcType=INTEGER}, #{includeBrand,jdbcType=TINYINT}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.Category">
     <selectKey keyProperty="categoryId" order="AFTER" resultType="java.lang.Integer">
@@ -131,6 +134,9 @@
       <if test="includeBrand != null">
         include_brand,
       </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="categorySuperId != null">
@@ -147,6 +153,9 @@
       </if>
       <if test="includeBrand != null">
         #{includeBrand,jdbcType=TINYINT},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -177,6 +186,9 @@
       <if test="record.includeBrand != null">
         include_brand = #{record.includeBrand,jdbcType=TINYINT},
       </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -189,7 +201,8 @@
       category_name = #{record.categoryName,jdbcType=VARCHAR},
       category_full_name = #{record.categoryFullName,jdbcType=VARCHAR},
       category_level = #{record.categoryLevel,jdbcType=INTEGER},
-      include_brand = #{record.includeBrand,jdbcType=TINYINT}
+      include_brand = #{record.includeBrand,jdbcType=TINYINT},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -212,6 +225,9 @@
       <if test="includeBrand != null">
         include_brand = #{includeBrand,jdbcType=TINYINT},
       </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where category_id = #{categoryId,jdbcType=INTEGER}
   </update>
@@ -221,7 +237,8 @@
       category_name = #{categoryName,jdbcType=VARCHAR},
       category_full_name = #{categoryFullName,jdbcType=VARCHAR},
       category_level = #{categoryLevel,jdbcType=INTEGER},
-      include_brand = #{includeBrand,jdbcType=TINYINT}
+      include_brand = #{includeBrand,jdbcType=TINYINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
     where category_id = #{categoryId,jdbcType=INTEGER}
   </update>
 </mapper>

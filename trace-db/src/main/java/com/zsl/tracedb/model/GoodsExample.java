@@ -1204,6 +1204,66 @@ public class GoodsExample {
             addCriterion("template_id not between", value1, value2, "templateId");
             return (Criteria) this;
         }
+
+        public Criteria andInternationalSalesIsNull() {
+            addCriterion("international_sales is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInternationalSalesIsNotNull() {
+            addCriterion("international_sales is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInternationalSalesEqualTo(Byte value) {
+            addCriterion("international_sales =", value, "internationalSales");
+            return (Criteria) this;
+        }
+
+        public Criteria andInternationalSalesNotEqualTo(Byte value) {
+            addCriterion("international_sales <>", value, "internationalSales");
+            return (Criteria) this;
+        }
+
+        public Criteria andInternationalSalesGreaterThan(Byte value) {
+            addCriterion("international_sales >", value, "internationalSales");
+            return (Criteria) this;
+        }
+
+        public Criteria andInternationalSalesGreaterThanOrEqualTo(Byte value) {
+            addCriterion("international_sales >=", value, "internationalSales");
+            return (Criteria) this;
+        }
+
+        public Criteria andInternationalSalesLessThan(Byte value) {
+            addCriterion("international_sales <", value, "internationalSales");
+            return (Criteria) this;
+        }
+
+        public Criteria andInternationalSalesLessThanOrEqualTo(Byte value) {
+            addCriterion("international_sales <=", value, "internationalSales");
+            return (Criteria) this;
+        }
+
+        public Criteria andInternationalSalesIn(List<Byte> values) {
+            addCriterion("international_sales in", values, "internationalSales");
+            return (Criteria) this;
+        }
+
+        public Criteria andInternationalSalesNotIn(List<Byte> values) {
+            addCriterion("international_sales not in", values, "internationalSales");
+            return (Criteria) this;
+        }
+
+        public Criteria andInternationalSalesBetween(Byte value1, Byte value2) {
+            addCriterion("international_sales between", value1, value2, "internationalSales");
+            return (Criteria) this;
+        }
+
+        public Criteria andInternationalSalesNotBetween(Byte value1, Byte value2) {
+            addCriterion("international_sales not between", value1, value2, "internationalSales");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

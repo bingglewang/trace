@@ -18,7 +18,8 @@
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="operator" jdbcType="VARCHAR" property="operator" />
     <result column="produced_time" jdbcType="TIMESTAMP" property="producedTime" />
-   <!-- <result column="template_id" jdbcType="INTEGER" property="templateId" />-->
+    <result column="template_id" jdbcType="INTEGER" property="templateId" />
+    <result column="international_sales" jdbcType="TINYINT" property="internationalSales" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -81,7 +82,7 @@
   <sql id="Base_Column_List">
     goods_id, goods_name, merchant_id, category_id, category_full_name, goods_creat_time, 
     goods_update_time, brand_id, video_name, video_url, cargo, source, location, phone, 
-    operator, produced_time
+    operator, produced_time, template_id, international_sales
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.GoodsExample" resultMap="BaseResultMap">
     select
@@ -122,13 +123,13 @@
       brand_id, video_name, video_url, 
       cargo, source, location, 
       phone, operator, produced_time, 
-      template_id)
+      template_id, international_sales)
     values (#{goodsName,jdbcType=VARCHAR}, #{merchantId,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER}, 
       #{categoryFullName,jdbcType=VARCHAR}, #{goodsCreatTime,jdbcType=TIMESTAMP}, #{goodsUpdateTime,jdbcType=TIMESTAMP}, 
       #{brandId,jdbcType=INTEGER}, #{videoName,jdbcType=VARCHAR}, #{videoUrl,jdbcType=VARCHAR}, 
       #{cargo,jdbcType=TINYINT}, #{source,jdbcType=VARCHAR}, #{location,jdbcType=VARCHAR}, 
       #{phone,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, #{producedTime,jdbcType=TIMESTAMP}, 
-      #{templateId,jdbcType=INTEGER})
+      #{templateId,jdbcType=INTEGER}, #{internationalSales,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.Goods">
     <selectKey keyProperty="goodsId" order="AFTER" resultType="java.lang.Integer">
@@ -184,6 +185,9 @@
       <if test="templateId != null">
         template_id,
       </if>
+      <if test="internationalSales != null">
+        international_sales,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="goodsName != null">
@@ -233,6 +237,9 @@
       </if>
       <if test="templateId != null">
         #{templateId,jdbcType=INTEGER},
+      </if>
+      <if test="internationalSales != null">
+        #{internationalSales,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -296,6 +303,9 @@
       <if test="record.templateId != null">
         template_id = #{record.templateId,jdbcType=INTEGER},
       </if>
+      <if test="record.internationalSales != null">
+        international_sales = #{record.internationalSales,jdbcType=TINYINT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -319,7 +329,8 @@
       phone = #{record.phone,jdbcType=VARCHAR},
       operator = #{record.operator,jdbcType=VARCHAR},
       produced_time = #{record.producedTime,jdbcType=TIMESTAMP},
-      template_id = #{record.templateId,jdbcType=INTEGER}
+      template_id = #{record.templateId,jdbcType=INTEGER},
+      international_sales = #{record.internationalSales,jdbcType=TINYINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -375,6 +386,9 @@
       <if test="templateId != null">
         template_id = #{templateId,jdbcType=INTEGER},
       </if>
+      <if test="internationalSales != null">
+        international_sales = #{internationalSales,jdbcType=TINYINT},
+      </if>
     </set>
     where goods_id = #{goodsId,jdbcType=INTEGER}
   </update>
@@ -395,7 +409,8 @@
       phone = #{phone,jdbcType=VARCHAR},
       operator = #{operator,jdbcType=VARCHAR},
       produced_time = #{producedTime,jdbcType=TIMESTAMP},
-      template_id = #{templateId,jdbcType=INTEGER}
+      template_id = #{templateId,jdbcType=INTEGER},
+      international_sales = #{internationalSales,jdbcType=TINYINT}
     where goods_id = #{goodsId,jdbcType=INTEGER}
   </update>
 </mapper>

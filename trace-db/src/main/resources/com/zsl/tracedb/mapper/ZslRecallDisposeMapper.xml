@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsl.tracedb.mapper.ZslRecallDisposeMapper">
+  <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.ZslRecallDispose">
+    <id column="recall_dispose_id" jdbcType="INTEGER" property="recallDisposeId" />
+    <result column="batch_recall_id" jdbcType="INTEGER" property="batchRecallId" />
+    <result column="code_segment_file_url" jdbcType="VARCHAR" property="codeSegmentFileUrl" />
+    <result column="dispose_type" jdbcType="INTEGER" property="disposeType" />
+    <result column="dispose_time_scope" jdbcType="VARCHAR" property="disposeTimeScope" />
+    <result column="employe_id" jdbcType="INTEGER" property="employeId" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+    <result column="dispose_way" jdbcType="VARCHAR" property="disposeWay" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    recall_dispose_id, batch_recall_id, code_segment_file_url, dispose_type, dispose_time_scope, 
+    employe_id, address, count, dispose_way, create_time
+  </sql>
+  <select id="selectByExample" parameterType="com.zsl.tracedb.model.ZslRecallDisposeExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from zsl_recall_dispose
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from zsl_recall_dispose
+    where recall_dispose_id = #{recallDisposeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from zsl_recall_dispose
+    where recall_dispose_id = #{recallDisposeId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zsl.tracedb.model.ZslRecallDisposeExample">
+    delete from zsl_recall_dispose
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zsl.tracedb.model.ZslRecallDispose">
+    <selectKey keyProperty="recallDisposeId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into zsl_recall_dispose (batch_recall_id, code_segment_file_url, 
+      dispose_type, dispose_time_scope, employe_id, 
+      address, count, dispose_way, 
+      create_time)
+    values (#{batchRecallId,jdbcType=INTEGER}, #{codeSegmentFileUrl,jdbcType=VARCHAR}, 
+      #{disposeType,jdbcType=INTEGER}, #{disposeTimeScope,jdbcType=VARCHAR}, #{employeId,jdbcType=INTEGER}, 
+      #{address,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER}, #{disposeWay,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zsl.tracedb.model.ZslRecallDispose">
+    <selectKey keyProperty="recallDisposeId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into zsl_recall_dispose
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="batchRecallId != null">
+        batch_recall_id,
+      </if>
+      <if test="codeSegmentFileUrl != null">
+        code_segment_file_url,
+      </if>
+      <if test="disposeType != null">
+        dispose_type,
+      </if>
+      <if test="disposeTimeScope != null">
+        dispose_time_scope,
+      </if>
+      <if test="employeId != null">
+        employe_id,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="count != null">
+        count,
+      </if>
+      <if test="disposeWay != null">
+        dispose_way,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="batchRecallId != null">
+        #{batchRecallId,jdbcType=INTEGER},
+      </if>
+      <if test="codeSegmentFileUrl != null">
+        #{codeSegmentFileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="disposeType != null">
+        #{disposeType,jdbcType=INTEGER},
+      </if>
+      <if test="disposeTimeScope != null">
+        #{disposeTimeScope,jdbcType=VARCHAR},
+      </if>
+      <if test="employeId != null">
+        #{employeId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="count != null">
+        #{count,jdbcType=INTEGER},
+      </if>
+      <if test="disposeWay != null">
+        #{disposeWay,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zsl.tracedb.model.ZslRecallDisposeExample" resultType="java.lang.Integer">
+    select count(*) from zsl_recall_dispose
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update zsl_recall_dispose
+    <set>
+      <if test="record.recallDisposeId != null">
+        recall_dispose_id = #{record.recallDisposeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.batchRecallId != null">
+        batch_recall_id = #{record.batchRecallId,jdbcType=INTEGER},
+      </if>
+      <if test="record.codeSegmentFileUrl != null">
+        code_segment_file_url = #{record.codeSegmentFileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.disposeType != null">
+        dispose_type = #{record.disposeType,jdbcType=INTEGER},
+      </if>
+      <if test="record.disposeTimeScope != null">
+        dispose_time_scope = #{record.disposeTimeScope,jdbcType=VARCHAR},
+      </if>
+      <if test="record.employeId != null">
+        employe_id = #{record.employeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.address != null">
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.count != null">
+        count = #{record.count,jdbcType=INTEGER},
+      </if>
+      <if test="record.disposeWay != null">
+        dispose_way = #{record.disposeWay,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update zsl_recall_dispose
+    set recall_dispose_id = #{record.recallDisposeId,jdbcType=INTEGER},
+      batch_recall_id = #{record.batchRecallId,jdbcType=INTEGER},
+      code_segment_file_url = #{record.codeSegmentFileUrl,jdbcType=VARCHAR},
+      dispose_type = #{record.disposeType,jdbcType=INTEGER},
+      dispose_time_scope = #{record.disposeTimeScope,jdbcType=VARCHAR},
+      employe_id = #{record.employeId,jdbcType=INTEGER},
+      address = #{record.address,jdbcType=VARCHAR},
+      count = #{record.count,jdbcType=INTEGER},
+      dispose_way = #{record.disposeWay,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.ZslRecallDispose">
+    update zsl_recall_dispose
+    <set>
+      <if test="batchRecallId != null">
+        batch_recall_id = #{batchRecallId,jdbcType=INTEGER},
+      </if>
+      <if test="codeSegmentFileUrl != null">
+        code_segment_file_url = #{codeSegmentFileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="disposeType != null">
+        dispose_type = #{disposeType,jdbcType=INTEGER},
+      </if>
+      <if test="disposeTimeScope != null">
+        dispose_time_scope = #{disposeTimeScope,jdbcType=VARCHAR},
+      </if>
+      <if test="employeId != null">
+        employe_id = #{employeId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="count != null">
+        count = #{count,jdbcType=INTEGER},
+      </if>
+      <if test="disposeWay != null">
+        dispose_way = #{disposeWay,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where recall_dispose_id = #{recallDisposeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.ZslRecallDispose">
+    update zsl_recall_dispose
+    set batch_recall_id = #{batchRecallId,jdbcType=INTEGER},
+      code_segment_file_url = #{codeSegmentFileUrl,jdbcType=VARCHAR},
+      dispose_type = #{disposeType,jdbcType=INTEGER},
+      dispose_time_scope = #{disposeTimeScope,jdbcType=VARCHAR},
+      employe_id = #{employeId,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      count = #{count,jdbcType=INTEGER},
+      dispose_way = #{disposeWay,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where recall_dispose_id = #{recallDisposeId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -46,6 +46,9 @@ public class Goods implements Serializable {
     @ApiModelProperty(value = "单品运费模版id")
     private Integer templateId;
 
+    @ApiModelProperty(value = "是否上架国际贸易区（0：下架，1：上架）")
+    private Byte internationalSales;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getGoodsId() {
@@ -184,6 +187,14 @@ public class Goods implements Serializable {
         this.templateId = templateId;
     }
 
+    public Byte getInternationalSales() {
+        return internationalSales;
+    }
+
+    public void setInternationalSales(Byte internationalSales) {
+        this.internationalSales = internationalSales;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -207,6 +218,7 @@ public class Goods implements Serializable {
         sb.append(", operator=").append(operator);
         sb.append(", producedTime=").append(producedTime);
         sb.append(", templateId=").append(templateId);
+        sb.append(", internationalSales=").append(internationalSales);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

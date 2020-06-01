@@ -2,6 +2,7 @@ package com.zsl.tracedb.model;
 
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.util.Date;
 
 public class Category implements Serializable {
     private Integer categoryId;
@@ -16,6 +17,9 @@ public class Category implements Serializable {
     private Integer categoryLevel;
 
     private Byte includeBrand;
+
+    @ApiModelProperty(value = "更新时间")
+    private Date updateTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -67,6 +71,14 @@ public class Category implements Serializable {
         this.includeBrand = includeBrand;
     }
 
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -79,6 +91,7 @@ public class Category implements Serializable {
         sb.append(", categoryFullName=").append(categoryFullName);
         sb.append(", categoryLevel=").append(categoryLevel);
         sb.append(", includeBrand=").append(includeBrand);
+        sb.append(", updateTime=").append(updateTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

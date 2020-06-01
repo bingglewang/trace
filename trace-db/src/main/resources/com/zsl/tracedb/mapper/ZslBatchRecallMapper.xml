@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsl.tracedb.mapper.ZslBatchRecallMapper">
+  <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.ZslBatchRecall">
+    <id column="batch_recall_id" jdbcType="INTEGER" property="batchRecallId" />
+    <result column="production_batch_id" jdbcType="INTEGER" property="productionBatchId" />
+    <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
+    <result column="recall_count" jdbcType="INTEGER" property="recallCount" />
+    <result column="undisposed_count" jdbcType="INTEGER" property="undisposedCount" />
+    <result column="dispose_status" jdbcType="BIT" property="disposeStatus" />
+    <result column="principal" jdbcType="VARCHAR" property="principal" />
+    <result column="principal_phone" jdbcType="VARCHAR" property="principalPhone" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.zsl.tracedb.model.ZslBatchRecall">
+    <result column="cause" jdbcType="LONGVARCHAR" property="cause" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    batch_recall_id, production_batch_id, goods_id, recall_count, undisposed_count, dispose_status, 
+    principal, principal_phone, create_time
+  </sql>
+  <sql id="Blob_Column_List">
+    cause
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.zsl.tracedb.model.ZslBatchRecallExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from zsl_batch_recall
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.zsl.tracedb.model.ZslBatchRecallExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from zsl_batch_recall
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from zsl_batch_recall
+    where batch_recall_id = #{batchRecallId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from zsl_batch_recall
+    where batch_recall_id = #{batchRecallId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zsl.tracedb.model.ZslBatchRecallExample">
+    delete from zsl_batch_recall
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zsl.tracedb.model.ZslBatchRecall">
+    <selectKey keyProperty="batchRecallId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into zsl_batch_recall (production_batch_id, goods_id, recall_count, 
+      undisposed_count, dispose_status, principal, 
+      principal_phone, create_time, cause
+      )
+    values (#{productionBatchId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{recallCount,jdbcType=INTEGER}, 
+      #{undisposedCount,jdbcType=INTEGER}, #{disposeStatus,jdbcType=BIT}, #{principal,jdbcType=VARCHAR}, 
+      #{principalPhone,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{cause,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zsl.tracedb.model.ZslBatchRecall">
+    <selectKey keyProperty="batchRecallId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into zsl_batch_recall
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="productionBatchId != null">
+        production_batch_id,
+      </if>
+      <if test="goodsId != null">
+        goods_id,
+      </if>
+      <if test="recallCount != null">
+        recall_count,
+      </if>
+      <if test="undisposedCount != null">
+        undisposed_count,
+      </if>
+      <if test="disposeStatus != null">
+        dispose_status,
+      </if>
+      <if test="principal != null">
+        principal,
+      </if>
+      <if test="principalPhone != null">
+        principal_phone,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="cause != null">
+        cause,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="productionBatchId != null">
+        #{productionBatchId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsId != null">
+        #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="recallCount != null">
+        #{recallCount,jdbcType=INTEGER},
+      </if>
+      <if test="undisposedCount != null">
+        #{undisposedCount,jdbcType=INTEGER},
+      </if>
+      <if test="disposeStatus != null">
+        #{disposeStatus,jdbcType=BIT},
+      </if>
+      <if test="principal != null">
+        #{principal,jdbcType=VARCHAR},
+      </if>
+      <if test="principalPhone != null">
+        #{principalPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cause != null">
+        #{cause,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zsl.tracedb.model.ZslBatchRecallExample" resultType="java.lang.Integer">
+    select count(*) from zsl_batch_recall
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update zsl_batch_recall
+    <set>
+      <if test="record.batchRecallId != null">
+        batch_recall_id = #{record.batchRecallId,jdbcType=INTEGER},
+      </if>
+      <if test="record.productionBatchId != null">
+        production_batch_id = #{record.productionBatchId,jdbcType=INTEGER},
+      </if>
+      <if test="record.goodsId != null">
+        goods_id = #{record.goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="record.recallCount != null">
+        recall_count = #{record.recallCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.undisposedCount != null">
+        undisposed_count = #{record.undisposedCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.disposeStatus != null">
+        dispose_status = #{record.disposeStatus,jdbcType=BIT},
+      </if>
+      <if test="record.principal != null">
+        principal = #{record.principal,jdbcType=VARCHAR},
+      </if>
+      <if test="record.principalPhone != null">
+        principal_phone = #{record.principalPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.cause != null">
+        cause = #{record.cause,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update zsl_batch_recall
+    set batch_recall_id = #{record.batchRecallId,jdbcType=INTEGER},
+      production_batch_id = #{record.productionBatchId,jdbcType=INTEGER},
+      goods_id = #{record.goodsId,jdbcType=INTEGER},
+      recall_count = #{record.recallCount,jdbcType=INTEGER},
+      undisposed_count = #{record.undisposedCount,jdbcType=INTEGER},
+      dispose_status = #{record.disposeStatus,jdbcType=BIT},
+      principal = #{record.principal,jdbcType=VARCHAR},
+      principal_phone = #{record.principalPhone,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      cause = #{record.cause,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update zsl_batch_recall
+    set batch_recall_id = #{record.batchRecallId,jdbcType=INTEGER},
+      production_batch_id = #{record.productionBatchId,jdbcType=INTEGER},
+      goods_id = #{record.goodsId,jdbcType=INTEGER},
+      recall_count = #{record.recallCount,jdbcType=INTEGER},
+      undisposed_count = #{record.undisposedCount,jdbcType=INTEGER},
+      dispose_status = #{record.disposeStatus,jdbcType=BIT},
+      principal = #{record.principal,jdbcType=VARCHAR},
+      principal_phone = #{record.principalPhone,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.ZslBatchRecall">
+    update zsl_batch_recall
+    <set>
+      <if test="productionBatchId != null">
+        production_batch_id = #{productionBatchId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsId != null">
+        goods_id = #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="recallCount != null">
+        recall_count = #{recallCount,jdbcType=INTEGER},
+      </if>
+      <if test="undisposedCount != null">
+        undisposed_count = #{undisposedCount,jdbcType=INTEGER},
+      </if>
+      <if test="disposeStatus != null">
+        dispose_status = #{disposeStatus,jdbcType=BIT},
+      </if>
+      <if test="principal != null">
+        principal = #{principal,jdbcType=VARCHAR},
+      </if>
+      <if test="principalPhone != null">
+        principal_phone = #{principalPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cause != null">
+        cause = #{cause,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where batch_recall_id = #{batchRecallId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zsl.tracedb.model.ZslBatchRecall">
+    update zsl_batch_recall
+    set production_batch_id = #{productionBatchId,jdbcType=INTEGER},
+      goods_id = #{goodsId,jdbcType=INTEGER},
+      recall_count = #{recallCount,jdbcType=INTEGER},
+      undisposed_count = #{undisposedCount,jdbcType=INTEGER},
+      dispose_status = #{disposeStatus,jdbcType=BIT},
+      principal = #{principal,jdbcType=VARCHAR},
+      principal_phone = #{principalPhone,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      cause = #{cause,jdbcType=LONGVARCHAR}
+    where batch_recall_id = #{batchRecallId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.ZslBatchRecall">
+    update zsl_batch_recall
+    set production_batch_id = #{productionBatchId,jdbcType=INTEGER},
+      goods_id = #{goodsId,jdbcType=INTEGER},
+      recall_count = #{recallCount,jdbcType=INTEGER},
+      undisposed_count = #{undisposedCount,jdbcType=INTEGER},
+      dispose_status = #{disposeStatus,jdbcType=BIT},
+      principal = #{principal,jdbcType=VARCHAR},
+      principal_phone = #{principalPhone,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where batch_recall_id = #{batchRecallId,jdbcType=INTEGER}
+  </update>
+</mapper>

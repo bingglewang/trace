@@ -14,6 +14,9 @@ public class AccountDistributeNode implements Serializable {
     @ApiModelProperty(value = "追溯点名称")
     private String tracePoint;
 
+    @ApiModelProperty(value = "追溯点别称")
+    private String traceAnotherName;
+
     @ApiModelProperty(value = "地址")
     private String location;
 
@@ -46,6 +49,14 @@ public class AccountDistributeNode implements Serializable {
         this.tracePoint = tracePoint;
     }
 
+    public String getTraceAnotherName() {
+        return traceAnotherName;
+    }
+
+    public void setTraceAnotherName(String traceAnotherName) {
+        this.traceAnotherName = traceAnotherName;
+    }
+
     public String getLocation() {
         return location;
     }
@@ -71,6 +82,7 @@ public class AccountDistributeNode implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", accountId=").append(accountId);
         sb.append(", tracePoint=").append(tracePoint);
+        sb.append(", traceAnotherName=").append(traceAnotherName);
         sb.append(", location=").append(location);
         sb.append(", createTime=").append(createTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);

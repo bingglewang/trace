@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zsl.tracedb.mapper.AccountDistributeNodeMapper">
-  <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.AccountDistributeNode">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="account_id" jdbcType="INTEGER" property="accountId" />
-    <result column="trace_point" jdbcType="VARCHAR" property="tracePoint" />
-    <result column="trace_another_name" jdbcType="VARCHAR" property="traceAnotherName" />
-    <result column="location" jdbcType="VARCHAR" property="location" />
+<mapper namespace="com.zsl.tracedb.mapper.ZslBatchMaterialOutMapper">
+  <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.ZslBatchMaterialOut">
+    <id column="batch_material_out_id" jdbcType="INTEGER" property="batchMaterialOutId" />
+    <result column="production_batch_id" jdbcType="INTEGER" property="productionBatchId" />
+    <result column="material_out_id" jdbcType="INTEGER" property="materialOutId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -68,15 +66,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, account_id, trace_point, trace_another_name, location, create_time
+    batch_material_out_id, production_batch_id, material_out_id, create_time
   </sql>
-  <select id="selectByExample" parameterType="com.zsl.tracedb.model.AccountDistributeNodeExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.zsl.tracedb.model.ZslBatchMaterialOutExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from account_distribute_node
+    from zsl_batch_material_out
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -87,91 +85,73 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from account_distribute_node
-    where id = #{id,jdbcType=INTEGER}
+    from zsl_batch_material_out
+    where batch_material_out_id = #{batchMaterialOutId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from account_distribute_node
-    where id = #{id,jdbcType=INTEGER}
+    delete from zsl_batch_material_out
+    where batch_material_out_id = #{batchMaterialOutId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.zsl.tracedb.model.AccountDistributeNodeExample">
-    delete from account_distribute_node
+  <delete id="deleteByExample" parameterType="com.zsl.tracedb.model.ZslBatchMaterialOutExample">
+    delete from zsl_batch_material_out
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.zsl.tracedb.model.AccountDistributeNode">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+  <insert id="insert" parameterType="com.zsl.tracedb.model.ZslBatchMaterialOut">
+    <selectKey keyProperty="batchMaterialOutId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into account_distribute_node (account_id, trace_point, trace_another_name, 
-      location, create_time)
-    values (#{accountId,jdbcType=INTEGER}, #{tracePoint,jdbcType=VARCHAR}, #{traceAnotherName,jdbcType=VARCHAR}, 
-      #{location,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+    insert into zsl_batch_material_out (production_batch_id, material_out_id, 
+      create_time)
+    values (#{productionBatchId,jdbcType=INTEGER}, #{materialOutId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.zsl.tracedb.model.AccountDistributeNode">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+  <insert id="insertSelective" parameterType="com.zsl.tracedb.model.ZslBatchMaterialOut">
+    <selectKey keyProperty="batchMaterialOutId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into account_distribute_node
+    insert into zsl_batch_material_out
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="accountId != null">
-        account_id,
+      <if test="productionBatchId != null">
+        production_batch_id,
       </if>
-      <if test="tracePoint != null">
-        trace_point,
-      </if>
-      <if test="traceAnotherName != null">
-        trace_another_name,
-      </if>
-      <if test="location != null">
-        location,
+      <if test="materialOutId != null">
+        material_out_id,
       </if>
       <if test="createTime != null">
         create_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="accountId != null">
-        #{accountId,jdbcType=INTEGER},
+      <if test="productionBatchId != null">
+        #{productionBatchId,jdbcType=INTEGER},
       </if>
-      <if test="tracePoint != null">
-        #{tracePoint,jdbcType=VARCHAR},
-      </if>
-      <if test="traceAnotherName != null">
-        #{traceAnotherName,jdbcType=VARCHAR},
-      </if>
-      <if test="location != null">
-        #{location,jdbcType=VARCHAR},
+      <if test="materialOutId != null">
+        #{materialOutId,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.zsl.tracedb.model.AccountDistributeNodeExample" resultType="java.lang.Integer">
-    select count(*) from account_distribute_node
+  <select id="countByExample" parameterType="com.zsl.tracedb.model.ZslBatchMaterialOutExample" resultType="java.lang.Integer">
+    select count(*) from zsl_batch_material_out
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update account_distribute_node
+    update zsl_batch_material_out
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="record.batchMaterialOutId != null">
+        batch_material_out_id = #{record.batchMaterialOutId,jdbcType=INTEGER},
       </if>
-      <if test="record.accountId != null">
-        account_id = #{record.accountId,jdbcType=INTEGER},
+      <if test="record.productionBatchId != null">
+        production_batch_id = #{record.productionBatchId,jdbcType=INTEGER},
       </if>
-      <if test="record.tracePoint != null">
-        trace_point = #{record.tracePoint,jdbcType=VARCHAR},
-      </if>
-      <if test="record.traceAnotherName != null">
-        trace_another_name = #{record.traceAnotherName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.location != null">
-        location = #{record.location,jdbcType=VARCHAR},
+      <if test="record.materialOutId != null">
+        material_out_id = #{record.materialOutId,jdbcType=INTEGER},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -182,45 +162,35 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update account_distribute_node
-    set id = #{record.id,jdbcType=INTEGER},
-      account_id = #{record.accountId,jdbcType=INTEGER},
-      trace_point = #{record.tracePoint,jdbcType=VARCHAR},
-      trace_another_name = #{record.traceAnotherName,jdbcType=VARCHAR},
-      location = #{record.location,jdbcType=VARCHAR},
+    update zsl_batch_material_out
+    set batch_material_out_id = #{record.batchMaterialOutId,jdbcType=INTEGER},
+      production_batch_id = #{record.productionBatchId,jdbcType=INTEGER},
+      material_out_id = #{record.materialOutId,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.AccountDistributeNode">
-    update account_distribute_node
+  <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.ZslBatchMaterialOut">
+    update zsl_batch_material_out
     <set>
-      <if test="accountId != null">
-        account_id = #{accountId,jdbcType=INTEGER},
+      <if test="productionBatchId != null">
+        production_batch_id = #{productionBatchId,jdbcType=INTEGER},
       </if>
-      <if test="tracePoint != null">
-        trace_point = #{tracePoint,jdbcType=VARCHAR},
-      </if>
-      <if test="traceAnotherName != null">
-        trace_another_name = #{traceAnotherName,jdbcType=VARCHAR},
-      </if>
-      <if test="location != null">
-        location = #{location,jdbcType=VARCHAR},
+      <if test="materialOutId != null">
+        material_out_id = #{materialOutId,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where batch_material_out_id = #{batchMaterialOutId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.AccountDistributeNode">
-    update account_distribute_node
-    set account_id = #{accountId,jdbcType=INTEGER},
-      trace_point = #{tracePoint,jdbcType=VARCHAR},
-      trace_another_name = #{traceAnotherName,jdbcType=VARCHAR},
-      location = #{location,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.ZslBatchMaterialOut">
+    update zsl_batch_material_out
+    set production_batch_id = #{productionBatchId,jdbcType=INTEGER},
+      material_out_id = #{materialOutId,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=INTEGER}
+    where batch_material_out_id = #{batchMaterialOutId,jdbcType=INTEGER}
   </update>
 </mapper>

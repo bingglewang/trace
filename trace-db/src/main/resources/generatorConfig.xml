@@ -156,5 +156,28 @@
         <table tableName="zsl_current_e_index">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
+
+        <table tableName="zsl_batch_material_out">
+            <generatedKey column="batch_material_out_id" sqlStatement="MySql" identity="true"/>
+        </table>
+
+        <table tableName="zsl_batch_recall">
+            <generatedKey column="batch_recall_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="zsl_production_batch">
+            <generatedKey column="batch_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="zsl_production_scene">
+            <generatedKey column="scene_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="zsl_recall_dispose">
+            <generatedKey column="recall_dispose_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="zsl_scene_batch">
+            <generatedKey column="scene_batch_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="zsl_scene_image">
+            <generatedKey column="scene_image_id" sqlStatement="MySql" identity="true"/>
+        </table>
     </context>
 </generatorConfiguration>
