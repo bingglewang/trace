@@ -11,13 +11,13 @@ public class ZslSceneImage implements Serializable {
     private Integer sceneId;
 
     @ApiModelProperty(value = "当前状态（0禁用、1现启用、2历史启用）")
-    private Boolean currentStatus;
+    private Integer currentStatus;
 
     @ApiModelProperty(value = "图片链接")
     private String imageUrl;
 
     @ApiModelProperty(value = "图片顺序")
-    private Byte showSort;
+    private Integer showSort;
 
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
@@ -40,11 +40,11 @@ public class ZslSceneImage implements Serializable {
         this.sceneId = sceneId;
     }
 
-    public Boolean getCurrentStatus() {
+    public Integer getCurrentStatus() {
         return currentStatus;
     }
 
-    public void setCurrentStatus(Boolean currentStatus) {
+    public void setCurrentStatus(Integer currentStatus) {
         this.currentStatus = currentStatus;
     }
 
@@ -56,11 +56,11 @@ public class ZslSceneImage implements Serializable {
         this.imageUrl = imageUrl;
     }
 
-    public Byte getShowSort() {
+    public Integer getShowSort() {
         return showSort;
     }
 
-    public void setShowSort(Byte showSort) {
+    public void setShowSort(Integer showSort) {
         this.showSort = showSort;
     }
 

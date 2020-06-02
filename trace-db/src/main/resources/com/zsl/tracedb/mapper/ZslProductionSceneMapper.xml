@@ -4,8 +4,8 @@
   <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.ZslProductionScene">
     <id column="scene_id" jdbcType="INTEGER" property="sceneId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="current_status" jdbcType="BIT" property="currentStatus" />
-    <result column="scene_sort" jdbcType="TINYINT" property="sceneSort" />
+    <result column="current_status" jdbcType="INTEGER" property="currentStatus" />
+    <result column="scene_sort" jdbcType="INTEGER" property="sceneSort" />
     <result column="video_url" jdbcType="VARCHAR" property="videoUrl" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
@@ -133,7 +133,7 @@
     insert into zsl_production_scene (name, current_status, scene_sort, 
       video_url, update_time, goods_id, 
       create_time, description)
-    values (#{name,jdbcType=VARCHAR}, #{currentStatus,jdbcType=BIT}, #{sceneSort,jdbcType=TINYINT}, 
+    values (#{name,jdbcType=VARCHAR}, #{currentStatus,jdbcType=INTEGER}, #{sceneSort,jdbcType=INTEGER}, 
       #{videoUrl,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{goodsId,jdbcType=INTEGER}, 
       #{createTime,jdbcType=TIMESTAMP}, #{description,jdbcType=LONGVARCHAR})
   </insert>
@@ -173,10 +173,10 @@
         #{name,jdbcType=VARCHAR},
       </if>
       <if test="currentStatus != null">
-        #{currentStatus,jdbcType=BIT},
+        #{currentStatus,jdbcType=INTEGER},
       </if>
       <if test="sceneSort != null">
-        #{sceneSort,jdbcType=TINYINT},
+        #{sceneSort,jdbcType=INTEGER},
       </if>
       <if test="videoUrl != null">
         #{videoUrl,jdbcType=VARCHAR},
@@ -211,10 +211,10 @@
         name = #{record.name,jdbcType=VARCHAR},
       </if>
       <if test="record.currentStatus != null">
-        current_status = #{record.currentStatus,jdbcType=BIT},
+        current_status = #{record.currentStatus,jdbcType=INTEGER},
       </if>
       <if test="record.sceneSort != null">
-        scene_sort = #{record.sceneSort,jdbcType=TINYINT},
+        scene_sort = #{record.sceneSort,jdbcType=INTEGER},
       </if>
       <if test="record.videoUrl != null">
         video_url = #{record.videoUrl,jdbcType=VARCHAR},
@@ -240,8 +240,8 @@
     update zsl_production_scene
     set scene_id = #{record.sceneId,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR},
-      current_status = #{record.currentStatus,jdbcType=BIT},
-      scene_sort = #{record.sceneSort,jdbcType=TINYINT},
+      current_status = #{record.currentStatus,jdbcType=INTEGER},
+      scene_sort = #{record.sceneSort,jdbcType=INTEGER},
       video_url = #{record.videoUrl,jdbcType=VARCHAR},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       goods_id = #{record.goodsId,jdbcType=INTEGER},
@@ -255,8 +255,8 @@
     update zsl_production_scene
     set scene_id = #{record.sceneId,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR},
-      current_status = #{record.currentStatus,jdbcType=BIT},
-      scene_sort = #{record.sceneSort,jdbcType=TINYINT},
+      current_status = #{record.currentStatus,jdbcType=INTEGER},
+      scene_sort = #{record.sceneSort,jdbcType=INTEGER},
       video_url = #{record.videoUrl,jdbcType=VARCHAR},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       goods_id = #{record.goodsId,jdbcType=INTEGER},
@@ -272,10 +272,10 @@
         name = #{name,jdbcType=VARCHAR},
       </if>
       <if test="currentStatus != null">
-        current_status = #{currentStatus,jdbcType=BIT},
+        current_status = #{currentStatus,jdbcType=INTEGER},
       </if>
       <if test="sceneSort != null">
-        scene_sort = #{sceneSort,jdbcType=TINYINT},
+        scene_sort = #{sceneSort,jdbcType=INTEGER},
       </if>
       <if test="videoUrl != null">
         video_url = #{videoUrl,jdbcType=VARCHAR},
@@ -298,8 +298,8 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zsl.tracedb.model.ZslProductionScene">
     update zsl_production_scene
     set name = #{name,jdbcType=VARCHAR},
-      current_status = #{currentStatus,jdbcType=BIT},
-      scene_sort = #{sceneSort,jdbcType=TINYINT},
+      current_status = #{currentStatus,jdbcType=INTEGER},
+      scene_sort = #{sceneSort,jdbcType=INTEGER},
       video_url = #{videoUrl,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       goods_id = #{goodsId,jdbcType=INTEGER},
@@ -310,8 +310,8 @@
   <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.ZslProductionScene">
     update zsl_production_scene
     set name = #{name,jdbcType=VARCHAR},
-      current_status = #{currentStatus,jdbcType=BIT},
-      scene_sort = #{sceneSort,jdbcType=TINYINT},
+      current_status = #{currentStatus,jdbcType=INTEGER},
+      scene_sort = #{sceneSort,jdbcType=INTEGER},
       video_url = #{videoUrl,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       goods_id = #{goodsId,jdbcType=INTEGER},

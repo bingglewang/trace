@@ -415,52 +415,52 @@ public class ZslBatchRecallExample {
             return (Criteria) this;
         }
 
-        public Criteria andDisposeStatusEqualTo(Boolean value) {
+        public Criteria andDisposeStatusEqualTo(Integer value) {
             addCriterion("dispose_status =", value, "disposeStatus");
             return (Criteria) this;
         }
 
-        public Criteria andDisposeStatusNotEqualTo(Boolean value) {
+        public Criteria andDisposeStatusNotEqualTo(Integer value) {
             addCriterion("dispose_status <>", value, "disposeStatus");
             return (Criteria) this;
         }
 
-        public Criteria andDisposeStatusGreaterThan(Boolean value) {
+        public Criteria andDisposeStatusGreaterThan(Integer value) {
             addCriterion("dispose_status >", value, "disposeStatus");
             return (Criteria) this;
         }
 
-        public Criteria andDisposeStatusGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andDisposeStatusGreaterThanOrEqualTo(Integer value) {
             addCriterion("dispose_status >=", value, "disposeStatus");
             return (Criteria) this;
         }
 
-        public Criteria andDisposeStatusLessThan(Boolean value) {
+        public Criteria andDisposeStatusLessThan(Integer value) {
             addCriterion("dispose_status <", value, "disposeStatus");
             return (Criteria) this;
         }
 
-        public Criteria andDisposeStatusLessThanOrEqualTo(Boolean value) {
+        public Criteria andDisposeStatusLessThanOrEqualTo(Integer value) {
             addCriterion("dispose_status <=", value, "disposeStatus");
             return (Criteria) this;
         }
 
-        public Criteria andDisposeStatusIn(List<Boolean> values) {
+        public Criteria andDisposeStatusIn(List<Integer> values) {
             addCriterion("dispose_status in", values, "disposeStatus");
             return (Criteria) this;
         }
 
-        public Criteria andDisposeStatusNotIn(List<Boolean> values) {
+        public Criteria andDisposeStatusNotIn(List<Integer> values) {
             addCriterion("dispose_status not in", values, "disposeStatus");
             return (Criteria) this;
         }
 
-        public Criteria andDisposeStatusBetween(Boolean value1, Boolean value2) {
+        public Criteria andDisposeStatusBetween(Integer value1, Integer value2) {
             addCriterion("dispose_status between", value1, value2, "disposeStatus");
             return (Criteria) this;
         }
 
-        public Criteria andDisposeStatusNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andDisposeStatusNotBetween(Integer value1, Integer value2) {
             addCriterion("dispose_status not between", value1, value2, "disposeStatus");
             return (Criteria) this;
         }

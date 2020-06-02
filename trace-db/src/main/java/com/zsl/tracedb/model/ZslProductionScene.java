@@ -11,10 +11,10 @@ public class ZslProductionScene implements Serializable {
     private String name;
 
     @ApiModelProperty(value = "当前状态（0禁用、1现启用、2历史启用）")
-    private Boolean currentStatus;
+    private Integer currentStatus;
 
     @ApiModelProperty(value = "产品的场景排序")
-    private Byte sceneSort;
+    private Integer sceneSort;
 
     @ApiModelProperty(value = "视频链接url")
     private String videoUrl;
@@ -49,19 +49,19 @@ public class ZslProductionScene implements Serializable {
         this.name = name;
     }
 
-    public Boolean getCurrentStatus() {
+    public Integer getCurrentStatus() {
         return currentStatus;
     }
 
-    public void setCurrentStatus(Boolean currentStatus) {
+    public void setCurrentStatus(Integer currentStatus) {
         this.currentStatus = currentStatus;
     }
 
-    public Byte getSceneSort() {
+    public Integer getSceneSort() {
         return sceneSort;
     }
 
-    public void setSceneSort(Byte sceneSort) {
+    public void setSceneSort(Integer sceneSort) {
         this.sceneSort = sceneSort;
     }
 

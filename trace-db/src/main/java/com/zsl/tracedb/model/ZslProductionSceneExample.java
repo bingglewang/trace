@@ -245,52 +245,52 @@ public class ZslProductionSceneExample {
             return (Criteria) this;
         }
 
-        public Criteria andCurrentStatusEqualTo(Boolean value) {
+        public Criteria andCurrentStatusEqualTo(Integer value) {
             addCriterion("current_status =", value, "currentStatus");
             return (Criteria) this;
         }
 
-        public Criteria andCurrentStatusNotEqualTo(Boolean value) {
+        public Criteria andCurrentStatusNotEqualTo(Integer value) {
             addCriterion("current_status <>", value, "currentStatus");
             return (Criteria) this;
         }
 
-        public Criteria andCurrentStatusGreaterThan(Boolean value) {
+        public Criteria andCurrentStatusGreaterThan(Integer value) {
             addCriterion("current_status >", value, "currentStatus");
             return (Criteria) this;
         }
 
-        public Criteria andCurrentStatusGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andCurrentStatusGreaterThanOrEqualTo(Integer value) {
             addCriterion("current_status >=", value, "currentStatus");
             return (Criteria) this;
         }
 
-        public Criteria andCurrentStatusLessThan(Boolean value) {
+        public Criteria andCurrentStatusLessThan(Integer value) {
             addCriterion("current_status <", value, "currentStatus");
             return (Criteria) this;
         }
 
-        public Criteria andCurrentStatusLessThanOrEqualTo(Boolean value) {
+        public Criteria andCurrentStatusLessThanOrEqualTo(Integer value) {
             addCriterion("current_status <=", value, "currentStatus");
             return (Criteria) this;
         }
 
-        public Criteria andCurrentStatusIn(List<Boolean> values) {
+        public Criteria andCurrentStatusIn(List<Integer> values) {
             addCriterion("current_status in", values, "currentStatus");
             return (Criteria) this;
         }
 
-        public Criteria andCurrentStatusNotIn(List<Boolean> values) {
+        public Criteria andCurrentStatusNotIn(List<Integer> values) {
             addCriterion("current_status not in", values, "currentStatus");
             return (Criteria) this;
         }
 
-        public Criteria andCurrentStatusBetween(Boolean value1, Boolean value2) {
+        public Criteria andCurrentStatusBetween(Integer value1, Integer value2) {
             addCriterion("current_status between", value1, value2, "currentStatus");
             return (Criteria) this;
         }
 
-        public Criteria andCurrentStatusNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andCurrentStatusNotBetween(Integer value1, Integer value2) {
             addCriterion("current_status not between", value1, value2, "currentStatus");
             return (Criteria) this;
         }
@@ -305,52 +305,52 @@ public class ZslProductionSceneExample {
             return (Criteria) this;
         }
 
-        public Criteria andSceneSortEqualTo(Byte value) {
+        public Criteria andSceneSortEqualTo(Integer value) {
             addCriterion("scene_sort =", value, "sceneSort");
             return (Criteria) this;
         }
 
-        public Criteria andSceneSortNotEqualTo(Byte value) {
+        public Criteria andSceneSortNotEqualTo(Integer value) {
             addCriterion("scene_sort <>", value, "sceneSort");
             return (Criteria) this;
         }
 
-        public Criteria andSceneSortGreaterThan(Byte value) {
+        public Criteria andSceneSortGreaterThan(Integer value) {
             addCriterion("scene_sort >", value, "sceneSort");
             return (Criteria) this;
         }
 
-        public Criteria andSceneSortGreaterThanOrEqualTo(Byte value) {
+        public Criteria andSceneSortGreaterThanOrEqualTo(Integer value) {
             addCriterion("scene_sort >=", value, "sceneSort");
             return (Criteria) this;
         }
 
-        public Criteria andSceneSortLessThan(Byte value) {
+        public Criteria andSceneSortLessThan(Integer value) {
             addCriterion("scene_sort <", value, "sceneSort");
             return (Criteria) this;
         }
 
-        public Criteria andSceneSortLessThanOrEqualTo(Byte value) {
+        public Criteria andSceneSortLessThanOrEqualTo(Integer value) {
             addCriterion("scene_sort <=", value, "sceneSort");
             return (Criteria) this;
         }
 
-        public Criteria andSceneSortIn(List<Byte> values) {
+        public Criteria andSceneSortIn(List<Integer> values) {
             addCriterion("scene_sort in", values, "sceneSort");
             return (Criteria) this;
         }
 
-        public Criteria andSceneSortNotIn(List<Byte> values) {
+        public Criteria andSceneSortNotIn(List<Integer> values) {
             addCriterion("scene_sort not in", values, "sceneSort");
             return (Criteria) this;
         }
 
-        public Criteria andSceneSortBetween(Byte value1, Byte value2) {
+        public Criteria andSceneSortBetween(Integer value1, Integer value2) {
             addCriterion("scene_sort between", value1, value2, "sceneSort");
             return (Criteria) this;
         }
 
-        public Criteria andSceneSortNotBetween(Byte value1, Byte value2) {
+        public Criteria andSceneSortNotBetween(Integer value1, Integer value2) {
             addCriterion("scene_sort not between", value1, value2, "sceneSort");
             return (Criteria) this;
         }

@@ -4,9 +4,9 @@
   <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.ZslSceneImage">
     <id column="scene_image_id" jdbcType="INTEGER" property="sceneImageId" />
     <result column="scene_id" jdbcType="INTEGER" property="sceneId" />
-    <result column="current_status" jdbcType="BIT" property="currentStatus" />
+    <result column="current_status" jdbcType="INTEGER" property="currentStatus" />
     <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
-    <result column="show_sort" jdbcType="TINYINT" property="showSort" />
+    <result column="show_sort" jdbcType="INTEGER" property="showSort" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -106,8 +106,8 @@
     </selectKey>
     insert into zsl_scene_image (scene_id, current_status, image_url, 
       show_sort, create_time)
-    values (#{sceneId,jdbcType=INTEGER}, #{currentStatus,jdbcType=BIT}, #{imageUrl,jdbcType=VARCHAR}, 
-      #{showSort,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP})
+    values (#{sceneId,jdbcType=INTEGER}, #{currentStatus,jdbcType=INTEGER}, #{imageUrl,jdbcType=VARCHAR}, 
+      #{showSort,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.ZslSceneImage">
     <selectKey keyProperty="sceneImageId" order="AFTER" resultType="java.lang.Integer">
@@ -136,13 +136,13 @@
         #{sceneId,jdbcType=INTEGER},
       </if>
       <if test="currentStatus != null">
-        #{currentStatus,jdbcType=BIT},
+        #{currentStatus,jdbcType=INTEGER},
       </if>
       <if test="imageUrl != null">
         #{imageUrl,jdbcType=VARCHAR},
       </if>
       <if test="showSort != null">
-        #{showSort,jdbcType=TINYINT},
+        #{showSort,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -165,13 +165,13 @@
         scene_id = #{record.sceneId,jdbcType=INTEGER},
       </if>
       <if test="record.currentStatus != null">
-        current_status = #{record.currentStatus,jdbcType=BIT},
+        current_status = #{record.currentStatus,jdbcType=INTEGER},
       </if>
       <if test="record.imageUrl != null">
         image_url = #{record.imageUrl,jdbcType=VARCHAR},
       </if>
       <if test="record.showSort != null">
-        show_sort = #{record.showSort,jdbcType=TINYINT},
+        show_sort = #{record.showSort,jdbcType=INTEGER},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -185,9 +185,9 @@
     update zsl_scene_image
     set scene_image_id = #{record.sceneImageId,jdbcType=INTEGER},
       scene_id = #{record.sceneId,jdbcType=INTEGER},
-      current_status = #{record.currentStatus,jdbcType=BIT},
+      current_status = #{record.currentStatus,jdbcType=INTEGER},
       image_url = #{record.imageUrl,jdbcType=VARCHAR},
-      show_sort = #{record.showSort,jdbcType=TINYINT},
+      show_sort = #{record.showSort,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -200,13 +200,13 @@
         scene_id = #{sceneId,jdbcType=INTEGER},
       </if>
       <if test="currentStatus != null">
-        current_status = #{currentStatus,jdbcType=BIT},
+        current_status = #{currentStatus,jdbcType=INTEGER},
       </if>
       <if test="imageUrl != null">
         image_url = #{imageUrl,jdbcType=VARCHAR},
       </if>
       <if test="showSort != null">
-        show_sort = #{showSort,jdbcType=TINYINT},
+        show_sort = #{showSort,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -217,9 +217,9 @@
   <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.ZslSceneImage">
     update zsl_scene_image
     set scene_id = #{sceneId,jdbcType=INTEGER},
-      current_status = #{currentStatus,jdbcType=BIT},
+      current_status = #{currentStatus,jdbcType=INTEGER},
       image_url = #{imageUrl,jdbcType=VARCHAR},
-      show_sort = #{showSort,jdbcType=TINYINT},
+      show_sort = #{showSort,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where scene_image_id = #{sceneImageId,jdbcType=INTEGER}
   </update>

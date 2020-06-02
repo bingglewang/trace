@@ -7,7 +7,7 @@
     <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
     <result column="recall_count" jdbcType="INTEGER" property="recallCount" />
     <result column="undisposed_count" jdbcType="INTEGER" property="undisposedCount" />
-    <result column="dispose_status" jdbcType="BIT" property="disposeStatus" />
+    <result column="dispose_status" jdbcType="INTEGER" property="disposeStatus" />
     <result column="principal" jdbcType="VARCHAR" property="principal" />
     <result column="principal_phone" jdbcType="VARCHAR" property="principalPhone" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -137,7 +137,7 @@
       principal_phone, create_time, cause
       )
     values (#{productionBatchId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{recallCount,jdbcType=INTEGER}, 
-      #{undisposedCount,jdbcType=INTEGER}, #{disposeStatus,jdbcType=BIT}, #{principal,jdbcType=VARCHAR}, 
+      #{undisposedCount,jdbcType=INTEGER}, #{disposeStatus,jdbcType=INTEGER}, #{principal,jdbcType=VARCHAR}, 
       #{principalPhone,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{cause,jdbcType=LONGVARCHAR}
       )
   </insert>
@@ -189,7 +189,7 @@
         #{undisposedCount,jdbcType=INTEGER},
       </if>
       <if test="disposeStatus != null">
-        #{disposeStatus,jdbcType=BIT},
+        #{disposeStatus,jdbcType=INTEGER},
       </if>
       <if test="principal != null">
         #{principal,jdbcType=VARCHAR},
@@ -230,7 +230,7 @@
         undisposed_count = #{record.undisposedCount,jdbcType=INTEGER},
       </if>
       <if test="record.disposeStatus != null">
-        dispose_status = #{record.disposeStatus,jdbcType=BIT},
+        dispose_status = #{record.disposeStatus,jdbcType=INTEGER},
       </if>
       <if test="record.principal != null">
         principal = #{record.principal,jdbcType=VARCHAR},
@@ -256,7 +256,7 @@
       goods_id = #{record.goodsId,jdbcType=INTEGER},
       recall_count = #{record.recallCount,jdbcType=INTEGER},
       undisposed_count = #{record.undisposedCount,jdbcType=INTEGER},
-      dispose_status = #{record.disposeStatus,jdbcType=BIT},
+      dispose_status = #{record.disposeStatus,jdbcType=INTEGER},
       principal = #{record.principal,jdbcType=VARCHAR},
       principal_phone = #{record.principalPhone,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -272,7 +272,7 @@
       goods_id = #{record.goodsId,jdbcType=INTEGER},
       recall_count = #{record.recallCount,jdbcType=INTEGER},
       undisposed_count = #{record.undisposedCount,jdbcType=INTEGER},
-      dispose_status = #{record.disposeStatus,jdbcType=BIT},
+      dispose_status = #{record.disposeStatus,jdbcType=INTEGER},
       principal = #{record.principal,jdbcType=VARCHAR},
       principal_phone = #{record.principalPhone,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
@@ -296,7 +296,7 @@
         undisposed_count = #{undisposedCount,jdbcType=INTEGER},
       </if>
       <if test="disposeStatus != null">
-        dispose_status = #{disposeStatus,jdbcType=BIT},
+        dispose_status = #{disposeStatus,jdbcType=INTEGER},
       </if>
       <if test="principal != null">
         principal = #{principal,jdbcType=VARCHAR},
@@ -319,7 +319,7 @@
       goods_id = #{goodsId,jdbcType=INTEGER},
       recall_count = #{recallCount,jdbcType=INTEGER},
       undisposed_count = #{undisposedCount,jdbcType=INTEGER},
-      dispose_status = #{disposeStatus,jdbcType=BIT},
+      dispose_status = #{disposeStatus,jdbcType=INTEGER},
       principal = #{principal,jdbcType=VARCHAR},
       principal_phone = #{principalPhone,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -332,7 +332,7 @@
       goods_id = #{goodsId,jdbcType=INTEGER},
       recall_count = #{recallCount,jdbcType=INTEGER},
       undisposed_count = #{undisposedCount,jdbcType=INTEGER},
-      dispose_status = #{disposeStatus,jdbcType=BIT},
+      dispose_status = #{disposeStatus,jdbcType=INTEGER},
       principal = #{principal,jdbcType=VARCHAR},
       principal_phone = #{principalPhone,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP}

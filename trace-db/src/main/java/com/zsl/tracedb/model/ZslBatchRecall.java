@@ -20,7 +20,7 @@ public class ZslBatchRecall implements Serializable {
     private Integer undisposedCount;
 
     @ApiModelProperty(value = "处理状态（1未处理、2已处理、3部分处理）")
-    private Boolean disposeStatus;
+    private Integer disposeStatus;
 
     @ApiModelProperty(value = "召回负责人")
     private String principal;
@@ -76,11 +76,11 @@ public class ZslBatchRecall implements Serializable {
         this.undisposedCount = undisposedCount;
     }
 
-    public Boolean getDisposeStatus() {
+    public Integer getDisposeStatus() {
         return disposeStatus;
     }
 
-    public void setDisposeStatus(Boolean disposeStatus) {
+    public void setDisposeStatus(Integer disposeStatus) {
         this.disposeStatus = disposeStatus;
     }
 
