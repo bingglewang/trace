@@ -14,10 +14,10 @@ public class ZslTraceRecord implements Serializable {
     private Integer traceGoodId;
 
     @ApiModelProperty(value = "商品结束编码")
-    private Integer traceToNumber;
+    private Long traceToNumber;
 
     @ApiModelProperty(value = "商品起始编码")
-    private Integer traceFromNumber;
+    private Long traceFromNumber;
 
     @ApiModelProperty(value = "关联摊位id（没有则为非农贸）")
     private Integer traceStallId;
@@ -51,19 +51,19 @@ public class ZslTraceRecord implements Serializable {
         this.traceGoodId = traceGoodId;
     }
 
-    public Integer getTraceToNumber() {
+    public Long getTraceToNumber() {
         return traceToNumber;
     }
 
-    public void setTraceToNumber(Integer traceToNumber) {
+    public void setTraceToNumber(Long traceToNumber) {
         this.traceToNumber = traceToNumber;
     }
 
-    public Integer getTraceFromNumber() {
+    public Long getTraceFromNumber() {
         return traceFromNumber;
     }
 
-    public void setTraceFromNumber(Integer traceFromNumber) {
+    public void setTraceFromNumber(Long traceFromNumber) {
         this.traceFromNumber = traceFromNumber;
     }
 

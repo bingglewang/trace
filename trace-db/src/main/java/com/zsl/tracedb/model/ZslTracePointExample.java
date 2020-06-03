@@ -305,52 +305,52 @@ public class ZslTracePointExample {
             return (Criteria) this;
         }
 
-        public Criteria andTracePointToNumberEqualTo(Integer value) {
+        public Criteria andTracePointToNumberEqualTo(Long value) {
             addCriterion("trace_point_to_number =", value, "tracePointToNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTracePointToNumberNotEqualTo(Integer value) {
+        public Criteria andTracePointToNumberNotEqualTo(Long value) {
             addCriterion("trace_point_to_number <>", value, "tracePointToNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTracePointToNumberGreaterThan(Integer value) {
+        public Criteria andTracePointToNumberGreaterThan(Long value) {
             addCriterion("trace_point_to_number >", value, "tracePointToNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTracePointToNumberGreaterThanOrEqualTo(Integer value) {
+        public Criteria andTracePointToNumberGreaterThanOrEqualTo(Long value) {
             addCriterion("trace_point_to_number >=", value, "tracePointToNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTracePointToNumberLessThan(Integer value) {
+        public Criteria andTracePointToNumberLessThan(Long value) {
             addCriterion("trace_point_to_number <", value, "tracePointToNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTracePointToNumberLessThanOrEqualTo(Integer value) {
+        public Criteria andTracePointToNumberLessThanOrEqualTo(Long value) {
             addCriterion("trace_point_to_number <=", value, "tracePointToNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTracePointToNumberIn(List<Integer> values) {
+        public Criteria andTracePointToNumberIn(List<Long> values) {
             addCriterion("trace_point_to_number in", values, "tracePointToNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTracePointToNumberNotIn(List<Integer> values) {
+        public Criteria andTracePointToNumberNotIn(List<Long> values) {
             addCriterion("trace_point_to_number not in", values, "tracePointToNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTracePointToNumberBetween(Integer value1, Integer value2) {
+        public Criteria andTracePointToNumberBetween(Long value1, Long value2) {
             addCriterion("trace_point_to_number between", value1, value2, "tracePointToNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTracePointToNumberNotBetween(Integer value1, Integer value2) {
+        public Criteria andTracePointToNumberNotBetween(Long value1, Long value2) {
             addCriterion("trace_point_to_number not between", value1, value2, "tracePointToNumber");
             return (Criteria) this;
         }
@@ -365,52 +365,52 @@ public class ZslTracePointExample {
             return (Criteria) this;
         }
 
-        public Criteria andTracePointFromNumberEqualTo(Integer value) {
+        public Criteria andTracePointFromNumberEqualTo(Long value) {
             addCriterion("trace_point_from_number =", value, "tracePointFromNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTracePointFromNumberNotEqualTo(Integer value) {
+        public Criteria andTracePointFromNumberNotEqualTo(Long value) {
             addCriterion("trace_point_from_number <>", value, "tracePointFromNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTracePointFromNumberGreaterThan(Integer value) {
+        public Criteria andTracePointFromNumberGreaterThan(Long value) {
             addCriterion("trace_point_from_number >", value, "tracePointFromNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTracePointFromNumberGreaterThanOrEqualTo(Integer value) {
+        public Criteria andTracePointFromNumberGreaterThanOrEqualTo(Long value) {
             addCriterion("trace_point_from_number >=", value, "tracePointFromNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTracePointFromNumberLessThan(Integer value) {
+        public Criteria andTracePointFromNumberLessThan(Long value) {
             addCriterion("trace_point_from_number <", value, "tracePointFromNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTracePointFromNumberLessThanOrEqualTo(Integer value) {
+        public Criteria andTracePointFromNumberLessThanOrEqualTo(Long value) {
             addCriterion("trace_point_from_number <=", value, "tracePointFromNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTracePointFromNumberIn(List<Integer> values) {
+        public Criteria andTracePointFromNumberIn(List<Long> values) {
             addCriterion("trace_point_from_number in", values, "tracePointFromNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTracePointFromNumberNotIn(List<Integer> values) {
+        public Criteria andTracePointFromNumberNotIn(List<Long> values) {
             addCriterion("trace_point_from_number not in", values, "tracePointFromNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTracePointFromNumberBetween(Integer value1, Integer value2) {
+        public Criteria andTracePointFromNumberBetween(Long value1, Long value2) {
             addCriterion("trace_point_from_number between", value1, value2, "tracePointFromNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTracePointFromNumberNotBetween(Integer value1, Integer value2) {
+        public Criteria andTracePointFromNumberNotBetween(Long value1, Long value2) {
             addCriterion("trace_point_from_number not between", value1, value2, "tracePointFromNumber");
             return (Criteria) this;
         }

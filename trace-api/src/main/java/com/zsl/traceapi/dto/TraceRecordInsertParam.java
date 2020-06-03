@@ -19,12 +19,12 @@ public class TraceRecordInsertParam {
     /**
      * 商品起始编码
      */
-    private Integer traceToNumber;
+    private Long traceToNumber;
 
     /**
      * 商品结束编码
      */
-    private Integer traceFromNumber;
+    private Long traceFromNumber;
 
     /**
      * 关联摊位id（没有则为非农贸）

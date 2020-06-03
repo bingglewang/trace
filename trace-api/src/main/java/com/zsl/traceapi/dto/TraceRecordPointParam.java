@@ -27,12 +27,12 @@ public class TraceRecordPointParam {
     /**
      * 追溯点起始编码
      */
-    private Integer tracePointToNumber;
+    private Long tracePointToNumber;
 
     /**
      * 追溯点结束编码
      */
-    private Integer tracePointFromNumber;
+    private Long tracePointFromNumber;
 
     /**
      * 父节点id

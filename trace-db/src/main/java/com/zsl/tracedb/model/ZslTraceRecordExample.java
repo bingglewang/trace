@@ -304,52 +304,52 @@ public class ZslTraceRecordExample {
             return (Criteria) this;
         }
 
-        public Criteria andTraceToNumberEqualTo(Integer value) {
+        public Criteria andTraceToNumberEqualTo(Long value) {
             addCriterion("trace_to_number =", value, "traceToNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTraceToNumberNotEqualTo(Integer value) {
+        public Criteria andTraceToNumberNotEqualTo(Long value) {
             addCriterion("trace_to_number <>", value, "traceToNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTraceToNumberGreaterThan(Integer value) {
+        public Criteria andTraceToNumberGreaterThan(Long value) {
             addCriterion("trace_to_number >", value, "traceToNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTraceToNumberGreaterThanOrEqualTo(Integer value) {
+        public Criteria andTraceToNumberGreaterThanOrEqualTo(Long value) {
             addCriterion("trace_to_number >=", value, "traceToNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTraceToNumberLessThan(Integer value) {
+        public Criteria andTraceToNumberLessThan(Long value) {
             addCriterion("trace_to_number <", value, "traceToNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTraceToNumberLessThanOrEqualTo(Integer value) {
+        public Criteria andTraceToNumberLessThanOrEqualTo(Long value) {
             addCriterion("trace_to_number <=", value, "traceToNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTraceToNumberIn(List<Integer> values) {
+        public Criteria andTraceToNumberIn(List<Long> values) {
             addCriterion("trace_to_number in", values, "traceToNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTraceToNumberNotIn(List<Integer> values) {
+        public Criteria andTraceToNumberNotIn(List<Long> values) {
             addCriterion("trace_to_number not in", values, "traceToNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTraceToNumberBetween(Integer value1, Integer value2) {
+        public Criteria andTraceToNumberBetween(Long value1, Long value2) {
             addCriterion("trace_to_number between", value1, value2, "traceToNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTraceToNumberNotBetween(Integer value1, Integer value2) {
+        public Criteria andTraceToNumberNotBetween(Long value1, Long value2) {
             addCriterion("trace_to_number not between", value1, value2, "traceToNumber");
             return (Criteria) this;
         }
@@ -364,52 +364,52 @@ public class ZslTraceRecordExample {
             return (Criteria) this;
         }
 
-        public Criteria andTraceFromNumberEqualTo(Integer value) {
+        public Criteria andTraceFromNumberEqualTo(Long value) {
             addCriterion("trace_from_number =", value, "traceFromNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTraceFromNumberNotEqualTo(Integer value) {
+        public Criteria andTraceFromNumberNotEqualTo(Long value) {
             addCriterion("trace_from_number <>", value, "traceFromNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTraceFromNumberGreaterThan(Integer value) {
+        public Criteria andTraceFromNumberGreaterThan(Long value) {
             addCriterion("trace_from_number >", value, "traceFromNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTraceFromNumberGreaterThanOrEqualTo(Integer value) {
+        public Criteria andTraceFromNumberGreaterThanOrEqualTo(Long value) {
             addCriterion("trace_from_number >=", value, "traceFromNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTraceFromNumberLessThan(Integer value) {
+        public Criteria andTraceFromNumberLessThan(Long value) {
             addCriterion("trace_from_number <", value, "traceFromNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTraceFromNumberLessThanOrEqualTo(Integer value) {
+        public Criteria andTraceFromNumberLessThanOrEqualTo(Long value) {
             addCriterion("trace_from_number <=", value, "traceFromNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTraceFromNumberIn(List<Integer> values) {
+        public Criteria andTraceFromNumberIn(List<Long> values) {
             addCriterion("trace_from_number in", values, "traceFromNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTraceFromNumberNotIn(List<Integer> values) {
+        public Criteria andTraceFromNumberNotIn(List<Long> values) {
             addCriterion("trace_from_number not in", values, "traceFromNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTraceFromNumberBetween(Integer value1, Integer value2) {
+        public Criteria andTraceFromNumberBetween(Long value1, Long value2) {
             addCriterion("trace_from_number between", value1, value2, "traceFromNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTraceFromNumberNotBetween(Integer value1, Integer value2) {
+        public Criteria andTraceFromNumberNotBetween(Long value1, Long value2) {
             addCriterion("trace_from_number not between", value1, value2, "traceFromNumber");
             return (Criteria) this;
         }

@@ -5,8 +5,8 @@
     <id column="trace_point_id" jdbcType="INTEGER" property="tracePointId" />
     <result column="trace_goods_id" jdbcType="INTEGER" property="traceGoodsId" />
     <result column="trace_point_name" jdbcType="VARCHAR" property="tracePointName" />
-    <result column="trace_point_to_number" jdbcType="INTEGER" property="tracePointToNumber" />
-    <result column="trace_point_from_number" jdbcType="INTEGER" property="tracePointFromNumber" />
+    <result column="trace_point_to_number" jdbcType="BIGINT" property="tracePointToNumber" />
+    <result column="trace_point_from_number" jdbcType="BIGINT" property="tracePointFromNumber" />
     <result column="trace_parent_id" jdbcType="INTEGER" property="traceParentId" />
     <result column="trace_stall_id" jdbcType="INTEGER" property="traceStallId" />
     <result column="trace_code_number" jdbcType="VARCHAR" property="traceCodeNumber" />
@@ -113,8 +113,8 @@
       trace_point_from_number, trace_parent_id, trace_stall_id, 
       trace_code_number, trace_point_time, trace_point_account_id
       )
-    values (#{traceGoodsId,jdbcType=INTEGER}, #{tracePointName,jdbcType=VARCHAR}, #{tracePointToNumber,jdbcType=INTEGER}, 
-      #{tracePointFromNumber,jdbcType=INTEGER}, #{traceParentId,jdbcType=INTEGER}, #{traceStallId,jdbcType=INTEGER}, 
+    values (#{traceGoodsId,jdbcType=INTEGER}, #{tracePointName,jdbcType=VARCHAR}, #{tracePointToNumber,jdbcType=BIGINT}, 
+      #{tracePointFromNumber,jdbcType=BIGINT}, #{traceParentId,jdbcType=INTEGER}, #{traceStallId,jdbcType=INTEGER}, 
       #{traceCodeNumber,jdbcType=VARCHAR}, #{tracePointTime,jdbcType=TIMESTAMP}, #{tracePointAccountId,jdbcType=INTEGER}
       )
   </insert>
@@ -160,10 +160,10 @@
         #{tracePointName,jdbcType=VARCHAR},
       </if>
       <if test="tracePointToNumber != null">
-        #{tracePointToNumber,jdbcType=INTEGER},
+        #{tracePointToNumber,jdbcType=BIGINT},
       </if>
       <if test="tracePointFromNumber != null">
-        #{tracePointFromNumber,jdbcType=INTEGER},
+        #{tracePointFromNumber,jdbcType=BIGINT},
       </if>
       <if test="traceParentId != null">
         #{traceParentId,jdbcType=INTEGER},
@@ -201,10 +201,10 @@
         trace_point_name = #{record.tracePointName,jdbcType=VARCHAR},
       </if>
       <if test="record.tracePointToNumber != null">
-        trace_point_to_number = #{record.tracePointToNumber,jdbcType=INTEGER},
+        trace_point_to_number = #{record.tracePointToNumber,jdbcType=BIGINT},
       </if>
       <if test="record.tracePointFromNumber != null">
-        trace_point_from_number = #{record.tracePointFromNumber,jdbcType=INTEGER},
+        trace_point_from_number = #{record.tracePointFromNumber,jdbcType=BIGINT},
       </if>
       <if test="record.traceParentId != null">
         trace_parent_id = #{record.traceParentId,jdbcType=INTEGER},
@@ -231,8 +231,8 @@
     set trace_point_id = #{record.tracePointId,jdbcType=INTEGER},
       trace_goods_id = #{record.traceGoodsId,jdbcType=INTEGER},
       trace_point_name = #{record.tracePointName,jdbcType=VARCHAR},
-      trace_point_to_number = #{record.tracePointToNumber,jdbcType=INTEGER},
-      trace_point_from_number = #{record.tracePointFromNumber,jdbcType=INTEGER},
+      trace_point_to_number = #{record.tracePointToNumber,jdbcType=BIGINT},
+      trace_point_from_number = #{record.tracePointFromNumber,jdbcType=BIGINT},
       trace_parent_id = #{record.traceParentId,jdbcType=INTEGER},
       trace_stall_id = #{record.traceStallId,jdbcType=INTEGER},
       trace_code_number = #{record.traceCodeNumber,jdbcType=VARCHAR},
@@ -252,10 +252,10 @@
         trace_point_name = #{tracePointName,jdbcType=VARCHAR},
       </if>
       <if test="tracePointToNumber != null">
-        trace_point_to_number = #{tracePointToNumber,jdbcType=INTEGER},
+        trace_point_to_number = #{tracePointToNumber,jdbcType=BIGINT},
       </if>
       <if test="tracePointFromNumber != null">
-        trace_point_from_number = #{tracePointFromNumber,jdbcType=INTEGER},
+        trace_point_from_number = #{tracePointFromNumber,jdbcType=BIGINT},
       </if>
       <if test="traceParentId != null">
         trace_parent_id = #{traceParentId,jdbcType=INTEGER},
@@ -279,8 +279,8 @@
     update zsl_trace_point
     set trace_goods_id = #{traceGoodsId,jdbcType=INTEGER},
       trace_point_name = #{tracePointName,jdbcType=VARCHAR},
-      trace_point_to_number = #{tracePointToNumber,jdbcType=INTEGER},
-      trace_point_from_number = #{tracePointFromNumber,jdbcType=INTEGER},
+      trace_point_to_number = #{tracePointToNumber,jdbcType=BIGINT},
+      trace_point_from_number = #{tracePointFromNumber,jdbcType=BIGINT},
       trace_parent_id = #{traceParentId,jdbcType=INTEGER},
       trace_stall_id = #{traceStallId,jdbcType=INTEGER},
       trace_code_number = #{traceCodeNumber,jdbcType=VARCHAR},

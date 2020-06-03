@@ -43,7 +43,7 @@ public class NumberConverUtil {
         }
     }
 
-    public static List<String> getConvertNum(Set<Integer> zslPoints){
+    public static List<String> getConvertNum(Set<Long> zslPoints){
         Set newSet = zslPoints.stream().sorted(Comparator.naturalOrder()).collect(Collectors.toSet());
         TreeSet<Integer> treeSet = new TreeSet<>();
         treeSet.addAll(newSet);

@@ -5,8 +5,8 @@
     <id column="trace_record_id" jdbcType="INTEGER" property="traceRecordId" />
     <result column="trace_code_number" jdbcType="VARCHAR" property="traceCodeNumber" />
     <result column="trace_good_id" jdbcType="INTEGER" property="traceGoodId" />
-    <result column="trace_to_number" jdbcType="INTEGER" property="traceToNumber" />
-    <result column="trace_from_number" jdbcType="INTEGER" property="traceFromNumber" />
+    <result column="trace_to_number" jdbcType="BIGINT" property="traceToNumber" />
+    <result column="trace_from_number" jdbcType="BIGINT" property="traceFromNumber" />
     <result column="trace_stall_id" jdbcType="INTEGER" property="traceStallId" />
     <result column="trace_scan_count" jdbcType="BIGINT" property="traceScanCount" />
   </resultMap>
@@ -109,8 +109,8 @@
     insert into zsl_trace_record (trace_code_number, trace_good_id, trace_to_number, 
       trace_from_number, trace_stall_id, trace_scan_count
       )
-    values (#{traceCodeNumber,jdbcType=VARCHAR}, #{traceGoodId,jdbcType=INTEGER}, #{traceToNumber,jdbcType=INTEGER}, 
-      #{traceFromNumber,jdbcType=INTEGER}, #{traceStallId,jdbcType=INTEGER}, #{traceScanCount,jdbcType=BIGINT}
+    values (#{traceCodeNumber,jdbcType=VARCHAR}, #{traceGoodId,jdbcType=INTEGER}, #{traceToNumber,jdbcType=BIGINT}, 
+      #{traceFromNumber,jdbcType=BIGINT}, #{traceStallId,jdbcType=INTEGER}, #{traceScanCount,jdbcType=BIGINT}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.ZslTraceRecord">
@@ -146,10 +146,10 @@
         #{traceGoodId,jdbcType=INTEGER},
       </if>
       <if test="traceToNumber != null">
-        #{traceToNumber,jdbcType=INTEGER},
+        #{traceToNumber,jdbcType=BIGINT},
       </if>
       <if test="traceFromNumber != null">
-        #{traceFromNumber,jdbcType=INTEGER},
+        #{traceFromNumber,jdbcType=BIGINT},
       </if>
       <if test="traceStallId != null">
         #{traceStallId,jdbcType=INTEGER},
@@ -178,10 +178,10 @@
         trace_good_id = #{record.traceGoodId,jdbcType=INTEGER},
       </if>
       <if test="record.traceToNumber != null">
-        trace_to_number = #{record.traceToNumber,jdbcType=INTEGER},
+        trace_to_number = #{record.traceToNumber,jdbcType=BIGINT},
       </if>
       <if test="record.traceFromNumber != null">
-        trace_from_number = #{record.traceFromNumber,jdbcType=INTEGER},
+        trace_from_number = #{record.traceFromNumber,jdbcType=BIGINT},
       </if>
       <if test="record.traceStallId != null">
         trace_stall_id = #{record.traceStallId,jdbcType=INTEGER},
@@ -199,8 +199,8 @@
     set trace_record_id = #{record.traceRecordId,jdbcType=INTEGER},
       trace_code_number = #{record.traceCodeNumber,jdbcType=VARCHAR},
       trace_good_id = #{record.traceGoodId,jdbcType=INTEGER},
-      trace_to_number = #{record.traceToNumber,jdbcType=INTEGER},
-      trace_from_number = #{record.traceFromNumber,jdbcType=INTEGER},
+      trace_to_number = #{record.traceToNumber,jdbcType=BIGINT},
+      trace_from_number = #{record.traceFromNumber,jdbcType=BIGINT},
       trace_stall_id = #{record.traceStallId,jdbcType=INTEGER},
       trace_scan_count = #{record.traceScanCount,jdbcType=BIGINT}
     <if test="_parameter != null">
@@ -217,10 +217,10 @@
         trace_good_id = #{traceGoodId,jdbcType=INTEGER},
       </if>
       <if test="traceToNumber != null">
-        trace_to_number = #{traceToNumber,jdbcType=INTEGER},
+        trace_to_number = #{traceToNumber,jdbcType=BIGINT},
       </if>
       <if test="traceFromNumber != null">
-        trace_from_number = #{traceFromNumber,jdbcType=INTEGER},
+        trace_from_number = #{traceFromNumber,jdbcType=BIGINT},
       </if>
       <if test="traceStallId != null">
         trace_stall_id = #{traceStallId,jdbcType=INTEGER},
@@ -235,8 +235,8 @@
     update zsl_trace_record
     set trace_code_number = #{traceCodeNumber,jdbcType=VARCHAR},
       trace_good_id = #{traceGoodId,jdbcType=INTEGER},
-      trace_to_number = #{traceToNumber,jdbcType=INTEGER},
-      trace_from_number = #{traceFromNumber,jdbcType=INTEGER},
+      trace_to_number = #{traceToNumber,jdbcType=BIGINT},
+      trace_from_number = #{traceFromNumber,jdbcType=BIGINT},
       trace_stall_id = #{traceStallId,jdbcType=INTEGER},
       trace_scan_count = #{traceScanCount,jdbcType=BIGINT}
     where trace_record_id = #{traceRecordId,jdbcType=INTEGER}

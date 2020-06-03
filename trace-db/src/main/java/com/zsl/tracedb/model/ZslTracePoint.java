@@ -15,10 +15,10 @@ public class ZslTracePoint implements Serializable {
     private String tracePointName;
 
     @ApiModelProperty(value = "追溯点结束编码")
-    private Integer tracePointToNumber;
+    private Long tracePointToNumber;
 
     @ApiModelProperty(value = "追溯点起始编码")
-    private Integer tracePointFromNumber;
+    private Long tracePointFromNumber;
 
     @ApiModelProperty(value = "父节点id")
     private Integer traceParentId;
@@ -60,19 +60,19 @@ public class ZslTracePoint implements Serializable {
         this.tracePointName = tracePointName;
     }
 
-    public Integer getTracePointToNumber() {
+    public Long getTracePointToNumber() {
         return tracePointToNumber;
     }
 
-    public void setTracePointToNumber(Integer tracePointToNumber) {
+    public void setTracePointToNumber(Long tracePointToNumber) {
         this.tracePointToNumber = tracePointToNumber;
     }
 
-    public Integer getTracePointFromNumber() {
+    public Long getTracePointFromNumber() {
         return tracePointFromNumber;
     }
 
-    public void setTracePointFromNumber(Integer tracePointFromNumber) {
+    public void setTracePointFromNumber(Long tracePointFromNumber) {
         this.tracePointFromNumber = tracePointFromNumber;
     }
 

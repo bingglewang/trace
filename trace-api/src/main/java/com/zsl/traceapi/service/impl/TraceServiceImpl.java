@@ -658,7 +658,7 @@ public class TraceServiceImpl implements TraceService {
         List<ZslTraceRecord> zslTraceRecordList = zslTraceRecordMapper.selectByExample(zslTraceRecordExample);
         if (!CollectionUtils.isEmpty(zslTraceRecordList)) {
             for (ZslTraceRecord item : zslTraceRecordList) {
-                for (int i = item.getTraceFromNumber(); i <= item.getTraceToNumber(); i++) {
+                for (long i = item.getTraceFromNumber(); i <= item.getTraceToNumber(); i++) {
                     if (!codeSet.add(i)) {
                         return "编码已经被使用过";
                     }
@@ -679,7 +679,7 @@ public class TraceServiceImpl implements TraceService {
                     return goods.getGoodsName() + "的起始编码必须小于结束编码";
                 }
             }
-            for (int j = insertParam.getTraceFromNumber(); j <= insertParam.getTraceToNumber(); j++) {
+            for (long j = insertParam.getTraceFromNumber(); j <= insertParam.getTraceToNumber(); j++) {
                 if (!codeSet.add(j)) {
                     return "编码已经被使用过";
                 }
@@ -916,7 +916,7 @@ public class TraceServiceImpl implements TraceService {
         List<ZslTracePoint> directChildrens = zslTracePointMapper.selectByExample(directChildrenExample);
         if (!CollectionUtils.isEmpty(zslTracePoints)) {
             for (ZslTracePoint direct : directChildrens) {
-                for (int i = direct.getTracePointFromNumber(); i <= direct.getTracePointToNumber(); i++) {
+                for (long i = direct.getTracePointFromNumber(); i <= direct.getTracePointToNumber(); i++) {
                     if (!codePointSet.add(i)) {
                         return "编码已经被使用过";
                     }
@@ -937,7 +937,7 @@ public class TraceServiceImpl implements TraceService {
             }
         }
 
-        for (int j = traceRecordPointParam.getTracePointFromNumber(); j <= traceRecordPointParam.getTracePointToNumber(); j++) {
+        for (long j = traceRecordPointParam.getTracePointFromNumber(); j <= traceRecordPointParam.getTracePointToNumber(); j++) {
             if (!codePointSet.add(j)) {
                 return "编码已经被使用过";
             }
@@ -1432,7 +1432,7 @@ public class TraceServiceImpl implements TraceService {
             zslTracePoint.setTracePointName(merchantPointDto.getTracePointName());
         }
         //下标
-        int traceIndex = Integer.parseInt(zslTraceSubcode.getTraceIndex().toString());
+        long traceIndex = zslTraceSubcode.getTraceIndex();
         //根据追溯码和编号查询父节点 商品id
         ZslTracePoint parent = zslTraceRecordDao.getTracePointBy(zslTraceSubcode.getTraceGoodId(),zslTraceSubcode.getTraceIndex(),zslTraceSubcode.getTraceCodeNumber());
         if(parent == null){
@@ -1659,7 +1659,7 @@ public class TraceServiceImpl implements TraceService {
         Map<Integer, List<ZslTracePoint>> map = NumberConverUtil.groupBillingDataByExcpBatchCode(deliverList);
         for(Integer key:map.keySet()){
             List<ZslTracePoint> groupPoints = map.get(key);
-            Set<Integer> groupSet =  groupPoints.stream()
+            Set<Long> groupSet =  groupPoints.stream()
                                                 .map(p -> p.getTracePointFromNumber())
                                                 .collect(Collectors.toSet());
             //获取基础追溯信息
@@ -1675,8 +1675,8 @@ public class TraceServiceImpl implements TraceService {
             for(String pstr : pointStrs){
                 ZslTracePoint insertP = new ZslTracePoint();
                 BeanUtils.copyProperties(baseZslPoint,insertP);
-                Integer fromNumber = Integer.parseInt(pstr.split("-")[0]);
-                Integer toNumber = Integer.parseInt(pstr.split("-")[1]);
+                Long fromNumber = Long.parseLong(pstr.split("-")[0]);
+                Long toNumber = Long.parseLong(pstr.split("-")[1]);
                 insertP.setTracePointFromNumber(fromNumber);
                 insertP.setTracePointToNumber(toNumber);
                 zslTracePointMapper.insert(insertP);
@@ -1689,18 +1689,18 @@ public class TraceServiceImpl implements TraceService {
     }
 
 
-    public boolean deductDeliverIntegral(Integer deductIntegral, Integer tracePointId, Integer businessId) {
+    public boolean deductDeliverIntegral(Long deductIntegral, Integer tracePointId, Integer businessId) {
         Merchant merchant = merchantMapper.selectByPrimaryKey(businessId);
         Merchant merchantUdate = new Merchant();
         merchantUdate.setMerchantId(businessId);
-        merchantUdate.setMerchantCoin(merchant.getMerchantCoin() - deductIntegral);
+        merchantUdate.setMerchantCoin((merchant.getMerchantCoin() - deductIntegral.intValue()));
         int update = merchantMapper.updateByPrimaryKeySelective(merchantUdate);
         if (update < 0) {
             return false; //积分扣除失败
         }
         //扣除积分
         IntegralLog integralLog = new IntegralLog();
-        integralLog.setDeductIntegral(deductIntegral);//当前扣除的积分
+        integralLog.setDeductIntegral(deductIntegral.intValue());//当前扣除的积分
         integralLog.setFunctionId(tracePointId);//操作业务主键id
         integralLog.setFunctionType(ServiceEnum.INSERT_TRACE_POINT.getId());
         integralLog.setMerchantId(businessId);//商家id
