@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zsl.tracedb.mapper.ZslProductionBatchMapper">
-  <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.ZslProductionBatch">
-    <id column="batch_id" jdbcType="INTEGER" property="batchId" />
-    <result column="batch_no" jdbcType="VARCHAR" property="batchNo" />
-    <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
-    <result column="production_time_scope" jdbcType="VARCHAR" property="productionTimeScope" />
-    <result column="merchant_id" jdbcType="INTEGER" property="merchantId" />
+<mapper namespace="com.zsl.tracedb.mapper.ZslProductionBatchBindSidMapper">
+  <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.ZslProductionBatchBindSid">
+    <id column="batch_sid_id" jdbcType="INTEGER" property="batchSidId" />
+    <result column="trace_code_no" jdbcType="VARCHAR" property="traceCodeNo" />
+    <result column="sid_start" jdbcType="BIGINT" property="sidStart" />
+    <result column="production_batch_id" jdbcType="INTEGER" property="productionBatchId" />
+    <result column="sid_end" jdbcType="BIGINT" property="sidEnd" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -68,15 +68,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    batch_id, batch_no, goods_id, production_time_scope, merchant_id, create_time
+    batch_sid_id, trace_code_no, sid_start, production_batch_id, sid_end, create_time
   </sql>
-  <select id="selectByExample" parameterType="com.zsl.tracedb.model.ZslProductionBatchExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.zsl.tracedb.model.ZslProductionBatchBindSidExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from zsl_production_batch
+    from zsl_production_batch_bind_sid
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -87,91 +87,91 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from zsl_production_batch
-    where batch_id = #{batchId,jdbcType=INTEGER}
+    from zsl_production_batch_bind_sid
+    where batch_sid_id = #{batchSidId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from zsl_production_batch
-    where batch_id = #{batchId,jdbcType=INTEGER}
+    delete from zsl_production_batch_bind_sid
+    where batch_sid_id = #{batchSidId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.zsl.tracedb.model.ZslProductionBatchExample">
-    delete from zsl_production_batch
+  <delete id="deleteByExample" parameterType="com.zsl.tracedb.model.ZslProductionBatchBindSidExample">
+    delete from zsl_production_batch_bind_sid
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.zsl.tracedb.model.ZslProductionBatch">
-    <selectKey keyProperty="batchId" order="AFTER" resultType="java.lang.Integer">
+  <insert id="insert" parameterType="com.zsl.tracedb.model.ZslProductionBatchBindSid">
+    <selectKey keyProperty="batchSidId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into zsl_production_batch (batch_no, goods_id, production_time_scope, 
-      merchant_id, create_time)
-    values (#{batchNo,jdbcType=VARCHAR}, #{goodsId,jdbcType=INTEGER}, #{productionTimeScope,jdbcType=VARCHAR}, 
-      #{merchantId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+    insert into zsl_production_batch_bind_sid (trace_code_no, sid_start, production_batch_id, 
+      sid_end, create_time)
+    values (#{traceCodeNo,jdbcType=VARCHAR}, #{sidStart,jdbcType=BIGINT}, #{productionBatchId,jdbcType=INTEGER}, 
+      #{sidEnd,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.zsl.tracedb.model.ZslProductionBatch">
-    <selectKey keyProperty="batchId" order="AFTER" resultType="java.lang.Integer">
+  <insert id="insertSelective" parameterType="com.zsl.tracedb.model.ZslProductionBatchBindSid">
+    <selectKey keyProperty="batchSidId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into zsl_production_batch
+    insert into zsl_production_batch_bind_sid
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="batchNo != null">
-        batch_no,
+      <if test="traceCodeNo != null">
+        trace_code_no,
       </if>
-      <if test="goodsId != null">
-        goods_id,
+      <if test="sidStart != null">
+        sid_start,
       </if>
-      <if test="productionTimeScope != null">
-        production_time_scope,
+      <if test="productionBatchId != null">
+        production_batch_id,
       </if>
-      <if test="merchantId != null">
-        merchant_id,
+      <if test="sidEnd != null">
+        sid_end,
       </if>
       <if test="createTime != null">
         create_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="batchNo != null">
-        #{batchNo,jdbcType=VARCHAR},
+      <if test="traceCodeNo != null">
+        #{traceCodeNo,jdbcType=VARCHAR},
       </if>
-      <if test="goodsId != null">
-        #{goodsId,jdbcType=INTEGER},
+      <if test="sidStart != null">
+        #{sidStart,jdbcType=BIGINT},
       </if>
-      <if test="productionTimeScope != null">
-        #{productionTimeScope,jdbcType=VARCHAR},
+      <if test="productionBatchId != null">
+        #{productionBatchId,jdbcType=INTEGER},
       </if>
-      <if test="merchantId != null">
-        #{merchantId,jdbcType=INTEGER},
+      <if test="sidEnd != null">
+        #{sidEnd,jdbcType=BIGINT},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.zsl.tracedb.model.ZslProductionBatchExample" resultType="java.lang.Integer">
-    select count(*) from zsl_production_batch
+  <select id="countByExample" parameterType="com.zsl.tracedb.model.ZslProductionBatchBindSidExample" resultType="java.lang.Integer">
+    select count(*) from zsl_production_batch_bind_sid
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update zsl_production_batch
+    update zsl_production_batch_bind_sid
     <set>
-      <if test="record.batchId != null">
-        batch_id = #{record.batchId,jdbcType=INTEGER},
+      <if test="record.batchSidId != null">
+        batch_sid_id = #{record.batchSidId,jdbcType=INTEGER},
       </if>
-      <if test="record.batchNo != null">
-        batch_no = #{record.batchNo,jdbcType=VARCHAR},
+      <if test="record.traceCodeNo != null">
+        trace_code_no = #{record.traceCodeNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.goodsId != null">
-        goods_id = #{record.goodsId,jdbcType=INTEGER},
+      <if test="record.sidStart != null">
+        sid_start = #{record.sidStart,jdbcType=BIGINT},
       </if>
-      <if test="record.productionTimeScope != null">
-        production_time_scope = #{record.productionTimeScope,jdbcType=VARCHAR},
+      <if test="record.productionBatchId != null">
+        production_batch_id = #{record.productionBatchId,jdbcType=INTEGER},
       </if>
-      <if test="record.merchantId != null">
-        merchant_id = #{record.merchantId,jdbcType=INTEGER},
+      <if test="record.sidEnd != null">
+        sid_end = #{record.sidEnd,jdbcType=BIGINT},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -182,45 +182,45 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update zsl_production_batch
-    set batch_id = #{record.batchId,jdbcType=INTEGER},
-      batch_no = #{record.batchNo,jdbcType=VARCHAR},
-      goods_id = #{record.goodsId,jdbcType=INTEGER},
-      production_time_scope = #{record.productionTimeScope,jdbcType=VARCHAR},
-      merchant_id = #{record.merchantId,jdbcType=INTEGER},
+    update zsl_production_batch_bind_sid
+    set batch_sid_id = #{record.batchSidId,jdbcType=INTEGER},
+      trace_code_no = #{record.traceCodeNo,jdbcType=VARCHAR},
+      sid_start = #{record.sidStart,jdbcType=BIGINT},
+      production_batch_id = #{record.productionBatchId,jdbcType=INTEGER},
+      sid_end = #{record.sidEnd,jdbcType=BIGINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.ZslProductionBatch">
-    update zsl_production_batch
+  <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.ZslProductionBatchBindSid">
+    update zsl_production_batch_bind_sid
     <set>
-      <if test="batchNo != null">
-        batch_no = #{batchNo,jdbcType=VARCHAR},
+      <if test="traceCodeNo != null">
+        trace_code_no = #{traceCodeNo,jdbcType=VARCHAR},
       </if>
-      <if test="goodsId != null">
-        goods_id = #{goodsId,jdbcType=INTEGER},
+      <if test="sidStart != null">
+        sid_start = #{sidStart,jdbcType=BIGINT},
       </if>
-      <if test="productionTimeScope != null">
-        production_time_scope = #{productionTimeScope,jdbcType=VARCHAR},
+      <if test="productionBatchId != null">
+        production_batch_id = #{productionBatchId,jdbcType=INTEGER},
       </if>
-      <if test="merchantId != null">
-        merchant_id = #{merchantId,jdbcType=INTEGER},
+      <if test="sidEnd != null">
+        sid_end = #{sidEnd,jdbcType=BIGINT},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where batch_id = #{batchId,jdbcType=INTEGER}
+    where batch_sid_id = #{batchSidId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.ZslProductionBatch">
-    update zsl_production_batch
-    set batch_no = #{batchNo,jdbcType=VARCHAR},
-      goods_id = #{goodsId,jdbcType=INTEGER},
-      production_time_scope = #{productionTimeScope,jdbcType=VARCHAR},
-      merchant_id = #{merchantId,jdbcType=INTEGER},
+  <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.ZslProductionBatchBindSid">
+    update zsl_production_batch_bind_sid
+    set trace_code_no = #{traceCodeNo,jdbcType=VARCHAR},
+      sid_start = #{sidStart,jdbcType=BIGINT},
+      production_batch_id = #{productionBatchId,jdbcType=INTEGER},
+      sid_end = #{sidEnd,jdbcType=BIGINT},
       create_time = #{createTime,jdbcType=TIMESTAMP}
-    where batch_id = #{batchId,jdbcType=INTEGER}
+    where batch_sid_id = #{batchSidId,jdbcType=INTEGER}
   </update>
 </mapper>

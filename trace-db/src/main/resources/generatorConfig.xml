@@ -167,6 +167,10 @@
         <table tableName="zsl_production_batch">
             <generatedKey column="batch_id" sqlStatement="MySql" identity="true"/>
         </table>
+        <table tableName="zsl_production_batch_bind_sid">
+            <generatedKey column="batch_sid_id" sqlStatement="MySql" identity="true"/>
+        </table>
+
         <table tableName="zsl_production_scene">
             <generatedKey column="scene_id" sqlStatement="MySql" identity="true"/>
         </table>

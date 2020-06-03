@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ZslProductionBatchExample {
+public class ZslProductionBatchBindSidExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public ZslProductionBatchExample() {
+    public ZslProductionBatchBindSidExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -105,323 +105,313 @@ public class ZslProductionBatchExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andBatchIdIsNull() {
-            addCriterion("batch_id is null");
+        public Criteria andBatchSidIdIsNull() {
+            addCriterion("batch_sid_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andBatchIdIsNotNull() {
-            addCriterion("batch_id is not null");
+        public Criteria andBatchSidIdIsNotNull() {
+            addCriterion("batch_sid_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andBatchIdEqualTo(Integer value) {
-            addCriterion("batch_id =", value, "batchId");
+        public Criteria andBatchSidIdEqualTo(Integer value) {
+            addCriterion("batch_sid_id =", value, "batchSidId");
             return (Criteria) this;
         }
 
-        public Criteria andBatchIdNotEqualTo(Integer value) {
-            addCriterion("batch_id <>", value, "batchId");
+        public Criteria andBatchSidIdNotEqualTo(Integer value) {
+            addCriterion("batch_sid_id <>", value, "batchSidId");
             return (Criteria) this;
         }
 
-        public Criteria andBatchIdGreaterThan(Integer value) {
-            addCriterion("batch_id >", value, "batchId");
+        public Criteria andBatchSidIdGreaterThan(Integer value) {
+            addCriterion("batch_sid_id >", value, "batchSidId");
             return (Criteria) this;
         }
 
-        public Criteria andBatchIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("batch_id >=", value, "batchId");
+        public Criteria andBatchSidIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("batch_sid_id >=", value, "batchSidId");
             return (Criteria) this;
         }
 
-        public Criteria andBatchIdLessThan(Integer value) {
-            addCriterion("batch_id <", value, "batchId");
+        public Criteria andBatchSidIdLessThan(Integer value) {
+            addCriterion("batch_sid_id <", value, "batchSidId");
             return (Criteria) this;
         }
 
-        public Criteria andBatchIdLessThanOrEqualTo(Integer value) {
-            addCriterion("batch_id <=", value, "batchId");
+        public Criteria andBatchSidIdLessThanOrEqualTo(Integer value) {
+            addCriterion("batch_sid_id <=", value, "batchSidId");
             return (Criteria) this;
         }
 
-        public Criteria andBatchIdIn(List<Integer> values) {
-            addCriterion("batch_id in", values, "batchId");
+        public Criteria andBatchSidIdIn(List<Integer> values) {
+            addCriterion("batch_sid_id in", values, "batchSidId");
             return (Criteria) this;
         }
 
-        public Criteria andBatchIdNotIn(List<Integer> values) {
-            addCriterion("batch_id not in", values, "batchId");
+        public Criteria andBatchSidIdNotIn(List<Integer> values) {
+            addCriterion("batch_sid_id not in", values, "batchSidId");
             return (Criteria) this;
         }
 
-        public Criteria andBatchIdBetween(Integer value1, Integer value2) {
-            addCriterion("batch_id between", value1, value2, "batchId");
+        public Criteria andBatchSidIdBetween(Integer value1, Integer value2) {
+            addCriterion("batch_sid_id between", value1, value2, "batchSidId");
             return (Criteria) this;
         }
 
-        public Criteria andBatchIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("batch_id not between", value1, value2, "batchId");
+        public Criteria andBatchSidIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("batch_sid_id not between", value1, value2, "batchSidId");
             return (Criteria) this;
         }
 
-        public Criteria andBatchNoIsNull() {
-            addCriterion("batch_no is null");
+        public Criteria andTraceCodeNoIsNull() {
+            addCriterion("trace_code_no is null");
             return (Criteria) this;
         }
 
-        public Criteria andBatchNoIsNotNull() {
-            addCriterion("batch_no is not null");
+        public Criteria andTraceCodeNoIsNotNull() {
+            addCriterion("trace_code_no is not null");
             return (Criteria) this;
         }
 
-        public Criteria andBatchNoEqualTo(String value) {
-            addCriterion("batch_no =", value, "batchNo");
+        public Criteria andTraceCodeNoEqualTo(String value) {
+            addCriterion("trace_code_no =", value, "traceCodeNo");
             return (Criteria) this;
         }
 
-        public Criteria andBatchNoNotEqualTo(String value) {
-            addCriterion("batch_no <>", value, "batchNo");
+        public Criteria andTraceCodeNoNotEqualTo(String value) {
+            addCriterion("trace_code_no <>", value, "traceCodeNo");
             return (Criteria) this;
         }
 
-        public Criteria andBatchNoGreaterThan(String value) {
-            addCriterion("batch_no >", value, "batchNo");
+        public Criteria andTraceCodeNoGreaterThan(String value) {
+            addCriterion("trace_code_no >", value, "traceCodeNo");
             return (Criteria) this;
         }
 
-        public Criteria andBatchNoGreaterThanOrEqualTo(String value) {
-            addCriterion("batch_no >=", value, "batchNo");
+        public Criteria andTraceCodeNoGreaterThanOrEqualTo(String value) {
+            addCriterion("trace_code_no >=", value, "traceCodeNo");
             return (Criteria) this;
         }
 
-        public Criteria andBatchNoLessThan(String value) {
-            addCriterion("batch_no <", value, "batchNo");
+        public Criteria andTraceCodeNoLessThan(String value) {
+            addCriterion("trace_code_no <", value, "traceCodeNo");
             return (Criteria) this;
         }
 
-        public Criteria andBatchNoLessThanOrEqualTo(String value) {
-            addCriterion("batch_no <=", value, "batchNo");
+        public Criteria andTraceCodeNoLessThanOrEqualTo(String value) {
+            addCriterion("trace_code_no <=", value, "traceCodeNo");
             return (Criteria) this;
         }
 
-        public Criteria andBatchNoLike(String value) {
-            addCriterion("batch_no like", value, "batchNo");
+        public Criteria andTraceCodeNoLike(String value) {
+            addCriterion("trace_code_no like", value, "traceCodeNo");
             return (Criteria) this;
         }
 
-        public Criteria andBatchNoNotLike(String value) {
-            addCriterion("batch_no not like", value, "batchNo");
+        public Criteria andTraceCodeNoNotLike(String value) {
+            addCriterion("trace_code_no not like", value, "traceCodeNo");
             return (Criteria) this;
         }
 
-        public Criteria andBatchNoIn(List<String> values) {
-            addCriterion("batch_no in", values, "batchNo");
+        public Criteria andTraceCodeNoIn(List<String> values) {
+            addCriterion("trace_code_no in", values, "traceCodeNo");
             return (Criteria) this;
         }
 
-        public Criteria andBatchNoNotIn(List<String> values) {
-            addCriterion("batch_no not in", values, "batchNo");
+        public Criteria andTraceCodeNoNotIn(List<String> values) {
+            addCriterion("trace_code_no not in", values, "traceCodeNo");
             return (Criteria) this;
         }
 
-        public Criteria andBatchNoBetween(String value1, String value2) {
-            addCriterion("batch_no between", value1, value2, "batchNo");
+        public Criteria andTraceCodeNoBetween(String value1, String value2) {
+            addCriterion("trace_code_no between", value1, value2, "traceCodeNo");
             return (Criteria) this;
         }
 
-        public Criteria andBatchNoNotBetween(String value1, String value2) {
-            addCriterion("batch_no not between", value1, value2, "batchNo");
+        public Criteria andTraceCodeNoNotBetween(String value1, String value2) {
+            addCriterion("trace_code_no not between", value1, value2, "traceCodeNo");
             return (Criteria) this;
         }
 
-        public Criteria andGoodsIdIsNull() {
-            addCriterion("goods_id is null");
+        public Criteria andSidStartIsNull() {
+            addCriterion("sid_start is null");
             return (Criteria) this;
         }
 
-        public Criteria andGoodsIdIsNotNull() {
-            addCriterion("goods_id is not null");
+        public Criteria andSidStartIsNotNull() {
+            addCriterion("sid_start is not null");
             return (Criteria) this;
         }
 
-        public Criteria andGoodsIdEqualTo(Integer value) {
-            addCriterion("goods_id =", value, "goodsId");
+        public Criteria andSidStartEqualTo(Long value) {
+            addCriterion("sid_start =", value, "sidStart");
             return (Criteria) this;
         }
 
-        public Criteria andGoodsIdNotEqualTo(Integer value) {
-            addCriterion("goods_id <>", value, "goodsId");
+        public Criteria andSidStartNotEqualTo(Long value) {
+            addCriterion("sid_start <>", value, "sidStart");
             return (Criteria) this;
         }
 
-        public Criteria andGoodsIdGreaterThan(Integer value) {
-            addCriterion("goods_id >", value, "goodsId");
+        public Criteria andSidStartGreaterThan(Long value) {
+            addCriterion("sid_start >", value, "sidStart");
             return (Criteria) this;
         }
 
-        public Criteria andGoodsIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("goods_id >=", value, "goodsId");
+        public Criteria andSidStartGreaterThanOrEqualTo(Long value) {
+            addCriterion("sid_start >=", value, "sidStart");
             return (Criteria) this;
         }
 
-        public Criteria andGoodsIdLessThan(Integer value) {
-            addCriterion("goods_id <", value, "goodsId");
+        public Criteria andSidStartLessThan(Long value) {
+            addCriterion("sid_start <", value, "sidStart");
             return (Criteria) this;
         }
 
-        public Criteria andGoodsIdLessThanOrEqualTo(Integer value) {
-            addCriterion("goods_id <=", value, "goodsId");
+        public Criteria andSidStartLessThanOrEqualTo(Long value) {
+            addCriterion("sid_start <=", value, "sidStart");
             return (Criteria) this;
         }
 
-        public Criteria andGoodsIdIn(List<Integer> values) {
-            addCriterion("goods_id in", values, "goodsId");
+        public Criteria andSidStartIn(List<Long> values) {
+            addCriterion("sid_start in", values, "sidStart");
             return (Criteria) this;
         }
 
-        public Criteria andGoodsIdNotIn(List<Integer> values) {
-            addCriterion("goods_id not in", values, "goodsId");
+        public Criteria andSidStartNotIn(List<Long> values) {
+            addCriterion("sid_start not in", values, "sidStart");
             return (Criteria) this;
         }
 
-        public Criteria andGoodsIdBetween(Integer value1, Integer value2) {
-            addCriterion("goods_id between", value1, value2, "goodsId");
+        public Criteria andSidStartBetween(Long value1, Long value2) {
+            addCriterion("sid_start between", value1, value2, "sidStart");
             return (Criteria) this;
         }
 
-        public Criteria andGoodsIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("goods_id not between", value1, value2, "goodsId");
+        public Criteria andSidStartNotBetween(Long value1, Long value2) {
+            addCriterion("sid_start not between", value1, value2, "sidStart");
             return (Criteria) this;
         }
 
-        public Criteria andProductionTimeScopeIsNull() {
-            addCriterion("production_time_scope is null");
+        public Criteria andProductionBatchIdIsNull() {
+            addCriterion("production_batch_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andProductionTimeScopeIsNotNull() {
-            addCriterion("production_time_scope is not null");
+        public Criteria andProductionBatchIdIsNotNull() {
+            addCriterion("production_batch_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andProductionTimeScopeEqualTo(String value) {
-            addCriterion("production_time_scope =", value, "productionTimeScope");
+        public Criteria andProductionBatchIdEqualTo(Integer value) {
+            addCriterion("production_batch_id =", value, "productionBatchId");
             return (Criteria) this;
         }
 
-        public Criteria andProductionTimeScopeNotEqualTo(String value) {
-            addCriterion("production_time_scope <>", value, "productionTimeScope");
+        public Criteria andProductionBatchIdNotEqualTo(Integer value) {
+            addCriterion("production_batch_id <>", value, "productionBatchId");
             return (Criteria) this;
         }
 
-        public Criteria andProductionTimeScopeGreaterThan(String value) {
-            addCriterion("production_time_scope >", value, "productionTimeScope");
+        public Criteria andProductionBatchIdGreaterThan(Integer value) {
+            addCriterion("production_batch_id >", value, "productionBatchId");
             return (Criteria) this;
         }
 
-        public Criteria andProductionTimeScopeGreaterThanOrEqualTo(String value) {
-            addCriterion("production_time_scope >=", value, "productionTimeScope");
+        public Criteria andProductionBatchIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("production_batch_id >=", value, "productionBatchId");
             return (Criteria) this;
         }
 
-        public Criteria andProductionTimeScopeLessThan(String value) {
-            addCriterion("production_time_scope <", value, "productionTimeScope");
+        public Criteria andProductionBatchIdLessThan(Integer value) {
+            addCriterion("production_batch_id <", value, "productionBatchId");
             return (Criteria) this;
         }
 
-        public Criteria andProductionTimeScopeLessThanOrEqualTo(String value) {
-            addCriterion("production_time_scope <=", value, "productionTimeScope");
+        public Criteria andProductionBatchIdLessThanOrEqualTo(Integer value) {
+            addCriterion("production_batch_id <=", value, "productionBatchId");
             return (Criteria) this;
         }
 
-        public Criteria andProductionTimeScopeLike(String value) {
-            addCriterion("production_time_scope like", value, "productionTimeScope");
+        public Criteria andProductionBatchIdIn(List<Integer> values) {
+            addCriterion("production_batch_id in", values, "productionBatchId");
             return (Criteria) this;
         }
 
-        public Criteria andProductionTimeScopeNotLike(String value) {
-            addCriterion("production_time_scope not like", value, "productionTimeScope");
+        public Criteria andProductionBatchIdNotIn(List<Integer> values) {
+            addCriterion("production_batch_id not in", values, "productionBatchId");
             return (Criteria) this;
         }
 
-        public Criteria andProductionTimeScopeIn(List<String> values) {
-            addCriterion("production_time_scope in", values, "productionTimeScope");
+        public Criteria andProductionBatchIdBetween(Integer value1, Integer value2) {
+            addCriterion("production_batch_id between", value1, value2, "productionBatchId");
             return (Criteria) this;
         }
 
-        public Criteria andProductionTimeScopeNotIn(List<String> values) {
-            addCriterion("production_time_scope not in", values, "productionTimeScope");
+        public Criteria andProductionBatchIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("production_batch_id not between", value1, value2, "productionBatchId");
             return (Criteria) this;
         }
 
-        public Criteria andProductionTimeScopeBetween(String value1, String value2) {
-            addCriterion("production_time_scope between", value1, value2, "productionTimeScope");
+        public Criteria andSidEndIsNull() {
+            addCriterion("sid_end is null");
             return (Criteria) this;
         }
 
-        public Criteria andProductionTimeScopeNotBetween(String value1, String value2) {
-            addCriterion("production_time_scope not between", value1, value2, "productionTimeScope");
+        public Criteria andSidEndIsNotNull() {
+            addCriterion("sid_end is not null");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdIsNull() {
-            addCriterion("merchant_id is null");
+        public Criteria andSidEndEqualTo(Long value) {
+            addCriterion("sid_end =", value, "sidEnd");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdIsNotNull() {
-            addCriterion("merchant_id is not null");
+        public Criteria andSidEndNotEqualTo(Long value) {
+            addCriterion("sid_end <>", value, "sidEnd");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdEqualTo(Integer value) {
-            addCriterion("merchant_id =", value, "merchantId");
+        public Criteria andSidEndGreaterThan(Long value) {
+            addCriterion("sid_end >", value, "sidEnd");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdNotEqualTo(Integer value) {
-            addCriterion("merchant_id <>", value, "merchantId");
+        public Criteria andSidEndGreaterThanOrEqualTo(Long value) {
+            addCriterion("sid_end >=", value, "sidEnd");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdGreaterThan(Integer value) {
-            addCriterion("merchant_id >", value, "merchantId");
+        public Criteria andSidEndLessThan(Long value) {
+            addCriterion("sid_end <", value, "sidEnd");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("merchant_id >=", value, "merchantId");
+        public Criteria andSidEndLessThanOrEqualTo(Long value) {
+            addCriterion("sid_end <=", value, "sidEnd");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdLessThan(Integer value) {
-            addCriterion("merchant_id <", value, "merchantId");
+        public Criteria andSidEndIn(List<Long> values) {
+            addCriterion("sid_end in", values, "sidEnd");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdLessThanOrEqualTo(Integer value) {
-            addCriterion("merchant_id <=", value, "merchantId");
+        public Criteria andSidEndNotIn(List<Long> values) {
+            addCriterion("sid_end not in", values, "sidEnd");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdIn(List<Integer> values) {
-            addCriterion("merchant_id in", values, "merchantId");
+        public Criteria andSidEndBetween(Long value1, Long value2) {
+            addCriterion("sid_end between", value1, value2, "sidEnd");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdNotIn(List<Integer> values) {
-            addCriterion("merchant_id not in", values, "merchantId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMerchantIdBetween(Integer value1, Integer value2) {
-            addCriterion("merchant_id between", value1, value2, "merchantId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMerchantIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("merchant_id not between", value1, value2, "merchantId");
+        public Criteria andSidEndNotBetween(Long value1, Long value2) {
+            addCriterion("sid_end not between", value1, value2, "sidEnd");
             return (Criteria) this;
         }
 
