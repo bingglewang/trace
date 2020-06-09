@@ -5,6 +5,7 @@
     <id column="scene_batch_id" jdbcType="INTEGER" property="sceneBatchId" />
     <result column="scene_id" jdbcType="INTEGER" property="sceneId" />
     <result column="employe_id" jdbcType="INTEGER" property="employeId" />
+    <result column="scene_time_scope" jdbcType="VARCHAR" property="sceneTimeScope" />
     <result column="batch_id" jdbcType="INTEGER" property="batchId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
@@ -67,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    scene_batch_id, scene_id, employe_id, batch_id, create_time
+    scene_batch_id, scene_id, employe_id, scene_time_scope, batch_id, create_time
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.ZslSceneBatchExample" resultMap="BaseResultMap">
     select
@@ -103,10 +104,10 @@
     <selectKey keyProperty="sceneBatchId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into zsl_scene_batch (scene_id, employe_id, batch_id, 
-      create_time)
-    values (#{sceneId,jdbcType=INTEGER}, #{employeId,jdbcType=INTEGER}, #{batchId,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP})
+    insert into zsl_scene_batch (scene_id, employe_id, scene_time_scope, 
+      batch_id, create_time)
+    values (#{sceneId,jdbcType=INTEGER}, #{employeId,jdbcType=INTEGER}, #{sceneTimeScope,jdbcType=VARCHAR}, 
+      #{batchId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.ZslSceneBatch">
     <selectKey keyProperty="sceneBatchId" order="AFTER" resultType="java.lang.Integer">
@@ -119,6 +120,9 @@
       </if>
       <if test="employeId != null">
         employe_id,
+      </if>
+      <if test="sceneTimeScope != null">
+        scene_time_scope,
       </if>
       <if test="batchId != null">
         batch_id,
@@ -133,6 +137,9 @@
       </if>
       <if test="employeId != null">
         #{employeId,jdbcType=INTEGER},
+      </if>
+      <if test="sceneTimeScope != null">
+        #{sceneTimeScope,jdbcType=VARCHAR},
       </if>
       <if test="batchId != null">
         #{batchId,jdbcType=INTEGER},
@@ -160,6 +167,9 @@
       <if test="record.employeId != null">
         employe_id = #{record.employeId,jdbcType=INTEGER},
       </if>
+      <if test="record.sceneTimeScope != null">
+        scene_time_scope = #{record.sceneTimeScope,jdbcType=VARCHAR},
+      </if>
       <if test="record.batchId != null">
         batch_id = #{record.batchId,jdbcType=INTEGER},
       </if>
@@ -176,6 +186,7 @@
     set scene_batch_id = #{record.sceneBatchId,jdbcType=INTEGER},
       scene_id = #{record.sceneId,jdbcType=INTEGER},
       employe_id = #{record.employeId,jdbcType=INTEGER},
+      scene_time_scope = #{record.sceneTimeScope,jdbcType=VARCHAR},
       batch_id = #{record.batchId,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -191,6 +202,9 @@
       <if test="employeId != null">
         employe_id = #{employeId,jdbcType=INTEGER},
       </if>
+      <if test="sceneTimeScope != null">
+        scene_time_scope = #{sceneTimeScope,jdbcType=VARCHAR},
+      </if>
       <if test="batchId != null">
         batch_id = #{batchId,jdbcType=INTEGER},
       </if>
@@ -204,6 +218,7 @@
     update zsl_scene_batch
     set scene_id = #{sceneId,jdbcType=INTEGER},
       employe_id = #{employeId,jdbcType=INTEGER},
+      scene_time_scope = #{sceneTimeScope,jdbcType=VARCHAR},
       batch_id = #{batchId,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where scene_batch_id = #{sceneBatchId,jdbcType=INTEGER}

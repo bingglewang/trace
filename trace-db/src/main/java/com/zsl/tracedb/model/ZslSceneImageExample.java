@@ -225,66 +225,6 @@ public class ZslSceneImageExample {
             return (Criteria) this;
         }
 
-        public Criteria andCurrentStatusIsNull() {
-            addCriterion("current_status is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentStatusIsNotNull() {
-            addCriterion("current_status is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentStatusEqualTo(Integer value) {
-            addCriterion("current_status =", value, "currentStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentStatusNotEqualTo(Integer value) {
-            addCriterion("current_status <>", value, "currentStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentStatusGreaterThan(Integer value) {
-            addCriterion("current_status >", value, "currentStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentStatusGreaterThanOrEqualTo(Integer value) {
-            addCriterion("current_status >=", value, "currentStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentStatusLessThan(Integer value) {
-            addCriterion("current_status <", value, "currentStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentStatusLessThanOrEqualTo(Integer value) {
-            addCriterion("current_status <=", value, "currentStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentStatusIn(List<Integer> values) {
-            addCriterion("current_status in", values, "currentStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentStatusNotIn(List<Integer> values) {
-            addCriterion("current_status not in", values, "currentStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentStatusBetween(Integer value1, Integer value2) {
-            addCriterion("current_status between", value1, value2, "currentStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentStatusNotBetween(Integer value1, Integer value2) {
-            addCriterion("current_status not between", value1, value2, "currentStatus");
-            return (Criteria) this;
-        }
-
         public Criteria andImageUrlIsNull() {
             addCriterion("image_url is null");
             return (Criteria) this;

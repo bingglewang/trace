@@ -7,8 +7,8 @@ import java.util.Date;
 public class ZslBatchMaterialOut implements Serializable {
     private Integer batchMaterialOutId;
 
-    @ApiModelProperty(value = "生产批次id")
-    private Integer productionBatchId;
+    @ApiModelProperty(value = "生产批次和生产场景中间表id")
+    private Integer sceneBatchId;
 
     @ApiModelProperty(value = "出库单id")
     private Integer materialOutId;
@@ -26,12 +26,12 @@ public class ZslBatchMaterialOut implements Serializable {
         this.batchMaterialOutId = batchMaterialOutId;
     }
 
-    public Integer getProductionBatchId() {
-        return productionBatchId;
+    public Integer getSceneBatchId() {
+        return sceneBatchId;
     }
 
-    public void setProductionBatchId(Integer productionBatchId) {
-        this.productionBatchId = productionBatchId;
+    public void setSceneBatchId(Integer sceneBatchId) {
+        this.sceneBatchId = sceneBatchId;
     }
 
     public Integer getMaterialOutId() {
@@ -57,7 +57,7 @@ public class ZslBatchMaterialOut implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", batchMaterialOutId=").append(batchMaterialOutId);
-        sb.append(", productionBatchId=").append(productionBatchId);
+        sb.append(", sceneBatchId=").append(sceneBatchId);
         sb.append(", materialOutId=").append(materialOutId);
         sb.append(", createTime=").append(createTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);

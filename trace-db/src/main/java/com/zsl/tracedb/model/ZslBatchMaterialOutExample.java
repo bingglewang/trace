@@ -165,63 +165,63 @@ public class ZslBatchMaterialOutExample {
             return (Criteria) this;
         }
 
-        public Criteria andProductionBatchIdIsNull() {
-            addCriterion("production_batch_id is null");
+        public Criteria andSceneBatchIdIsNull() {
+            addCriterion("scene_batch_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andProductionBatchIdIsNotNull() {
-            addCriterion("production_batch_id is not null");
+        public Criteria andSceneBatchIdIsNotNull() {
+            addCriterion("scene_batch_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andProductionBatchIdEqualTo(Integer value) {
-            addCriterion("production_batch_id =", value, "productionBatchId");
+        public Criteria andSceneBatchIdEqualTo(Integer value) {
+            addCriterion("scene_batch_id =", value, "sceneBatchId");
             return (Criteria) this;
         }
 
-        public Criteria andProductionBatchIdNotEqualTo(Integer value) {
-            addCriterion("production_batch_id <>", value, "productionBatchId");
+        public Criteria andSceneBatchIdNotEqualTo(Integer value) {
+            addCriterion("scene_batch_id <>", value, "sceneBatchId");
             return (Criteria) this;
         }
 
-        public Criteria andProductionBatchIdGreaterThan(Integer value) {
-            addCriterion("production_batch_id >", value, "productionBatchId");
+        public Criteria andSceneBatchIdGreaterThan(Integer value) {
+            addCriterion("scene_batch_id >", value, "sceneBatchId");
             return (Criteria) this;
         }
 
-        public Criteria andProductionBatchIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("production_batch_id >=", value, "productionBatchId");
+        public Criteria andSceneBatchIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("scene_batch_id >=", value, "sceneBatchId");
             return (Criteria) this;
         }
 
-        public Criteria andProductionBatchIdLessThan(Integer value) {
-            addCriterion("production_batch_id <", value, "productionBatchId");
+        public Criteria andSceneBatchIdLessThan(Integer value) {
+            addCriterion("scene_batch_id <", value, "sceneBatchId");
             return (Criteria) this;
         }
 
-        public Criteria andProductionBatchIdLessThanOrEqualTo(Integer value) {
-            addCriterion("production_batch_id <=", value, "productionBatchId");
+        public Criteria andSceneBatchIdLessThanOrEqualTo(Integer value) {
+            addCriterion("scene_batch_id <=", value, "sceneBatchId");
             return (Criteria) this;
         }
 
-        public Criteria andProductionBatchIdIn(List<Integer> values) {
-            addCriterion("production_batch_id in", values, "productionBatchId");
+        public Criteria andSceneBatchIdIn(List<Integer> values) {
+            addCriterion("scene_batch_id in", values, "sceneBatchId");
             return (Criteria) this;
         }
 
-        public Criteria andProductionBatchIdNotIn(List<Integer> values) {
-            addCriterion("production_batch_id not in", values, "productionBatchId");
+        public Criteria andSceneBatchIdNotIn(List<Integer> values) {
+            addCriterion("scene_batch_id not in", values, "sceneBatchId");
             return (Criteria) this;
         }
 
-        public Criteria andProductionBatchIdBetween(Integer value1, Integer value2) {
-            addCriterion("production_batch_id between", value1, value2, "productionBatchId");
+        public Criteria andSceneBatchIdBetween(Integer value1, Integer value2) {
+            addCriterion("scene_batch_id between", value1, value2, "sceneBatchId");
             return (Criteria) this;
         }
 
-        public Criteria andProductionBatchIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("production_batch_id not between", value1, value2, "productionBatchId");
+        public Criteria andSceneBatchIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("scene_batch_id not between", value1, value2, "sceneBatchId");
             return (Criteria) this;
         }
 

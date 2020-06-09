@@ -13,7 +13,7 @@ public class ZslProductionBatch implements Serializable {
     @ApiModelProperty(value = "商品id")
     private Integer goodsId;
 
-    @ApiModelProperty(value = "生产时间范围")
+    @ApiModelProperty(value = "批次生产时间范围")
     private String productionTimeScope;
 
     @ApiModelProperty(value = "商家id")

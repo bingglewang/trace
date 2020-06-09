@@ -10,9 +10,6 @@ public class ZslSceneImage implements Serializable {
     @ApiModelProperty(value = "追溯场景主键id")
     private Integer sceneId;
 
-    @ApiModelProperty(value = "当前状态（0禁用、1现启用、2历史启用）")
-    private Integer currentStatus;
-
     @ApiModelProperty(value = "图片链接")
     private String imageUrl;
 
@@ -38,14 +35,6 @@ public class ZslSceneImage implements Serializable {
 
     public void setSceneId(Integer sceneId) {
         this.sceneId = sceneId;
-    }
-
-    public Integer getCurrentStatus() {
-        return currentStatus;
-    }
-
-    public void setCurrentStatus(Integer currentStatus) {
-        this.currentStatus = currentStatus;
     }
 
     public String getImageUrl() {
@@ -80,7 +69,6 @@ public class ZslSceneImage implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", sceneImageId=").append(sceneImageId);
         sb.append(", sceneId=").append(sceneId);
-        sb.append(", currentStatus=").append(currentStatus);
         sb.append(", imageUrl=").append(imageUrl);
         sb.append(", showSort=").append(showSort);
         sb.append(", createTime=").append(createTime);

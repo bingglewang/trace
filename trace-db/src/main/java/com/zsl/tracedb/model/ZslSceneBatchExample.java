@@ -285,6 +285,76 @@ public class ZslSceneBatchExample {
             return (Criteria) this;
         }
 
+        public Criteria andSceneTimeScopeIsNull() {
+            addCriterion("scene_time_scope is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSceneTimeScopeIsNotNull() {
+            addCriterion("scene_time_scope is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSceneTimeScopeEqualTo(String value) {
+            addCriterion("scene_time_scope =", value, "sceneTimeScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andSceneTimeScopeNotEqualTo(String value) {
+            addCriterion("scene_time_scope <>", value, "sceneTimeScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andSceneTimeScopeGreaterThan(String value) {
+            addCriterion("scene_time_scope >", value, "sceneTimeScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andSceneTimeScopeGreaterThanOrEqualTo(String value) {
+            addCriterion("scene_time_scope >=", value, "sceneTimeScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andSceneTimeScopeLessThan(String value) {
+            addCriterion("scene_time_scope <", value, "sceneTimeScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andSceneTimeScopeLessThanOrEqualTo(String value) {
+            addCriterion("scene_time_scope <=", value, "sceneTimeScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andSceneTimeScopeLike(String value) {
+            addCriterion("scene_time_scope like", value, "sceneTimeScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andSceneTimeScopeNotLike(String value) {
+            addCriterion("scene_time_scope not like", value, "sceneTimeScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andSceneTimeScopeIn(List<String> values) {
+            addCriterion("scene_time_scope in", values, "sceneTimeScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andSceneTimeScopeNotIn(List<String> values) {
+            addCriterion("scene_time_scope not in", values, "sceneTimeScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andSceneTimeScopeBetween(String value1, String value2) {
+            addCriterion("scene_time_scope between", value1, value2, "sceneTimeScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andSceneTimeScopeNotBetween(String value1, String value2) {
+            addCriterion("scene_time_scope not between", value1, value2, "sceneTimeScope");
+            return (Criteria) this;
+        }
+
         public Criteria andBatchIdIsNull() {
             addCriterion("batch_id is null");
             return (Criteria) this;

@@ -13,6 +13,9 @@ public class ZslSceneBatch implements Serializable {
     @ApiModelProperty(value = "员工id")
     private Integer employeId;
 
+    @ApiModelProperty(value = "当前生产批次的生产场景下生产时间范围")
+    private String sceneTimeScope;
+
     @ApiModelProperty(value = "批次id")
     private Integer batchId;
 
@@ -45,6 +48,14 @@ public class ZslSceneBatch implements Serializable {
         this.employeId = employeId;
     }
 
+    public String getSceneTimeScope() {
+        return sceneTimeScope;
+    }
+
+    public void setSceneTimeScope(String sceneTimeScope) {
+        this.sceneTimeScope = sceneTimeScope;
+    }
+
     public Integer getBatchId() {
         return batchId;
     }
@@ -70,6 +81,7 @@ public class ZslSceneBatch implements Serializable {
         sb.append(", sceneBatchId=").append(sceneBatchId);
         sb.append(", sceneId=").append(sceneId);
         sb.append(", employeId=").append(employeId);
+        sb.append(", sceneTimeScope=").append(sceneTimeScope);
         sb.append(", batchId=").append(batchId);
         sb.append(", createTime=").append(createTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
