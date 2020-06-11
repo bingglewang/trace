@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsl.tracedb.mapper.MaterialWarehouseMapper">
+  <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.MaterialWarehouse">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="warehouse_name" jdbcType="VARCHAR" property="warehouseName" />
+    <result column="warehouse_number" jdbcType="VARCHAR" property="warehouseNumber" />
+    <result column="warehouse_order" jdbcType="VARCHAR" property="warehouseOrder" />
+    <result column="staff_name" jdbcType="VARCHAR" property="staffName" />
+    <result column="material_id" jdbcType="INTEGER" property="materialId" />
+    <result column="stock" jdbcType="DECIMAL" property="stock" />
+    <result column="residue_stock" jdbcType="DECIMAL" property="residueStock" />
+    <result column="units" jdbcType="VARCHAR" property="units" />
+    <result column="merchant_id" jdbcType="INTEGER" property="merchantId" />
+    <result column="allot_id" jdbcType="INTEGER" property="allotId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, warehouse_name, warehouse_number, warehouse_order, staff_name, material_id, stock, 
+    residue_stock, units, merchant_id, allot_id, create_time
+  </sql>
+  <select id="selectByExample" parameterType="com.zsl.tracedb.model.MaterialWarehouseExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from material_warehouse
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from material_warehouse
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from material_warehouse
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zsl.tracedb.model.MaterialWarehouseExample">
+    delete from material_warehouse
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zsl.tracedb.model.MaterialWarehouse">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into material_warehouse (warehouse_name, warehouse_number, warehouse_order, 
+      staff_name, material_id, stock, 
+      residue_stock, units, merchant_id, 
+      allot_id, create_time)
+    values (#{warehouseName,jdbcType=VARCHAR}, #{warehouseNumber,jdbcType=VARCHAR}, #{warehouseOrder,jdbcType=VARCHAR}, 
+      #{staffName,jdbcType=VARCHAR}, #{materialId,jdbcType=INTEGER}, #{stock,jdbcType=DECIMAL}, 
+      #{residueStock,jdbcType=DECIMAL}, #{units,jdbcType=VARCHAR}, #{merchantId,jdbcType=INTEGER}, 
+      #{allotId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zsl.tracedb.model.MaterialWarehouse">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into material_warehouse
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="warehouseName != null">
+        warehouse_name,
+      </if>
+      <if test="warehouseNumber != null">
+        warehouse_number,
+      </if>
+      <if test="warehouseOrder != null">
+        warehouse_order,
+      </if>
+      <if test="staffName != null">
+        staff_name,
+      </if>
+      <if test="materialId != null">
+        material_id,
+      </if>
+      <if test="stock != null">
+        stock,
+      </if>
+      <if test="residueStock != null">
+        residue_stock,
+      </if>
+      <if test="units != null">
+        units,
+      </if>
+      <if test="merchantId != null">
+        merchant_id,
+      </if>
+      <if test="allotId != null">
+        allot_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="warehouseName != null">
+        #{warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseNumber != null">
+        #{warehouseNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseOrder != null">
+        #{warehouseOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="staffName != null">
+        #{staffName,jdbcType=VARCHAR},
+      </if>
+      <if test="materialId != null">
+        #{materialId,jdbcType=INTEGER},
+      </if>
+      <if test="stock != null">
+        #{stock,jdbcType=DECIMAL},
+      </if>
+      <if test="residueStock != null">
+        #{residueStock,jdbcType=DECIMAL},
+      </if>
+      <if test="units != null">
+        #{units,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null">
+        #{merchantId,jdbcType=INTEGER},
+      </if>
+      <if test="allotId != null">
+        #{allotId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zsl.tracedb.model.MaterialWarehouseExample" resultType="java.lang.Integer">
+    select count(*) from material_warehouse
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update material_warehouse
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.warehouseName != null">
+        warehouse_name = #{record.warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.warehouseNumber != null">
+        warehouse_number = #{record.warehouseNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.warehouseOrder != null">
+        warehouse_order = #{record.warehouseOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="record.staffName != null">
+        staff_name = #{record.staffName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialId != null">
+        material_id = #{record.materialId,jdbcType=INTEGER},
+      </if>
+      <if test="record.stock != null">
+        stock = #{record.stock,jdbcType=DECIMAL},
+      </if>
+      <if test="record.residueStock != null">
+        residue_stock = #{record.residueStock,jdbcType=DECIMAL},
+      </if>
+      <if test="record.units != null">
+        units = #{record.units,jdbcType=VARCHAR},
+      </if>
+      <if test="record.merchantId != null">
+        merchant_id = #{record.merchantId,jdbcType=INTEGER},
+      </if>
+      <if test="record.allotId != null">
+        allot_id = #{record.allotId,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update material_warehouse
+    set id = #{record.id,jdbcType=INTEGER},
+      warehouse_name = #{record.warehouseName,jdbcType=VARCHAR},
+      warehouse_number = #{record.warehouseNumber,jdbcType=VARCHAR},
+      warehouse_order = #{record.warehouseOrder,jdbcType=VARCHAR},
+      staff_name = #{record.staffName,jdbcType=VARCHAR},
+      material_id = #{record.materialId,jdbcType=INTEGER},
+      stock = #{record.stock,jdbcType=DECIMAL},
+      residue_stock = #{record.residueStock,jdbcType=DECIMAL},
+      units = #{record.units,jdbcType=VARCHAR},
+      merchant_id = #{record.merchantId,jdbcType=INTEGER},
+      allot_id = #{record.allotId,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.MaterialWarehouse">
+    update material_warehouse
+    <set>
+      <if test="warehouseName != null">
+        warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseNumber != null">
+        warehouse_number = #{warehouseNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseOrder != null">
+        warehouse_order = #{warehouseOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="staffName != null">
+        staff_name = #{staffName,jdbcType=VARCHAR},
+      </if>
+      <if test="materialId != null">
+        material_id = #{materialId,jdbcType=INTEGER},
+      </if>
+      <if test="stock != null">
+        stock = #{stock,jdbcType=DECIMAL},
+      </if>
+      <if test="residueStock != null">
+        residue_stock = #{residueStock,jdbcType=DECIMAL},
+      </if>
+      <if test="units != null">
+        units = #{units,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null">
+        merchant_id = #{merchantId,jdbcType=INTEGER},
+      </if>
+      <if test="allotId != null">
+        allot_id = #{allotId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.MaterialWarehouse">
+    update material_warehouse
+    set warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+      warehouse_number = #{warehouseNumber,jdbcType=VARCHAR},
+      warehouse_order = #{warehouseOrder,jdbcType=VARCHAR},
+      staff_name = #{staffName,jdbcType=VARCHAR},
+      material_id = #{materialId,jdbcType=INTEGER},
+      stock = #{stock,jdbcType=DECIMAL},
+      residue_stock = #{residueStock,jdbcType=DECIMAL},
+      units = #{units,jdbcType=VARCHAR},
+      merchant_id = #{merchantId,jdbcType=INTEGER},
+      allot_id = #{allotId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

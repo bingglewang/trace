@@ -183,5 +183,15 @@
         <table tableName="zsl_scene_image">
             <generatedKey column="scene_image_id" sqlStatement="MySql" identity="true"/>
         </table>
+
+        <table tableName="material">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="material_warehouse">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="material_warehouse_out">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
     </context>
 </generatorConfiguration>

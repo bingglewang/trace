@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsl.tracedb.mapper.MaterialWarehouseOutMapper">
+  <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.MaterialWarehouseOut">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="batch_number" jdbcType="VARCHAR" property="batchNumber" />
+    <result column="warehouse_out_order" jdbcType="VARCHAR" property="warehouseOutOrder" />
+    <result column="stock_number" jdbcType="DECIMAL" property="stockNumber" />
+    <result column="units" jdbcType="VARCHAR" property="units" />
+    <result column="merchant_id" jdbcType="INTEGER" property="merchantId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, batch_number, warehouse_out_order, stock_number, units, merchant_id, create_time
+  </sql>
+  <select id="selectByExample" parameterType="com.zsl.tracedb.model.MaterialWarehouseOutExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from material_warehouse_out
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from material_warehouse_out
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from material_warehouse_out
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zsl.tracedb.model.MaterialWarehouseOutExample">
+    delete from material_warehouse_out
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zsl.tracedb.model.MaterialWarehouseOut">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into material_warehouse_out (batch_number, warehouse_out_order, stock_number, 
+      units, merchant_id, create_time
+      )
+    values (#{batchNumber,jdbcType=VARCHAR}, #{warehouseOutOrder,jdbcType=VARCHAR}, #{stockNumber,jdbcType=DECIMAL}, 
+      #{units,jdbcType=VARCHAR}, #{merchantId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zsl.tracedb.model.MaterialWarehouseOut">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into material_warehouse_out
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="batchNumber != null">
+        batch_number,
+      </if>
+      <if test="warehouseOutOrder != null">
+        warehouse_out_order,
+      </if>
+      <if test="stockNumber != null">
+        stock_number,
+      </if>
+      <if test="units != null">
+        units,
+      </if>
+      <if test="merchantId != null">
+        merchant_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="batchNumber != null">
+        #{batchNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseOutOrder != null">
+        #{warehouseOutOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="stockNumber != null">
+        #{stockNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="units != null">
+        #{units,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null">
+        #{merchantId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zsl.tracedb.model.MaterialWarehouseOutExample" resultType="java.lang.Integer">
+    select count(*) from material_warehouse_out
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update material_warehouse_out
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.batchNumber != null">
+        batch_number = #{record.batchNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.warehouseOutOrder != null">
+        warehouse_out_order = #{record.warehouseOutOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stockNumber != null">
+        stock_number = #{record.stockNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="record.units != null">
+        units = #{record.units,jdbcType=VARCHAR},
+      </if>
+      <if test="record.merchantId != null">
+        merchant_id = #{record.merchantId,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update material_warehouse_out
+    set id = #{record.id,jdbcType=INTEGER},
+      batch_number = #{record.batchNumber,jdbcType=VARCHAR},
+      warehouse_out_order = #{record.warehouseOutOrder,jdbcType=VARCHAR},
+      stock_number = #{record.stockNumber,jdbcType=DECIMAL},
+      units = #{record.units,jdbcType=VARCHAR},
+      merchant_id = #{record.merchantId,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.MaterialWarehouseOut">
+    update material_warehouse_out
+    <set>
+      <if test="batchNumber != null">
+        batch_number = #{batchNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseOutOrder != null">
+        warehouse_out_order = #{warehouseOutOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="stockNumber != null">
+        stock_number = #{stockNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="units != null">
+        units = #{units,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null">
+        merchant_id = #{merchantId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.MaterialWarehouseOut">
+    update material_warehouse_out
+    set batch_number = #{batchNumber,jdbcType=VARCHAR},
+      warehouse_out_order = #{warehouseOutOrder,jdbcType=VARCHAR},
+      stock_number = #{stockNumber,jdbcType=DECIMAL},
+      units = #{units,jdbcType=VARCHAR},
+      merchant_id = #{merchantId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
