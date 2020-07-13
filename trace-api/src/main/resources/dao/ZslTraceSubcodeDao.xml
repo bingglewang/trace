@@ -247,6 +247,7 @@ AND sub.is_leaf = 'Y';
                     #{traceIndex} BETWEEN r.trace_from_number
                     AND r.trace_to_number
                 )
+                 AND r.trace_good_id = #{goodsId}
             )
             AND (
                 SELECT
@@ -259,6 +260,7 @@ AND sub.is_leaf = 'Y';
                     #{traceIndex} BETWEEN r1.trace_from_number
                     AND r1.trace_to_number
                 )
+                 AND r1.trace_good_id = #{goodsId}
             )
         )
     </select>
@@ -284,6 +286,7 @@ AND sub.is_leaf = 'Y';
                     #{traceIndex} BETWEEN r.trace_from_number
                     AND r.trace_to_number
                 )
+                AND r.trace_good_id = #{goodsId}
             )
             AND (
                 SELECT
@@ -296,6 +299,7 @@ AND sub.is_leaf = 'Y';
                     #{traceIndex} BETWEEN r1.trace_from_number
                     AND r1.trace_to_number
                 )
+                AND r1.trace_good_id = #{goodsId}
             )
         )
     </select>
