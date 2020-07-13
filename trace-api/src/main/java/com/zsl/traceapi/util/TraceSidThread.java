@@ -1,10 +1,7 @@
 package com.zsl.traceapi.util;
 
-import com.zsl.traceapi.config.kafka.producer.TraceCodeProducerKafka;
-import com.zsl.traceapi.dao.ZslTraceSidDao;
 import com.zsl.traceapi.dao.ZslTraceSubcodeDao;
 import com.zsl.traceapi.dto.TracePreSidInsertParam;
-import com.zsl.tracedb.mapper.ZslTraceMapper;
 import com.zsl.tracedb.mapper.ZslTraceSidMapper;
 import com.zsl.tracedb.model.ZslTraceSid;
 import org.slf4j.Logger;

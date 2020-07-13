@@ -222,7 +222,7 @@ public class TraceServiceImpl implements TraceService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int pass(Integer id, Long sid) {
+    public int pass(Integer id, List<TracePassDto> paramList) {
         ZslTrace zslTraceInfo = zslTraceMapper.selectByPrimaryKey(id);
         if (zslTraceInfo != null) {
             if (zslTraceInfo.getTraceHandleStatus() == 2) {
@@ -267,11 +267,10 @@ public class TraceServiceImpl implements TraceService {
                         return -8;  //追溯码生成错误
                     }
                 } else {
-                    CommonResult result = getCodePartBySid(sid, id);
-                    if (result.getCode() - 200 != 0) {
+                    List<ZslTracePapper> list = getCodePartBySidPass(id, paramList);
+                    if (list == null) {
                         return -11;
                     } else {
-                        List<ZslTracePapper> list = (List<ZslTracePapper>) result.getData();
                         for (int i = 0; i < list.size(); i++) {
                             //插入纸质关联码段
                             list.get(i).setTraceCodeNumber(passParam.getTraceCodeNumber());
@@ -2193,8 +2192,9 @@ public class TraceServiceImpl implements TraceService {
         return 1;//正常
     }
 
+
     @Override
-    public CommonResult getCodePartBySid(Long sid, Integer traceId) {
+    public CommonResult getCodePartBySid(Integer traceId,Long startSid,Long endSid) {
         ZslTrace zslTrace = zslTraceMapper.selectByPrimaryKey(traceId);
         if (zslTrace == null) {
             return CommonResult.failed("追溯信息不存在");
@@ -2202,65 +2202,75 @@ public class TraceServiceImpl implements TraceService {
         if (zslTrace.getTraceApplyType() - 2 == 0) {
             return CommonResult.failed("追溯类型不对");
         }
-        //判断空闲码段是否足够
-        Long countNum1 = 0L;
-        int rangeCount = 0;
         List<ZslTraceSid> zslTraceSids = zslTraceSidDao.listByCount();
-        if (!CollectionUtils.isEmpty(zslTraceSids)) {
-            for (int i = 0; i < zslTraceSids.size(); i++) {
-                Long startIndex = 0L;
-                if (zslTraceSids.get(i).getSidStartIndex() - sid <= 0 && zslTraceSids.get(i).getSidEndIndex() - sid >= 0) {
-                    rangeCount++;
-                }
-                if (zslTraceSids.get(i).getSidStartIndex() - sid < 0) {
-                    startIndex = sid;
-                } else {
-                    startIndex = zslTraceSids.get(i).getSidStartIndex();
-                }
-                Long endIndex = zslTraceSids.get(i).getSidEndIndex();
-                for (Long j = startIndex; j <= endIndex; j++) {
-                    if (zslTrace.getTraceApplyCount() - countNum1 == 0) {
-                        break;
-                    }
-                    countNum1++;
+        if(!CollectionUtils.isEmpty(zslTraceSids)){
+            for(ZslTraceSid itemStart : zslTraceSids){
+                if(!(startSid - itemStart.getSidStartIndex() >= 0 && startSid - itemStart.getSidEndIndex() <= 0)){
+                    return CommonResult.failed("开始sid不在预留范围内");
                 }
             }
+            for(ZslTraceSid itemEnd : zslTraceSids){
+                if(!(endSid - itemEnd.getSidStartIndex() >= 0 && endSid - itemEnd.getSidEndIndex() <= 0)){
+                    return CommonResult.failed("结束sid不在预留范围内");
+                }
+            }
+            List<TracePassDto> list = new ArrayList<>();
+            TracePassDto tracePassDto = new TracePassDto();
+            tracePassDto.setStartSid(startSid);
+            tracePassDto.setEndSid(endSid);
+            list.add(tracePassDto);
+            List<ZslTracePapper> papperList = getCodePartBySidPass(traceId,list);
+            if(papperList != null){
+                Long sum = papperList.stream()
+                        .mapToLong(item -> item.getTraceCount())
+                        .sum();
+                return CommonResult.success(sum);
+            }else{
+                return CommonResult.failed("获取错误");
+            }
+        }else{
+            return CommonResult.failed("预留码段不足");
         }
-        if (rangeCount < 1) {
-            return CommonResult.failed("编码不在范围");
+    }
+
+
+    public  List<ZslTracePapper> getCodePartBySidPass(Integer traceId,List<TracePassDto> list) {
+        ZslTrace zslTrace = zslTraceMapper.selectByPrimaryKey(traceId);
+        if (zslTrace == null) {
+            return null;
         }
-        if (countNum1 - zslTrace.getTraceApplyCount() < 0) {
-            return CommonResult.failed("空闲码段不足");
+        if (zslTrace.getTraceApplyType() - 2 == 0) {
+            return null;
         }
 
-        //获取覆盖码段
-        List<ZslTraceSid> blankList = zslTraceSidDao.listBlankCodePart();
-        List<ZslTracePapper> codePartParamList = new ArrayList<>();
-        Long countNum = 0L;
-        for (int i = 0; i < blankList.size(); i++) {
-            ZslTracePapper codePartParam = new ZslTracePapper();
-            Long startIndex = 0L;
-            if (zslTraceSids.get(i).getSidStartIndex() - sid < 0) {
-                startIndex = sid;
-            } else {
-                startIndex = blankList.get(i).getSidStartIndex();
-            }
-            Long endIndex = blankList.get(i).getSidEndIndex();
-            codePartParam.setTraceNumStart(startIndex);
-            codePartParam.setTraceNumEnd(endIndex);
-            for (Long j = startIndex; j <= endIndex; j++) {
-                if (zslTrace.getTraceApplyCount() - countNum == 0) {
-                    codePartParam.setTraceNumEnd(j - 1);
-                    break;
-                }
-                countNum++;
-            }
-            codePartParam.setTraceCount(codePartParam.getTraceNumEnd() - codePartParam.getTraceNumStart() + 1);
-            if (codePartParam.getTraceCount() > 0) {
-                codePartParamList.add(codePartParam);
-            }
+        //判断空闲码段是否足够
+        List<ZslTraceSid> zslTraceSids = zslTraceSidDao.listByCount();
+        if (!CollectionUtils.isEmpty(zslTraceSids)) {
+            // 求集合并集
+            List<long[]> answerA = zslTraceSids.stream()
+                    .map(item -> new long[]{item.getSidStartIndex(), item.getSidEndIndex()})
+                    .collect(Collectors.toList());
+
+            long[][] A = answerA.toArray(new long[answerA.size()][]);
+            List<long[]>  answerB = list.stream()
+                    .map(item -> new long[]{item.getStartSid(),item.getEndSid()})
+                    .collect(Collectors.toList());
+            long[][] B = answerB.toArray(new long[answerB.size()][]);
+
+            long[][] result = Solution.intervalIntersection(A,B);
+            List<ZslTracePapper> zslTracePapperList = Arrays.stream(result)
+                    .map(item -> {
+                        ZslTracePapper zslTracePapper = new ZslTracePapper();
+                        zslTracePapper.setTraceNumStart(item[0]);
+                        zslTracePapper.setTraceNumEnd(item[1]);
+                        zslTracePapper.setTraceCount(item[1] - item[0] + 1);
+                        return zslTracePapper;
+                    }).collect(Collectors.toList());
+            return zslTracePapperList;
+
+        }else{
+            return null;
         }
-        return CommonResult.success(codePartParamList);
     }
 
     @Override

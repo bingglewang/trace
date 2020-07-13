@@ -53,7 +53,7 @@ public interface TraceService {
      * @param id
      * @return
      */
-    int pass(Integer id,Long sid);
+    int pass(Integer id, List<TracePassDto> paramList);
 
     /**
      * 撤回申请
@@ -268,11 +268,10 @@ public interface TraceService {
 
     /**
      * 根据sid获取覆盖码段
-     * @param sid
      * @param traceId
      * @return
      */
-    CommonResult getCodePartBySid(Long sid,Integer traceId);
+    CommonResult getCodePartBySid(Integer traceId,Long startSid,Long endSid);
 
     /**
      * 根据sid和追溯id获取覆盖码段

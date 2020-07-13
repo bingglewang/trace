@@ -1,13 +1,9 @@
 package com.zsl.traceapi.util;
 
-import com.zsl.traceapi.config.kafka.producer.TraceCodeImageProducerKafka;
-import com.zsl.traceapi.config.kafka.producer.TraceCodeProducerKafka;
-import com.zsl.traceapi.dao.ZslTraceSidDao;
 import com.zsl.traceapi.dao.ZslTraceSubcodeDao;
 import com.zsl.traceapi.dto.TraceSubcodeInsertParam;
 import com.zsl.tracedb.mapper.ZslCurrentEIndexMapper;
 import com.zsl.tracedb.mapper.ZslTraceMapper;
-import com.zsl.tracedb.mapper.ZslTraceSidMapper;
 import com.zsl.tracedb.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,8 +27,6 @@ public class MyThread extends Thread {
 
     private ZslTraceSubcodeDao zslTraceSubcodeDao = (ZslTraceSubcodeDao) SpringContextUtil.getBean(ZslTraceSubcodeDao.class);
 
-    private TraceCodeProducerKafka traceCodeProducerKafka = (TraceCodeProducerKafka) SpringContextUtil.getBean(TraceCodeProducerKafka.class);
-
     private ZslCurrentEIndexMapper zslCurrentEIndexMapper = (ZslCurrentEIndexMapper) SpringContextUtil.getBean(ZslCurrentEIndexMapper.class);
 
     private String traceCodeNumber;
@@ -45,13 +39,6 @@ public class MyThread extends Thread {
     public void run() {
         try {
             logger.info("要生成的批次号:{}", traceCodeNumber);
-            //判断是否已经有，有则删掉之前的
-            ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectByCodeNumber(traceCodeNumber);
-            if (zslTraceSubcode != null) {
-                int j = zslTraceSubcodeDao.deleteByCodeNumber(traceCodeNumber);
-                logger.info(zslTraceSubcode + "的删除结果:{}", j);
-            }
-
 
             //拿到追溯信息
             ZslTraceExample zslTraceExample = new ZslTraceExample();
@@ -100,11 +87,8 @@ public class MyThread extends Thread {
             }
             logger.info("已经完成的批次号:{}", traceCodeNumber);
         } catch (Exception e) {
+            e.printStackTrace();
             logger.info("处理失败:{}", traceCodeNumber);
-            try {
-                traceCodeProducerKafka.sendMessage(traceCodeNumber);
-            } catch (Exception e1) {
-            }
         }
     }
 }

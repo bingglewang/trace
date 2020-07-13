@@ -233,8 +233,8 @@ public class TraceController {
     @PutMapping("/pass/{id:[0-9]+}")
     @ApiOperation("通过申请")
     @ResponseBody
-    public CommonResult pass(@PathVariable Integer id, Long sid) {
-        int i = traceService.pass(id, sid);
+    public CommonResult pass(@PathVariable Integer id, @RequestBody List<TracePassDto> passDtoList) {
+        int i = traceService.pass(id, passDtoList);
         if (i > 0) {
             return CommonResult.success(null, "通过成功");
         } else if (i == -1) {
@@ -705,6 +705,7 @@ public class TraceController {
      * @return
      */
     @GetMapping("preCreatePaperCode")
+    @RequestLimit(count = 1, time = 180)
     public CommonResult preCreatePaperCode(Long preCreateCount) {
         return traceService.preCreatePaperCode(preCreateCount);
     }
@@ -729,7 +730,8 @@ public class TraceController {
             Long zslTradeSid = Long.parseLong(traceCodeNumber);
             new TraceSidThread(zslTradeSid).start();
         } catch (Exception e) {
-            new MyThread(traceCodeNumber).start();
+            //new MyThread(traceCodeNumber).start();
+            e.printStackTrace();
         }
         return CommonResult.success("");
     }
@@ -746,8 +748,8 @@ public class TraceController {
      * 根据sid和追溯id获取覆盖码段
      */
     @GetMapping("getCodePartBySid")
-    public CommonResult getCodePartBySid(Long sid, Integer id) {
-        return traceService.getCodePartBySid(sid, id);
+    public CommonResult getCodePartBySid(Integer id,Long startSid,Long endSid) {
+        return traceService.getCodePartBySid(id,startSid,endSid);
     }
 }
 
