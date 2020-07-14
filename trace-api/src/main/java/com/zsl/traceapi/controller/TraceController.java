@@ -259,7 +259,10 @@ public class TraceController {
             return CommonResult.failed("空闲码段不足");
         } else if (i == -11) {
             return CommonResult.failed("编码不在范围内");
-        } else {
+        } else if(i == -12){
+            return CommonResult.failed("审核数量需大于申请数量");
+        }
+        else {
             return CommonResult.failed("审核失败，服务器错误");
         }
     }

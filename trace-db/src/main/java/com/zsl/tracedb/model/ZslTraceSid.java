@@ -26,6 +26,9 @@ public class ZslTraceSid implements Serializable {
     @ApiModelProperty(value = "账号id")
     private Integer accountId;
 
+    @ApiModelProperty(value = "唯一标识码")
+    private String uniqueCode;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -84,6 +87,14 @@ public class ZslTraceSid implements Serializable {
         this.accountId = accountId;
     }
 
+    public String getUniqueCode() {
+        return uniqueCode;
+    }
+
+    public void setUniqueCode(String uniqueCode) {
+        this.uniqueCode = uniqueCode;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -97,6 +108,7 @@ public class ZslTraceSid implements Serializable {
         sb.append(", createTime=").append(createTime);
         sb.append(", enableCount=").append(enableCount);
         sb.append(", accountId=").append(accountId);
+        sb.append(", uniqueCode=").append(uniqueCode);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

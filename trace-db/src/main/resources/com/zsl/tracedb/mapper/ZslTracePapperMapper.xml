@@ -6,6 +6,7 @@
     <result column="trace_num_start" jdbcType="BIGINT" property="traceNumStart" />
     <result column="trace_num_end" jdbcType="BIGINT" property="traceNumEnd" />
     <result column="trace_code_number" jdbcType="VARCHAR" property="traceCodeNumber" />
+    <result column="is_enabled" jdbcType="INTEGER" property="isEnabled" />
     <result column="trace_count" jdbcType="BIGINT" property="traceCount" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -67,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, trace_num_start, trace_num_end, trace_code_number, trace_count
+    id, trace_num_start, trace_num_end, trace_code_number, is_enabled, trace_count
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.ZslTracePapperExample" resultMap="BaseResultMap">
     select
@@ -104,9 +105,9 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into zsl_trace_papper (trace_num_start, trace_num_end, trace_code_number, 
-      trace_count)
+      is_enabled, trace_count)
     values (#{traceNumStart,jdbcType=BIGINT}, #{traceNumEnd,jdbcType=BIGINT}, #{traceCodeNumber,jdbcType=VARCHAR}, 
-      #{traceCount,jdbcType=BIGINT})
+      #{isEnabled,jdbcType=INTEGER}, #{traceCount,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.ZslTracePapper">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -123,6 +124,9 @@
       <if test="traceCodeNumber != null">
         trace_code_number,
       </if>
+      <if test="isEnabled != null">
+        is_enabled,
+      </if>
       <if test="traceCount != null">
         trace_count,
       </if>
@@ -136,6 +140,9 @@
       </if>
       <if test="traceCodeNumber != null">
         #{traceCodeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="isEnabled != null">
+        #{isEnabled,jdbcType=INTEGER},
       </if>
       <if test="traceCount != null">
         #{traceCount,jdbcType=BIGINT},
@@ -163,6 +170,9 @@
       <if test="record.traceCodeNumber != null">
         trace_code_number = #{record.traceCodeNumber,jdbcType=VARCHAR},
       </if>
+      <if test="record.isEnabled != null">
+        is_enabled = #{record.isEnabled,jdbcType=INTEGER},
+      </if>
       <if test="record.traceCount != null">
         trace_count = #{record.traceCount,jdbcType=BIGINT},
       </if>
@@ -177,6 +187,7 @@
       trace_num_start = #{record.traceNumStart,jdbcType=BIGINT},
       trace_num_end = #{record.traceNumEnd,jdbcType=BIGINT},
       trace_code_number = #{record.traceCodeNumber,jdbcType=VARCHAR},
+      is_enabled = #{record.isEnabled,jdbcType=INTEGER},
       trace_count = #{record.traceCount,jdbcType=BIGINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -194,6 +205,9 @@
       <if test="traceCodeNumber != null">
         trace_code_number = #{traceCodeNumber,jdbcType=VARCHAR},
       </if>
+      <if test="isEnabled != null">
+        is_enabled = #{isEnabled,jdbcType=INTEGER},
+      </if>
       <if test="traceCount != null">
         trace_count = #{traceCount,jdbcType=BIGINT},
       </if>
@@ -205,6 +219,7 @@
     set trace_num_start = #{traceNumStart,jdbcType=BIGINT},
       trace_num_end = #{traceNumEnd,jdbcType=BIGINT},
       trace_code_number = #{traceCodeNumber,jdbcType=VARCHAR},
+      is_enabled = #{isEnabled,jdbcType=INTEGER},
       trace_count = #{traceCount,jdbcType=BIGINT}
     where id = #{id,jdbcType=INTEGER}
   </update>

@@ -226,6 +226,12 @@ public class TraceServiceImpl implements TraceService {
         ZslTrace zslTraceInfo = zslTraceMapper.selectByPrimaryKey(id);
         if (zslTraceInfo != null) {
             if (zslTraceInfo.getTraceHandleStatus() == 2) {
+                if(zslTraceInfo.getTraceApplyType() == 1){
+                    Long passCount = getTracePassCount(id,paramList);
+                    if(passCount - zslTraceInfo.getTraceApplyCount() < 0){
+                        return -12;
+                    }
+                }
                 //将申请处理状态改为 已通过 1
                 ZslTrace passParam = new ZslTrace();
                 passParam.setTraceId(id);
@@ -684,6 +690,12 @@ public class TraceServiceImpl implements TraceService {
                 }
             }
         }
+
+        //获取zsl-papper 审核的码段
+        ZslTracePapperExample zslTracePapperExample = new ZslTracePapperExample();
+
+
+
         return result;
     }
 
@@ -2204,16 +2216,25 @@ public class TraceServiceImpl implements TraceService {
         }
         List<ZslTraceSid> zslTraceSids = zslTraceSidDao.listByCount();
         if(!CollectionUtils.isEmpty(zslTraceSids)){
-            for(ZslTraceSid itemStart : zslTraceSids){
-                if(!(startSid - itemStart.getSidStartIndex() >= 0 && startSid - itemStart.getSidEndIndex() <= 0)){
-                    return CommonResult.failed("开始sid不在预留范围内");
+            int startFlag = 0;
+            int endFlag = 0;
+            for(ZslTraceSid item : zslTraceSids){
+                if(startSid - item.getSidStartIndex() >= 0 && startSid - item.getSidEndIndex() <= 0){
+                    startFlag++;
+                }
+                if(endSid - item.getSidStartIndex() >= 0 && endSid - item.getSidEndIndex() <= 0){
+                    endFlag++;
                 }
             }
-            for(ZslTraceSid itemEnd : zslTraceSids){
-                if(!(endSid - itemEnd.getSidStartIndex() >= 0 && endSid - itemEnd.getSidEndIndex() <= 0)){
-                    return CommonResult.failed("结束sid不在预留范围内");
-                }
+
+            if(startFlag == 0){
+                return CommonResult.failed("开始sid不在预留范围内");
             }
+
+            if(endFlag == 0){
+                return CommonResult.failed("结束sid不在预留范围内");
+            }
+
             List<TracePassDto> list = new ArrayList<>();
             TracePassDto tracePassDto = new TracePassDto();
             tracePassDto.setStartSid(startSid);
@@ -2230,6 +2251,23 @@ public class TraceServiceImpl implements TraceService {
             }
         }else{
             return CommonResult.failed("预留码段不足");
+        }
+    }
+
+
+    /**
+     * 获取审核码段的数量
+     * @return
+     */
+    public Long getTracePassCount(Integer traceId,List<TracePassDto> list){
+        List<ZslTracePapper> papperList = getCodePartBySidPass(traceId,list);
+        if(papperList != null){
+            Long sum = papperList.stream()
+                    .mapToLong(item -> item.getTraceCount())
+                    .sum();
+            return sum;
+        }else{
+            return 0L;
         }
     }
 

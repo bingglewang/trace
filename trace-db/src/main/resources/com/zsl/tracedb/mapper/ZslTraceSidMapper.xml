@@ -9,6 +9,7 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="enable_count" jdbcType="BIGINT" property="enableCount" />
     <result column="account_id" jdbcType="INTEGER" property="accountId" />
+    <result column="unique_code" jdbcType="VARCHAR" property="uniqueCode" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,7 +70,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, sid_start_index, sid_end_index, sid_pre_create, create_time, enable_count, account_id
+    id, sid_start_index, sid_end_index, sid_pre_create, create_time, enable_count, account_id, 
+    unique_code
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.ZslTraceSidExample" resultMap="BaseResultMap">
     select
@@ -106,11 +108,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into zsl_trace_sid (sid_start_index, sid_end_index, sid_pre_create, 
-      create_time, enable_count, account_id
-      )
+      create_time, enable_count, account_id, 
+      unique_code)
     values (#{sidStartIndex,jdbcType=BIGINT}, #{sidEndIndex,jdbcType=BIGINT}, #{sidPreCreate,jdbcType=TINYINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{enableCount,jdbcType=BIGINT}, #{accountId,jdbcType=INTEGER}
-      )
+      #{createTime,jdbcType=TIMESTAMP}, #{enableCount,jdbcType=BIGINT}, #{accountId,jdbcType=INTEGER}, 
+      #{uniqueCode,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.ZslTraceSid">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -136,6 +138,9 @@
       <if test="accountId != null">
         account_id,
       </if>
+      <if test="uniqueCode != null">
+        unique_code,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="sidStartIndex != null">
@@ -155,6 +160,9 @@
       </if>
       <if test="accountId != null">
         #{accountId,jdbcType=INTEGER},
+      </if>
+      <if test="uniqueCode != null">
+        #{uniqueCode,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -188,6 +196,9 @@
       <if test="record.accountId != null">
         account_id = #{record.accountId,jdbcType=INTEGER},
       </if>
+      <if test="record.uniqueCode != null">
+        unique_code = #{record.uniqueCode,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -201,7 +212,8 @@
       sid_pre_create = #{record.sidPreCreate,jdbcType=TINYINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       enable_count = #{record.enableCount,jdbcType=BIGINT},
-      account_id = #{record.accountId,jdbcType=INTEGER}
+      account_id = #{record.accountId,jdbcType=INTEGER},
+      unique_code = #{record.uniqueCode,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -227,6 +239,9 @@
       <if test="accountId != null">
         account_id = #{accountId,jdbcType=INTEGER},
       </if>
+      <if test="uniqueCode != null">
+        unique_code = #{uniqueCode,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -237,7 +252,8 @@
       sid_pre_create = #{sidPreCreate,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       enable_count = #{enableCount,jdbcType=BIGINT},
-      account_id = #{accountId,jdbcType=INTEGER}
+      account_id = #{accountId,jdbcType=INTEGER},
+      unique_code = #{uniqueCode,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

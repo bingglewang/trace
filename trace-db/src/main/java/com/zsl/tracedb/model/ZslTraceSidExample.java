@@ -524,6 +524,76 @@ public class ZslTraceSidExample {
             addCriterion("account_id not between", value1, value2, "accountId");
             return (Criteria) this;
         }
+
+        public Criteria andUniqueCodeIsNull() {
+            addCriterion("unique_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUniqueCodeIsNotNull() {
+            addCriterion("unique_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUniqueCodeEqualTo(String value) {
+            addCriterion("unique_code =", value, "uniqueCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andUniqueCodeNotEqualTo(String value) {
+            addCriterion("unique_code <>", value, "uniqueCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andUniqueCodeGreaterThan(String value) {
+            addCriterion("unique_code >", value, "uniqueCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andUniqueCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("unique_code >=", value, "uniqueCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andUniqueCodeLessThan(String value) {
+            addCriterion("unique_code <", value, "uniqueCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andUniqueCodeLessThanOrEqualTo(String value) {
+            addCriterion("unique_code <=", value, "uniqueCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andUniqueCodeLike(String value) {
+            addCriterion("unique_code like", value, "uniqueCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andUniqueCodeNotLike(String value) {
+            addCriterion("unique_code not like", value, "uniqueCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andUniqueCodeIn(List<String> values) {
+            addCriterion("unique_code in", values, "uniqueCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andUniqueCodeNotIn(List<String> values) {
+            addCriterion("unique_code not in", values, "uniqueCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andUniqueCodeBetween(String value1, String value2) {
+            addCriterion("unique_code between", value1, value2, "uniqueCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andUniqueCodeNotBetween(String value1, String value2) {
+            addCriterion("unique_code not between", value1, value2, "uniqueCode");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

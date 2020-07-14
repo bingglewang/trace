@@ -16,6 +16,9 @@ public class ZslTracePapper implements Serializable {
     @ApiModelProperty(value = "关联批次号")
     private String traceCodeNumber;
 
+    @ApiModelProperty(value = "是否可用(1:可用，-1不可用)")
+    private Integer isEnabled;
+
     @ApiModelProperty(value = "数量")
     private Long traceCount;
 
@@ -53,6 +56,14 @@ public class ZslTracePapper implements Serializable {
         this.traceCodeNumber = traceCodeNumber;
     }
 
+    public Integer getIsEnabled() {
+        return isEnabled;
+    }
+
+    public void setIsEnabled(Integer isEnabled) {
+        this.isEnabled = isEnabled;
+    }
+
     public Long getTraceCount() {
         return traceCount;
     }
@@ -71,6 +82,7 @@ public class ZslTracePapper implements Serializable {
         sb.append(", traceNumStart=").append(traceNumStart);
         sb.append(", traceNumEnd=").append(traceNumEnd);
         sb.append(", traceCodeNumber=").append(traceCodeNumber);
+        sb.append(", isEnabled=").append(isEnabled);
         sb.append(", traceCount=").append(traceCount);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
