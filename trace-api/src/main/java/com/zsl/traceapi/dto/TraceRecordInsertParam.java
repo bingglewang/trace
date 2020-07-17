@@ -2,8 +2,6 @@ package com.zsl.traceapi.dto;
 
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 public class TraceRecordInsertParam {
     /**
@@ -32,7 +30,7 @@ public class TraceRecordInsertParam {
     private Integer traceStallId;
 
     /**
-     * 生产环节列表参数
+     * 生产批次id
      */
-    private List<ProductionLinkParam> productionLinks;
+    private Integer productionBatchId;
 }

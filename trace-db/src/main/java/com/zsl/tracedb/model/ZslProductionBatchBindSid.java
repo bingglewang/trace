@@ -10,6 +10,9 @@ public class ZslProductionBatchBindSid implements Serializable {
     @ApiModelProperty(value = "追溯编码")
     private String traceCodeNo;
 
+    @ApiModelProperty(value = "追溯记录id")
+    private Integer traceRecordId;
+
     @ApiModelProperty(value = "追溯码段开始sid")
     private Long sidStart;
 
@@ -38,6 +41,14 @@ public class ZslProductionBatchBindSid implements Serializable {
 
     public void setTraceCodeNo(String traceCodeNo) {
         this.traceCodeNo = traceCodeNo;
+    }
+
+    public Integer getTraceRecordId() {
+        return traceRecordId;
+    }
+
+    public void setTraceRecordId(Integer traceRecordId) {
+        this.traceRecordId = traceRecordId;
     }
 
     public Long getSidStart() {
@@ -80,6 +91,7 @@ public class ZslProductionBatchBindSid implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", batchSidId=").append(batchSidId);
         sb.append(", traceCodeNo=").append(traceCodeNo);
+        sb.append(", traceRecordId=").append(traceRecordId);
         sb.append(", sidStart=").append(sidStart);
         sb.append(", productionBatchId=").append(productionBatchId);
         sb.append(", sidEnd=").append(sidEnd);

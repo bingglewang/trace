@@ -235,6 +235,66 @@ public class ZslProductionBatchBindSidExample {
             return (Criteria) this;
         }
 
+        public Criteria andTraceRecordIdIsNull() {
+            addCriterion("trace_record_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceRecordIdIsNotNull() {
+            addCriterion("trace_record_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceRecordIdEqualTo(Integer value) {
+            addCriterion("trace_record_id =", value, "traceRecordId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceRecordIdNotEqualTo(Integer value) {
+            addCriterion("trace_record_id <>", value, "traceRecordId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceRecordIdGreaterThan(Integer value) {
+            addCriterion("trace_record_id >", value, "traceRecordId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceRecordIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("trace_record_id >=", value, "traceRecordId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceRecordIdLessThan(Integer value) {
+            addCriterion("trace_record_id <", value, "traceRecordId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceRecordIdLessThanOrEqualTo(Integer value) {
+            addCriterion("trace_record_id <=", value, "traceRecordId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceRecordIdIn(List<Integer> values) {
+            addCriterion("trace_record_id in", values, "traceRecordId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceRecordIdNotIn(List<Integer> values) {
+            addCriterion("trace_record_id not in", values, "traceRecordId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceRecordIdBetween(Integer value1, Integer value2) {
+            addCriterion("trace_record_id between", value1, value2, "traceRecordId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTraceRecordIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("trace_record_id not between", value1, value2, "traceRecordId");
+            return (Criteria) this;
+        }
+
         public Criteria andSidStartIsNull() {
             addCriterion("sid_start is null");
             return (Criteria) this;

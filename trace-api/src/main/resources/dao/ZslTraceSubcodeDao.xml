@@ -199,9 +199,9 @@ AND sub.is_leaf = 'Y';
         SELECT trace_sub_code_number
         FROM `zsl_trace_subcode`
         where (trace_sid BETWEEN
-        (SELECT trace_sid from zsl_trace_subcode where trace_index = #{fromIndex} and trace_code_number = #{traceCodeNumber})
+         #{fromIndex}
         and
-        (SELECT trace_sid from zsl_trace_subcode where  trace_index =  #{toIndex} and trace_code_number = #{traceCodeNumber})
+         #{toIndex}
     )
 </select>
 
@@ -236,7 +236,7 @@ AND sub.is_leaf = 'Y';
         AND z.trace_good_id IS NOT NULL
         AND z.is_leaf = 'Y'
         AND (
-            z.trace_index BETWEEN (
+            z.trace_sid BETWEEN (
                 SELECT
                     r.trace_from_number
                 FROM
@@ -276,7 +276,7 @@ AND sub.is_leaf = 'Y';
         AND z.trace_good_id IS NOT NULL
         AND z.is_leaf = 'Y'
         AND (
-            z.trace_index BETWEEN (
+            z.trace_sid BETWEEN (
                 SELECT
                     r.trace_from_number
                 FROM
@@ -368,10 +368,10 @@ AND sub.is_leaf = 'Y';
 
 
     <select id="getTotalCount" resultType="java.lang.Long">
-        SELECT count(parent_id) from zsl_trace_subcode where (id BETWEEN
-        (SELECT id FROM `zsl_trace_subcode` where trace_index = #{fromNumber} and trace_code_number = #{traceCodeNumber}  and trace_good_id is not null)
+        SELECT count(parent_id) from zsl_trace_subcode where (trace_sid BETWEEN
+         #{fromNumber}
         and
-        (SELECT id FROM `zsl_trace_subcode` where trace_index = #{toNumber} and trace_code_number = #{traceCodeNumber} and trace_good_id is not null))
+         #{toNumber}
         and trace_code_number = #{traceCodeNumber}
         and parent_id = -1
         and trace_good_id is not null
@@ -379,17 +379,17 @@ AND sub.is_leaf = 'Y';
 
 
     <select id="selectMaxToNumberByRecord" resultType="java.lang.Long">
-        select max(trace_index)
+        select max(trace_sid)
         from zsl_trace_subcode
-        where trace_index
+        where trace_sid
         in (SELECT trace_to_number FROM `zsl_trace_record` where trace_code_number = #{traceCodeNumber} )
         and trace_code_number = #{traceCodeNumber}
     </select>
 
     <select id="selectMinFromNumberByRecord" resultType="java.lang.Long">
-        select min(trace_index)
+        select min(trace_sid)
         from zsl_trace_subcode
-        where trace_index
+        where trace_sid
         in (SELECT trace_from_number FROM `zsl_trace_record` where trace_code_number = #{traceCodeNumber} )
         and trace_code_number = #{traceCodeNumber}
     </select>
