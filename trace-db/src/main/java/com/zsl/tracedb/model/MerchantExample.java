@@ -1685,6 +1685,66 @@ public class MerchantExample {
             return (Criteria) this;
         }
 
+        public Criteria andPaperEnableUppperIsNull() {
+            addCriterion("paper_enable_uppper is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaperEnableUppperIsNotNull() {
+            addCriterion("paper_enable_uppper is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaperEnableUppperEqualTo(Long value) {
+            addCriterion("paper_enable_uppper =", value, "paperEnableUppper");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaperEnableUppperNotEqualTo(Long value) {
+            addCriterion("paper_enable_uppper <>", value, "paperEnableUppper");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaperEnableUppperGreaterThan(Long value) {
+            addCriterion("paper_enable_uppper >", value, "paperEnableUppper");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaperEnableUppperGreaterThanOrEqualTo(Long value) {
+            addCriterion("paper_enable_uppper >=", value, "paperEnableUppper");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaperEnableUppperLessThan(Long value) {
+            addCriterion("paper_enable_uppper <", value, "paperEnableUppper");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaperEnableUppperLessThanOrEqualTo(Long value) {
+            addCriterion("paper_enable_uppper <=", value, "paperEnableUppper");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaperEnableUppperIn(List<Long> values) {
+            addCriterion("paper_enable_uppper in", values, "paperEnableUppper");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaperEnableUppperNotIn(List<Long> values) {
+            addCriterion("paper_enable_uppper not in", values, "paperEnableUppper");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaperEnableUppperBetween(Long value1, Long value2) {
+            addCriterion("paper_enable_uppper between", value1, value2, "paperEnableUppper");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaperEnableUppperNotBetween(Long value1, Long value2) {
+            addCriterion("paper_enable_uppper not between", value1, value2, "paperEnableUppper");
+            return (Criteria) this;
+        }
+
         public Criteria andPaperLabelUpperIsNull() {
             addCriterion("paper_label_upper is null");
             return (Criteria) this;

@@ -26,6 +26,7 @@
     <result column="certification_to_pay" jdbcType="TINYINT" property="certificationToPay" />
     <result column="merchant_desciption" jdbcType="VARCHAR" property="merchantDesciption" />
     <result column="stall_limit" jdbcType="INTEGER" property="stallLimit" />
+    <result column="paper_enable_uppper" jdbcType="BIGINT" property="paperEnableUppper" />
     <result column="paper_label_upper" jdbcType="BIGINT" property="paperLabelUpper" />
     <result column="site_abscissa" jdbcType="VARCHAR" property="siteAbscissa" />
     <result column="site_ordinate" jdbcType="VARCHAR" property="siteOrdinate" />
@@ -95,8 +96,8 @@
     merchant_detail_site, merchant_url, net_type, merchant_coin, alliance_business_id, 
     merchant_type, leal_person_name, papers_url, papers_back_url, papers_number, business_lines, 
     merchant_contact, contact_number, merchant_enter_time, merchant_status, short_video_url, 
-    certification_to_pay, merchant_desciption, stall_limit, paper_label_upper, site_abscissa, 
-    site_ordinate, discern_site, sales_url
+    certification_to_pay, merchant_desciption, stall_limit, paper_enable_uppper, paper_label_upper, 
+    site_abscissa, site_ordinate, discern_site, sales_url
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.MerchantExample" resultMap="BaseResultMap">
     select
@@ -140,9 +141,9 @@
       business_lines, merchant_contact, contact_number, 
       merchant_enter_time, merchant_status, short_video_url, 
       certification_to_pay, merchant_desciption, 
-      stall_limit, paper_label_upper, site_abscissa, 
-      site_ordinate, discern_site, sales_url
-      )
+      stall_limit, paper_enable_uppper, paper_label_upper, 
+      site_abscissa, site_ordinate, discern_site, 
+      sales_url)
     values (#{merchantName,jdbcType=VARCHAR}, #{merchantAccount,jdbcType=VARCHAR}, #{adminstrationId,jdbcType=INTEGER}, 
       #{administrativeDivisionFullSite,jdbcType=VARCHAR}, #{merchantDetailSite,jdbcType=VARCHAR}, 
       #{merchantUrl,jdbcType=VARCHAR}, #{netType,jdbcType=INTEGER}, #{merchantCoin,jdbcType=INTEGER}, 
@@ -151,9 +152,9 @@
       #{businessLines,jdbcType=VARCHAR}, #{merchantContact,jdbcType=VARCHAR}, #{contactNumber,jdbcType=VARCHAR}, 
       #{merchantEnterTime,jdbcType=TIMESTAMP}, #{merchantStatus,jdbcType=INTEGER}, #{shortVideoUrl,jdbcType=VARCHAR}, 
       #{certificationToPay,jdbcType=TINYINT}, #{merchantDesciption,jdbcType=VARCHAR}, 
-      #{stallLimit,jdbcType=INTEGER}, #{paperLabelUpper,jdbcType=BIGINT}, #{siteAbscissa,jdbcType=VARCHAR}, 
-      #{siteOrdinate,jdbcType=VARCHAR}, #{discernSite,jdbcType=VARCHAR}, #{salesUrl,jdbcType=VARCHAR}
-      )
+      #{stallLimit,jdbcType=INTEGER}, #{paperEnableUppper,jdbcType=BIGINT}, #{paperLabelUpper,jdbcType=BIGINT}, 
+      #{siteAbscissa,jdbcType=VARCHAR}, #{siteOrdinate,jdbcType=VARCHAR}, #{discernSite,jdbcType=VARCHAR}, 
+      #{salesUrl,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.Merchant">
     <selectKey keyProperty="merchantId" order="AFTER" resultType="java.lang.Integer">
@@ -229,6 +230,9 @@
       </if>
       <if test="stallLimit != null">
         stall_limit,
+      </if>
+      <if test="paperEnableUppper != null">
+        paper_enable_uppper,
       </if>
       <if test="paperLabelUpper != null">
         paper_label_upper,
@@ -315,6 +319,9 @@
       </if>
       <if test="stallLimit != null">
         #{stallLimit,jdbcType=INTEGER},
+      </if>
+      <if test="paperEnableUppper != null">
+        #{paperEnableUppper,jdbcType=BIGINT},
       </if>
       <if test="paperLabelUpper != null">
         #{paperLabelUpper,jdbcType=BIGINT},
@@ -414,6 +421,9 @@
       <if test="record.stallLimit != null">
         stall_limit = #{record.stallLimit,jdbcType=INTEGER},
       </if>
+      <if test="record.paperEnableUppper != null">
+        paper_enable_uppper = #{record.paperEnableUppper,jdbcType=BIGINT},
+      </if>
       <if test="record.paperLabelUpper != null">
         paper_label_upper = #{record.paperLabelUpper,jdbcType=BIGINT},
       </if>
@@ -460,6 +470,7 @@
       certification_to_pay = #{record.certificationToPay,jdbcType=TINYINT},
       merchant_desciption = #{record.merchantDesciption,jdbcType=VARCHAR},
       stall_limit = #{record.stallLimit,jdbcType=INTEGER},
+      paper_enable_uppper = #{record.paperEnableUppper,jdbcType=BIGINT},
       paper_label_upper = #{record.paperLabelUpper,jdbcType=BIGINT},
       site_abscissa = #{record.siteAbscissa,jdbcType=VARCHAR},
       site_ordinate = #{record.siteOrdinate,jdbcType=VARCHAR},
@@ -541,6 +552,9 @@
       <if test="stallLimit != null">
         stall_limit = #{stallLimit,jdbcType=INTEGER},
       </if>
+      <if test="paperEnableUppper != null">
+        paper_enable_uppper = #{paperEnableUppper,jdbcType=BIGINT},
+      </if>
       <if test="paperLabelUpper != null">
         paper_label_upper = #{paperLabelUpper,jdbcType=BIGINT},
       </if>
@@ -584,6 +598,7 @@
       certification_to_pay = #{certificationToPay,jdbcType=TINYINT},
       merchant_desciption = #{merchantDesciption,jdbcType=VARCHAR},
       stall_limit = #{stallLimit,jdbcType=INTEGER},
+      paper_enable_uppper = #{paperEnableUppper,jdbcType=BIGINT},
       paper_label_upper = #{paperLabelUpper,jdbcType=BIGINT},
       site_abscissa = #{siteAbscissa,jdbcType=VARCHAR},
       site_ordinate = #{siteOrdinate,jdbcType=VARCHAR},

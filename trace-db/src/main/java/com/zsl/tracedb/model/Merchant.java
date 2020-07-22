@@ -76,6 +76,9 @@ public class Merchant implements Serializable {
     @ApiModelProperty(value = "摊位数（农贸专享）")
     private Integer stallLimit;
 
+    @ApiModelProperty(value = "可用纸质标签额度")
+    private Long paperEnableUppper;
+
     @ApiModelProperty(value = "纸质标签额度上限")
     private Long paperLabelUpper;
 
@@ -285,6 +288,14 @@ public class Merchant implements Serializable {
         this.stallLimit = stallLimit;
     }
 
+    public Long getPaperEnableUppper() {
+        return paperEnableUppper;
+    }
+
+    public void setPaperEnableUppper(Long paperEnableUppper) {
+        this.paperEnableUppper = paperEnableUppper;
+    }
+
     public Long getPaperLabelUpper() {
         return paperLabelUpper;
     }
@@ -355,6 +366,7 @@ public class Merchant implements Serializable {
         sb.append(", certificationToPay=").append(certificationToPay);
         sb.append(", merchantDesciption=").append(merchantDesciption);
         sb.append(", stallLimit=").append(stallLimit);
+        sb.append(", paperEnableUppper=").append(paperEnableUppper);
         sb.append(", paperLabelUpper=").append(paperLabelUpper);
         sb.append(", siteAbscissa=").append(siteAbscissa);
         sb.append(", siteOrdinate=").append(siteOrdinate);
