@@ -8,6 +8,8 @@
         <result column="sid_pre_create" jdbcType="TINYINT" property="sidPreCreate" />
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
         <result column="enable_count" jdbcType="BIGINT" property="enableCount" />
+        <result column="account_id" jdbcType="INTEGER" property="accountId" />
+        <result column="unique_code" jdbcType="VARCHAR" property="uniqueCode" />
     </resultMap>
 
 
@@ -21,6 +23,39 @@
            select * from zsl_trace_sid
         where sid_pre_create = 1
         order  by sid_start_index asc
+    </select>
+
+    <select id="getByPage" resultType="com.zsl.traceapi.dto.ZslTraceSidVo">
+        SELECT
+            zts.id id,
+            zts.sid_start_index sidStartIndex,
+            zts.sid_end_index sidEndIndex,
+            zts.sid_pre_create sidPreCreate,
+            zts.create_time createTime,
+            zts.enable_count enableCount,
+            a.realName accountName,
+            zts.unique_code uniqueCode
+        FROM
+            `zsl_trace_sid` zts
+        LEFT JOIN account a ON a.id = zts.account_id
+        WHERE
+            zts.sid_pre_create = 1
+        <if test="queryParam.startSid != null">
+            and zts.sid_start_index >= #{queryParam.startSid}
+        </if>
+        <if test="queryParam.endSid != null">
+            and zts.sid_end_index &lt;= #{queryParam.endSid}
+        </if>
+        <if test="queryParam.startTime!=null">
+            AND date_format(zts.create_time,'%Y-%m-%e %H:%i:%S') &gt;=
+            date_format(#{queryParam.startTime},'%Y-%m-%e %H:%i:%S')
+        </if>
+        <if test="queryParam.endTime!=null">
+            AND date_format(zts.create_time,'%Y-%m-%e %H:%i:%S') &lt;=
+            date_format(#{queryParam.endTime},'%Y-%m-%e %H:%i:%S')
+        </if>
+        ORDER BY
+            zts.create_time DESC;
     </select>
 
 </mapper>

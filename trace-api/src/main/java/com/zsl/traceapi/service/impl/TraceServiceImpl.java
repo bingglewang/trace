@@ -138,6 +138,16 @@ public class TraceServiceImpl implements TraceService {
         zslTraceSid.setCreateTime(new Date()); //生成时间
         zslTraceSid.setSidStartIndex(sidStartIndex); //sid起始下标
         zslTraceSid.setSidEndIndex(sidEndIndex); //sid结束下标
+
+        //获取用户登录信息
+        RequestContext requestContext = RequestContextMgr.getLocalContext();
+        JSONObject loginUser = requestContext.getJsonObject();
+        Integer accountId = Integer.parseInt(loginUser.get("id").toString());
+        zslTraceSid.setAccountId(accountId);
+
+        //唯一字符串
+        zslTraceSid.setUniqueCode(UUID.randomUUID().toString());
+
         int i = zslTraceSidMapper.insert(zslTraceSid);
         if (i > 0) {
             //修改电子下标
@@ -199,6 +209,27 @@ public class TraceServiceImpl implements TraceService {
     }
 
     @Override
+    public List<ZslTraceSidVo> getByPageSids(ZslTraceSidPageParam queryParam, PageParams pageParams) {
+        //设置排序，大小，页数
+        if (pageParams.getPageSize() != null) {
+            PageHelper.startPage(pageParams.getPageNum(), pageParams.getPageSize(), pageParams.getOrderBy());
+        }
+
+        //时间戳处理
+        if (queryParam.getStartCreateTime() != null && StringUtils.isNotBlank(queryParam.getStartCreateTime().toString())) {
+            queryParam.setStartTime(new Date(queryParam.getStartCreateTime()));
+        }
+        if (queryParam.getEndCreateTime() != null && StringUtils.isNotBlank(queryParam.getEndCreateTime().toString())) {
+            queryParam.setEndTime(new Date(queryParam.getEndCreateTime()));
+        }
+
+        //获取数据
+        List<ZslTraceSidVo> result = zslTraceSidDao.getByPage(queryParam);
+
+        return result;
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public ZslTrace insert(ZslTrace zslTrace) {
         int i = zslTraceMapper.insertSelective(zslTrace);
@@ -229,20 +260,25 @@ public class TraceServiceImpl implements TraceService {
         ZslTrace zslTraceInfo = zslTraceMapper.selectByPrimaryKey(id);
         if (zslTraceInfo != null) {
             if (zslTraceInfo.getTraceHandleStatus() == 2) {
-                if (zslTraceInfo.getTraceApplyType() == 1) {
-                    Long passCount = getTracePassCount(id, paramList);
-                    if (passCount - zslTraceInfo.getTraceApplyCount() < 0) {
-                        return -12;
-                    }
-                }
                 //将申请处理状态改为 已通过 1
                 ZslTrace passParam = new ZslTrace();
                 passParam.setTraceId(id);
                 passParam.setTraceHandleStatus(1);
                 passParam.setTraceReviewDate(new Date());
+
+                if (zslTraceInfo.getTraceApplyType() == 1) {
+                    Long passCount = getTracePassCount(id, paramList);
+                    // 剩余数量（）
+                    passParam.setTraceEnableCount(Integer.parseInt(passCount + ""));
+                    if (passCount - zslTraceInfo.getTraceApplyCount() < 0) {
+                        return -12;
+                    }
+                }else{
+                    // 剩余数量（）
+                    passParam.setTraceEnableCount(Integer.parseInt(zslTraceInfo.getTraceApplyCount() + ""));
+                }
+
                 //生成追溯码批次号
-                // 剩余数量（）
-                passParam.setTraceEnableCount(Integer.parseInt(zslTraceInfo.getTraceApplyCount() + ""));
                 // 已经关联数量（0）
                 passParam.setTraceBack1(0);
                 //批次号：zs+时间戳+商家id+4位随机数
@@ -2341,6 +2377,12 @@ public class TraceServiceImpl implements TraceService {
         } else {
             return CommonResult.success(resultList.get(0).getCurrentIndexRelation() + 1);
         }
+    }
+
+    @Override
+    public Object getLabelDistributionByPage() {
+
+        return null;
     }
 
     List<ZslTreeNode> transeTreeNode(ZslTraceSubcode zslTraceSubcode) {

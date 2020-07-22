@@ -12,6 +12,9 @@ public class MaterialWarehouseOut implements Serializable {
     @ApiModelProperty(value = "入库批次号(规则:YCL20200912+入库表主键id)")
     private String batchNumber;
 
+    @ApiModelProperty(value = "入库表主键id")
+    private Integer warehouseId;
+
     @ApiModelProperty(value = "出库单号")
     private String warehouseOutOrder;
 
@@ -42,6 +45,14 @@ public class MaterialWarehouseOut implements Serializable {
 
     public void setBatchNumber(String batchNumber) {
         this.batchNumber = batchNumber;
+    }
+
+    public Integer getWarehouseId() {
+        return warehouseId;
+    }
+
+    public void setWarehouseId(Integer warehouseId) {
+        this.warehouseId = warehouseId;
     }
 
     public String getWarehouseOutOrder() {
@@ -92,6 +103,7 @@ public class MaterialWarehouseOut implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", batchNumber=").append(batchNumber);
+        sb.append(", warehouseId=").append(warehouseId);
         sb.append(", warehouseOutOrder=").append(warehouseOutOrder);
         sb.append(", stockNumber=").append(stockNumber);
         sb.append(", units=").append(units);

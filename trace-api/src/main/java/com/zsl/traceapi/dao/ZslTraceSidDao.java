@@ -1,6 +1,9 @@
 package com.zsl.traceapi.dao;
 
+import com.zsl.traceapi.dto.ZslTraceSidPageParam;
+import com.zsl.traceapi.dto.ZslTraceSidVo;
 import com.zsl.tracedb.model.ZslTraceSid;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,4 +17,5 @@ import java.util.List;
 public interface ZslTraceSidDao {
     List<ZslTraceSid> listByCount();
     List<ZslTraceSid> listBlankCodePart();
+    List<ZslTraceSidVo> getByPage(@Param("queryParam") ZslTraceSidPageParam queryParam);
 }

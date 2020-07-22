@@ -17,7 +17,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/spurtCode/isExist")
                 .excludePathPatterns("/trace/getScanRecordBySid")
                 .excludePathPatterns("/trace/getTraceGoodInfo")
-                .excludePathPatterns("/trace/preCreatePaperCode") //不开放
                 .excludePathPatterns("/trace/testTraceUpdate")  //不开放
                 .excludePathPatterns("/trace/testTraceCreate")  //不开放
                 .excludePathPatterns("/trace/getCodePartBySid")  //不开放

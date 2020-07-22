@@ -5,7 +5,6 @@ import com.zsl.traceapi.dao.ZslTraceSubcodeDao;
 import com.zsl.traceapi.dto.TraceCodeRelation;
 import com.zsl.traceapi.dto.TraceSubcodeUpdateParam;
 import com.zsl.traceapi.dto.TraceSubcodeUpdateParamSid;
-import com.zsl.traceapi.util.SpringContextUtil;
 import com.zsl.tracedb.mapper.ZslTraceMapper;
 import com.zsl.tracedb.model.ZslTrace;
 import com.zsl.tracedb.model.ZslTraceExample;

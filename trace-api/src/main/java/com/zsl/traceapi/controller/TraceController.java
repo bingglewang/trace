@@ -1,5 +1,6 @@
 package com.zsl.traceapi.controller;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.zsl.traceapi.config.kafka.producer.TraceUpdateProducerKafka;
@@ -60,6 +61,9 @@ public class TraceController {
     private ZslTraceSubcodeDao zslTraceSubcodeDao;
 
     @Autowired
+    private ZslTraceSidMapper zslTraceSidMapper;
+
+    @Autowired
     private TraceUpdateProducerKafka traceUpdateProducerKafka;
 
 
@@ -89,6 +93,20 @@ public class TraceController {
         return CommonResult.success(CommonPage.restPage(result));
     }
 
+
+    @ApiOperation(value = "分页获取预留码段信息")
+    @GetMapping("/getByPageSids")
+    @ResponseBody
+    public CommonResult<CommonPage<ZslTraceSidVo>> getByPageSids(ZslTraceSidPageParam query, @Valid PageParams pageParams, BindingResult bindingResult) {
+        if (pageParams.getPageNum() == null || pageParams.getPageNum() == 0) {
+            pageParams.setPageNum(1); //默认从第1页开始
+        }
+        if (pageParams.getPageSize() == null || pageParams.getPageSize() == 0) {
+            pageParams.setPageSize(10);//默认页面大小为10
+        }
+        List<ZslTraceSidVo> result = traceService.getByPageSids(query, pageParams);
+        return CommonResult.success(CommonPage.restPage(result));
+    }
 
     /**
      * 搜索获取外码和内码
@@ -753,6 +771,34 @@ public class TraceController {
     @GetMapping("getCodePartBySid")
     public CommonResult getCodePartBySid(Integer id,Long startSid,Long endSid) {
         return traceService.getCodePartBySid(id,startSid,endSid);
+    }
+
+    /**
+     * 获取空闲纸质标签数
+     * @return
+     */
+    @GetMapping("getBlankPaperCount")
+    public CommonResult getBlankPaperCount(){
+        ZslTraceSidExample zslTraceSidExample = new ZslTraceSidExample();
+        ZslTraceSidExample.Criteria criteria = zslTraceSidExample.createCriteria();
+        criteria.andSidPreCreateEqualTo((byte)1);
+        List<ZslTraceSid> zslTraceSids = zslTraceSidMapper.selectByExample(zslTraceSidExample);
+        Long result = 0L;
+        if(CollectionUtil.isNotEmpty(zslTraceSids)){
+            result = zslTraceSids.stream()
+                    .mapToLong(item -> item.getEnableCount())
+                    .sum();
+        }
+        return CommonResult.success(result);
+    }
+
+    /**
+     * 获取纸质标签损耗数量
+     * @return
+     */
+    @GetMapping("getLossPaperCount")
+    public CommonResult getLossPaperCount(){
+        return null;
     }
 }
 

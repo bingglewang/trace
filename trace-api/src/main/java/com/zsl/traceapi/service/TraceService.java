@@ -35,6 +35,14 @@ public interface TraceService {
     List<ZslTraceVo> getZslTraceByPage(QueryParam queryParam, PageParams pageParams, HttpServletRequest request);
 
     /**
+     * 分页获取预留码段
+     * @param queryParam
+     * @param pageParams
+     * @return
+     */
+    List<ZslTraceSidVo> getByPageSids(ZslTraceSidPageParam queryParam,PageParams pageParams);
+
+    /**
      * 新增追溯信息
      * @param zslTrace
      * @return
@@ -278,4 +286,10 @@ public interface TraceService {
      * @param traceCodeNumber
      */
     CommonResult getNextSidByCodeNumber(String traceCodeNumber);
+
+    /**
+     * 分页获取标签发放明细
+     * @return
+     */
+    Object getLabelDistributionByPage();
 }
