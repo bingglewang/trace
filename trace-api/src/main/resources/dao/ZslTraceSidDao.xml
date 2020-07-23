@@ -55,7 +55,7 @@
             date_format(#{queryParam.endTime},'%Y-%m-%e %H:%i:%S')
         </if>
         ORDER BY
-            zts.create_time DESC;
+            zts.create_time DESC
     </select>
 
 </mapper>

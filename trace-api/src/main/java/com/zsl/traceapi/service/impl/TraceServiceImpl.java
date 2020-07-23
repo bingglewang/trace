@@ -209,6 +209,17 @@ public class TraceServiceImpl implements TraceService {
     }
 
     @Override
+    public List<LabelDistributionVo> labelDistributionDetails(LabelDistributionQueryParam queryParam, PageParams pageParams) {
+        //设置排序，大小，页数
+        if (pageParams.getPageSize() != null) {
+            PageHelper.startPage(pageParams.getPageNum(), pageParams.getPageSize(), pageParams.getOrderBy());
+        }
+
+        List<LabelDistributionVo> result = zslTraceDao.labelDistributionDetails(queryParam);
+        return result;
+    }
+
+    @Override
     public List<ZslTraceSidVo> getByPageSids(ZslTraceSidPageParam queryParam, PageParams pageParams) {
         //设置排序，大小，页数
         if (pageParams.getPageSize() != null) {

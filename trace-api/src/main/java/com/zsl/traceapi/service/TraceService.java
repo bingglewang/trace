@@ -2,6 +2,7 @@ package com.zsl.traceapi.service;
 
 import com.zsl.traceapi.dto.*;
 import com.zsl.traceapi.vo.GoodsVo;
+import com.zsl.traceapi.vo.LabelDistributionVo;
 import com.zsl.traceapi.vo.TraceRecordVo;
 import com.zsl.traceapi.vo.ZslTraceVo;
 import com.zsl.tracecommon.CommonResult;
@@ -33,6 +34,14 @@ public interface TraceService {
      * @return
      */
     List<ZslTraceVo> getZslTraceByPage(QueryParam queryParam, PageParams pageParams, HttpServletRequest request);
+
+    /**
+     * 分页获取标签发放明细列表
+     * @param queryParam
+     * @param pageParams
+     * @return
+     */
+    List<LabelDistributionVo> labelDistributionDetails(LabelDistributionQueryParam queryParam, PageParams pageParams);
 
     /**
      * 分页获取预留码段

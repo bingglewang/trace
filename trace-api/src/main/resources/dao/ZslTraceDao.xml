@@ -254,5 +254,33 @@
             and (SELECT alliance_business_id FROM `merchant` where merchant_id = z.trace_business_id) is null
         </if>
     </select>
+    
+    <select id="labelDistributionDetails" resultType="com.zsl.traceapi.vo.LabelDistributionVo">
+        SELECT
+           z.trace_business_id businessId,
+           m.paper_enable_uppper freeCount,
+          (select m1.paper_label_upper from merchant m1 where m1.merchant_id = m.merchant_id) enabledCount,
+            (select  sum(z1.trace_apply_count) from zsl_trace  z1 where z1.trace_handle_status = 1 and z1.trace_apply_type = 1 and z1.trace_business_id = z.trace_business_id ) usedPaperCount,
+          (select  sum(z2.trace_apply_count) from zsl_trace  z2 where z2.trace_handle_status = 1 and z2.trace_apply_type = 2 and z2.trace_business_id = z.trace_business_id ) usedElectrCount,
+          m.merchant_name merchantName,
+          if(z.trace_back2 is null,'总部',ab.alliance_business_name) companyName
+        FROM
+            `zsl_trace` z
+        left JOIN merchant m on m.merchant_id = z.trace_business_id
+        LEFT JOIN alliance_business ab on ab.alliance_business_id = z.trace_back2
+        WHERE
+            z.trace_handle_status = 1
+        <if test="queryParam.merchantName != '' ">
+            and z.trace_business_id in (select merchant_id from merchant mm where mm.merchant_name like concat("%",#{queryParam.merchantName},"%"))
+        </if>
+        <if test="queryParam.allianceId != null and queryParam.allianceId != 0">
+            and  z.trace_back2 = #{queryParam.allianceId}
+        </if>
+        <if test="queryParam.allianceId == 0">
+            and  z.trace_back2 is null
+        </if>
+        GROUP BY
+            z.trace_business_id,z.trace_back2
+    </select>
 
 </mapper>

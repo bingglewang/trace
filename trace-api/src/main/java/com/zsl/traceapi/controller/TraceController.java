@@ -1,8 +1,6 @@
 package com.zsl.traceapi.controller;
 
-import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageHelper;
 import com.zsl.traceapi.config.kafka.producer.TraceUpdateProducerKafka;
 import com.zsl.traceapi.context.RequestContext;
 import com.zsl.traceapi.context.RequestContextMgr;
@@ -12,6 +10,7 @@ import com.zsl.traceapi.service.RedisService;
 import com.zsl.traceapi.service.TraceService;
 import com.zsl.traceapi.util.*;
 import com.zsl.traceapi.validator.RequestLimit;
+import com.zsl.traceapi.vo.LabelDistributionVo;
 import com.zsl.traceapi.vo.TracePointTreeVo;
 import com.zsl.traceapi.vo.TraceRecordVo;
 import com.zsl.traceapi.vo.ZslTraceVo;
@@ -38,6 +37,9 @@ import java.util.*;
 @RestController
 @RequestMapping("/trace")
 public class TraceController {
+
+    @Autowired
+    private ZslTraceMapper zslTraceMapper;
 
     @Autowired
     private RedisService redisService;
@@ -105,6 +107,20 @@ public class TraceController {
             pageParams.setPageSize(10);//默认页面大小为10
         }
         List<ZslTraceSidVo> result = traceService.getByPageSids(query, pageParams);
+        return CommonResult.success(CommonPage.restPage(result));
+    }
+
+    @ApiOperation(value = "分页获取纸质标签发放明细")
+    @GetMapping("/labelDistributionDetails")
+    @ResponseBody
+    public CommonResult<CommonPage<LabelDistributionVo>> labelDistributionDetails(LabelDistributionQueryParam query, @Valid PageParams pageParams, BindingResult bindingResult) {
+        if (pageParams.getPageNum() == null || pageParams.getPageNum() == 0) {
+            pageParams.setPageNum(1); //默认从第1页开始
+        }
+        if (pageParams.getPageSize() == null || pageParams.getPageSize() == 0) {
+            pageParams.setPageSize(10);//默认页面大小为10
+        }
+        List<LabelDistributionVo> result = traceService.labelDistributionDetails(query, pageParams);
         return CommonResult.success(CommonPage.restPage(result));
     }
 
@@ -774,31 +790,35 @@ public class TraceController {
     }
 
     /**
-     * 获取空闲纸质标签数
-     * @return
-     */
-    @GetMapping("getBlankPaperCount")
-    public CommonResult getBlankPaperCount(){
-        ZslTraceSidExample zslTraceSidExample = new ZslTraceSidExample();
-        ZslTraceSidExample.Criteria criteria = zslTraceSidExample.createCriteria();
-        criteria.andSidPreCreateEqualTo((byte)1);
-        List<ZslTraceSid> zslTraceSids = zslTraceSidMapper.selectByExample(zslTraceSidExample);
-        Long result = 0L;
-        if(CollectionUtil.isNotEmpty(zslTraceSids)){
-            result = zslTraceSids.stream()
-                    .mapToLong(item -> item.getEnableCount())
-                    .sum();
-        }
-        return CommonResult.success(result);
-    }
-
-    /**
-     * 获取纸质标签损耗数量
+     * 获取空闲纸质标签数,纸质标签损耗数量  和已使用纸质标签数
      * @return
      */
     @GetMapping("getLossPaperCount")
     public CommonResult getLossPaperCount(){
-        return null;
+        ZslTraceExample zslTraceExample = new ZslTraceExample();
+        ZslTraceExample.Criteria criteria = zslTraceExample.createCriteria();
+        criteria.andTraceHandleStatusEqualTo(1);
+        criteria.andTraceApplyTypeEqualTo(1);
+        List<ZslTrace> zslTraceList = zslTraceMapper.selectByExample(zslTraceExample);
+        Map<String,Object> result = new HashMap<>();
+        long lossCount = zslTraceList.stream()
+                .mapToLong(item -> (item.getTraceEnableCount() + item.getTraceBack1()) - item.getTraceApplyCount())
+                .sum();
+        result.put("lossCount",lossCount);
+        long useCount = zslTraceList.stream()
+                .mapToLong(item ->  item.getTraceBack1())
+                .sum();
+        result.put("useCount",useCount);
+
+        ZslTraceSidExample zslTraceSidExample = new ZslTraceSidExample();
+        ZslTraceSidExample.Criteria criteria1 = zslTraceSidExample.createCriteria();
+        criteria1.andSidPreCreateEqualTo((byte)1);
+        List<ZslTraceSid> zslTraceSids = zslTraceSidMapper.selectByExample(zslTraceSidExample);
+        long  blankCount = zslTraceSids.stream()
+                    .mapToLong(item -> item.getEnableCount())
+                    .sum();
+        result.put("blankCount",blankCount);
+        return CommonResult.success(result);
     }
 }
 

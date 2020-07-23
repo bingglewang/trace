@@ -1,9 +1,11 @@
 package com.zsl.traceapi.dao;
 
 
+import com.zsl.traceapi.dto.LabelDistributionQueryParam;
 import com.zsl.traceapi.dto.MerchantRankVo;
 import com.zsl.traceapi.dto.QueryParam;
 import com.zsl.traceapi.vo.GoodsTracePieVo;
+import com.zsl.traceapi.vo.LabelDistributionVo;
 import com.zsl.traceapi.vo.NewTraceRecordVo;
 import com.zsl.traceapi.vo.ZslTraceVo;
 import org.apache.ibatis.annotations.Param;
@@ -31,6 +33,8 @@ public interface ZslTraceDao {
     Long busiTotalTraceCount(@Param("traceBusinessId") Integer traceBusinessId);
 
     Long selectScanTotalCount(@Param("companyId")Integer companyId);
+
+    List<LabelDistributionVo> labelDistributionDetails(@Param("queryParam") LabelDistributionQueryParam queryParam);
 
     Long selectScanYestCount(@Param("companyId")Integer companyId);
 }
