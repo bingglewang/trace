@@ -109,6 +109,9 @@ public class TraceServiceImpl implements TraceService {
     private ZslTracePapperMapper zslTracePapperMapper;
 
     @Autowired
+    private ZslProductionBatchMapper zslProductionBatchMapper;
+
+    @Autowired
     private ZslProductionBatchBindSidMapper zslProductionBatchBindSidMapper;
 
     @Autowired
@@ -598,9 +601,17 @@ public class TraceServiceImpl implements TraceService {
             insertRecord.setTraceStallId(item.getTraceStallId());
             zslTraceRecordMapper.insert(insertRecord);
 
+
+            //根据生产批次获取 生产批次id
+            ZslProductionBatch zslProductionBatch = getProductionBatch(item.getProductionBatch(),item.getTraceGoodId());
+            Integer productionId = -1;
+            if(zslProductionBatch != null){
+                productionId = zslProductionBatch.getBatchId();
+            }
+
             // 关联生产批次
             ZslProductionBatchBindSid zslProductionBatchBindSid = new ZslProductionBatchBindSid();
-            zslProductionBatchBindSid.setProductionBatchId(item.getProductionBatchId());
+            zslProductionBatchBindSid.setProductionBatchId(productionId);
             zslProductionBatchBindSid.setCreateTime(new Date());
             zslProductionBatchBindSid.setTraceCodeNo(item.getTraceCodeNumber());
             zslProductionBatchBindSid.setTraceRecordId(insertRecord.getTraceRecordId());
@@ -636,6 +647,26 @@ public class TraceServiceImpl implements TraceService {
             return decutPoint;
         } else {
             return -3; //追溯记录处理失败
+        }
+    }
+
+
+    /**
+     * 根据生产批次号和商品id获取，
+     * @param productionBatch
+     * @param goodsId
+     * @return
+     */
+    public ZslProductionBatch getProductionBatch(String productionBatch,Integer goodsId){
+        ZslProductionBatchExample zslProductionBatchExample = new ZslProductionBatchExample();
+        ZslProductionBatchExample.Criteria criteria = zslProductionBatchExample.createCriteria();
+        criteria.andBatchNoEqualTo(productionBatch);
+        criteria.andGoodsIdEqualTo(goodsId);
+        List<ZslProductionBatch> batchList = zslProductionBatchMapper.selectByExample(zslProductionBatchExample);
+        if(CollectionUtil.isNotEmpty(batchList)){
+            return batchList.get(0);
+        }else{
+            return null;
         }
     }
 
@@ -2391,10 +2422,52 @@ public class TraceServiceImpl implements TraceService {
     }
 
     @Override
-    public Object getLabelDistributionByPage() {
+    public Object miniTraceRecordBind(MiniTraceRecordBindVo miniTraceRecordBindVo) {
+        Set<Long> groupSet = new HashSet<>();
+        List<TraceRecordInsertParam> traceRecordInsertParamList = new ArrayList<>();
 
-        return null;
+        String traceCodeNumber = "";
+
+        for(Long sid : miniTraceRecordBindVo.getSids()){
+            ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectById(sid);
+            if(zslTraceSubcode != null){
+                if(!traceCodeNumber.equals(zslTraceSubcode.getTraceCodeNumber())){
+                    return CommonResult.failed("只能操作同批次追溯码");
+                }
+                traceCodeNumber = zslTraceSubcode.getTraceCodeNumber();
+                groupSet.add(zslTraceSubcode.getTraceSid());
+            }
+        }
+
+        List<String> pointStrs = NumberConverUtil.getConvertNum(groupSet);
+        for (String pstr : pointStrs) {
+            TraceRecordInsertParam traceRecordInsertParam = new TraceRecordInsertParam();
+            traceRecordInsertParam.setTraceStallId(-1);
+            traceRecordInsertParam.setTraceCodeNumber(traceCodeNumber);
+            traceRecordInsertParam.setProductionBatch(miniTraceRecordBindVo.getProductionBatch());
+            traceRecordInsertParam.setTraceGoodId(miniTraceRecordBindVo.getTraceGoodId());
+            Long fromNumber = Long.parseLong(pstr.split("-")[0]);
+            Long toNumber = Long.parseLong(pstr.split("-")[1]);
+            traceRecordInsertParam.setTraceFromNumber(fromNumber);
+            traceRecordInsertParam.setTraceToNumber(toNumber);
+            traceRecordInsertParamList.add(traceRecordInsertParam);
+        }
+
+        int count = traceRecordInsert(traceRecordInsertParamList);
+        if (count > 0) {
+            return CommonResult.success(count);
+        } else if (count == -1) {
+            return CommonResult.failed("商品信息不存在");
+        } else if (count == -2) {
+            return CommonResult.failed("追溯码不存在");
+        } else if (count == -3) {
+            return CommonResult.failed("追溯记录处理失败");
+        } else if (count == -4) {
+            return CommonResult.failed("积分处理失败");
+        }
+        return CommonResult.failed();
     }
+
 
     List<ZslTreeNode> transeTreeNode(ZslTraceSubcode zslTraceSubcode) {
         totalSubCode = new ArrayList<>();

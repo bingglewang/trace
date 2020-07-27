@@ -297,8 +297,8 @@ public interface TraceService {
     CommonResult getNextSidByCodeNumber(String traceCodeNumber);
 
     /**
-     * 分页获取标签发放明细
+     * 附码小程序录入绑定
      * @return
      */
-    Object getLabelDistributionByPage();
+    Object miniTraceRecordBind(MiniTraceRecordBindVo miniTraceRecordBindVo);
 }

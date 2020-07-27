@@ -639,6 +639,15 @@ public class TraceController {
     }
 
     /**
+     * 附码小程序 录入绑定
+     * @return
+     */
+    @PostMapping("miniTraceRecordBind")
+    public Object miniTraceRecordBind(@RequestBody MiniTraceRecordBindVo miniTraceRecordBindVo){
+        return traceService.miniTraceRecordBind(miniTraceRecordBindVo);
+    }
+
+    /**
      * 根据sid获取追溯码
      *
      * @param sid
@@ -648,6 +657,17 @@ public class TraceController {
     public CommonResult getSubCodeById(Long sid) {
         return traceService.getSubCodeById(sid);
     }
+
+    /**
+     * 附码小程序，录入，根据sid获取追溯码
+     * @param sid
+     * @return
+     */
+    @GetMapping("getSubCodeBySidRecord")
+    public CommonResult getSubCodeBySidRecord(Long sid){
+        return CommonResult.success( zslTraceSubcodeDao.selectById(sid));
+    }
+
 
     /**
      * 插入扫码记录

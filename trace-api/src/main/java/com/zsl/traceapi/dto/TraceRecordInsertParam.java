@@ -30,7 +30,7 @@ public class TraceRecordInsertParam {
     private Integer traceStallId;
 
     /**
-     * 生产批次id
+     * 生产批次
      */
-    private Integer productionBatchId;
+    private String productionBatch;
 }
