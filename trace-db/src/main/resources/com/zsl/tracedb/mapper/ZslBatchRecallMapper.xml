@@ -7,13 +7,11 @@
     <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
     <result column="recall_count" jdbcType="INTEGER" property="recallCount" />
     <result column="undisposed_count" jdbcType="INTEGER" property="undisposedCount" />
+    <result column="cause" jdbcType="VARCHAR" property="cause" />
     <result column="dispose_status" jdbcType="INTEGER" property="disposeStatus" />
     <result column="principal" jdbcType="VARCHAR" property="principal" />
     <result column="principal_phone" jdbcType="VARCHAR" property="principalPhone" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-  </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.zsl.tracedb.model.ZslBatchRecall">
-    <result column="cause" jdbcType="LONGVARCHAR" property="cause" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -74,28 +72,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    batch_recall_id, production_batch_id, goods_id, recall_count, undisposed_count, dispose_status, 
-    principal, principal_phone, create_time
+    batch_recall_id, production_batch_id, goods_id, recall_count, undisposed_count, cause, 
+    dispose_status, principal, principal_phone, create_time
   </sql>
-  <sql id="Blob_Column_List">
-    cause
-  </sql>
-  <select id="selectByExampleWithBLOBs" parameterType="com.zsl.tracedb.model.ZslBatchRecallExample" resultMap="ResultMapWithBLOBs">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from zsl_batch_recall
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.ZslBatchRecallExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -110,11 +89,9 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
     from zsl_batch_recall
     where batch_recall_id = #{batchRecallId,jdbcType=INTEGER}
   </select>
@@ -133,12 +110,12 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into zsl_batch_recall (production_batch_id, goods_id, recall_count, 
-      undisposed_count, dispose_status, principal, 
-      principal_phone, create_time, cause
+      undisposed_count, cause, dispose_status, 
+      principal, principal_phone, create_time
       )
     values (#{productionBatchId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{recallCount,jdbcType=INTEGER}, 
-      #{undisposedCount,jdbcType=INTEGER}, #{disposeStatus,jdbcType=INTEGER}, #{principal,jdbcType=VARCHAR}, 
-      #{principalPhone,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{cause,jdbcType=LONGVARCHAR}
+      #{undisposedCount,jdbcType=INTEGER}, #{cause,jdbcType=VARCHAR}, #{disposeStatus,jdbcType=INTEGER}, 
+      #{principal,jdbcType=VARCHAR}, #{principalPhone,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.ZslBatchRecall">
@@ -159,6 +136,9 @@
       <if test="undisposedCount != null">
         undisposed_count,
       </if>
+      <if test="cause != null">
+        cause,
+      </if>
       <if test="disposeStatus != null">
         dispose_status,
       </if>
@@ -170,9 +150,6 @@
       </if>
       <if test="createTime != null">
         create_time,
-      </if>
-      <if test="cause != null">
-        cause,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -188,6 +165,9 @@
       <if test="undisposedCount != null">
         #{undisposedCount,jdbcType=INTEGER},
       </if>
+      <if test="cause != null">
+        #{cause,jdbcType=VARCHAR},
+      </if>
       <if test="disposeStatus != null">
         #{disposeStatus,jdbcType=INTEGER},
       </if>
@@ -199,9 +179,6 @@
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="cause != null">
-        #{cause,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -229,6 +206,9 @@
       <if test="record.undisposedCount != null">
         undisposed_count = #{record.undisposedCount,jdbcType=INTEGER},
       </if>
+      <if test="record.cause != null">
+        cause = #{record.cause,jdbcType=VARCHAR},
+      </if>
       <if test="record.disposeStatus != null">
         dispose_status = #{record.disposeStatus,jdbcType=INTEGER},
       </if>
@@ -241,26 +221,7 @@
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.cause != null">
-        cause = #{record.cause,jdbcType=LONGVARCHAR},
-      </if>
     </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExampleWithBLOBs" parameterType="map">
-    update zsl_batch_recall
-    set batch_recall_id = #{record.batchRecallId,jdbcType=INTEGER},
-      production_batch_id = #{record.productionBatchId,jdbcType=INTEGER},
-      goods_id = #{record.goodsId,jdbcType=INTEGER},
-      recall_count = #{record.recallCount,jdbcType=INTEGER},
-      undisposed_count = #{record.undisposedCount,jdbcType=INTEGER},
-      dispose_status = #{record.disposeStatus,jdbcType=INTEGER},
-      principal = #{record.principal,jdbcType=VARCHAR},
-      principal_phone = #{record.principalPhone,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      cause = #{record.cause,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -272,6 +233,7 @@
       goods_id = #{record.goodsId,jdbcType=INTEGER},
       recall_count = #{record.recallCount,jdbcType=INTEGER},
       undisposed_count = #{record.undisposedCount,jdbcType=INTEGER},
+      cause = #{record.cause,jdbcType=VARCHAR},
       dispose_status = #{record.disposeStatus,jdbcType=INTEGER},
       principal = #{record.principal,jdbcType=VARCHAR},
       principal_phone = #{record.principalPhone,jdbcType=VARCHAR},
@@ -295,6 +257,9 @@
       <if test="undisposedCount != null">
         undisposed_count = #{undisposedCount,jdbcType=INTEGER},
       </if>
+      <if test="cause != null">
+        cause = #{cause,jdbcType=VARCHAR},
+      </if>
       <if test="disposeStatus != null">
         dispose_status = #{disposeStatus,jdbcType=INTEGER},
       </if>
@@ -307,23 +272,7 @@
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="cause != null">
-        cause = #{cause,jdbcType=LONGVARCHAR},
-      </if>
     </set>
-    where batch_recall_id = #{batchRecallId,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zsl.tracedb.model.ZslBatchRecall">
-    update zsl_batch_recall
-    set production_batch_id = #{productionBatchId,jdbcType=INTEGER},
-      goods_id = #{goodsId,jdbcType=INTEGER},
-      recall_count = #{recallCount,jdbcType=INTEGER},
-      undisposed_count = #{undisposedCount,jdbcType=INTEGER},
-      dispose_status = #{disposeStatus,jdbcType=INTEGER},
-      principal = #{principal,jdbcType=VARCHAR},
-      principal_phone = #{principalPhone,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      cause = #{cause,jdbcType=LONGVARCHAR}
     where batch_recall_id = #{batchRecallId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.ZslBatchRecall">
@@ -332,6 +281,7 @@
       goods_id = #{goodsId,jdbcType=INTEGER},
       recall_count = #{recallCount,jdbcType=INTEGER},
       undisposed_count = #{undisposedCount,jdbcType=INTEGER},
+      cause = #{cause,jdbcType=VARCHAR},
       dispose_status = #{disposeStatus,jdbcType=INTEGER},
       principal = #{principal,jdbcType=VARCHAR},
       principal_phone = #{principalPhone,jdbcType=VARCHAR},

@@ -10,26 +10,29 @@ public class ZslRecallDispose implements Serializable {
     @ApiModelProperty(value = "批次召回id")
     private Integer batchRecallId;
 
-    @ApiModelProperty(value = "销毁/处理码段数据文件url")
-    private String codeSegmentFileUrl;
+    @ApiModelProperty(value = "处理批次号")
+    private String disposeBatchNo;
+
+    @ApiModelProperty(value = "处理码段数据文件url")
+    private String excelFileUrl;
 
     @ApiModelProperty(value = "处理类型（0销毁、1继续销售）")
     private Integer disposeType;
 
-    @ApiModelProperty(value = "处理/销毁日期范围")
+    @ApiModelProperty(value = "处理日期范围")
     private String disposeTimeScope;
 
     @ApiModelProperty(value = "员工id")
     private Integer employeId;
 
-    @ApiModelProperty(value = "处理/销毁地点")
-    private String address;
+    @ApiModelProperty(value = "处理地点")
+    private String disposeSite;
 
-    @ApiModelProperty(value = "处理/销毁数量")
-    private Integer count;
+    @ApiModelProperty(value = "处理数量")
+    private Integer disposeCount;
 
     @ApiModelProperty(value = "处理方式")
-    private String disposeWay;
+    private String description;
 
     @ApiModelProperty(value = "记录创建时间")
     private Date createTime;
@@ -52,12 +55,20 @@ public class ZslRecallDispose implements Serializable {
         this.batchRecallId = batchRecallId;
     }
 
-    public String getCodeSegmentFileUrl() {
-        return codeSegmentFileUrl;
+    public String getDisposeBatchNo() {
+        return disposeBatchNo;
     }
 
-    public void setCodeSegmentFileUrl(String codeSegmentFileUrl) {
-        this.codeSegmentFileUrl = codeSegmentFileUrl;
+    public void setDisposeBatchNo(String disposeBatchNo) {
+        this.disposeBatchNo = disposeBatchNo;
+    }
+
+    public String getExcelFileUrl() {
+        return excelFileUrl;
+    }
+
+    public void setExcelFileUrl(String excelFileUrl) {
+        this.excelFileUrl = excelFileUrl;
     }
 
     public Integer getDisposeType() {
@@ -84,28 +95,28 @@ public class ZslRecallDispose implements Serializable {
         this.employeId = employeId;
     }
 
-    public String getAddress() {
-        return address;
+    public String getDisposeSite() {
+        return disposeSite;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setDisposeSite(String disposeSite) {
+        this.disposeSite = disposeSite;
     }
 
-    public Integer getCount() {
-        return count;
+    public Integer getDisposeCount() {
+        return disposeCount;
     }
 
-    public void setCount(Integer count) {
-        this.count = count;
+    public void setDisposeCount(Integer disposeCount) {
+        this.disposeCount = disposeCount;
     }
 
-    public String getDisposeWay() {
-        return disposeWay;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDisposeWay(String disposeWay) {
-        this.disposeWay = disposeWay;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Date getCreateTime() {
@@ -124,13 +135,14 @@ public class ZslRecallDispose implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", recallDisposeId=").append(recallDisposeId);
         sb.append(", batchRecallId=").append(batchRecallId);
-        sb.append(", codeSegmentFileUrl=").append(codeSegmentFileUrl);
+        sb.append(", disposeBatchNo=").append(disposeBatchNo);
+        sb.append(", excelFileUrl=").append(excelFileUrl);
         sb.append(", disposeType=").append(disposeType);
         sb.append(", disposeTimeScope=").append(disposeTimeScope);
         sb.append(", employeId=").append(employeId);
-        sb.append(", address=").append(address);
-        sb.append(", count=").append(count);
-        sb.append(", disposeWay=").append(disposeWay);
+        sb.append(", disposeSite=").append(disposeSite);
+        sb.append(", disposeCount=").append(disposeCount);
+        sb.append(", description=").append(description);
         sb.append(", createTime=").append(createTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

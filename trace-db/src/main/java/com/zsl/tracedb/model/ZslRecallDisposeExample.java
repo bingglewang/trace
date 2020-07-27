@@ -225,73 +225,143 @@ public class ZslRecallDisposeExample {
             return (Criteria) this;
         }
 
-        public Criteria andCodeSegmentFileUrlIsNull() {
-            addCriterion("code_segment_file_url is null");
+        public Criteria andDisposeBatchNoIsNull() {
+            addCriterion("dispose_batch_no is null");
             return (Criteria) this;
         }
 
-        public Criteria andCodeSegmentFileUrlIsNotNull() {
-            addCriterion("code_segment_file_url is not null");
+        public Criteria andDisposeBatchNoIsNotNull() {
+            addCriterion("dispose_batch_no is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCodeSegmentFileUrlEqualTo(String value) {
-            addCriterion("code_segment_file_url =", value, "codeSegmentFileUrl");
+        public Criteria andDisposeBatchNoEqualTo(String value) {
+            addCriterion("dispose_batch_no =", value, "disposeBatchNo");
             return (Criteria) this;
         }
 
-        public Criteria andCodeSegmentFileUrlNotEqualTo(String value) {
-            addCriterion("code_segment_file_url <>", value, "codeSegmentFileUrl");
+        public Criteria andDisposeBatchNoNotEqualTo(String value) {
+            addCriterion("dispose_batch_no <>", value, "disposeBatchNo");
             return (Criteria) this;
         }
 
-        public Criteria andCodeSegmentFileUrlGreaterThan(String value) {
-            addCriterion("code_segment_file_url >", value, "codeSegmentFileUrl");
+        public Criteria andDisposeBatchNoGreaterThan(String value) {
+            addCriterion("dispose_batch_no >", value, "disposeBatchNo");
             return (Criteria) this;
         }
 
-        public Criteria andCodeSegmentFileUrlGreaterThanOrEqualTo(String value) {
-            addCriterion("code_segment_file_url >=", value, "codeSegmentFileUrl");
+        public Criteria andDisposeBatchNoGreaterThanOrEqualTo(String value) {
+            addCriterion("dispose_batch_no >=", value, "disposeBatchNo");
             return (Criteria) this;
         }
 
-        public Criteria andCodeSegmentFileUrlLessThan(String value) {
-            addCriterion("code_segment_file_url <", value, "codeSegmentFileUrl");
+        public Criteria andDisposeBatchNoLessThan(String value) {
+            addCriterion("dispose_batch_no <", value, "disposeBatchNo");
             return (Criteria) this;
         }
 
-        public Criteria andCodeSegmentFileUrlLessThanOrEqualTo(String value) {
-            addCriterion("code_segment_file_url <=", value, "codeSegmentFileUrl");
+        public Criteria andDisposeBatchNoLessThanOrEqualTo(String value) {
+            addCriterion("dispose_batch_no <=", value, "disposeBatchNo");
             return (Criteria) this;
         }
 
-        public Criteria andCodeSegmentFileUrlLike(String value) {
-            addCriterion("code_segment_file_url like", value, "codeSegmentFileUrl");
+        public Criteria andDisposeBatchNoLike(String value) {
+            addCriterion("dispose_batch_no like", value, "disposeBatchNo");
             return (Criteria) this;
         }
 
-        public Criteria andCodeSegmentFileUrlNotLike(String value) {
-            addCriterion("code_segment_file_url not like", value, "codeSegmentFileUrl");
+        public Criteria andDisposeBatchNoNotLike(String value) {
+            addCriterion("dispose_batch_no not like", value, "disposeBatchNo");
             return (Criteria) this;
         }
 
-        public Criteria andCodeSegmentFileUrlIn(List<String> values) {
-            addCriterion("code_segment_file_url in", values, "codeSegmentFileUrl");
+        public Criteria andDisposeBatchNoIn(List<String> values) {
+            addCriterion("dispose_batch_no in", values, "disposeBatchNo");
             return (Criteria) this;
         }
 
-        public Criteria andCodeSegmentFileUrlNotIn(List<String> values) {
-            addCriterion("code_segment_file_url not in", values, "codeSegmentFileUrl");
+        public Criteria andDisposeBatchNoNotIn(List<String> values) {
+            addCriterion("dispose_batch_no not in", values, "disposeBatchNo");
             return (Criteria) this;
         }
 
-        public Criteria andCodeSegmentFileUrlBetween(String value1, String value2) {
-            addCriterion("code_segment_file_url between", value1, value2, "codeSegmentFileUrl");
+        public Criteria andDisposeBatchNoBetween(String value1, String value2) {
+            addCriterion("dispose_batch_no between", value1, value2, "disposeBatchNo");
             return (Criteria) this;
         }
 
-        public Criteria andCodeSegmentFileUrlNotBetween(String value1, String value2) {
-            addCriterion("code_segment_file_url not between", value1, value2, "codeSegmentFileUrl");
+        public Criteria andDisposeBatchNoNotBetween(String value1, String value2) {
+            addCriterion("dispose_batch_no not between", value1, value2, "disposeBatchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelFileUrlIsNull() {
+            addCriterion("excel_file_url is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelFileUrlIsNotNull() {
+            addCriterion("excel_file_url is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelFileUrlEqualTo(String value) {
+            addCriterion("excel_file_url =", value, "excelFileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelFileUrlNotEqualTo(String value) {
+            addCriterion("excel_file_url <>", value, "excelFileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelFileUrlGreaterThan(String value) {
+            addCriterion("excel_file_url >", value, "excelFileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelFileUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("excel_file_url >=", value, "excelFileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelFileUrlLessThan(String value) {
+            addCriterion("excel_file_url <", value, "excelFileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelFileUrlLessThanOrEqualTo(String value) {
+            addCriterion("excel_file_url <=", value, "excelFileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelFileUrlLike(String value) {
+            addCriterion("excel_file_url like", value, "excelFileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelFileUrlNotLike(String value) {
+            addCriterion("excel_file_url not like", value, "excelFileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelFileUrlIn(List<String> values) {
+            addCriterion("excel_file_url in", values, "excelFileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelFileUrlNotIn(List<String> values) {
+            addCriterion("excel_file_url not in", values, "excelFileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelFileUrlBetween(String value1, String value2) {
+            addCriterion("excel_file_url between", value1, value2, "excelFileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelFileUrlNotBetween(String value1, String value2) {
+            addCriterion("excel_file_url not between", value1, value2, "excelFileUrl");
             return (Criteria) this;
         }
 
@@ -485,203 +555,203 @@ public class ZslRecallDisposeExample {
             return (Criteria) this;
         }
 
-        public Criteria andAddressIsNull() {
-            addCriterion("address is null");
+        public Criteria andDisposeSiteIsNull() {
+            addCriterion("dispose_site is null");
             return (Criteria) this;
         }
 
-        public Criteria andAddressIsNotNull() {
-            addCriterion("address is not null");
+        public Criteria andDisposeSiteIsNotNull() {
+            addCriterion("dispose_site is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAddressEqualTo(String value) {
-            addCriterion("address =", value, "address");
+        public Criteria andDisposeSiteEqualTo(String value) {
+            addCriterion("dispose_site =", value, "disposeSite");
             return (Criteria) this;
         }
 
-        public Criteria andAddressNotEqualTo(String value) {
-            addCriterion("address <>", value, "address");
+        public Criteria andDisposeSiteNotEqualTo(String value) {
+            addCriterion("dispose_site <>", value, "disposeSite");
             return (Criteria) this;
         }
 
-        public Criteria andAddressGreaterThan(String value) {
-            addCriterion("address >", value, "address");
+        public Criteria andDisposeSiteGreaterThan(String value) {
+            addCriterion("dispose_site >", value, "disposeSite");
             return (Criteria) this;
         }
 
-        public Criteria andAddressGreaterThanOrEqualTo(String value) {
-            addCriterion("address >=", value, "address");
+        public Criteria andDisposeSiteGreaterThanOrEqualTo(String value) {
+            addCriterion("dispose_site >=", value, "disposeSite");
             return (Criteria) this;
         }
 
-        public Criteria andAddressLessThan(String value) {
-            addCriterion("address <", value, "address");
+        public Criteria andDisposeSiteLessThan(String value) {
+            addCriterion("dispose_site <", value, "disposeSite");
             return (Criteria) this;
         }
 
-        public Criteria andAddressLessThanOrEqualTo(String value) {
-            addCriterion("address <=", value, "address");
+        public Criteria andDisposeSiteLessThanOrEqualTo(String value) {
+            addCriterion("dispose_site <=", value, "disposeSite");
             return (Criteria) this;
         }
 
-        public Criteria andAddressLike(String value) {
-            addCriterion("address like", value, "address");
+        public Criteria andDisposeSiteLike(String value) {
+            addCriterion("dispose_site like", value, "disposeSite");
             return (Criteria) this;
         }
 
-        public Criteria andAddressNotLike(String value) {
-            addCriterion("address not like", value, "address");
+        public Criteria andDisposeSiteNotLike(String value) {
+            addCriterion("dispose_site not like", value, "disposeSite");
             return (Criteria) this;
         }
 
-        public Criteria andAddressIn(List<String> values) {
-            addCriterion("address in", values, "address");
+        public Criteria andDisposeSiteIn(List<String> values) {
+            addCriterion("dispose_site in", values, "disposeSite");
             return (Criteria) this;
         }
 
-        public Criteria andAddressNotIn(List<String> values) {
-            addCriterion("address not in", values, "address");
+        public Criteria andDisposeSiteNotIn(List<String> values) {
+            addCriterion("dispose_site not in", values, "disposeSite");
             return (Criteria) this;
         }
 
-        public Criteria andAddressBetween(String value1, String value2) {
-            addCriterion("address between", value1, value2, "address");
+        public Criteria andDisposeSiteBetween(String value1, String value2) {
+            addCriterion("dispose_site between", value1, value2, "disposeSite");
             return (Criteria) this;
         }
 
-        public Criteria andAddressNotBetween(String value1, String value2) {
-            addCriterion("address not between", value1, value2, "address");
+        public Criteria andDisposeSiteNotBetween(String value1, String value2) {
+            addCriterion("dispose_site not between", value1, value2, "disposeSite");
             return (Criteria) this;
         }
 
-        public Criteria andCountIsNull() {
-            addCriterion("count is null");
+        public Criteria andDisposeCountIsNull() {
+            addCriterion("dispose_count is null");
             return (Criteria) this;
         }
 
-        public Criteria andCountIsNotNull() {
-            addCriterion("count is not null");
+        public Criteria andDisposeCountIsNotNull() {
+            addCriterion("dispose_count is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCountEqualTo(Integer value) {
-            addCriterion("count =", value, "count");
+        public Criteria andDisposeCountEqualTo(Integer value) {
+            addCriterion("dispose_count =", value, "disposeCount");
             return (Criteria) this;
         }
 
-        public Criteria andCountNotEqualTo(Integer value) {
-            addCriterion("count <>", value, "count");
+        public Criteria andDisposeCountNotEqualTo(Integer value) {
+            addCriterion("dispose_count <>", value, "disposeCount");
             return (Criteria) this;
         }
 
-        public Criteria andCountGreaterThan(Integer value) {
-            addCriterion("count >", value, "count");
+        public Criteria andDisposeCountGreaterThan(Integer value) {
+            addCriterion("dispose_count >", value, "disposeCount");
             return (Criteria) this;
         }
 
-        public Criteria andCountGreaterThanOrEqualTo(Integer value) {
-            addCriterion("count >=", value, "count");
+        public Criteria andDisposeCountGreaterThanOrEqualTo(Integer value) {
+            addCriterion("dispose_count >=", value, "disposeCount");
             return (Criteria) this;
         }
 
-        public Criteria andCountLessThan(Integer value) {
-            addCriterion("count <", value, "count");
+        public Criteria andDisposeCountLessThan(Integer value) {
+            addCriterion("dispose_count <", value, "disposeCount");
             return (Criteria) this;
         }
 
-        public Criteria andCountLessThanOrEqualTo(Integer value) {
-            addCriterion("count <=", value, "count");
+        public Criteria andDisposeCountLessThanOrEqualTo(Integer value) {
+            addCriterion("dispose_count <=", value, "disposeCount");
             return (Criteria) this;
         }
 
-        public Criteria andCountIn(List<Integer> values) {
-            addCriterion("count in", values, "count");
+        public Criteria andDisposeCountIn(List<Integer> values) {
+            addCriterion("dispose_count in", values, "disposeCount");
             return (Criteria) this;
         }
 
-        public Criteria andCountNotIn(List<Integer> values) {
-            addCriterion("count not in", values, "count");
+        public Criteria andDisposeCountNotIn(List<Integer> values) {
+            addCriterion("dispose_count not in", values, "disposeCount");
             return (Criteria) this;
         }
 
-        public Criteria andCountBetween(Integer value1, Integer value2) {
-            addCriterion("count between", value1, value2, "count");
+        public Criteria andDisposeCountBetween(Integer value1, Integer value2) {
+            addCriterion("dispose_count between", value1, value2, "disposeCount");
             return (Criteria) this;
         }
 
-        public Criteria andCountNotBetween(Integer value1, Integer value2) {
-            addCriterion("count not between", value1, value2, "count");
+        public Criteria andDisposeCountNotBetween(Integer value1, Integer value2) {
+            addCriterion("dispose_count not between", value1, value2, "disposeCount");
             return (Criteria) this;
         }
 
-        public Criteria andDisposeWayIsNull() {
-            addCriterion("dispose_way is null");
+        public Criteria andDescriptionIsNull() {
+            addCriterion("description is null");
             return (Criteria) this;
         }
 
-        public Criteria andDisposeWayIsNotNull() {
-            addCriterion("dispose_way is not null");
+        public Criteria andDescriptionIsNotNull() {
+            addCriterion("description is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDisposeWayEqualTo(String value) {
-            addCriterion("dispose_way =", value, "disposeWay");
+        public Criteria andDescriptionEqualTo(String value) {
+            addCriterion("description =", value, "description");
             return (Criteria) this;
         }
 
-        public Criteria andDisposeWayNotEqualTo(String value) {
-            addCriterion("dispose_way <>", value, "disposeWay");
+        public Criteria andDescriptionNotEqualTo(String value) {
+            addCriterion("description <>", value, "description");
             return (Criteria) this;
         }
 
-        public Criteria andDisposeWayGreaterThan(String value) {
-            addCriterion("dispose_way >", value, "disposeWay");
+        public Criteria andDescriptionGreaterThan(String value) {
+            addCriterion("description >", value, "description");
             return (Criteria) this;
         }
 
-        public Criteria andDisposeWayGreaterThanOrEqualTo(String value) {
-            addCriterion("dispose_way >=", value, "disposeWay");
+        public Criteria andDescriptionGreaterThanOrEqualTo(String value) {
+            addCriterion("description >=", value, "description");
             return (Criteria) this;
         }
 
-        public Criteria andDisposeWayLessThan(String value) {
-            addCriterion("dispose_way <", value, "disposeWay");
+        public Criteria andDescriptionLessThan(String value) {
+            addCriterion("description <", value, "description");
             return (Criteria) this;
         }
 
-        public Criteria andDisposeWayLessThanOrEqualTo(String value) {
-            addCriterion("dispose_way <=", value, "disposeWay");
+        public Criteria andDescriptionLessThanOrEqualTo(String value) {
+            addCriterion("description <=", value, "description");
             return (Criteria) this;
         }
 
-        public Criteria andDisposeWayLike(String value) {
-            addCriterion("dispose_way like", value, "disposeWay");
+        public Criteria andDescriptionLike(String value) {
+            addCriterion("description like", value, "description");
             return (Criteria) this;
         }
 
-        public Criteria andDisposeWayNotLike(String value) {
-            addCriterion("dispose_way not like", value, "disposeWay");
+        public Criteria andDescriptionNotLike(String value) {
+            addCriterion("description not like", value, "description");
             return (Criteria) this;
         }
 
-        public Criteria andDisposeWayIn(List<String> values) {
-            addCriterion("dispose_way in", values, "disposeWay");
+        public Criteria andDescriptionIn(List<String> values) {
+            addCriterion("description in", values, "description");
             return (Criteria) this;
         }
 
-        public Criteria andDisposeWayNotIn(List<String> values) {
-            addCriterion("dispose_way not in", values, "disposeWay");
+        public Criteria andDescriptionNotIn(List<String> values) {
+            addCriterion("description not in", values, "description");
             return (Criteria) this;
         }
 
-        public Criteria andDisposeWayBetween(String value1, String value2) {
-            addCriterion("dispose_way between", value1, value2, "disposeWay");
+        public Criteria andDescriptionBetween(String value1, String value2) {
+            addCriterion("description between", value1, value2, "description");
             return (Criteria) this;
         }
 
-        public Criteria andDisposeWayNotBetween(String value1, String value2) {
-            addCriterion("dispose_way not between", value1, value2, "disposeWay");
+        public Criteria andDescriptionNotBetween(String value1, String value2) {
+            addCriterion("description not between", value1, value2, "description");
             return (Criteria) this;
         }
 

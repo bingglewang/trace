@@ -19,6 +19,9 @@ public class ZslBatchRecall implements Serializable {
     @ApiModelProperty(value = "未处理数量")
     private Integer undisposedCount;
 
+    @ApiModelProperty(value = "召回原因")
+    private String cause;
+
     @ApiModelProperty(value = "处理状态（1未处理、2已处理、3部分处理）")
     private Integer disposeStatus;
 
@@ -30,9 +33,6 @@ public class ZslBatchRecall implements Serializable {
 
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
-
-    @ApiModelProperty(value = "召回原因")
-    private String cause;
 
     private static final long serialVersionUID = 1L;
 
@@ -76,6 +76,14 @@ public class ZslBatchRecall implements Serializable {
         this.undisposedCount = undisposedCount;
     }
 
+    public String getCause() {
+        return cause;
+    }
+
+    public void setCause(String cause) {
+        this.cause = cause;
+    }
+
     public Integer getDisposeStatus() {
         return disposeStatus;
     }
@@ -108,14 +116,6 @@ public class ZslBatchRecall implements Serializable {
         this.createTime = createTime;
     }
 
-    public String getCause() {
-        return cause;
-    }
-
-    public void setCause(String cause) {
-        this.cause = cause;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -127,11 +127,11 @@ public class ZslBatchRecall implements Serializable {
         sb.append(", goodsId=").append(goodsId);
         sb.append(", recallCount=").append(recallCount);
         sb.append(", undisposedCount=").append(undisposedCount);
+        sb.append(", cause=").append(cause);
         sb.append(", disposeStatus=").append(disposeStatus);
         sb.append(", principal=").append(principal);
         sb.append(", principalPhone=").append(principalPhone);
         sb.append(", createTime=").append(createTime);
-        sb.append(", cause=").append(cause);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

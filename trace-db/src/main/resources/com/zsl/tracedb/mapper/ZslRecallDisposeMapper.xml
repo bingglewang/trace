@@ -4,13 +4,14 @@
   <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.ZslRecallDispose">
     <id column="recall_dispose_id" jdbcType="INTEGER" property="recallDisposeId" />
     <result column="batch_recall_id" jdbcType="INTEGER" property="batchRecallId" />
-    <result column="code_segment_file_url" jdbcType="VARCHAR" property="codeSegmentFileUrl" />
+    <result column="dispose_batch_no" jdbcType="VARCHAR" property="disposeBatchNo" />
+    <result column="excel_file_url" jdbcType="VARCHAR" property="excelFileUrl" />
     <result column="dispose_type" jdbcType="INTEGER" property="disposeType" />
     <result column="dispose_time_scope" jdbcType="VARCHAR" property="disposeTimeScope" />
     <result column="employe_id" jdbcType="INTEGER" property="employeId" />
-    <result column="address" jdbcType="VARCHAR" property="address" />
-    <result column="count" jdbcType="INTEGER" property="count" />
-    <result column="dispose_way" jdbcType="VARCHAR" property="disposeWay" />
+    <result column="dispose_site" jdbcType="VARCHAR" property="disposeSite" />
+    <result column="dispose_count" jdbcType="INTEGER" property="disposeCount" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -72,8 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    recall_dispose_id, batch_recall_id, code_segment_file_url, dispose_type, dispose_time_scope, 
-    employe_id, address, count, dispose_way, create_time
+    recall_dispose_id, batch_recall_id, dispose_batch_no, excel_file_url, dispose_type, 
+    dispose_time_scope, employe_id, dispose_site, dispose_count, description, create_time
   </sql>
   <select id="selectByExample" parameterType="com.zsl.tracedb.model.ZslRecallDisposeExample" resultMap="BaseResultMap">
     select
@@ -109,13 +110,13 @@
     <selectKey keyProperty="recallDisposeId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into zsl_recall_dispose (batch_recall_id, code_segment_file_url, 
+    insert into zsl_recall_dispose (batch_recall_id, dispose_batch_no, excel_file_url, 
       dispose_type, dispose_time_scope, employe_id, 
-      address, count, dispose_way, 
+      dispose_site, dispose_count, description, 
       create_time)
-    values (#{batchRecallId,jdbcType=INTEGER}, #{codeSegmentFileUrl,jdbcType=VARCHAR}, 
+    values (#{batchRecallId,jdbcType=INTEGER}, #{disposeBatchNo,jdbcType=VARCHAR}, #{excelFileUrl,jdbcType=VARCHAR}, 
       #{disposeType,jdbcType=INTEGER}, #{disposeTimeScope,jdbcType=VARCHAR}, #{employeId,jdbcType=INTEGER}, 
-      #{address,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER}, #{disposeWay,jdbcType=VARCHAR}, 
+      #{disposeSite,jdbcType=VARCHAR}, #{disposeCount,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.zsl.tracedb.model.ZslRecallDispose">
@@ -127,8 +128,11 @@
       <if test="batchRecallId != null">
         batch_recall_id,
       </if>
-      <if test="codeSegmentFileUrl != null">
-        code_segment_file_url,
+      <if test="disposeBatchNo != null">
+        dispose_batch_no,
+      </if>
+      <if test="excelFileUrl != null">
+        excel_file_url,
       </if>
       <if test="disposeType != null">
         dispose_type,
@@ -139,14 +143,14 @@
       <if test="employeId != null">
         employe_id,
       </if>
-      <if test="address != null">
-        address,
+      <if test="disposeSite != null">
+        dispose_site,
       </if>
-      <if test="count != null">
-        count,
+      <if test="disposeCount != null">
+        dispose_count,
       </if>
-      <if test="disposeWay != null">
-        dispose_way,
+      <if test="description != null">
+        description,
       </if>
       <if test="createTime != null">
         create_time,
@@ -156,8 +160,11 @@
       <if test="batchRecallId != null">
         #{batchRecallId,jdbcType=INTEGER},
       </if>
-      <if test="codeSegmentFileUrl != null">
-        #{codeSegmentFileUrl,jdbcType=VARCHAR},
+      <if test="disposeBatchNo != null">
+        #{disposeBatchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="excelFileUrl != null">
+        #{excelFileUrl,jdbcType=VARCHAR},
       </if>
       <if test="disposeType != null">
         #{disposeType,jdbcType=INTEGER},
@@ -168,14 +175,14 @@
       <if test="employeId != null">
         #{employeId,jdbcType=INTEGER},
       </if>
-      <if test="address != null">
-        #{address,jdbcType=VARCHAR},
+      <if test="disposeSite != null">
+        #{disposeSite,jdbcType=VARCHAR},
       </if>
-      <if test="count != null">
-        #{count,jdbcType=INTEGER},
+      <if test="disposeCount != null">
+        #{disposeCount,jdbcType=INTEGER},
       </if>
-      <if test="disposeWay != null">
-        #{disposeWay,jdbcType=VARCHAR},
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -197,8 +204,11 @@
       <if test="record.batchRecallId != null">
         batch_recall_id = #{record.batchRecallId,jdbcType=INTEGER},
       </if>
-      <if test="record.codeSegmentFileUrl != null">
-        code_segment_file_url = #{record.codeSegmentFileUrl,jdbcType=VARCHAR},
+      <if test="record.disposeBatchNo != null">
+        dispose_batch_no = #{record.disposeBatchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.excelFileUrl != null">
+        excel_file_url = #{record.excelFileUrl,jdbcType=VARCHAR},
       </if>
       <if test="record.disposeType != null">
         dispose_type = #{record.disposeType,jdbcType=INTEGER},
@@ -209,14 +219,14 @@
       <if test="record.employeId != null">
         employe_id = #{record.employeId,jdbcType=INTEGER},
       </if>
-      <if test="record.address != null">
-        address = #{record.address,jdbcType=VARCHAR},
+      <if test="record.disposeSite != null">
+        dispose_site = #{record.disposeSite,jdbcType=VARCHAR},
       </if>
-      <if test="record.count != null">
-        count = #{record.count,jdbcType=INTEGER},
+      <if test="record.disposeCount != null">
+        dispose_count = #{record.disposeCount,jdbcType=INTEGER},
       </if>
-      <if test="record.disposeWay != null">
-        dispose_way = #{record.disposeWay,jdbcType=VARCHAR},
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -230,13 +240,14 @@
     update zsl_recall_dispose
     set recall_dispose_id = #{record.recallDisposeId,jdbcType=INTEGER},
       batch_recall_id = #{record.batchRecallId,jdbcType=INTEGER},
-      code_segment_file_url = #{record.codeSegmentFileUrl,jdbcType=VARCHAR},
+      dispose_batch_no = #{record.disposeBatchNo,jdbcType=VARCHAR},
+      excel_file_url = #{record.excelFileUrl,jdbcType=VARCHAR},
       dispose_type = #{record.disposeType,jdbcType=INTEGER},
       dispose_time_scope = #{record.disposeTimeScope,jdbcType=VARCHAR},
       employe_id = #{record.employeId,jdbcType=INTEGER},
-      address = #{record.address,jdbcType=VARCHAR},
-      count = #{record.count,jdbcType=INTEGER},
-      dispose_way = #{record.disposeWay,jdbcType=VARCHAR},
+      dispose_site = #{record.disposeSite,jdbcType=VARCHAR},
+      dispose_count = #{record.disposeCount,jdbcType=INTEGER},
+      description = #{record.description,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -248,8 +259,11 @@
       <if test="batchRecallId != null">
         batch_recall_id = #{batchRecallId,jdbcType=INTEGER},
       </if>
-      <if test="codeSegmentFileUrl != null">
-        code_segment_file_url = #{codeSegmentFileUrl,jdbcType=VARCHAR},
+      <if test="disposeBatchNo != null">
+        dispose_batch_no = #{disposeBatchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="excelFileUrl != null">
+        excel_file_url = #{excelFileUrl,jdbcType=VARCHAR},
       </if>
       <if test="disposeType != null">
         dispose_type = #{disposeType,jdbcType=INTEGER},
@@ -260,14 +274,14 @@
       <if test="employeId != null">
         employe_id = #{employeId,jdbcType=INTEGER},
       </if>
-      <if test="address != null">
-        address = #{address,jdbcType=VARCHAR},
+      <if test="disposeSite != null">
+        dispose_site = #{disposeSite,jdbcType=VARCHAR},
       </if>
-      <if test="count != null">
-        count = #{count,jdbcType=INTEGER},
+      <if test="disposeCount != null">
+        dispose_count = #{disposeCount,jdbcType=INTEGER},
       </if>
-      <if test="disposeWay != null">
-        dispose_way = #{disposeWay,jdbcType=VARCHAR},
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -278,13 +292,14 @@
   <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.ZslRecallDispose">
     update zsl_recall_dispose
     set batch_recall_id = #{batchRecallId,jdbcType=INTEGER},
-      code_segment_file_url = #{codeSegmentFileUrl,jdbcType=VARCHAR},
+      dispose_batch_no = #{disposeBatchNo,jdbcType=VARCHAR},
+      excel_file_url = #{excelFileUrl,jdbcType=VARCHAR},
       dispose_type = #{disposeType,jdbcType=INTEGER},
       dispose_time_scope = #{disposeTimeScope,jdbcType=VARCHAR},
       employe_id = #{employeId,jdbcType=INTEGER},
-      address = #{address,jdbcType=VARCHAR},
-      count = #{count,jdbcType=INTEGER},
-      dispose_way = #{disposeWay,jdbcType=VARCHAR},
+      dispose_site = #{disposeSite,jdbcType=VARCHAR},
+      dispose_count = #{disposeCount,jdbcType=INTEGER},
+      description = #{description,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where recall_dispose_id = #{recallDisposeId,jdbcType=INTEGER}
   </update>

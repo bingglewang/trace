@@ -405,6 +405,76 @@ public class ZslBatchRecallExample {
             return (Criteria) this;
         }
 
+        public Criteria andCauseIsNull() {
+            addCriterion("cause is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCauseIsNotNull() {
+            addCriterion("cause is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCauseEqualTo(String value) {
+            addCriterion("cause =", value, "cause");
+            return (Criteria) this;
+        }
+
+        public Criteria andCauseNotEqualTo(String value) {
+            addCriterion("cause <>", value, "cause");
+            return (Criteria) this;
+        }
+
+        public Criteria andCauseGreaterThan(String value) {
+            addCriterion("cause >", value, "cause");
+            return (Criteria) this;
+        }
+
+        public Criteria andCauseGreaterThanOrEqualTo(String value) {
+            addCriterion("cause >=", value, "cause");
+            return (Criteria) this;
+        }
+
+        public Criteria andCauseLessThan(String value) {
+            addCriterion("cause <", value, "cause");
+            return (Criteria) this;
+        }
+
+        public Criteria andCauseLessThanOrEqualTo(String value) {
+            addCriterion("cause <=", value, "cause");
+            return (Criteria) this;
+        }
+
+        public Criteria andCauseLike(String value) {
+            addCriterion("cause like", value, "cause");
+            return (Criteria) this;
+        }
+
+        public Criteria andCauseNotLike(String value) {
+            addCriterion("cause not like", value, "cause");
+            return (Criteria) this;
+        }
+
+        public Criteria andCauseIn(List<String> values) {
+            addCriterion("cause in", values, "cause");
+            return (Criteria) this;
+        }
+
+        public Criteria andCauseNotIn(List<String> values) {
+            addCriterion("cause not in", values, "cause");
+            return (Criteria) this;
+        }
+
+        public Criteria andCauseBetween(String value1, String value2) {
+            addCriterion("cause between", value1, value2, "cause");
+            return (Criteria) this;
+        }
+
+        public Criteria andCauseNotBetween(String value1, String value2) {
+            addCriterion("cause not between", value1, value2, "cause");
+            return (Criteria) this;
+        }
+
         public Criteria andDisposeStatusIsNull() {
             addCriterion("dispose_status is null");
             return (Criteria) this;
