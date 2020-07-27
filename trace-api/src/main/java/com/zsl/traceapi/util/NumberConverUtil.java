@@ -45,10 +45,10 @@ public class NumberConverUtil {
 
     public static List<String> getConvertNum(Set<Long> zslPoints){
         Set newSet = zslPoints.stream().sorted(Comparator.naturalOrder()).collect(Collectors.toSet());
-        TreeSet<Integer> treeSet = new TreeSet<>();
+        TreeSet<Long> treeSet = new TreeSet<>();
         treeSet.addAll(newSet);
 
-        Integer[] NoNum = new Integer[treeSet.size()];
+        Long[] NoNum = new Long[treeSet.size()];
         treeSet.toArray(NoNum);
 
         String result = convert(NoNum, 0);
@@ -86,7 +86,7 @@ public class NumberConverUtil {
 
 
 
-    public static String convert(Integer[] ints, int index) {
+    public static String convert(Long[] ints, int index) {
         int end = index;
         if (ints.length == index) {//结束条件，遍历完数组
             return "";

@@ -2431,7 +2431,7 @@ public class TraceServiceImpl implements TraceService {
         for(Long sid : miniTraceRecordBindVo.getSids()){
             ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectById(sid);
             if(zslTraceSubcode != null){
-                if(!traceCodeNumber.equals(zslTraceSubcode.getTraceCodeNumber())){
+                if(StringUtils.isNotBlank(traceCodeNumber) && !traceCodeNumber.equals(zslTraceSubcode.getTraceCodeNumber())){
                     return CommonResult.failed("只能操作同批次追溯码");
                 }
                 traceCodeNumber = zslTraceSubcode.getTraceCodeNumber();
@@ -2451,6 +2451,11 @@ public class TraceServiceImpl implements TraceService {
             traceRecordInsertParam.setTraceFromNumber(fromNumber);
             traceRecordInsertParam.setTraceToNumber(toNumber);
             traceRecordInsertParamList.add(traceRecordInsertParam);
+        }
+
+        String repeat = isCodeRepeat(traceRecordInsertParamList);
+        if (!repeat.equals("编码没有冲突")) {
+            return CommonResult.failed(repeat);
         }
 
         int count = traceRecordInsert(traceRecordInsertParamList);

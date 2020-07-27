@@ -33,7 +33,7 @@ public class TraceCodeUtil {
         String suffix = traceCode.substring(traceCode.length()-6);
         Long suffixLong = Long.parseLong(suffix);
         Long blockLong = totalCount + suffixLong;
-        String blockLongStr = blockLong.toString();
+        String blockLongStr = String.format("%06d", blockLong);
         System.out.println("字符串:"+blockLongStr);
         if(((blockLongStr.charAt(blockLongStr.length()-5) - '0') == 0)){
             if(((blockLongStr.charAt(blockLongStr.length()-6) - '0') == 0)){
@@ -50,8 +50,8 @@ public class TraceCodeUtil {
     //判断起始编码，和结束编码,(起始编码必须小于结束编码，)
 
     public static void main(String[] args) {
-        String traceCode = "zs157171673594400050001969";
-        Long totalCount = 2000000L;
+        String traceCode = "zs1572491288681000576007495";
+        Long totalCount = 40L;
         String block = generateBlock(traceCode,totalCount);
         System.out.println("区块："+block);
     }
