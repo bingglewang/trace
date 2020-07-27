@@ -33,7 +33,7 @@ public class TraceCodeUtil {
         String suffix = traceCode.substring(traceCode.length()-6);
         Long suffixLong = Long.parseLong(suffix);
         Long blockLong = totalCount + suffixLong;
-        String blockLongStr = blockLong.toString();
+        String blockLongStr = String.format("%06d", blockLong);
         System.out.println("字符串:"+blockLongStr);
         if(((blockLongStr.charAt(blockLongStr.length()-5) - '0') == 0)){
             if(((blockLongStr.charAt(blockLongStr.length()-6) - '0') == 0)){
