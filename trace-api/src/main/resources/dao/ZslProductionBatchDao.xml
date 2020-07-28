@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsl.traceapi.dao.ZslProductionBatchDao">
+
+    <resultMap id="BaseResultMap" type="com.zsl.traceapi.vo.BatchPagingVo">
+        <id column="batch_id" jdbcType="INTEGER" property="batchId" />
+	    <result column="batch_no" jdbcType="VARCHAR" property="batchNo" />
+	    <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
+	    <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
+	    <result column="production_time_scope" jdbcType="VARCHAR" property="productionTimeScope" />
+    </resultMap>
+	<!--分页查询生产批次列表-->
+	<select id="listByCondition" parameterType="com.zsl.traceapi.dto.BatchQueryParam" resultMap="BaseResultMap">
+        SELECT
+		   pb.batch_id, pb.batch_no, g.goods_id, g.goods_name, pb.production_time_scope
+		FROM
+		   zsl_production_batch pb 
+		   LEFT JOIN merchant m ON m.merchant_id=pb.merchant_id
+		   LEFT JOIN goods g ON g.goods_id=pb.goods_id
+		WHERE 1=1
+	      	<choose>
+	      		<!-- 商家端查询 -->
+	      		<when test="merchantId!=null"> AND pb.merchant_id=#{merchantId}</when>
+	      		<!-- 运营端查询 -->
+	      		<otherwise>
+	      			<if test="merchantName!=null and merchantName!=''">
+	      				AND m.merchant_name LIKE CONCAT('%', #{merchantName}, '%')
+	      			</if>
+	      		</otherwise>
+	      	</choose>
+	      	<if test="batchNo!=null and batchNo!=''">
+   				AND pb.batch_no LIKE CONCAT('%', #{batchNo}, '%')
+   			</if>
+   			<if test="goodsName!=null and goodsName!=''">
+   				AND g.goods_name LIKE CONCAT('%', #{goodsName}, '%')
+   			</if>
+    </select>
+    
+    <!-- id获取批次信息 -->
+    <select id="getBatchInfo" parameterType="java.lang.Integer" resultType="com.zsl.traceapi.vo.BatchModifyVo">
+        SELECT
+			pa.batch_id AS batchId, pa.batch_no AS batchNo, gs.goods_id AS goodsId, 
+			gs.goods_name AS goodsName, me.merchant_id AS merchantId, me.merchant_name AS merchantName
+		FROM
+			zsl_production_batch pa
+			LEFT JOIN merchant me ON me.merchant_id=pa.merchant_id
+			LEFT JOIN goods gs ON gs.goods_id=pa.goods_id 
+		WHERE
+			1=1 AND pa.batch_id=#{batchId}
+    </select>
+    
+    <!-- 批次id获取场景时间范围列表 -->
+    <select id="getSceneTimeByBatchId" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT
+			sb.scene_time_scope
+		FROM
+			zsl_scene_batch sb 
+		  	LEFT JOIN zsl_production_scene ps ON ps.scene_id=sb.scene_id
+		WHERE
+			1=1 AND sb.batch_id=1 AND ps.current_status=1
+			ORDER BY ps.scene_sort ASC
+    </select>
+    
+    <!-- 生产批次id获取追溯码段 -->
+    <select id="getTraceCodeSidByBatchId" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT
+		   pbis.batch_sid_id, pbis.trace_code_no, pbis.sid_start, pbis.sid_end
+		FROM
+		   zsl_production_batch_bind_sid pbis
+		WHERE 1=1
+			AND pbis.production_batch_id=#{batchId}
+    </select>
+    
+    <!-- 生产批次id获取追溯码段 -->
+    <select id="goodsListByBatchNo" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+			gs.goods_id, gs.goods_name
+		FROM
+			zsl_production_batch pa
+			LEFT JOIN goods gs ON gs.goods_id=pa.goods_id 
+		WHERE 1=1 
+			AND pa.batch_no=#{batchNo}
+    </select>
+
+</mapper>

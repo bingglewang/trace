@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsl.traceapi.dao.ZslProductionSceneDao">
+
+	<!--按条件查询生产场景列表-->
+    <resultMap id="listByConditionResult" type="com.zsl.traceapi.vo.ScenePagingVo">
+        <id column="scene_id" jdbcType="INTEGER" property="sceneId" />
+	    <result column="name" jdbcType="VARCHAR" property="name" />
+	    <result column="scene_sort" jdbcType="INTEGER" property="sceneSort" />
+	    <result column="description" property="description" />
+    </resultMap>
+	<select id="listByCondition" parameterType="com.zsl.traceapi.dto.SceneQueryParam" resultMap="listByConditionResult">
+        SELECT
+            zps.scene_id, zps.name, zps.scene_sort, zps.description
+        FROM
+            zsl_production_scene zps 
+        WHERE
+	      	1=1 AND zps.goods_id=#{goodsId} AND zps.current_status=1
+	      	<if test="name!=null and name!=''">
+	      		AND zps.name LIKE CONCAT('%', #{name}, '%')
+	      	</if>
+	    ORDER BY zps.scene_sort asc
+    </select>
+	
+    <!--id查询生产场景信息-->
+    <resultMap id="detailByIdResult" type="com.zsl.traceapi.vo.SceneDetailVo">
+        <id column="scene_id" jdbcType="INTEGER" property="sceneId" />
+	    <result column="name" jdbcType="VARCHAR" property="name" />
+	    <result column="current_status" jdbcType="INTEGER" property="currentStatus" />
+	    <result column="scene_sort" jdbcType="INTEGER" property="sceneSort" />
+	    <result column="video_url" jdbcType="VARCHAR" property="videoUrl" />
+	    <result column="description" jdbcType="VARCHAR" property="description" />
+	    <collection property="sceneImages" ofType="java.util.Map">
+	    	<id column="scene_image_id" jdbcType="INTEGER" property="sceneImageId" />
+		    <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
+		    <result column="show_sort" jdbcType="INTEGER" property="showSort" />
+	    </collection>
+    </resultMap>
+	<select id="detailById" parameterType="java.lang.Integer" resultMap="detailByIdResult">
+		SELECT
+            zps.scene_id, zps.name, zps.current_status, zps.scene_sort, zps.video_url, zps.description, 
+            zsi.scene_image_id, zsi.image_url, zsi.show_sort
+        FROM
+            zsl_production_scene zps LEFT JOIN zsl_scene_image zsi ON zsi.scene_id=zps.scene_id
+        WHERE
+	      	1=1 AND zps.scene_id=#{sceneId} AND zps.current_status=1 
+	    ORDER BY zsi.show_sort ASC
+	</select>
+	
+    <!-- 新建生产批次时加载场景信息列表 -->
+    <resultMap id="sceneListForNewBatchResult" type="com.zsl.traceapi.vo.SceneForNewBatchVo">
+        <id column="scene_id" jdbcType="INTEGER" property="sceneId" />
+	    <result column="name" jdbcType="VARCHAR" property="name" />
+	    <result column="scene_sort" jdbcType="INTEGER" property="sceneSort" />
+	    <result column="description" jdbcType="VARCHAR" property="description" />
+	    <result column="video_url" jdbcType="VARCHAR" property="videoUrl" />
+	    <collection property="sceneImages" ofType="java.util.Map">
+	    	<id column="scene_image_id" jdbcType="INTEGER" property="sceneImageId" />
+		    <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
+		    <result column="show_sort" jdbcType="INTEGER" property="showSort" />
+	    </collection>
+    </resultMap>
+    <select id="sceneListForNewBatch" parameterType="java.lang.Integer" resultMap="sceneListForNewBatchResult">
+        SELECT
+		   ps.scene_id, ps.name, ps.scene_sort, ps.description, ps.video_url, 
+		   si.scene_image_id, si.image_url, si.show_sort
+		FROM
+		   zsl_production_scene ps LEFT JOIN zsl_scene_image si ON si.scene_id=ps.scene_id 
+		WHERE
+			1=1 AND ps.goods_id=#{goodsId} AND ps.current_status=1
+			ORDER BY ps.scene_sort, si.show_sort ASC
+    </select>
+    
+    <!-- 编辑生产批次时关联的场景及材料 -->
+    <resultMap id="sceneListForEditBatchResult" type="com.zsl.traceapi.vo.SceneForEditBatchVo">
+        <result column="scene_batch_id" jdbcType="INTEGER" property="sceneBatchId" />
+        <result column="scene_time_scope" jdbcType="VARCHAR" property="sceneTimeScope" />
+        <result column="employe_name" jdbcType="VARCHAR" property="employeName" />
+	    <result column="name" jdbcType="VARCHAR" property="name" />
+	    <result column="scene_sort" jdbcType="INTEGER" property="sceneSort" />
+	    <result column="description" jdbcType="VARCHAR" property="description" />
+	    <result column="video_url" jdbcType="VARCHAR" property="videoUrl" />
+	    <collection property="sceneImages" ofType="java.util.Map">
+	    	<id column="scene_image_id" jdbcType="INTEGER" property="sceneImageId" />
+		    <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
+		    <result column="show_sort" jdbcType="INTEGER" property="showSort" />
+	    </collection>
+	    <collection property="materialOutStorages" ofType="java.util.Map">
+		    <result column="batch_number" jdbcType="VARCHAR" property="batchNumber" />
+		    <result column="stock_number" jdbcType="VARCHAR" property="stockNumber" />
+		    <result column="warehouse_out_order" jdbcType="VARCHAR" property="warehouseOutOrder" />
+		    <result column="material_name" jdbcType="VARCHAR" property="materialName" />
+		    <result column="in_stock_time"  property="inStockTime" />
+		    <result column="warehouse_number" jdbcType="VARCHAR" property="warehouseNumber" />
+		    <result column="surplus_stock" jdbcType="VARCHAR" property="surplusStock" />
+		    <result column="supplier" jdbcType="VARCHAR" property="supplier" />
+	    </collection>
+    </resultMap>
+    <select id="sceneListForEditBatch" parameterType="java.lang.Integer" resultMap="sceneListForEditBatchResult">
+        SELECT
+			sb.scene_batch_id, sb.scene_time_scope, ac.account_name AS employe_name, 
+		   	ps.name, ps.scene_sort, ps.description, ps.video_url, 
+		   	si.scene_image_id, si.image_url, si.show_sort, 
+		   	mwo.batch_number, mwo.stock_number, mwo.warehouse_out_order,
+			ml.material_name, mw.warehouse_number, 
+			DATE_FORMAT(mw.create_time, '%Y-%m-%d %H:%i:%s') AS in_stock_time,
+			CONCAT(mw.residue_stock, mw.units) surplus_stock,
+			IFNULL(ml.material_source, mt.merchant_name) AS supplier
+		FROM
+			zsl_scene_batch sb 
+			LEFT JOIN account ac ON ac.id=sb.employe_id	
+			
+		   	LEFT JOIN zsl_production_scene ps ON ps.scene_id=sb.scene_id
+			LEFT JOIN zsl_scene_image si ON si.scene_id=ps.scene_id
+		   
+		   	LEFT JOIN zsl_batch_material_out bmo ON bmo.scene_batch_id=sb.scene_batch_id
+		   	LEFT JOIN material_warehouse_out mwo ON mwo.id=bmo.material_out_id
+		   	LEFT JOIN material_warehouse mw ON mw.id=mwo.warehouse_id
+		   	LEFT JOIN material ml ON ml.id=mw.material_id 
+			LEFT JOIN merchant mt ON mt.merchant_id=ml.merchant_id
+		WHERE
+			1=1 AND sb.batch_id=#{bathcId}
+			ORDER BY ps.scene_sort, si.show_sort ASC
+    </select>
+    <!-- 获取未绑定当前生产批次的场景列表 -->
+    <select id="getSceneListForNoBound" parameterType="java.lang.Integer" resultMap="sceneListForNewBatchResult">
+        SELECT
+		   ps.scene_id, ps.name, ps.scene_sort, ps.description, ps.video_url, 
+		   si.scene_image_id, si.image_url, si.show_sort
+		FROM
+		   zsl_production_scene ps 
+			LEFT JOIN zsl_scene_image si ON si.scene_id=ps.scene_id 
+			LEFT JOIN zsl_scene_batch sb ON sb.scene_id=ps.scene_id
+		WHERE
+			1=1 AND ps.goods_id=#{goodsId} AND ps.current_status=1 
+			AND (sb.scene_batch_id IS NULL OR sb.batch_id!=#{batchId})
+			ORDER BY ps.scene_sort, si.show_sort ASC
+    </select>
+    
+    <!-- 根据生产批次追溯场景信息 -->
+    <resultMap id="traceSceneResult" type="com.zsl.traceapi.vo.traceBatchVo">
+	    <result column="batch_no" jdbcType="VARCHAR" property="batchNo" />
+	    <collection property="tsvList" ofType="com.zsl.traceapi.vo.traceSceneVo">
+		    <result column="scene_time_scope" jdbcType="VARCHAR" property="sceneTimeScope" />
+		    <result column="employe_name" jdbcType="VARCHAR" property="employeName" />
+		    <result column="scene_name" jdbcType="VARCHAR" property="sceneName" />
+		    <result column="description" jdbcType="VARCHAR" property="description" />
+		    <collection property="sceneImageList" ofType="java.lang.String">
+			    <result column="image_url"/>
+		    </collection>
+		    <collection property="materialNameList" ofType="java.lang.String">
+			    <result column="material_name"/>
+		    </collection>
+	    </collection>
+    </resultMap>
+    <select id="traceScene" parameterType="java.lang.String" resultMap="traceSceneResult">
+        SELECT
+		   pb.batch_no, sb.scene_time_scope, a.realName AS employe_name, ps.name AS scene_name, ps.description, 
+		   m.material_name, si.image_url
+		FROM
+			zsl_production_batch pb 
+			LEFT JOIN zsl_scene_batch sb ON sb.batch_id=pb.batch_id
+			LEFT JOIN account a ON a.id=sb.employe_id
+			LEFT JOIN zsl_production_scene ps ON ps.scene_id=sb.scene_id
+			LEFT JOIN zsl_scene_image si ON si.scene_id=ps.scene_id
+			LEFT JOIN zsl_batch_material_out bmo ON bmo.scene_batch_id=sb.scene_batch_id
+			LEFT JOIN material_warehouse_out mwo ON mwo.id=bmo.material_out_id
+			LEFT JOIN material_warehouse mw ON mw.id=mwo.warehouse_id
+			LEFT JOIN material m ON m.id=mw.material_id
+		WHERE
+			1=1 AND pb.batch_no = #{batchNo} 
+			ORDER BY ps.scene_sort, si.show_sort ASC
+    </select>
+
+</mapper>

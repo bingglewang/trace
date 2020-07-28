@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsl.traceapi.dao.ZslBatchRecallDao">
+
+	<!-- 条件查询分页列表 -->
+    <resultMap id="listByConditionResult" type="com.zsl.traceapi.vo.RecallPagingVo">
+        <id column="batch_recall_id" jdbcType="INTEGER" property="recallId" />
+	    <result column="batch_no" jdbcType="VARCHAR" property="productionBatchNo" />
+	    <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
+	    <result column="recall_count" jdbcType="INTEGER" property="recallCount" />
+	    <result column="cause" jdbcType="VARCHAR" property="cause" />
+	    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+	    <result column="undisposed_count" jdbcType="INTEGER" property="undisposedCount" />
+	    <result column="dispose_status" jdbcType="INTEGER" property="disposeStatus" />
+    </resultMap>
+	<select id="listByCondition" parameterType="com.zsl.traceapi.dto.RecallQueryParam" resultMap="listByConditionResult">
+        SELECT
+		   br.batch_recall_id, pb.batch_no, gs.goods_name, br.recall_count, 
+			br.cause, br.create_time, br.undisposed_count, br.dispose_status
+		FROM
+		   zsl_batch_recall br 
+		   LEFT JOIN zsl_production_batch pb ON pb.batch_id=br.production_batch_id
+		   LEFT JOIN goods gs ON gs.goods_id=br.goods_id
+		WHERE 1=1
+			AND pb.merchant_id=#{merchantId}
+	      	<if test="batchNo!=null and batchNo!=''">
+   				AND pb.batch_no LIKE CONCAT('%', #{batchNo}, '%')
+   			</if>
+   			ORDER BY br.create_time DESC
+    </select>
+    
+    <!-- 召回编辑页面详细信息 -->
+    <resultMap id="detailForEditResult" type="com.zsl.traceapi.vo.RecallDetailForEditVo">
+        <id column="batch_recall_id" jdbcType="INTEGER" property="recallId" />
+	    <result column="batch_no" jdbcType="VARCHAR" property="productionBatchNo" />
+	    <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
+	    <result column="cause" jdbcType="VARCHAR" property="cause" />
+	    <result column="principal" jdbcType="VARCHAR" property="principal" />
+	    <result column="principal_phone" jdbcType="VARCHAR" property="principalPhone" />
+    </resultMap>
+	<select id="detailForEdit" parameterType="java.lang.Integer" resultMap="detailForEditResult">
+        SELECT
+		   br.batch_recall_id, pb.batch_no, gs.goods_name, 
+			br.cause, br.principal, br.principal_phone
+		FROM
+		   zsl_batch_recall br 
+		   LEFT JOIN zsl_production_batch pb ON pb.batch_id=br.production_batch_id
+		   LEFT JOIN goods gs ON gs.goods_id=br.goods_id
+		WHERE 1=1
+			AND br.batch_recall_id=#{recallId}
+    </select>
+    
+    <!-- 处理召回的结果详情 -->
+    <resultMap id="disposeDetailResult" type="com.zsl.traceapi.vo.DisposeRecallResultVo">
+        <id column="batch_recall_id" jdbcType="INTEGER" property="recallId" />
+	    <result column="batch_no" jdbcType="VARCHAR" property="productionBatchNo" />
+	    <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
+	    <result column="recall_count" jdbcType="INTEGER" property="recallCount" />
+	    <result column="undisposed_count" jdbcType="INTEGER" property="undisposeCount" />
+	    <result column="cause" jdbcType="VARCHAR" property="cause" />
+	    <collection property="ddvList" ofType="com.zsl.traceapi.vo.DisposeDetailVo">
+	    	<result column="dispose_type" jdbcType="INTEGER" property="disposeType" />
+	    	<result column="dispose_count" jdbcType="INTEGER" property="disposeCount" />
+		    <result column="employe_name" jdbcType="VARCHAR" property="employeName" />
+		    <result column="dispose_time_scope" jdbcType="VARCHAR" property="disposeTimeScope" />
+		    <result column="dispose_site" jdbcType="VARCHAR" property="disposeSite" />
+		    <result column="description" jdbcType="VARCHAR" property="description" />
+		    <result column="excel_file_url" jdbcType="VARCHAR" property="excelFileUrl" />
+	    </collection>
+    </resultMap>
+	<select id="disposeDetail" parameterType="java.lang.Integer" resultMap="disposeDetailResult">
+        SELECT
+		   br.batch_recall_id, pb.batch_no, gs.goods_name, br.recall_count, br.undisposed_count, br.cause,
+		   rd.dispose_type, rd.dispose_count, a.account_name AS employe_name, 
+		   rd.dispose_time_scope, rd.dispose_site, rd.description, rd.excel_file_url
+		FROM
+		   zsl_batch_recall br 
+		   LEFT JOIN zsl_production_batch pb ON pb.batch_id=br.production_batch_id
+		   LEFT JOIN goods gs ON gs.goods_id=br.goods_id
+		   LEFT JOIN zsl_recall_dispose rd ON rd.batch_recall_id=br.batch_recall_id
+		   LEFT JOIN account a ON a.id=rd.employe_id
+		WHERE 1=1
+			AND br.batch_recall_id=#{recallId}
+    </select>
+    
+    <!-- 销毁记录分页列表 -->
+    <resultMap id="destroyPagingResult" type="com.zsl.traceapi.vo.DestroyPagingVo">
+        <id column="recall_dispose_id" jdbcType="INTEGER" property="recallDisposeId" />
+	    <result column="dispose_batch_no" jdbcType="VARCHAR" property="disposeBatchNo" />
+	    <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
+	    <result column="dispose_count" jdbcType="INTEGER" property="disposeCount" />
+	    <result column="dispose_site" jdbcType="VARCHAR" property="disposeSite" />
+	    <result column="employe_name" jdbcType="VARCHAR" property="employeName" />
+	    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+	    <result column="excel_file_url" jdbcType="VARCHAR" property="excelFileUrl" />
+    </resultMap>
+	<select id="destroyPaging" parameterType="com.zsl.traceapi.dto.RecallQueryParam" resultMap="destroyPagingResult">
+        SELECT
+		   	rd.recall_dispose_id, rd.dispose_batch_no, gs.goods_name, rd.dispose_count, 
+			rd.dispose_site, a.account_name AS employe_name, rd.create_time, rd.excel_file_url 
+		FROM
+		   zsl_recall_dispose rd 
+		   LEFT JOIN account a ON a.id=rd.employe_id
+		   LEFT JOIN zsl_batch_recall br ON br.batch_recall_id=rd.batch_recall_id
+		   LEFT JOIN goods gs ON gs.goods_id=br.goods_id
+		   LEFT JOIN zsl_production_batch pb ON pb.batch_id=br.production_batch_id
+		WHERE 1=1
+			AND pb.merchant_id=#{merchantId} AND rd.dispose_type=0
+	      	<if test="batchNo!=null and batchNo!=''">
+   				AND pb.batch_no LIKE CONCAT('%', #{batchNo}, '%')
+   			</if>
+   			ORDER BY rd.create_time DESC
+    </select>
+    
+    <!-- 批量插入处理记录 -->
+    <insert id="batchInsertDispose" parameterType="com.zsl.tracedb.model.ZslRecallDispose">
+    	<foreach collection="rdList" item="rd" separator=";">
+    		INSERT INTO zsl_recall_dispose VALUES(null, 
+    			#{rd.batchRecallId}, #{rd.disposeBatchNo}, #{rd.excelFileUrl}, #{rd.disposeType}, 
+    			#{rd.disposeTimeScope}, #{rd.employeId}, #{rd.disposeSite}, #{rd.disposeCount}, 
+    			#{rd.description}, #{rd.createTime})
+    	</foreach>
+    </insert>
+    
+</mapper>

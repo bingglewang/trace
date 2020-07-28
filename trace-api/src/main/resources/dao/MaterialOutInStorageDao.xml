@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsl.traceapi.dao.MaterialOutInStorageDao">
+
+	<!--商家id获取原材料入库信息列表-->
+    <resultMap id="BaseResult" type="com.zsl.traceapi.vo.MaterialInStorageVo">
+        <id column="id" jdbcType="INTEGER" property="id" />
+	    <result column="in_storage_batch_no" property="inStorageBatchNo" />
+	    <result column="material_name" jdbcType="VARCHAR" property="materialName" />
+	    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+	    <result column="warehouse_number" jdbcType="VARCHAR" property="warehouseNumber" />
+	    <result column="residue_stock" jdbcType="DECIMAL" property="residueStock" />
+	    <result column="units" jdbcType="VARCHAR" property="unit" />
+	    <result column="supplier" jdbcType="VARCHAR" property="supplier" />
+    </resultMap>
+	<select id="listByMerchant" parameterType="java.lang.Integer" resultMap="BaseResult">
+        SELECT 
+			mw.id, CONCAT("YCL20200912", mw.id) in_storage_batch_no, ml.material_name, 
+			mw.create_time, mw.warehouse_number, mw.residue_stock, mw.units,
+			IFNULL(ml.material_source, mt.merchant_name) AS supplier
+		FROM 
+			material_warehouse mw 
+			LEFT JOIN material ml ON ml.id=mw.material_id 
+			LEFT JOIN merchant mt ON mt.merchant_id=ml.merchant_id 
+		<where> 1=1
+			AND ml.merchant_id=#{merchantId}
+      	</where>
+    </select>
+
+</mapper>

@@ -50,6 +50,11 @@
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+          <groupId>org.apache.tomcat.embed</groupId>
+          <artifactId>tomcat-embed-core</artifactId>
+          <version>8.5.34</version>
+      </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
