@@ -149,7 +149,7 @@
 			    <result column="image_url"/>
 		    </collection>
 		    <collection property="materialList" ofType="java.util.Map">
-		    	<result column="id" jdbcType="Integer" property="materialOutId"/>
+		    	<result column="id" jdbcType="INTEGER" property="materialOutId"/>
 			    <result column="material_name" jdbcType="VARCHAR" property="materialName" />
 		    </collection>
 	    </collection>
