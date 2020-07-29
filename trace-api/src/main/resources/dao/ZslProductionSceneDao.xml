@@ -148,15 +148,16 @@
 		    <collection property="sceneImageList" ofType="java.lang.String">
 			    <result column="image_url"/>
 		    </collection>
-		    <collection property="materialNameList" ofType="java.lang.String">
-			    <result column="material_name"/>
+		    <collection property="materialList" ofType="java.util.Map">
+		    	<result column="id" jdbcType="Integer" property="materialOutId"/>
+			    <result column="material_name" jdbcType="VARCHAR" property="materialName" />
 		    </collection>
 	    </collection>
     </resultMap>
     <select id="traceScene" parameterType="java.lang.String" resultMap="traceSceneResult">
         SELECT
 		   pb.batch_no, sb.scene_time_scope, a.realName AS employe_name, ps.name AS scene_name, ps.description, 
-		   m.material_name, si.image_url
+		   mwo.id, m.material_name, si.image_url
 		FROM
 			zsl_production_batch pb 
 			LEFT JOIN zsl_scene_batch sb ON sb.batch_id=pb.batch_id

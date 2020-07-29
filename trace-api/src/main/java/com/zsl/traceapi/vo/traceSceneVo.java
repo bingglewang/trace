@@ -1,6 +1,7 @@
 package com.zsl.traceapi.vo;
 
 import java.util.List;
+import java.util.Map;
 
 import lombok.Data;
 
@@ -24,6 +25,6 @@ public class traceSceneVo {
     /** 场景图片列表 */
     private List<String> sceneImageList;
     /** 场景的出库原材料列表 */
-    private List<String> materialNameList;
+    private List<Map<String, Object>> materialList;
     
 }
