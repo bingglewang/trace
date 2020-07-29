@@ -1919,43 +1919,26 @@ public class TraceServiceImpl implements TraceService {
             //所在区块
             String block = TraceCodeUtil.generateBlock(zslTraceSubcode.getTraceCodeNumber(), TotalCount);
             result.put("block", block);
+
             //生产环节信息
             ZslTraceRecord zslTraceRecord = zslTraceRecordDao.selectRecordForProduct(zslTraceSubcode.getTraceGoodId(), zslTraceSubcode.getTraceSid(), zslTraceSubcode.getTraceCodeNumber());
             if (zslTraceRecord == null) {
                 result.put("productionInfo", "");
-            } else {
-                //根据记录id查询生产环节
-                ZslTraceProductionLinkExample zslTraceProductionLinkExample = new ZslTraceProductionLinkExample();
-                ZslTraceProductionLinkExample.Criteria criteria1 = zslTraceProductionLinkExample.createCriteria();
-                criteria1.andTraceRecodeIdEqualTo(zslTraceRecord.getTraceRecordId());
-                List<ZslTraceProductionLink> productionLinkList = zslTraceProductionLinkMapper.selectByExample(zslTraceProductionLinkExample);
-                if (CollectionUtil.isEmpty(productionLinkList)) {
-                    result.put("productionInfo", new ArrayList<>());
-                } else {
-                    List<ProductionLinkVo> productionInfo = new ArrayList<>();
-                    for (ZslTraceProductionLink pItem : productionLinkList) {
-                        ProductionLinkVo productionLinkVo = new ProductionLinkVo();
-                        productionLinkVo.setProductionDescripe(pItem.getProductionDescripe());
-                        productionLinkVo.setProductionMan(pItem.getProductionMan());
-                        productionLinkVo.setProductionName(pItem.getProductionName());
-                        productionLinkVo.setProductionTime(DateUtil.DateToString(pItem.getProductionTime(), "yyyy-MM-dd HH:mm:ss"));
-                        List<String> productPicList = new ArrayList<>();
-                        ZslProductionImageExample zslProductionImageExample = new ZslProductionImageExample();
-                        ZslProductionImageExample.Criteria criteria2 = zslProductionImageExample.createCriteria();
-                        criteria2.andProductionIdEqualTo(pItem.getId());
-                        zslProductionImageExample.setOrderByClause("image_index asc");
-                        List<ZslProductionImage> productionImageList = zslProductionImageMapper.selectByExample(zslProductionImageExample);
-                        if (CollectionUtil.isEmpty(productionImageList)) {
-                            productionLinkVo.setProductionPicList(productPicList);
-                        } else {
-                            for (ZslProductionImage zslProductionImage : productionImageList) {
-                                productPicList.add(zslProductionImage.getImageUrl());
-                            }
-                            productionLinkVo.setProductionPicList(productPicList);
-                        }
-                        productionInfo.add(productionLinkVo);
+            }else{
+                // 获取生产批次号
+                ZslProductionBatchBindSidExample zslProductionBatchBindSidExample = new ZslProductionBatchBindSidExample();
+                ZslProductionBatchBindSidExample.Criteria criteria1 = zslProductionBatchBindSidExample.createCriteria();
+                criteria1.andTraceRecordIdEqualTo(zslTraceRecord.getTraceRecordId());
+                List<ZslProductionBatchBindSid> zslProductionBatchBindSids = zslProductionBatchBindSidMapper.selectByExample(zslProductionBatchBindSidExample);
+                if(CollectionUtil.isNotEmpty(zslProductionBatchBindSids)){
+                    ZslProductionBatch zslProductionBatch = zslProductionBatchMapper.selectByPrimaryKey(zslProductionBatchBindSids.get(0).getProductionBatchId());
+                    if(zslProductionBatch != null){
+                        result.put("productionInfo", zslProductionBatch.getBatchNo());
+                    }else{
+                        result.put("productionInfo", "");
                     }
-                    result.put("productionInfo", productionInfo);
+                }else{
+                    result.put("productionInfo", "");
                 }
             }
 
