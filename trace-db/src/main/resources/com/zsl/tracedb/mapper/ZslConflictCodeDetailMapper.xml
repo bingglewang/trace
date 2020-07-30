@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsl.tracedb.mapper.ZslConflictCodeDetailMapper">
+  <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.ZslConflictCodeDetail">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="conflict_code_id" jdbcType="INTEGER" property="conflictCodeId" />
+    <result column="conflict_address" jdbcType="VARCHAR" property="conflictAddress" />
+    <result column="conflict_date" jdbcType="TIMESTAMP" property="conflictDate" />
+    <result column="conflict_ip" jdbcType="VARCHAR" property="conflictIp" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, conflict_code_id, conflict_address, conflict_date, conflict_ip
+  </sql>
+  <select id="selectByExample" parameterType="com.zsl.tracedb.model.ZslConflictCodeDetailExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from zsl_conflict_code_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from zsl_conflict_code_detail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from zsl_conflict_code_detail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zsl.tracedb.model.ZslConflictCodeDetailExample">
+    delete from zsl_conflict_code_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zsl.tracedb.model.ZslConflictCodeDetail">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into zsl_conflict_code_detail (conflict_code_id, conflict_address, 
+      conflict_date, conflict_ip)
+    values (#{conflictCodeId,jdbcType=INTEGER}, #{conflictAddress,jdbcType=VARCHAR}, 
+      #{conflictDate,jdbcType=TIMESTAMP}, #{conflictIp,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zsl.tracedb.model.ZslConflictCodeDetail">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into zsl_conflict_code_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="conflictCodeId != null">
+        conflict_code_id,
+      </if>
+      <if test="conflictAddress != null">
+        conflict_address,
+      </if>
+      <if test="conflictDate != null">
+        conflict_date,
+      </if>
+      <if test="conflictIp != null">
+        conflict_ip,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="conflictCodeId != null">
+        #{conflictCodeId,jdbcType=INTEGER},
+      </if>
+      <if test="conflictAddress != null">
+        #{conflictAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="conflictDate != null">
+        #{conflictDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="conflictIp != null">
+        #{conflictIp,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zsl.tracedb.model.ZslConflictCodeDetailExample" resultType="java.lang.Integer">
+    select count(*) from zsl_conflict_code_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update zsl_conflict_code_detail
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.conflictCodeId != null">
+        conflict_code_id = #{record.conflictCodeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.conflictAddress != null">
+        conflict_address = #{record.conflictAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.conflictDate != null">
+        conflict_date = #{record.conflictDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.conflictIp != null">
+        conflict_ip = #{record.conflictIp,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update zsl_conflict_code_detail
+    set id = #{record.id,jdbcType=INTEGER},
+      conflict_code_id = #{record.conflictCodeId,jdbcType=INTEGER},
+      conflict_address = #{record.conflictAddress,jdbcType=VARCHAR},
+      conflict_date = #{record.conflictDate,jdbcType=TIMESTAMP},
+      conflict_ip = #{record.conflictIp,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.ZslConflictCodeDetail">
+    update zsl_conflict_code_detail
+    <set>
+      <if test="conflictCodeId != null">
+        conflict_code_id = #{conflictCodeId,jdbcType=INTEGER},
+      </if>
+      <if test="conflictAddress != null">
+        conflict_address = #{conflictAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="conflictDate != null">
+        conflict_date = #{conflictDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="conflictIp != null">
+        conflict_ip = #{conflictIp,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.ZslConflictCodeDetail">
+    update zsl_conflict_code_detail
+    set conflict_code_id = #{conflictCodeId,jdbcType=INTEGER},
+      conflict_address = #{conflictAddress,jdbcType=VARCHAR},
+      conflict_date = #{conflictDate,jdbcType=TIMESTAMP},
+      conflict_ip = #{conflictIp,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
