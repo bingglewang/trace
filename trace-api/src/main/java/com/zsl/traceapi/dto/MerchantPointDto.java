@@ -16,6 +16,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MerchantPointDto {
     /**
+     * 是否代理商
+     */
+    private boolean isAgent;
+    /**
      * 账号id
      */
     private Integer accountId;

@@ -70,10 +70,10 @@ public class TraceServiceImpl implements TraceService {
     private ZslTraceRecordMapper zslTraceRecordMapper;
 
     @Autowired
-    private ZslTraceProductionLinkMapper zslTraceProductionLinkMapper;
+    private ZslConflictCodeMapper zslConflictCodeMapper;
 
     @Autowired
-    private ZslProductionImageMapper zslProductionImageMapper;
+    private ZslConflictCodeDetailMapper zslConflictCodeDetailMapper;
 
     @Autowired
     private ZslTraceRelationMapper zslTraceRelationMapper;
@@ -1836,6 +1836,7 @@ public class TraceServiceImpl implements TraceService {
     @Override
     public CommonResult getTraceGoodInfo(Long sid, HttpServletRequest request) {
         ZslTraceSubcode zslTraceSubcode = zslTraceSubcodeDao.selectById(sid);
+        String scanAddress = request.getParameter("name");
         if (zslTraceSubcode != null && "Y".equals(zslTraceSubcode.getIsLeaf())) {
             if (zslTraceSubcode.getTraceGoodId() == null) {
                 return CommonResult.failed("该追溯码尚未录入信息");
@@ -1887,6 +1888,7 @@ public class TraceServiceImpl implements TraceService {
             //追溯信息（流通环节信息）
             List<ScanPointQueryParam> tracePointNodes = new ArrayList<>();
             List<ZslTracePoint> tracePointList = zslTraceSubcodeDao.selectTracePointNodes(zslTraceSubcode.getTraceGoodId(), zslTraceSubcode.getTraceSid(), zslTraceSubcode.getTraceCodeNumber());
+            MerchantPointDto tempMerchantPoint = null;
             for (ZslTracePoint zslTracePoint : tracePointList) {
                 ScanPointQueryParam scanPointQueryParam = new ScanPointQueryParam();
                 MerchantPointDto merchantPointDto = getCirculateNodeInfoDiffAgent(zslTracePoint.getTracePointAccountId());
@@ -1897,6 +1899,9 @@ public class TraceServiceImpl implements TraceService {
                     scanPointQueryParam.setContactNumber(merchantPointDto.getContactNumber());
                     scanPointQueryParam.setDetailAddress(merchantPointDto.getDetailAddress());
                     scanPointQueryParam.setPersonInCharge(merchantPointDto.getPersonInCharge());
+                    if(merchantPointDto.isAgent()){
+                        tempMerchantPoint = merchantPointDto;
+                    }
                 }
 
                 if (zslTracePoint.getTracePointTime() != null) {
@@ -1939,6 +1944,41 @@ public class TraceServiceImpl implements TraceService {
                     }
                 }else{
                     result.put("productionInfo", "");
+                }
+            }
+
+            //判断串货
+            if(StringUtils.isNotBlank(scanAddress)){
+                String scanCity = AddressResolutionUtil.addressResolution(scanAddress);
+                String agentCity = AddressResolutionUtil.addressResolution(tempMerchantPoint.getDetailAddress());
+                if(!agentCity.equals(scanCity)){
+                    ZslConflictCodeExample conflictCodeExample = new ZslConflictCodeExample();
+                    ZslConflictCodeExample.Criteria criteria1 = conflictCodeExample.createCriteria();
+                    criteria1.andTraceSidEqualTo(zslTraceSubcode.getTraceSid());
+                    List<ZslConflictCode> zslConflictCodes = zslConflictCodeMapper.selectByExample(conflictCodeExample);
+                    int conflictCodeId = 0;
+                    if(CollectionUtil.isEmpty(zslConflictCodes)){
+                        ZslConflictCode zslConflictCode = new ZslConflictCode();
+                        zslConflictCode.setProductBatchCode(result.get("productionInfo").toString());
+                        zslConflictCode.setTraceSid(zslTraceSubcode.getTraceSid());
+                        zslConflictCode.setTraceCodeNumber(zslTraceSubcode.getTraceCodeNumber());
+                        zslConflictCode.setTraceAddress(tempMerchantPoint.getDetailAddress());
+                        zslConflictCode.setTraceNodeName(tempMerchantPoint.getTracePointName());
+                        Goods goods = goodsMapper.selectByPrimaryKey(zslTraceSubcode.getTraceGoodId());
+                        if(goods != null){
+                            zslConflictCode.setTraceGoodName(goods.getGoodsName());
+                        }
+                        zslConflictCodeMapper.insert(zslConflictCode);
+                        conflictCodeId = zslConflictCode.getId();
+                    }else{
+                        conflictCodeId = zslConflictCodes.get(0).getId();
+                    }
+                    ZslConflictCodeDetail detail = new ZslConflictCodeDetail();
+                    detail.setConflictAddress(scanAddress);
+                    detail.setConflictCodeId(conflictCodeId);
+                    detail.setConflictDate(new Date());
+                    detail.setConflictIp(IpUtil.getRequestIp(request));
+                    zslConflictCodeDetailMapper.insert(detail);
                 }
             }
 
@@ -2001,6 +2041,7 @@ public class TraceServiceImpl implements TraceService {
             result = merchantDao.getOtherPoint(accountId);
         } else if (account.getRoleId().equals(RoleEnum.ROLE_BUSINESS_AGENT.getId())) {
             result = merchantDao.getOtherPointDiffAgent(accountId);
+            result.setAgent(true);
         }
         return result;
     }
