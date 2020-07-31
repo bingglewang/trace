@@ -279,6 +279,7 @@ public class TraceServiceImpl implements TraceService {
                 passParam.setTraceId(id);
                 passParam.setTraceHandleStatus(1);
                 passParam.setTraceReviewDate(new Date());
+                passParam.setTraceBack3("Y");
 
                 if (zslTraceInfo.getTraceApplyType() == 1) {
                     Long passCount = getTracePassCount(id, paramList);
