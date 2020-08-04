@@ -75,6 +75,7 @@
     <resultMap id="sceneListForEditBatchResult" type="com.zsl.traceapi.vo.SceneForEditBatchVo">
         <result column="scene_batch_id" jdbcType="INTEGER" property="sceneBatchId" />
         <result column="scene_time_scope" jdbcType="VARCHAR" property="sceneTimeScope" />
+        <result column="id" jdbcType="INTEGER" property="employeId" />
         <result column="employe_name" jdbcType="VARCHAR" property="employeName" />
 	    <result column="name" jdbcType="VARCHAR" property="name" />
 	    <result column="scene_sort" jdbcType="INTEGER" property="sceneSort" />
@@ -86,6 +87,7 @@
 		    <result column="show_sort" jdbcType="INTEGER" property="showSort" />
 	    </collection>
 	    <collection property="materialOutStorages" ofType="java.util.Map">
+	    	<result column="warehouse_id" jdbcType="INTEGER" property="materialInId" />
 		    <result column="batch_number" jdbcType="VARCHAR" property="batchNumber" />
 		    <result column="stock_number" jdbcType="VARCHAR" property="stockNumber" />
 		    <result column="warehouse_out_order" jdbcType="VARCHAR" property="warehouseOutOrder" />
@@ -98,10 +100,10 @@
     </resultMap>
     <select id="sceneListForEditBatch" parameterType="java.lang.Integer" resultMap="sceneListForEditBatchResult">
         SELECT
-			sb.scene_batch_id, sb.scene_time_scope, ac.account_name AS employe_name, 
+			sb.scene_batch_id, sb.scene_time_scope, ac.id, ac.account_name AS employe_name, 
 		   	ps.name, ps.scene_sort, ps.description, ps.video_url, 
 		   	si.scene_image_id, si.image_url, si.show_sort, 
-		   	mwo.batch_number, mwo.stock_number, mwo.warehouse_out_order,
+		   	mwo.warehouse_id, mwo.batch_number, mwo.stock_number, mwo.warehouse_out_order,
 			ml.material_name, mw.warehouse_number, 
 			DATE_FORMAT(mw.create_time, '%Y-%m-%d %H:%i:%s') AS in_stock_time,
 			CONCAT(mw.residue_stock, mw.units) surplus_stock,

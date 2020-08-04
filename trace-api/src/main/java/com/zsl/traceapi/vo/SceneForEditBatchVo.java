@@ -12,6 +12,8 @@ public class SceneForEditBatchVo {
     private Integer sceneBatchId;
     /** 场景时间范围 */
     private String sceneTimeScope;
+    /** 员工id */
+    private Integer employeId;
     /** 员工名称 */
     private String employeName;
     /** 场景名称 */
