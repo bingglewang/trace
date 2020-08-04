@@ -1,5 +1,8 @@
 package com.zsl.traceapi.service;
 
+import java.util.List;
+import java.util.Map;
+
 import com.zsl.traceapi.dto.MerchantPointDto;
 
 /**
@@ -23,4 +26,11 @@ public interface OtherAccountServcie {
      * @return
      */
     boolean isCurrentNodeNewest(Long sid);
+
+	/**
+	 * --根据商家获取员工列表（子账号）
+	 * @param merchantId
+	 * @return
+	 */
+	List<Map<String, Object>> optionAccountList(Integer merchantId);
 }

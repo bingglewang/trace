@@ -3,8 +3,13 @@ package com.zsl.traceapi.controller;
 import com.zsl.traceapi.dto.MerchantPointDto;
 import com.zsl.traceapi.service.OtherAccountServcie;
 import com.zsl.tracecommon.CommonResult;
+
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,6 +48,18 @@ public class OtherAccountController {
     public CommonResult isCurrentNodeNewest(Long sid){
         boolean result = accountServcie.isCurrentNodeNewest(sid);
         return CommonResult.success(result);
+    }
+    
+    
+    
+    /**
+     * --根据商家获取员工列表（子账号）
+     * @param merchantId
+     * @return
+     */
+    @GetMapping("optionAccountList/{merchantId}")
+    public CommonResult<List<Map<String, Object>>> optionAccountList(@PathVariable Integer merchantId){
+        return CommonResult.success(accountServcie.optionAccountList(merchantId));
     }
 
 }

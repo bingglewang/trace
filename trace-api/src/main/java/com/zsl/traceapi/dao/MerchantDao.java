@@ -1,6 +1,10 @@
 package com.zsl.traceapi.dao;
 
 import com.zsl.traceapi.dto.MerchantPointDto;
+
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -76,4 +80,13 @@ public interface MerchantDao {
      */
     int updatePointNodeByAccountId(@Param("accountId") Integer accountId,@Param("tracePointName") String tracePointName);
 
+
+    
+    /**
+     * --根据商家获取员工列表（子账号）
+     * @param merchantId
+     * @return
+     */
+    List<Map<String, Object>> optionAccountList(Integer merchantId);
+    
 }

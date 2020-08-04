@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName OtherAccountServcieImpl
@@ -169,5 +170,11 @@ public class OtherAccountServcieImpl implements OtherAccountServcie {
         }
         return false;
     }
+
+
+	@Override
+	public List<Map<String, Object>> optionAccountList(Integer merchantId) {
+		return merchantDao.optionAccountList(merchantId);
+	}
 
 }

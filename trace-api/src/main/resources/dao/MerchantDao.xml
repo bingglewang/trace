@@ -114,5 +114,17 @@
         WHERE
         account_id = #{accountId};
     </update>
+    
+    
+    <!-- 根据商家获取员工列表（子账号） -->
+    <select id="optionAccountList" parameterType="java.lang.Integer" resultType="java.util.Map">
+       	SELECT
+			a.id AS accountId, a.account_name
+		FROM 
+			account_sub_merchant asm
+			LEFT JOIN account a ON a.id=asm.account_id
+		WHERE 1=1
+			AND asm.merchant_id=#{merchantId}
+    </select>
 
 </mapper>
