@@ -200,5 +200,8 @@
         <table tableName="zsl_conflict_code_detail">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
+        <table tableName="zsl_recall_trace_subcode">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
     </context>
 </generatorConfiguration>

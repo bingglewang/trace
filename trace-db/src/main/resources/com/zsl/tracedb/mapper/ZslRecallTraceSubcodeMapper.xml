@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsl.tracedb.mapper.ZslRecallTraceSubcodeMapper">
+  <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.ZslRecallTraceSubcode">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="recall_id" jdbcType="INTEGER" property="recallId" />
+    <result column="recall_type" jdbcType="INTEGER" property="recallType" />
+    <result column="subcode_id" jdbcType="INTEGER" property="subcodeId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, recall_id, recall_type, subcode_id, create_time
+  </sql>
+  <select id="selectByExample" parameterType="com.zsl.tracedb.model.ZslRecallTraceSubcodeExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from zsl_recall_trace_subcode
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from zsl_recall_trace_subcode
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from zsl_recall_trace_subcode
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zsl.tracedb.model.ZslRecallTraceSubcodeExample">
+    delete from zsl_recall_trace_subcode
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zsl.tracedb.model.ZslRecallTraceSubcode">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into zsl_recall_trace_subcode (recall_id, recall_type, subcode_id, 
+      create_time)
+    values (#{recallId,jdbcType=INTEGER}, #{recallType,jdbcType=INTEGER}, #{subcodeId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zsl.tracedb.model.ZslRecallTraceSubcode">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into zsl_recall_trace_subcode
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="recallId != null">
+        recall_id,
+      </if>
+      <if test="recallType != null">
+        recall_type,
+      </if>
+      <if test="subcodeId != null">
+        subcode_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="recallId != null">
+        #{recallId,jdbcType=INTEGER},
+      </if>
+      <if test="recallType != null">
+        #{recallType,jdbcType=INTEGER},
+      </if>
+      <if test="subcodeId != null">
+        #{subcodeId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zsl.tracedb.model.ZslRecallTraceSubcodeExample" resultType="java.lang.Integer">
+    select count(*) from zsl_recall_trace_subcode
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update zsl_recall_trace_subcode
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.recallId != null">
+        recall_id = #{record.recallId,jdbcType=INTEGER},
+      </if>
+      <if test="record.recallType != null">
+        recall_type = #{record.recallType,jdbcType=INTEGER},
+      </if>
+      <if test="record.subcodeId != null">
+        subcode_id = #{record.subcodeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update zsl_recall_trace_subcode
+    set id = #{record.id,jdbcType=INTEGER},
+      recall_id = #{record.recallId,jdbcType=INTEGER},
+      recall_type = #{record.recallType,jdbcType=INTEGER},
+      subcode_id = #{record.subcodeId,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zsl.tracedb.model.ZslRecallTraceSubcode">
+    update zsl_recall_trace_subcode
+    <set>
+      <if test="recallId != null">
+        recall_id = #{recallId,jdbcType=INTEGER},
+      </if>
+      <if test="recallType != null">
+        recall_type = #{recallType,jdbcType=INTEGER},
+      </if>
+      <if test="subcodeId != null">
+        subcode_id = #{subcodeId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zsl.tracedb.model.ZslRecallTraceSubcode">
+    update zsl_recall_trace_subcode
+    set recall_id = #{recallId,jdbcType=INTEGER},
+      recall_type = #{recallType,jdbcType=INTEGER},
+      subcode_id = #{subcodeId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -8,8 +8,8 @@ public class TraceRecordVo {
     private String traceCodeNumber;
     private Integer traceGoodId;
     private String traceGoodsName;
-    private Integer traceToNumber;
-    private Integer traceFromNumber;
+    private Long traceToNumber;
+    private Long traceFromNumber;
     private Integer traceStallId;
     private String traceStallName;
     private Long fromSid;
