@@ -16,7 +16,6 @@ import lombok.Data;
  */
 @Data
 public class DisposeRecallParam {
-	
 	@ApiModelProperty(value = "处理方式")
 	@NotNull(message = "disposeType不能空")
 	@Min(value = 0, message = "disposeType参数违规")

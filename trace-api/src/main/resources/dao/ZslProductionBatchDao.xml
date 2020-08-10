@@ -81,5 +81,16 @@
 		WHERE 1=1 
 			AND pa.batch_no=#{batchNo}
     </select>
+    
+    <!-- 商家获取生产批次列表 -->
+	<select id="batchListByMerchant" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT
+		   	pb.batch_id AS batchId, pb.batch_no AS batchNo
+		FROM
+		   	zsl_production_batch pb 
+		   	LEFT JOIN merchant m ON m.merchant_id=pb.merchant_id
+		WHERE 1=1
+			AND m.merchant_id=#{merchantId}
+    </select>
 
 </mapper>

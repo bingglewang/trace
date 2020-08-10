@@ -1,6 +1,7 @@
 package com.zsl.traceapi.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -17,6 +18,7 @@ import com.github.pagehelper.PageInfo;
 import com.zsl.traceapi.dto.DisposeRecallParam;
 import com.zsl.traceapi.dto.RecallParam;
 import com.zsl.traceapi.dto.RecallQueryParam;
+import com.zsl.traceapi.dto.TraceSidDisposeParam;
 import com.zsl.traceapi.service.RecallService;
 import com.zsl.traceapi.vo.DestroyPagingVo;
 import com.zsl.traceapi.vo.RecallDetailForEditVo;
@@ -32,6 +34,7 @@ import com.zsl.tracecommon.CommonResult;
  */
 @RestController
 @RequestMapping(value = "recall/")
+@Validated
 public class RecallController {
 	@Autowired
 	private RecallService recallService;
@@ -97,7 +100,7 @@ public class RecallController {
 	 */
 	@PostMapping(value = "disposeRecallInfo/{recallId}")
 	public CommonResult<String> disposeRecallInfo(@PathVariable Integer recallId, 
-			@RequestBody @Valid List<DisposeRecallParam> param) {
+			@RequestBody List<@Valid DisposeRecallParam> param) {
 		return recallService.disposeRecallInfo(recallId, param);
 	}
 	/**
@@ -117,6 +120,16 @@ public class RecallController {
 	@PostMapping(value = "destroyPaging")
 	public CommonResult<PageInfo<DestroyPagingVo>> destroyPaging(@RequestBody @Valid RecallQueryParam param) {
 		return recallService.destroyPaging(param);
+	}
+	
+	/**
+	 * --解析CSV追溯sid
+	 * @param param
+	 * @return
+	 */
+	@PostMapping(value = "traceSidByCsv")
+	public CommonResult<Map<String, Object>> traceSidByCsv(TraceSidDisposeParam param) {
+		return recallService.traceSidByCsv(param);
 	}
 
 }

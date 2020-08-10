@@ -114,4 +114,15 @@ public class ProductionBatchController {
 		return batchService.goodsListByBatchNo(batchNo);
 	}
 	
+	
+	/**
+	 * --商家获取生产批次列表
+	 * @param merchantId
+	 * @return
+	 */
+	@GetMapping(value = "batchListByMerchant/{merchantId}")
+	public CommonResult<List<Map<String, Object>>> batchListByMerchant(@PathVariable Integer merchantId) {
+		return batchService.batchListByMerchant(merchantId);
+	}
+	
 }

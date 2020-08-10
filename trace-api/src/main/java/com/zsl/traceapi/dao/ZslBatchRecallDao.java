@@ -3,13 +3,16 @@ package com.zsl.traceapi.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import com.zsl.traceapi.dto.RecallQueryParam;
 import com.zsl.traceapi.vo.RecallDetailForEditVo;
 import com.zsl.traceapi.vo.DestroyPagingVo;
 import com.zsl.traceapi.vo.DisposeRecallResultVo;
 import com.zsl.traceapi.vo.RecallPagingVo;
+import com.zsl.tracedb.model.ZslProductionBatch;
 import com.zsl.tracedb.model.ZslRecallDispose;
+import com.zsl.tracedb.model.ZslRecallTraceSubcode;
 
 /**
  * @author CH W
@@ -52,5 +55,20 @@ public interface ZslBatchRecallDao {
 	 * @param rdList
 	 */
 	void batchInsertDispose(@Param("rdList") List<ZslRecallDispose> rdList);
+	
+	/**
+	 * --批量插入召回追溯码中间表记录
+	 * @param rtsList
+	 */
+	void batchInsertRecallSubcode(@Param("rtsList") List<ZslRecallTraceSubcode> rtsList);
+
+	/**
+	 * --生产批次号和商品id查询记录
+	 * @param productionBatchNo
+	 * @param goodsId
+	 * @return
+	 */
+	@Select("SELECT * FROM zsl_production_batch WHERE batch_no=#{batchNo} AND goods_id=#{goodsId}")
+	ZslProductionBatch recordByBatchNoAndGoodsId(String batchNo, Integer goodsId);
 
 }

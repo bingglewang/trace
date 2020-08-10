@@ -1,9 +1,13 @@
 package com.zsl.traceapi.service.impl;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.BeanUtils;
@@ -14,9 +18,11 @@ import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zsl.traceapi.dao.ZslBatchRecallDao;
+import com.zsl.traceapi.dao.ZslTraceSubcodeDao;
 import com.zsl.traceapi.dto.DisposeRecallParam;
 import com.zsl.traceapi.dto.RecallParam;
 import com.zsl.traceapi.dto.RecallQueryParam;
+import com.zsl.traceapi.dto.TraceSidDisposeParam;
 import com.zsl.traceapi.service.RecallService;
 import com.zsl.traceapi.vo.DestroyPagingVo;
 import com.zsl.traceapi.vo.RecallDetailForEditVo;
@@ -25,13 +31,15 @@ import com.zsl.traceapi.vo.RecallPagingVo;
 import com.zsl.tracecommon.CommonResult;
 import com.zsl.tracedb.mapper.ZslBatchRecallMapper;
 import com.zsl.tracedb.mapper.ZslProductionBatchBindSidMapper;
-import com.zsl.tracedb.mapper.ZslProductionBatchMapper;
+import com.zsl.tracedb.mapper.ZslRecallTraceSubcodeMapper;
 import com.zsl.tracedb.model.ZslBatchRecall;
 import com.zsl.tracedb.model.ZslProductionBatch;
 import com.zsl.tracedb.model.ZslProductionBatchBindSid;
 import com.zsl.tracedb.model.ZslProductionBatchBindSidExample;
-import com.zsl.tracedb.model.ZslProductionBatchExample;
 import com.zsl.tracedb.model.ZslRecallDispose;
+import com.zsl.tracedb.model.ZslRecallTraceSubcode;
+import com.zsl.tracedb.model.ZslRecallTraceSubcodeExample;
+import com.zsl.tracedb.model.ZslTraceSubcode;
 
 /**
  * @author CH W
@@ -46,9 +54,11 @@ public class RecallServiceImpl implements RecallService {
 	@Autowired
 	private ZslBatchRecallDao batchRecallDao;
 	@Autowired
-	private ZslProductionBatchMapper batchMapper;
-	@Autowired
 	private ZslProductionBatchBindSidMapper batchBindSidMapper;
+	@Autowired
+	private ZslTraceSubcodeDao traceSubcodeDao;
+	@Autowired
+	private ZslRecallTraceSubcodeMapper recallTraceSubcodeMapper;
 	
 	@Override
 	public CommonResult<PageInfo<RecallPagingVo>> paging(RecallQueryParam param) {
@@ -68,19 +78,16 @@ public class RecallServiceImpl implements RecallService {
 		if(!Pattern.matches(reg, param.getPrincipalPhone())){
 			return CommonResult.failed("手机号码错误，请认真填写");
 		}
-		ZslProductionBatchExample batchExample = new ZslProductionBatchExample();
-		ZslProductionBatchExample.Criteria batchCriteria = batchExample.createCriteria();
-		batchCriteria.andBatchNoEqualTo(param.getProductionBatchNo());
-		batchCriteria.andGoodsIdEqualTo(param.getGoodsId());
-		List<ZslProductionBatch> pbList = batchMapper.selectByExample(batchExample);
-		if(pbList==null || pbList.size()<1) {
+		ZslProductionBatch pbRecord = batchRecallDao.recordByBatchNoAndGoodsId(
+				param.getProductionBatchNo(), param.getGoodsId());
+		if(pbRecord==null) {
 			return CommonResult.failed("违规操作，商品和生产批次不匹配");
 		}
 		try {
 			//	计算当前召回批次的数量
 			ZslProductionBatchBindSidExample pbbsExample = new ZslProductionBatchBindSidExample();
 			ZslProductionBatchBindSidExample.Criteria pbbsCriteria = pbbsExample.createCriteria();
-			pbbsCriteria.andProductionBatchIdEqualTo(pbList.get(0).getBatchId());
+			pbbsCriteria.andProductionBatchIdEqualTo(pbRecord.getBatchId());
 			List<ZslProductionBatchBindSid> pbbsList = batchBindSidMapper.selectByExample(pbbsExample);
 			Long recallCount = 0L;
 			if(pbbsList!=null && pbbsList.size()>0) {
@@ -91,7 +98,7 @@ public class RecallServiceImpl implements RecallService {
 			//	插入召回记录
 			ZslBatchRecall brRecord = new ZslBatchRecall();
 			BeanUtils.copyProperties(param, brRecord);
-			brRecord.setProductionBatchId(pbList.get(0).getBatchId());
+			brRecord.setProductionBatchId(pbRecord.getBatchId());
 			brRecord.setRecallCount(recallCount.intValue());
 			brRecord.setUndisposedCount(recallCount.intValue());
 			brRecord.setDisposeStatus(1);
@@ -167,8 +174,10 @@ public class RecallServiceImpl implements RecallService {
 					ZslRecallDispose rdRecord = new ZslRecallDispose();
 					BeanUtils.copyProperties(drp, rdRecord);
 					rdRecord.setDisposeTimeScope(drp.getStartTime()+"----"+drp.getEndTime());
-					rdRecord.setDisposeBatchNo("CL" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+					Date date = new Date();
+					rdRecord.setDisposeBatchNo("CL" + new SimpleDateFormat("yyyyMMddHHmmss").format(date));
 					rdRecord.setBatchRecallId(recallId);
+					rdRecord.setCreateTime(date);
 					rdList.add(rdRecord);
 				}
 				batchRecallDao.batchInsertDispose(rdList);
@@ -194,6 +203,64 @@ public class RecallServiceImpl implements RecallService {
 		PageHelper.startPage(param.getPageNum(), param.getPageSize());
 		List<DestroyPagingVo> dpvList = batchRecallDao.destroyPaging(param);
 		return CommonResult.success(new PageInfo<DestroyPagingVo>(dpvList));
+	}
+
+	@Override
+	public CommonResult<Map<String, Object>> traceSidByCsv(TraceSidDisposeParam param) {
+		try {
+			//	解析csv文件数据
+			BufferedReader br = new BufferedReader(new InputStreamReader(param.getTmpFile().getInputStream()));
+			List<Long> traceSidList = new ArrayList<>();
+			String str = "";
+			for(int i=0; (str = br.readLine())!=null; i++) {
+				if(i==0) continue;
+				traceSidList.add(Long.valueOf(str));
+			}
+			br.close();
+			if(traceSidList.size()==0) {
+				return CommonResult.failed("上传文件为空数据");
+			}
+			//	校验追溯sid数据，并插入关联表记录
+			List<ZslRecallTraceSubcode> rtsList = new ArrayList<>();
+			List<Long> noExistSidList = new ArrayList<>();
+			List<Long> processedList = new ArrayList<>();
+			for(Long traceSid : traceSidList) {
+				ZslTraceSubcode tsRecord = traceSubcodeDao.recordBySid(traceSid);
+				if(tsRecord!=null) {
+					ZslRecallTraceSubcodeExample rtsExample = new ZslRecallTraceSubcodeExample();
+					ZslRecallTraceSubcodeExample.Criteria rtsCriteria = rtsExample.createCriteria();
+					rtsCriteria.andSubcodeIdEqualTo(tsRecord.getId().intValue());
+					List<ZslRecallTraceSubcode> existRtsList = recallTraceSubcodeMapper.selectByExample(rtsExample);
+					//	召回已处理过的追溯sid列表
+					if(existRtsList!=null && existRtsList.size()>0) {
+						processedList.add(traceSid);
+						continue;
+					}
+					//	成功处理追溯sid
+					ZslRecallTraceSubcode rtsRecord = new ZslRecallTraceSubcode();
+					rtsRecord.setRecallId(param.getRecallId());
+					rtsRecord.setRecallType(param.getRecallType());
+					rtsRecord.setSubcodeId(tsRecord.getId().intValue());
+					rtsRecord.setCreateTime(new Date());
+					rtsList.add(rtsRecord);
+				}else {
+					//	不存在系统中的追溯sid列表
+					noExistSidList.add(traceSid);
+				}
+			}
+			if(rtsList.size()>0) {
+				batchRecallDao.batchInsertRecallSubcode(rtsList);
+			}
+			//	返回数据
+			Map<String, Object> traceSidInfoVo = new HashMap<>();
+			traceSidInfoVo.put("noExistSidList", noExistSidList);	//	不存在系统中的追溯sid列表
+			traceSidInfoVo.put("processedList", processedList);		//	召回已处理过的追溯sid列表
+			traceSidInfoVo.put("successCount", rtsList.size());		//	成功处理的sid数量
+			return CommonResult.success(traceSidInfoVo);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return CommonResult.failed(e.getMessage());
+		}
 	}
 	
 }

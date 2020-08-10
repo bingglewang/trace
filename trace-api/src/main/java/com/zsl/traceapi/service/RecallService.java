@@ -1,11 +1,13 @@
 package com.zsl.traceapi.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.github.pagehelper.PageInfo;
 import com.zsl.traceapi.dto.DisposeRecallParam;
 import com.zsl.traceapi.dto.RecallParam;
 import com.zsl.traceapi.dto.RecallQueryParam;
+import com.zsl.traceapi.dto.TraceSidDisposeParam;
 import com.zsl.traceapi.vo.DestroyPagingVo;
 import com.zsl.traceapi.vo.RecallDetailForEditVo;
 import com.zsl.traceapi.vo.DisposeRecallResultVo;
@@ -82,5 +84,12 @@ public interface RecallService {
 	 * @return
 	 */
 	CommonResult<PageInfo<DestroyPagingVo>> destroyPaging(RecallQueryParam param);
+
+	/**
+	 * --解析CSV追溯码数量
+	 * @param param
+	 * @return
+	 */
+	CommonResult<Map<String, Object>> traceSidByCsv(TraceSidDisposeParam param);
 
 }

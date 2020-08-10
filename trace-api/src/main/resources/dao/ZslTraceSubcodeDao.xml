@@ -413,5 +413,11 @@ AND sub.is_leaf = 'Y';
         where trace_code_number = #{traceCodeNumber}
         and trace_sid = #{traceSid}
     </select>
+    
+    
+    <!-- 追溯sid查询记录 -->
+    <select id="recordBySid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    	SELECT * FROM zsl_trace_subcode WHERE trace_sid=#{traceSid}
+    </select>
 
 </mapper>

@@ -48,5 +48,13 @@ public interface ProductionBatchService {
 	 * @return
 	 */
 	CommonResult<List<Map<String, Object>>> goodsListByBatchNo(String batchNo);
+	
+	
+	/**
+	 * --商家获取生产批次列表
+	 * @param merchantId
+	 * @return
+	 */
+	CommonResult<List<Map<String, Object>>> batchListByMerchant(Integer merchantId);
 
 }

@@ -49,4 +49,13 @@ public interface ZslProductionBatchDao {
 	 */
 	List<Map<String, Object>> goodsListByBatchNo(String batchNo);
 
+	
+	
+	/**
+	 * --商家获取生产批次列表
+	 * @param merchantId
+	 * @return
+	 */
+	List<Map<String, Object>> batchListByMerchant(Integer merchantId);
+
 }

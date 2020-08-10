@@ -50,4 +50,11 @@ public interface ZslTraceSubcodeDao {
     List<SpurtCodeVo> getSidsByTraceCodeNumber(@Param("traceCodeNumber") String traceCodeNumber);
 
     SpurtCodeVo getSubCodeBySidAndCode(@Param("traceCodeNumber") String traceCodeNumber,@Param("traceSid") Long traceSid);
+	
+    /**
+     * --追溯sid查询记录
+	 * @param traceSid
+	 * @return
+	 */
+	ZslTraceSubcode recordBySid(Long traceSid);
 }

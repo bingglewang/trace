@@ -122,4 +122,12 @@
     	</foreach>
     </insert>
     
+    <!-- 批量插入召回追溯码中间表记录 -->
+    <insert id="batchInsertRecallSubcode" parameterType="com.zsl.tracedb.model.ZslRecallTraceSubcode">
+    	<foreach collection="rtsList" item="rts" separator=";">
+    		INSERT INTO zsl_recall_trace_subcode VALUES(null, 
+    			#{rts.recallId}, #{rts.recallType}, #{rts.subcodeId}, #{rts.createTime})
+    	</foreach>
+    </insert>
+    
 </mapper>

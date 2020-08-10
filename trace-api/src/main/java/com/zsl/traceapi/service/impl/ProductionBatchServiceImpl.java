@@ -222,4 +222,11 @@ public class ProductionBatchServiceImpl implements ProductionBatchService {
 		return CommonResult.success(batchDao.goodsListByBatchNo(batchNo));
 	}
 
+	
+	
+	@Override
+	public CommonResult<List<Map<String, Object>>> batchListByMerchant(Integer merchantId) {
+		return CommonResult.success(batchDao.batchListByMerchant(merchantId));
+	}
+
 }
