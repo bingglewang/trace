@@ -243,7 +243,6 @@ AND sub.is_leaf = 'Y';
                     zsl_trace_record r
                 WHERE
                     r.trace_code_number =  #{traceCodeNumber}
-                and
                 AND (
                     #{traceIndex} BETWEEN r.trace_from_number
                     AND r.trace_to_number
