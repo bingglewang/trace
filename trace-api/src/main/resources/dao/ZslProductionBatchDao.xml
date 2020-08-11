@@ -2,15 +2,50 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zsl.traceapi.dao.ZslProductionBatchDao">
 
-    <resultMap id="BaseResultMap" type="com.zsl.traceapi.vo.BatchPagingVo">
+	<!-- 条件查询列表 -->
+    <resultMap id="listByConditionResult" type="com.zsl.tracedb.model.ZslProductionBatch">
+        <id column="batch_id" jdbcType="INTEGER" property="batchId" />
+	    <result column="batch_no" jdbcType="VARCHAR" property="batchNo" />
+	    <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
+	    <result column="production_time_scope" jdbcType="VARCHAR" property="productionTimeScope" />
+	    <result column="merchant_id" jdbcType="INTEGER" property="merchantId" />
+	    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    </resultMap>
+	<select id="listByCondition"  resultMap="listByConditionResult"
+			parameterType="com.zsl.tracedb.model.ZslProductionBatch">
+        SELECT
+		   	*
+		FROM
+		   zsl_production_batch 
+		WHERE 1=1
+   			<if test="batchNo!=null and batchNo!=''">
+   				AND batch_no LIKE CONCAT('%', #{batchNo}, '%')
+   			</if>
+   			<if test="goodsId!=null">
+   				AND goods_id = #{goodsId}
+   			</if>
+   			<if test="productionTimeScope!=null and productionTimeScope!=''">
+   				AND production_time_scope LIKE CONCAT('%', #{productionTimeScope}, '%')
+   			</if>
+   			<if test="merchantId!=null">
+   				AND merchant_id = #{merchantId}
+   			</if>
+   			<if test="createTime!=null">
+   				AND create_time = #{createTime}
+   			</if>
+   			ORDER BY create_time DESC
+    </select>
+
+	<!-- 自定义条件查询生产批次列表 -->
+    <resultMap id="listByCustomConditionResult" type="com.zsl.traceapi.vo.BatchPagingVo">
         <id column="batch_id" jdbcType="INTEGER" property="batchId" />
 	    <result column="batch_no" jdbcType="VARCHAR" property="batchNo" />
 	    <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
 	    <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
 	    <result column="production_time_scope" jdbcType="VARCHAR" property="productionTimeScope" />
     </resultMap>
-	<!--分页查询生产批次列表-->
-	<select id="listByCondition" parameterType="com.zsl.traceapi.dto.BatchQueryParam" resultMap="BaseResultMap">
+	<select id="listByCustomCondition" resultMap="listByCustomConditionResult"
+	 		parameterType="com.zsl.traceapi.dto.BatchQueryParam">
         SELECT
 		   pb.batch_id, pb.batch_no, g.goods_id, g.goods_name, pb.production_time_scope
 		FROM

@@ -10,24 +10,25 @@ import com.zsl.traceapi.vo.RecallDetailForEditVo;
 import com.zsl.traceapi.vo.DestroyPagingVo;
 import com.zsl.traceapi.vo.DisposeRecallResultVo;
 import com.zsl.traceapi.vo.RecallPagingVo;
+import com.zsl.tracedb.model.ZslBatchRecall;
 import com.zsl.tracedb.model.ZslProductionBatch;
 import com.zsl.tracedb.model.ZslRecallDispose;
 import com.zsl.tracedb.model.ZslRecallTraceSubcode;
 
 /**
+ * @remark 生产批次召回dao
  * @author CH W
- * @description	追溯生产场景dao
- * @date 2020年6月5日 下午4:09:06
+ * @date 2020年8月10日 下午5:12:57
  * @version 1.0
  */
-public interface ZslBatchRecallDao {
+public interface ZslBatchRecallDao extends BaseDao<ZslBatchRecall> {
 
 	/**
 	 * --条件查询分页列表
 	 * @param param
 	 * @return
 	 */
-	List<RecallPagingVo> listByCondition(RecallQueryParam param);
+	List<RecallPagingVo> listByCustomCondition(RecallQueryParam param);
 
 	/**
 	 * --编辑页面详细
@@ -71,4 +72,12 @@ public interface ZslBatchRecallDao {
 	@Select("SELECT * FROM zsl_production_batch WHERE batch_no=#{batchNo} AND goods_id=#{goodsId}")
 	ZslProductionBatch recordByBatchNoAndGoodsId(String batchNo, Integer goodsId);
 
+	/**
+	 * --subcodeId获取召回追溯中间表记录
+	 * @param subcodeId
+	 * @return
+	 */
+	@Select("SELECT * FROM zsl_recall_trace_subcode WHERE subcode_id=#{subcodeId}")
+	ZslRecallTraceSubcode recallTraceBySubcodeId(Integer subcodeId);
+	
 }

@@ -1,6 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zsl.traceapi.dao.ZslTraceSubcodeDao">
+
+	<!-- 条件查询列表 -->
+    <resultMap id="listByConditionResult" type="com.zsl.tracedb.model.ZslTraceSubcode">
+        <id column="id" jdbcType="BIGINT" property="id" />
+	    <result column="trace_sid" jdbcType="BIGINT" property="traceSid" />
+	    <result column="trace_index" jdbcType="BIGINT" property="traceIndex" />
+	    <result column="trace_code_number" jdbcType="VARCHAR" property="traceCodeNumber" />
+	    <result column="trace_sub_code_number" jdbcType="VARCHAR" property="traceSubCodeNumber" />
+	    <result column="trace_good_id" jdbcType="INTEGER" property="traceGoodId" />
+	    <result column="trace_stall_id" jdbcType="INTEGER" property="traceStallId" />
+	    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+	    <result column="is_leaf" jdbcType="VARCHAR" property="isLeaf" />
+	    <result column="node_level" jdbcType="INTEGER" property="nodeLevel" />
+	    <result column="scan_count" jdbcType="BIGINT" property="scanCount" />
+	    <result column="is_saled" jdbcType="INTEGER" property="isSaled" />
+	    <result column="sale_time" jdbcType="TIMESTAMP" property="saleTime" />
+    </resultMap>
+	<select id="listByCondition"  resultMap="listByConditionResult"
+			parameterType="com.zsl.tracedb.model.ZslTraceSubcode">
+        SELECT
+		   	*
+		FROM
+		   zsl_trace_subcode 
+		WHERE 1=1
+   			<if test="traceSid!=null">
+   				AND trace_sid = #{traceSid}
+   			</if>
+   			<if test="traceIndex!=null">
+   				AND trace_index = #{traceIndex}
+   			</if>
+   			<if test="traceCodeNumber!=null and traceCodeNumber!=''">
+   				AND trace_code_number LIKE CONCAT('%', #{traceCodeNumber}, '%')
+   			</if>
+   			<if test="traceSubCodeNumber!=null and traceSubCodeNumber!=''">
+   				AND trace_sub_code_number LIKE CONCAT('%', #{traceSubCodeNumber}, '%')
+   			</if>
+			<if test="traceGoodId!=null">
+   				AND trace_good_id = #{traceGoodId}
+   			</if>
+   			<if test="traceStallId!=null">
+   				AND trace_stall_id = #{traceStallId}
+   			</if>
+   			<if test="parentId!=null">
+   				AND parent_id = #{parentId}
+   			</if>
+	      	<if test="isLeaf!=null and isLeaf!=''">
+   				AND is_leaf LIKE CONCAT('%', #{isLeaf}, '%')
+   			</if>
+   			<if test="nodeLevel!=null">
+   				AND node_level = #{nodeLevel}
+   			</if>
+   			<if test="scanCount!=null">
+   				AND scan_count = #{scanCount}
+   			</if>
+   			<if test="isSaled!=null">
+   				AND is_saled = #{isSaled}
+   			</if>
+   			<if test="saleTime!=null">
+   				AND sale_time = #{saleTime}
+   			</if>
+   			ORDER BY sale_time DESC
+    </select>
+
     <resultMap id="BaseResultMap" type="com.zsl.tracedb.model.ZslTraceSubcode">
         <id column="id" jdbcType="BIGINT" property="id" />
         <result column="trace_sid" jdbcType="BIGINT" property="traceSid" />

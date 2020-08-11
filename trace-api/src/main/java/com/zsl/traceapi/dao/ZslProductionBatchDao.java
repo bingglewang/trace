@@ -6,6 +6,7 @@ import java.util.Map;
 import com.zsl.traceapi.dto.BatchQueryParam;
 import com.zsl.traceapi.vo.BatchModifyVo;
 import com.zsl.traceapi.vo.BatchPagingVo;
+import com.zsl.tracedb.model.ZslProductionBatch;
 
 /**
  * @author CH W
@@ -13,13 +14,13 @@ import com.zsl.traceapi.vo.BatchPagingVo;
  * @date 2020年6月5日 下午4:09:06
  * @version 1.0
  */
-public interface ZslProductionBatchDao {
+public interface ZslProductionBatchDao extends BaseDao<ZslProductionBatch> {
     /**
-     * --分页查询生产批次列表
+     * --自定义条件查询生产批次列表
      * @param queryParams
      * @return
      */
-    List<BatchPagingVo> listByCondition(BatchQueryParam queryParam);
+    List<BatchPagingVo> listByCustomCondition(BatchQueryParam queryParam);
 
 	/**
 	 * --id获取批次信息

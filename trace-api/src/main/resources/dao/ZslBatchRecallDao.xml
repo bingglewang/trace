@@ -2,8 +2,59 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zsl.traceapi.dao.ZslBatchRecallDao">
 
-	<!-- 条件查询分页列表 -->
-    <resultMap id="listByConditionResult" type="com.zsl.traceapi.vo.RecallPagingVo">
+	<!-- 条件查询列表 -->
+    <resultMap id="listByConditionResult" type="com.zsl.tracedb.model.ZslBatchRecall">
+        <id column="batch_recall_id" jdbcType="INTEGER" property="batchRecallId" />
+	    <result column="production_batch_id" jdbcType="INTEGER" property="productionBatchId" />
+	    <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
+	    <result column="recall_count" jdbcType="INTEGER" property="recallCount" />
+	    <result column="undisposed_count" jdbcType="INTEGER" property="undisposedCount" />
+	    <result column="cause" jdbcType="VARCHAR" property="cause" />
+	    <result column="dispose_status" jdbcType="INTEGER" property="disposeStatus" />
+	    <result column="principal" jdbcType="VARCHAR" property="principal" />
+	    <result column="principal_phone" jdbcType="VARCHAR" property="principalPhone" />
+	    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    </resultMap>
+	<select id="listByCondition"  resultMap="listByConditionResult"
+			parameterType="com.zsl.tracedb.model.ZslBatchRecall">
+        SELECT
+		   	batch_recall_id, production_batch_id, goods_id, recall_count, undisposed_count, 
+		   	cause, dispose_status, principal, principal_phone, create_time
+		FROM
+		   zsl_batch_recall 
+		WHERE 1=1
+   			<if test="productionBatchId!=null">
+   				AND production_batch_id = #{productionBatchId}
+   			</if>
+   			<if test="goodsId!=null">
+   				AND goods_id = #{goodsId}
+   			</if>
+   			<if test="recallCount!=null">
+   				AND recall_count = #{recallCount}
+   			</if>
+   			<if test="undisposedCount!=null">
+   				AND undisposed_count = #{undisposedCount}
+   			</if>
+	      	<if test="cause!=null and cause!=''">
+   				AND cause LIKE CONCAT('%', #{cause}, '%')
+   			</if>
+   			<if test="disposeStatus!=null">
+   				AND dispose_status = #{disposeStatus}
+   			</if>
+   			<if test="principal!=null and principal!=''">
+   				AND principal LIKE CONCAT('%', #{principal}, '%')
+   			</if>
+   			<if test="principalPhone!=null and principalPhone!=''">
+   				AND principal_phone LIKE CONCAT('%', #{principalPhone}, '%')
+   			</if>
+   			<if test="createTime!=null">
+   				AND create_time = #{createTime}
+   			</if>
+   			ORDER BY create_time DESC
+    </select>
+
+	<!-- 自定义条件查询分页列表 -->
+    <resultMap id="listByCustomConditionResult" type="com.zsl.traceapi.vo.RecallPagingVo">
         <id column="batch_recall_id" jdbcType="INTEGER" property="recallId" />
 	    <result column="batch_no" jdbcType="VARCHAR" property="productionBatchNo" />
 	    <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
@@ -13,7 +64,8 @@
 	    <result column="undisposed_count" jdbcType="INTEGER" property="undisposedCount" />
 	    <result column="dispose_status" jdbcType="INTEGER" property="disposeStatus" />
     </resultMap>
-	<select id="listByCondition" parameterType="com.zsl.traceapi.dto.RecallQueryParam" resultMap="listByConditionResult">
+	<select id="listByCustomCondition"  resultMap="listByCustomConditionResult"
+			parameterType="com.zsl.traceapi.dto.RecallQueryParam">
         SELECT
 		   br.batch_recall_id, pb.batch_no, gs.goods_name, br.recall_count, 
 			br.cause, br.create_time, br.undisposed_count, br.dispose_status

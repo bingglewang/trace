@@ -47,7 +47,7 @@ public class ProductionBatchServiceImpl implements ProductionBatchService {
 	public CommonResult<PageInfo<BatchPagingVo>> pagingList(BatchQueryParam queryParam) {
 		PageHelper.startPage(queryParam.getPageNum(), queryParam.getPageSize());
 		try {
-			List<BatchPagingVo> pblvList = batchDao.listByCondition(queryParam);
+			List<BatchPagingVo> pblvList = batchDao.listByCustomCondition(queryParam);
 			if(pblvList!=null && pblvList.size()>0) {
 				for(BatchPagingVo bpv : pblvList) {
 					//	处理添加追溯码段
@@ -79,7 +79,7 @@ public class ProductionBatchServiceImpl implements ProductionBatchService {
 		//	校验生产批次号
 		BatchQueryParam qbp = new BatchQueryParam();
 		qbp.setBatchNo(param.getBatchNo());
-		List<BatchPagingVo> bpvList = batchDao.listByCondition(qbp);
+		List<BatchPagingVo> bpvList = batchDao.listByCustomCondition(qbp);
 		if(bpvList!=null && bpvList.size()>0) {
 			for(BatchPagingVo bpv : bpvList){
 				if(param.getGoodsId()==bpv.getGoodsId()) {

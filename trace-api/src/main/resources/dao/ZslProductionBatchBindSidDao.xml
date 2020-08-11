@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsl.traceapi.dao.ZslProductionBatchBindSidDao">
+
+	<!-- 条件查询列表 -->
+    <resultMap id="listByConditionResult" type="com.zsl.tracedb.model.ZslProductionBatchBindSid">
+        <id column="batch_sid_id" jdbcType="INTEGER" property="batchSidId" />
+	    <result column="trace_code_no" jdbcType="VARCHAR" property="traceCodeNo" />
+	    <result column="trace_record_id" jdbcType="INTEGER" property="traceRecordId" />
+	    <result column="sid_start" jdbcType="BIGINT" property="sidStart" />
+	    <result column="production_batch_id" jdbcType="INTEGER" property="productionBatchId" />
+	    <result column="sid_end" jdbcType="BIGINT" property="sidEnd" />
+	    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    </resultMap>
+	<select id="listByCondition"  resultMap="listByConditionResult"
+			parameterType="com.zsl.tracedb.model.ZslProductionBatchBindSid">
+        SELECT
+		   	*
+		FROM
+		   zsl_production_batch_bind_sid 
+		WHERE 1=1
+   			<if test="traceCodeNo!=null and traceCodeNo!=''">
+   				AND trace_code_no LIKE CONCAT('%', #{traceCodeNo}, '%')
+   			</if>
+   			<if test="traceRecordId!=null">
+   				AND trace_record_id = #{traceRecordId}
+   			</if>
+   			<if test="sidStart!=null">
+   				AND sid_start = #{sidStart}
+   			</if>
+   			<if test="productionBatchId!=null">
+   				AND production_batch_id = #{productionBatchId}
+   			</if>
+   			<if test="sidEnd!=null">
+   				AND sid_end = #{sidEnd}
+   			</if>
+   			<if test="createTime!=null">
+   				AND create_time = #{createTime}
+   			</if>
+   			ORDER BY create_time DESC
+    </select>
+
+</mapper>

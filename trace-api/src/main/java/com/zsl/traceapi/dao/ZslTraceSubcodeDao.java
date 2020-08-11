@@ -11,7 +11,8 @@ import java.util.List;
 /**
  * 追溯记录自定义dao
  */
-public interface ZslTraceSubcodeDao {
+public interface ZslTraceSubcodeDao extends BaseDao<ZslTraceSubcode> {
+	
     int insertCodeBatch(@Param("list") List<TraceSubcodeInsertParam> traceSubcodeInsertParams);
     int insertCodeBatch1(@Param("list") List<TraceOutCodeByCount> traceOutCodeByCounts);
     int insertCodePreSidBatch(@Param("list") List<TracePreSidInsertParam> tracePreSidInsertParams);

@@ -23,7 +23,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/trace/getNextSidByCodeNumber")  //不开放
                 .excludePathPatterns("/trace/relationMqSubCode")
                 .excludePathPatterns("/error")
-                .excludePathPatterns("/getIpInfo.php");
+                .excludePathPatterns("/getIpInfo.php")
+                .excludePathPatterns("/p_scene/traceScene/*");
     }
 
     @Bean
