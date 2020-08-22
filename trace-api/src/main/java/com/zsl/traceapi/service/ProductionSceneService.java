@@ -57,6 +57,14 @@ public interface ProductionSceneService {
 	 */
 	List<SceneForEditBatchVo> sceneListForEditBatch(Integer batchId, Integer goodsId);
 	/**
+	 * --获取当前生产批次未关联的场景
+	 * @param batchId
+	 * @param goodsId
+	 * @param sceneIds
+	 * @return
+	 */
+	List<SceneForNewBatchVo> sceneListForNoBound(Integer batchId, Integer goodsId, List<Integer> sceneIds);
+	/**
 	 * --根据生产批次追溯场景信息
 	 * @param bathcNo
 	 * @return

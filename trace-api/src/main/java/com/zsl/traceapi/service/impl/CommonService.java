@@ -58,12 +58,15 @@ public class CommonService {
 	 * @param sceneParam
 	 * @return
 	 */
-	public Integer sceneOperation(SceneForNewBatchParam sceneParam) {
+	public Integer sceneOperation(SceneForNewBatchParam sceneParam, Integer goodsId) {
 		//	校验生产场景是否存在
 		Integer sceneId = sceneParam.getSceneId();
 		ZslProductionScene oldScene = sceneMapper.selectByPrimaryKey(sceneId);
 		if(oldScene==null) {
 			new Exception("sceneId‘"+sceneId+"’不存在");
+		}
+		if(oldScene.getGoodsId()!=goodsId) {
+			new Exception("场景名‘"+oldScene.getName()+"’并非该生产批次的商品归属");
 		}
 		/**
 		 * --校验生产场景说明、视频、图片数据是否有改动

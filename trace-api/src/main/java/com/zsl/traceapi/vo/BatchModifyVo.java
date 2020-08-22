@@ -26,7 +26,10 @@ public class BatchModifyVo {
     @ApiModelProperty(value = "商家名称")
     private String merchantName;
     
-    @ApiModelProperty(value = "编辑生产批次时要加载的场景信息列表")
+    @ApiModelProperty(value = "生产批次下已关联的场景信息列表")
     private List<SceneForEditBatchVo> sfebvList;
+    
+    @ApiModelProperty(value = "生产批次下未关联的场景信息列表")
+    private List<SceneForNewBatchVo> noBoundSceneList;
     
 }

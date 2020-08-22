@@ -2,6 +2,8 @@ package com.zsl.traceapi.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.zsl.traceapi.dto.SceneQueryParam;
 import com.zsl.traceapi.vo.ScenePagingVo;
 import com.zsl.traceapi.vo.traceBatchVo;
@@ -40,17 +42,20 @@ public interface ZslProductionSceneDao {
     /**
      * --编辑生产批次时关联的场景
 	 * @param bathcId
+	 * @param goodsId
 	 * @return
 	 */
-	List<SceneForEditBatchVo> sceneListForEditBatch(Integer bathcId);
+	List<SceneForEditBatchVo> sceneListForEditBatch(Integer bathcId, Integer goodsId);
 	
 	/**
 	 * --获取未绑定当前生产批次的场景列表
 	 * @param goodsId
 	 * @param batchId
+	 * @param sceneIds
 	 * @return
 	 */
-	List<SceneForEditBatchVo> getSceneListForNoBound(Integer goodsId, Integer batchId);
+	List<SceneForNewBatchVo> sceneListForNoBound(Integer goodsId, 
+			Integer batchId, @Param(value = "sceneIds")List<Integer> sceneIds);
 
 	/**
 	 * --根据生产批次追溯场景信息

@@ -1,5 +1,6 @@
 package com.zsl.traceapi.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -88,10 +89,18 @@ public class ProductionBatchController {
 			BatchModifyVo batchInfo = batchService.getBatchInfo(batchId);
 			List<SceneForEditBatchVo> sfebvList = sceneService.sceneListForEditBatch(batchId, batchInfo.getGoodsId());
 			batchInfo.setSfebvList(sfebvList);
+			List<Integer> sceneIds = new ArrayList<>();
+			if(sfebvList!=null && sfebvList.size()>0) {
+				for(SceneForEditBatchVo sfebv : sfebvList) {
+					sceneIds.add(sfebv.getSceneId());
+				}
+			}
+			List<SceneForNewBatchVo> sceneListForNoBound = sceneService.sceneListForNoBound(batchId, batchInfo.getGoodsId(), sceneIds);
+			batchInfo.setNoBoundSceneList(sceneListForNoBound);
 			return CommonResult.success(batchInfo);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return CommonResult.failed();
+			return CommonResult.failed(e.getMessage());
 		}
 	}
 	/**

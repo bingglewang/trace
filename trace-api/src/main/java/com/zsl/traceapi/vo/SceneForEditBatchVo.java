@@ -16,6 +16,8 @@ public class SceneForEditBatchVo {
     private Integer employeId;
     /** 员工名称 */
     private String employeName;
+    /** 场景id */
+    private Integer sceneId;
     /** 场景名称 */
     private String name;
     /** 场景排序 */

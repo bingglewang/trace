@@ -69,6 +69,7 @@
    			<if test="goodsName!=null and goodsName!=''">
    				AND g.goods_name LIKE CONCAT('%', #{goodsName}, '%')
    			</if>
+   		ORDER BY pb.batch_id DESC
     </select>
     
     <!-- id获取批次信息 -->
@@ -106,7 +107,7 @@
 			AND pbis.production_batch_id=#{batchId}
     </select>
     
-    <!-- 生产批次id获取追溯码段 -->
+    <!-- 生产批次号获取商品列表 -->
     <select id="goodsListByBatchNo" parameterType="java.lang.String" resultType="java.util.Map">
         SELECT
 			gs.goods_id, gs.goods_name

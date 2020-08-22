@@ -77,12 +77,11 @@ public class ProductionBatchServiceImpl implements ProductionBatchService {
 	@Override
 	public CommonResult<String> newBatch(BatchParam param) {
 		//	校验生产批次号
-		BatchQueryParam qbp = new BatchQueryParam();
-		qbp.setBatchNo(param.getBatchNo());
-		List<BatchPagingVo> bpvList = batchDao.listByCustomCondition(qbp);
-		if(bpvList!=null && bpvList.size()>0) {
-			for(BatchPagingVo bpv : bpvList){
-				if(param.getGoodsId()==bpv.getGoodsId()) {
+		List<Map<String, Object>> goodsList = batchDao.goodsListByBatchNo(param.getBatchNo());
+		if(goodsList!=null && goodsList.size()>0) {
+			for(Map<String, Object> goods : goodsList){
+				Integer goodsId = (Integer)goods.get("goods_id");
+				if(param.getGoodsId()==goodsId.intValue()) {
 					return CommonResult.failed("当前商品下已存在该生产批次号，请重新填写");
 				}
 			}
@@ -105,7 +104,7 @@ public class ProductionBatchServiceImpl implements ProductionBatchService {
 				//	生产场景业务操作
 				Integer sceneId;
 				try {
-					sceneId = commonService.sceneOperation(sceneParam);
+					sceneId = commonService.sceneOperation(sceneParam, batch.getGoodsId());
 				} catch (Exception e) {
 					e.printStackTrace();
 					return CommonResult.failed(e.getMessage());
@@ -155,7 +154,7 @@ public class ProductionBatchServiceImpl implements ProductionBatchService {
 				//	生产场景业务操作
 				Integer sceneId;
 				try {
-					sceneId = commonService.sceneOperation(sceneParam);
+					sceneId = commonService.sceneOperation(sceneParam, batch.getGoodsId());
 				} catch (Exception e) {
 					e.printStackTrace();
 					return CommonResult.failed(e.getMessage());

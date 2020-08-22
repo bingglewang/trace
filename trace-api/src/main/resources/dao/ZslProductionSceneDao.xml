@@ -70,6 +70,26 @@
 			1=1 AND ps.goods_id=#{goodsId} AND ps.current_status=1
 			ORDER BY ps.scene_sort, si.show_sort ASC
     </select>
+    <!-- 获取未绑定当前生产批次的场景列表 -->
+    <select id="sceneListForNoBound" resultMap="sceneListForNewBatchResult">
+        SELECT
+		   	ps.scene_id, ps.name, ps.scene_sort, ps.description, ps.video_url, 
+		   	si.scene_image_id, si.image_url, si.show_sort
+		FROM
+		   	zsl_production_scene ps 
+			LEFT JOIN zsl_scene_image si ON si.scene_id=ps.scene_id 
+			LEFT JOIN zsl_scene_batch sb ON sb.scene_id=ps.scene_id
+		WHERE 1=1 
+			AND ps.goods_id=#{goodsId} AND ps.current_status=1 
+			AND (sb.scene_batch_id IS NULL OR sb.batch_id&lt;&gt;#{batchId})
+			<if test="sceneIds!=null">
+				AND sb.scene_id NOT IN 
+				<foreach collection="sceneIds" item="sceneId" open="(" separator="," close=")">
+					#{sceneId}
+				</foreach>
+			</if>
+		ORDER BY ps.scene_sort, si.show_sort ASC
+    </select>
     
     <!-- 编辑生产批次时关联的场景及材料 -->
     <resultMap id="sceneListForEditBatchResult" type="com.zsl.traceapi.vo.SceneForEditBatchVo">
@@ -77,6 +97,7 @@
         <result column="scene_time_scope" jdbcType="VARCHAR" property="sceneTimeScope" />
         <result column="id" jdbcType="INTEGER" property="employeId" />
         <result column="employe_name" jdbcType="VARCHAR" property="employeName" />
+        <result column="scene_id" jdbcType="INTEGER" property="sceneId" />
 	    <result column="name" jdbcType="VARCHAR" property="name" />
 	    <result column="scene_sort" jdbcType="INTEGER" property="sceneSort" />
 	    <result column="description" jdbcType="VARCHAR" property="description" />
@@ -100,8 +121,8 @@
     </resultMap>
     <select id="sceneListForEditBatch" parameterType="java.lang.Integer" resultMap="sceneListForEditBatchResult">
         SELECT
-			sb.scene_batch_id, sb.scene_time_scope, ac.id, ac.account_name AS employe_name, 
-		   	ps.name, ps.scene_sort, ps.description, ps.video_url, 
+			sb.scene_batch_id, sb.scene_time_scope, ac.id, ac.realName AS employe_name, 
+		   	sb.scene_id, ps.name, ps.scene_sort, ps.description, ps.video_url, 
 		   	si.scene_image_id, si.image_url, si.show_sort, 
 		   	mwo.warehouse_id, mwo.batch_number, mwo.stock_number, mwo.warehouse_out_order,
 			ml.material_name, mw.warehouse_number, 
@@ -121,21 +142,7 @@
 		   	LEFT JOIN material ml ON ml.id=mw.material_id 
 			LEFT JOIN merchant mt ON mt.merchant_id=ml.merchant_id
 		WHERE
-			1=1 AND sb.batch_id=#{bathcId}
-			ORDER BY ps.scene_sort, si.show_sort ASC
-    </select>
-    <!-- 获取未绑定当前生产批次的场景列表 -->
-    <select id="getSceneListForNoBound" parameterType="java.lang.Integer" resultMap="sceneListForNewBatchResult">
-        SELECT
-		   ps.scene_id, ps.name, ps.scene_sort, ps.description, ps.video_url, 
-		   si.scene_image_id, si.image_url, si.show_sort
-		FROM
-		   zsl_production_scene ps 
-			LEFT JOIN zsl_scene_image si ON si.scene_id=ps.scene_id 
-			LEFT JOIN zsl_scene_batch sb ON sb.scene_id=ps.scene_id
-		WHERE
-			1=1 AND ps.goods_id=#{goodsId} AND ps.current_status=1 
-			AND (sb.scene_batch_id IS NULL OR sb.batch_id!=#{batchId})
+			1=1 AND sb.batch_id=#{bathcId} AND ps.goods_id=#{goodsId}
 			ORDER BY ps.scene_sort, si.show_sort ASC
     </select>
     

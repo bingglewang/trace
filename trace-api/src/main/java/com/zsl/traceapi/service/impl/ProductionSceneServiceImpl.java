@@ -183,19 +183,12 @@ public class ProductionSceneServiceImpl implements ProductionSceneService {
 	
 	@Override
 	public List<SceneForEditBatchVo> sceneListForEditBatch(Integer batchId, Integer goodsId) {
-		try {
-			List<SceneForEditBatchVo> sfebvList = sceneDao.sceneListForEditBatch(batchId);
-			List<SceneForEditBatchVo> noBoundSceneList = sceneDao.getSceneListForNoBound(goodsId, batchId);
-			if(sfebvList!=null && sfebvList.size()>0) {
-				//	查询商品下还未绑定生产批次
-				sfebvList.addAll(noBoundSceneList);
-				return sfebvList;
-			}
-			return noBoundSceneList;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+		return sceneDao.sceneListForEditBatch(batchId, goodsId);
+	}
+	
+	@Override
+	public List<SceneForNewBatchVo> sceneListForNoBound(Integer batchId, Integer goodsId, List<Integer> sceneIds) {
+		return sceneDao.sceneListForNoBound(goodsId, batchId, sceneIds);
 	}
 
 	@Override
