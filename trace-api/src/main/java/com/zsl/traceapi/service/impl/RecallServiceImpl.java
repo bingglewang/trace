@@ -93,7 +93,7 @@ public class RecallServiceImpl implements RecallService {
 			Long recallCount = 0L;
 			if(pbbsList!=null && pbbsList.size()>0) {
 				for(ZslProductionBatchBindSid pbbs : pbbsList) {
-					recallCount += pbbs.getSidEnd() - pbbs.getSidStart();
+					recallCount += (pbbs.getSidEnd() - pbbs.getSidStart())+1;
 				}
 			}
 			//	插入召回记录

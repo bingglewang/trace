@@ -67,8 +67,9 @@ public interface ProductionSceneService {
 	/**
 	 * --根据生产批次追溯场景信息
 	 * @param bathcNo
+	 * @param goodsId
 	 * @return
 	 */
-	CommonResult<traceBatchVo> traceScene(String bathcNo);
+	CommonResult<traceBatchVo> traceScene(String bathcNo, Integer goodsId);
 
 }

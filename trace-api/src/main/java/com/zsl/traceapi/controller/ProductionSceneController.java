@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.PageInfo;
@@ -73,11 +74,12 @@ public class ProductionSceneController {
 	/**
 	 * --根据生产批次追溯场景信息
 	 * @param batchNo
+	 * @param goodsId
 	 * @return
 	 */
 	@GetMapping(value = "traceScene/{batchNo}")
-	public CommonResult<traceBatchVo> traceScene(@PathVariable String batchNo){
-		return productionSceneService.traceScene(batchNo);
+	public CommonResult<traceBatchVo> traceScene(@PathVariable String batchNo, @RequestParam Integer goodsId){
+		return productionSceneService.traceScene(batchNo, goodsId);
 	}
 
 }

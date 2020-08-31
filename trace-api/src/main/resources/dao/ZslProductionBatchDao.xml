@@ -98,13 +98,15 @@
     </select>
     
     <!-- 生产批次id获取追溯码段 -->
-    <select id="getTraceCodeSidByBatchId" parameterType="java.lang.Integer" resultType="java.util.Map">
+    <select id="getTraceCodeSidByBatchId" parameterType="java.lang.Integer" resultType="java.lang.String">
         SELECT
-		   pbis.batch_sid_id, pbis.trace_code_no, pbis.sid_start, pbis.sid_end
+		   CONCAT(pbis.trace_code_no, '(', GROUP_CONCAT(concat_ws('--', 
+		   		pbis.sid_start, pbis.sid_end) SEPARATOR ','), ')') AS sidList
 		FROM
 		   zsl_production_batch_bind_sid pbis
 		WHERE 1=1
 			AND pbis.production_batch_id=#{batchId}
+		GROUP BY pbis.trace_code_no
     </select>
     
     <!-- 生产批次号获取商品列表 -->

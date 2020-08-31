@@ -41,7 +41,7 @@ public interface ZslProductionBatchDao extends BaseDao<ZslProductionBatch> {
 	 * @param batchId
 	 * @return
 	 */
-	List<Map<String, Object>> getTraceCodeSidByBatchId(Integer batchId);
+	List<String> getTraceCodeSidByBatchId(Integer batchId);
 
 	/**
 	 * --批次号获取所属商品列表

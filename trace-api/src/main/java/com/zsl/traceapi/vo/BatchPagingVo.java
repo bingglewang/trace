@@ -21,10 +21,7 @@ public class BatchPagingVo implements Serializable {
     @ApiModelProperty(value = "商品名称")
     private String goodsName;
     
-    @ApiModelProperty(value = "追溯批次号")
-    private String traceCodeNo;
-    
-    @ApiModelProperty(value = "追溯码段（SID范围）")
+    @ApiModelProperty(value = "追溯批次号和码段（SID范围）")
     private String sidScope;
     
     @ApiModelProperty(value = "批次生产时间段")

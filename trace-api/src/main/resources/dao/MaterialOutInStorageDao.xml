@@ -26,5 +26,33 @@
 			AND ml.merchant_id=#{merchantId}
       	</where>
     </select>
+    
+    
+    
+    <insert id="saveSellChannel" parameterType="com.zsl.traceapi.vo.GoodsSellChannelVo">
+    	INSERT INTO
+    		zsl_goods_sell_channel VALUES(NULL, #{goodsId}, #{tmall}, #{jd}, #{taobao})
+    </insert>
+    
+    <update id="updateSellChannel" parameterType="com.zsl.traceapi.vo.GoodsSellChannelVo">
+        UPDATE 
+        	zsl_goods_sell_channel SET tmall=#{tmall}, jd=#{jd}, taobao=#{taobao}
+        WHERE
+        	id=#{goodsSellChannelId};
+    </update>
+    
+    <!-- 根据商品id获取销售渠道信息 -->
+	<select id="goodsSellChannelForEditPage" resultType="com.zsl.traceapi.vo.GoodsSellChannelVo">
+        SELECT
+			gsc.id AS goodsSellChannelId, gsc.goods_id AS goodsId, gsc.tmall, gsc.jd, gsc.taobao
+		FROM
+			zsl_goods_sell_channel gsc
+		<where> 1=1
+			AND gsc.goods_id=#{goodsId} 
+			<if test="goodsSellChannelId!=null">
+				AND gsc.id=#{goodsSellChannelId}
+			</if>
+      	</where>
+    </select>
 
 </mapper>

@@ -2404,6 +2404,7 @@ public class TraceServiceImpl implements TraceService {
             long[][] A = answerA.toArray(new long[answerA.size()][]);
             List<long[]> answerB = list.stream()
                     .map(item -> new long[]{item.getStartSid(), item.getEndSid()})
+                    .sorted((o1,o2) -> new Long(o1[0]).compareTo(new Long(o2[0])))
                     .collect(Collectors.toList());
             long[][] B = answerB.toArray(new long[answerB.size()][]);
 

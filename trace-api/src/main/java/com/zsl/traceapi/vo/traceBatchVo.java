@@ -19,6 +19,12 @@ public class traceBatchVo {
     private Integer employeCount;
     /** 场景数 */
     private Integer sceneCount;
+    //	天猫销售渠道地址
+    private String tmall;
+    //	京东销售渠道地址
+    private String jd;
+    //	淘宝销售渠道地址
+    private String taobao;
     /** 追溯场景信息列表	 */
     private List<traceSceneVo> tsvList;
 

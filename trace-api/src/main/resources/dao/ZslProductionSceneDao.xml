@@ -82,12 +82,14 @@
 		WHERE 1=1 
 			AND ps.goods_id=#{goodsId} AND ps.current_status=1 
 			AND (sb.scene_batch_id IS NULL OR sb.batch_id&lt;&gt;#{batchId})
-			<if test="sceneIds!=null">
-				AND sb.scene_id NOT IN 
+			<if test="sceneIds!=null and sceneIds.size()>0">
+				AND (sb.scene_id IS NULL OR sb.scene_id NOT IN 
 				<foreach collection="sceneIds" item="sceneId" open="(" separator="," close=")">
 					#{sceneId}
 				</foreach>
+				)
 			</if>
+			
 		ORDER BY ps.scene_sort, si.show_sort ASC
     </select>
     
@@ -142,13 +144,16 @@
 		   	LEFT JOIN material ml ON ml.id=mw.material_id 
 			LEFT JOIN merchant mt ON mt.merchant_id=ml.merchant_id
 		WHERE
-			1=1 AND sb.batch_id=#{bathcId} AND ps.goods_id=#{goodsId}
+			1=1 AND sb.batch_id=#{bathcId} AND ps.goods_id=#{goodsId} AND ps.current_status=1
 			ORDER BY ps.scene_sort, si.show_sort ASC
     </select>
     
     <!-- 根据生产批次追溯场景信息 -->
     <resultMap id="traceSceneResult" type="com.zsl.traceapi.vo.traceBatchVo">
 	    <result column="batch_no" jdbcType="VARCHAR" property="batchNo" />
+	    <result column="tmall" jdbcType="VARCHAR" property="tmall" />
+	    <result column="jd" jdbcType="VARCHAR" property="jd" />
+	    <result column="taobao" jdbcType="VARCHAR" property="taobao" />
 	    <collection property="tsvList" ofType="com.zsl.traceapi.vo.traceSceneVo">
 		    <result column="scene_time_scope" jdbcType="VARCHAR" property="sceneTimeScope" />
 		    <result column="employe_name" jdbcType="VARCHAR" property="employeName" />
@@ -163,14 +168,16 @@
 		    </collection>
 	    </collection>
     </resultMap>
-    <select id="traceScene" parameterType="java.lang.String" resultMap="traceSceneResult">
+    <select id="traceScene" resultMap="traceSceneResult">
         SELECT
-		   pb.batch_no, sb.scene_time_scope, a.realName AS employe_name, ps.name AS scene_name, ps.description, 
+		   pb.batch_no, gsc.tmall, gsc.jd, gsc.taobao, sb.scene_time_scope, 
+		   a.realName AS employe_name, ps.name AS scene_name, ps.description, 
 		   mwo.id, m.material_name, si.image_url
 		FROM
 			zsl_production_batch pb 
 			LEFT JOIN zsl_scene_batch sb ON sb.batch_id=pb.batch_id
 			LEFT JOIN account a ON a.id=sb.employe_id
+			LEFT JOIN zsl_goods_sell_channel gsc ON gsc.goods_id=pb.goods_id
 			LEFT JOIN zsl_production_scene ps ON ps.scene_id=sb.scene_id
 			LEFT JOIN zsl_scene_image si ON si.scene_id=ps.scene_id
 			LEFT JOIN zsl_batch_material_out bmo ON bmo.scene_batch_id=sb.scene_batch_id
@@ -178,7 +185,7 @@
 			LEFT JOIN material_warehouse mw ON mw.id=mwo.warehouse_id
 			LEFT JOIN material m ON m.id=mw.material_id
 		WHERE
-			1=1 AND pb.batch_no = #{batchNo} 
+			1=1 AND pb.batch_no=#{batchNo} AND pb.goods_id=#{goodsId}
 			ORDER BY ps.scene_sort, si.show_sort ASC
     </select>
 

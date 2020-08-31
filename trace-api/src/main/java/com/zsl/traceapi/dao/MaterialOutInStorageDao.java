@@ -2,6 +2,7 @@ package com.zsl.traceapi.dao;
 
 import java.util.List;
 
+import com.zsl.traceapi.vo.GoodsSellChannelVo;
 import com.zsl.traceapi.vo.MaterialInStorageVo;
 
 /**
@@ -18,5 +19,26 @@ public interface MaterialOutInStorageDao {
 	 * @return
 	 */
 	List<MaterialInStorageVo> listByMerchant(Integer merchantId);
+
+	
+	
+	
+	/**
+	 * --根据商品id获取销售渠道信息
+	 * @param goodsId
+	 * @param goodsSellChannelId
+	 * @return
+	 */
+	GoodsSellChannelVo goodsSellChannelForEditPage(Integer goodsId, Integer goodsSellChannelId);
+	/**
+	 * --保存商品销售渠道
+	 * @param param
+	 */
+	void saveSellChannel(GoodsSellChannelVo param);
+	/**
+	 * --更新商品销售渠道
+	 * @param param
+	 */
+	void updateSellChannel(GoodsSellChannelVo param);
 
 }

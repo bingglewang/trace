@@ -2,7 +2,9 @@ package com.zsl.traceapi.service.impl;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -105,11 +107,13 @@ public class ProductionSceneServiceImpl implements ProductionSceneService {
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public CommonResult<String> modify(SceneParam params) {
+		//	校验场景信息
 		Integer sceneId = params.getSceneId();
 		ZslProductionScene oldZps = sceneMapper.selectByPrimaryKey(sceneId);
 		if(oldZps==null) {
 			return CommonResult.failed("修改的生产场景不存在");
 		}
+		
 		oldZps.setDescription(params.getDescription());
 		oldZps.setSceneSort(params.getSceneSort());
 		oldZps.setVideoUrl(params.getVideoUrl());
@@ -192,19 +196,23 @@ public class ProductionSceneServiceImpl implements ProductionSceneService {
 	}
 
 	@Override
-	public CommonResult<traceBatchVo> traceScene(String batchNo) {
+	public CommonResult<traceBatchVo> traceScene(String batchNo, Integer goodsId) {
 		try {
-			traceBatchVo traceScene = sceneDao.traceScene(batchNo);
+			traceBatchVo traceScene = sceneDao.traceScene(batchNo, goodsId);
 			if(traceScene==null) {
 				return CommonResult.failed("数据不存在");
 			}
 			List<traceSceneVo> tsvList = traceScene.getTsvList();
-			int size = 0;
+			int sceneCount = 0;
+			Map<String, String> employeCount = new HashMap<>();
 			if(tsvList!=null && tsvList.size()>0) {
-				size = tsvList.size();
+				sceneCount = tsvList.size();
+				for(traceSceneVo tsv : tsvList) {
+					employeCount.put(tsv.getEmployeName(), null);
+				}
 			}
-			traceScene.setEmployeCount(size);
-			traceScene.setSceneCount(size);
+			traceScene.setEmployeCount(employeCount.size());
+			traceScene.setSceneCount(sceneCount);
 			return CommonResult.success(traceScene);
 		} catch (Exception e) {
 			e.printStackTrace();

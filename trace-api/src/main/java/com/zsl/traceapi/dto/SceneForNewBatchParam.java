@@ -41,8 +41,8 @@ public class SceneForNewBatchParam {
 	@ApiModelProperty(value = "场景图片")
     private String[] imageUrls;
 	
-	@ApiModelProperty(value = "需要删除的生产场景图片")
-	private Integer[] delImageIds;
+//	@ApiModelProperty(value = "需要删除的生产场景图片")
+//	private Integer[] delImageIds;
     
 	@ApiModelProperty(value = "场景视频")
     private String videoUrl;

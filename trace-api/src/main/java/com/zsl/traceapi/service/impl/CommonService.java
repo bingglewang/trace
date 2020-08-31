@@ -15,6 +15,7 @@ import com.zsl.tracedb.model.ZslSceneImage;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -57,17 +58,11 @@ public class CommonService {
 	 * --新建/编辑批次时，生产场景相关操作业务
 	 * @param sceneParam
 	 * @return
+	 * @throws Exception 
 	 */
-	public Integer sceneOperation(SceneForNewBatchParam sceneParam, Integer goodsId) {
-		//	校验生产场景是否存在
+	public Integer sceneOperation(SceneForNewBatchParam sceneParam, Integer goodsId) throws Exception {
 		Integer sceneId = sceneParam.getSceneId();
 		ZslProductionScene oldScene = sceneMapper.selectByPrimaryKey(sceneId);
-		if(oldScene==null) {
-			new Exception("sceneId‘"+sceneId+"’不存在");
-		}
-		if(oldScene.getGoodsId()!=goodsId) {
-			new Exception("场景名‘"+oldScene.getName()+"’并非该生产批次的商品归属");
-		}
 		/**
 		 * --校验生产场景说明、视频、图片数据是否有改动
 		 * --只要有一项数据改动，将对该场景数据重新增加新的场景记录
@@ -77,10 +72,9 @@ public class CommonService {
 		if(!isChanged) {
 			isChanged = this.checkDataChange(oldScene.getVideoUrl(), sceneParam.getVideoUrl());
 		}
-		Integer[] delImageIds = sceneParam.getDelImageIds();
 		String[] imageUrls = sceneParam.getImageUrls();
 		if(!isChanged) {
-			if((delImageIds!=null && delImageIds.length>0) || (imageUrls!=null && imageUrls.length>0)) {
+			if ((imageUrls!=null && imageUrls.length>0)) {
 				isChanged = true;
 			}
 		}
@@ -132,6 +126,7 @@ public class CommonService {
 			materialOut.setStockNumber(smp.getOutStorageCount());
 			materialOut.setUnits(smp.getUnit());
 			materialOut.setMerchantId(merchantId);
+			materialOut.setCreateTime(new Date());
 			materialOutMapper.insert(materialOut);
 			//	保存场景的材料出库中间表
 			ZslBatchMaterialOut batchMaterialOut = new ZslBatchMaterialOut();

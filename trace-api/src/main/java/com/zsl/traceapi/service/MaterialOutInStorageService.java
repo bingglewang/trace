@@ -2,6 +2,7 @@ package com.zsl.traceapi.service;
 
 import java.util.List;
 
+import com.zsl.traceapi.vo.GoodsSellChannelVo;
 import com.zsl.traceapi.vo.MaterialInStorageVo;
 import com.zsl.tracecommon.CommonResult;
 
@@ -19,5 +20,21 @@ public interface MaterialOutInStorageService {
 	 * @return
 	 */
 	CommonResult<List<MaterialInStorageVo>> listByMerchant(Integer merchantId);
+	
+	
+	
+	/**
+	 * --新建或修改商品销售渠道
+	 * @param param
+	 * @return
+	 */
+	CommonResult<String> newOrModifyGoodsSellChannel(GoodsSellChannelVo param);
+
+	/**
+	 * --商品销售渠道编辑页面数据
+	 * @param goodsId
+	 * @return
+	 */
+	CommonResult<GoodsSellChannelVo> goodsSellChannelForEditPage(Integer goodsId);
 
 }

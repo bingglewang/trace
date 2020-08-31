@@ -60,8 +60,9 @@ public interface ZslProductionSceneDao {
 	/**
 	 * --根据生产批次追溯场景信息
 	 * @param batchNo
+	 * @param goodsId
 	 * @return
 	 */
-	traceBatchVo traceScene(String batchNo);
+	traceBatchVo traceScene(String batchNo, Integer goodsId);
 
 }

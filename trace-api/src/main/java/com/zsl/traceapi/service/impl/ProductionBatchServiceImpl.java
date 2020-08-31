@@ -1,6 +1,8 @@
 package com.zsl.traceapi.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,13 +18,18 @@ import com.zsl.traceapi.dao.ZslProductionBatchDao;
 import com.zsl.traceapi.dto.BatchParam;
 import com.zsl.traceapi.dto.BatchQueryParam;
 import com.zsl.traceapi.dto.SceneForNewBatchParam;
+import com.zsl.traceapi.dto.SourceMaterialParam;
 import com.zsl.traceapi.service.ProductionBatchService;
 import com.zsl.traceapi.vo.BatchModifyVo;
 import com.zsl.traceapi.vo.BatchPagingVo;
 import com.zsl.tracecommon.CommonResult;
+import com.zsl.tracedb.mapper.MaterialWarehouseMapper;
 import com.zsl.tracedb.mapper.ZslProductionBatchMapper;
+import com.zsl.tracedb.mapper.ZslProductionSceneMapper;
 import com.zsl.tracedb.mapper.ZslSceneBatchMapper;
+import com.zsl.tracedb.model.MaterialWarehouse;
 import com.zsl.tracedb.model.ZslProductionBatch;
+import com.zsl.tracedb.model.ZslProductionScene;
 import com.zsl.tracedb.model.ZslSceneBatch;
 import com.zsl.tracedb.model.ZslSceneBatchExample;
 
@@ -42,6 +49,10 @@ public class ProductionBatchServiceImpl implements ProductionBatchService {
 	private ZslProductionBatchDao batchDao;
 	@Autowired
 	private ZslSceneBatchMapper sceneBatchMapper;
+	@Autowired
+	private ZslProductionSceneMapper sceneMapper;
+	@Autowired
+	private MaterialWarehouseMapper materialInMapper;
 	
 	@Override
 	public CommonResult<PageInfo<BatchPagingVo>> pagingList(BatchQueryParam queryParam) {
@@ -51,18 +62,16 @@ public class ProductionBatchServiceImpl implements ProductionBatchService {
 			if(pblvList!=null && pblvList.size()>0) {
 				for(BatchPagingVo bpv : pblvList) {
 					//	处理添加追溯码段
-					List<Map<String, Object>> codeSidList = batchDao.getTraceCodeSidByBatchId(bpv.getBatchId());
+					List<String> codeSidList = batchDao.getTraceCodeSidByBatchId(bpv.getBatchId());
 					if(codeSidList!=null && codeSidList.size()>0) {
-						StringBuilder sid = new StringBuilder();
-						String traceCodeNo = "";
-						for(Map<String, Object> codeSid : codeSidList) {
-							sid.append(codeSid.get("sid_start")).append("--")
-								.append(codeSid.get("sid_end")).append(",");
-							traceCodeNo = (String)codeSid.get("trace_code_no");
+						StringBuilder sid = new StringBuilder("【");
+						for(String codeSid : codeSidList) {
+							sid.append(codeSid).append("; ");
 						}
-						sid.deleteCharAt(sid.lastIndexOf(","));
+						sid.deleteCharAt(sid.lastIndexOf(";"));
+						sid.deleteCharAt(sid.lastIndexOf(" "));
+						sid.append("】");
 						bpv.setSidScope(sid.toString());
-						bpv.setTraceCodeNo(traceCodeNo);
 					}
 				}
 			}
@@ -86,12 +95,48 @@ public class ProductionBatchServiceImpl implements ProductionBatchService {
 				}
 			}
 		}
+		//	校验原材料出库信息
+		List<SceneForNewBatchParam> sceneParamList = param.getSceneList();
+		if(sceneParamList!=null && sceneParamList.size()>0) {
+			Map<Integer, BigDecimal> residueStockList = new HashMap<>();	//	各原材料剩余库存集合
+			for(SceneForNewBatchParam sceneParam : sceneParamList){
+				if(sceneParam.getMaterialList()!=null && sceneParam.getMaterialList().size()>0) {
+					for(SourceMaterialParam smp : sceneParam.getMaterialList()) {
+						BigDecimal outStorageCount = smp.getOutStorageCount();
+						Integer materialInId = smp.getMaterialInId();
+						if(StringUtils.isBlank(smp.getInStorageBatchNo()) || StringUtils.isBlank(smp.getOutOrderNo())
+							|| StringUtils.isBlank(smp.getUnit()) || materialInId==null
+							|| outStorageCount==null 
+							|| outStorageCount.compareTo(new BigDecimal(0))==-1 
+							|| outStorageCount.compareTo(new BigDecimal(0))==0) {
+							return CommonResult.failed("有原材料出库参数填写后未完善或违规");
+						}
+						//	校验原材料库存
+						BigDecimal residueStock = null;
+						if(residueStockList.containsKey(materialInId)) {
+							residueStock = residueStockList.get(materialInId);
+						}else {
+							MaterialWarehouse materialIn = materialInMapper.selectByPrimaryKey(materialInId);
+							residueStock = materialIn.getResidueStock();
+						}
+						if(outStorageCount.compareTo(residueStock)==1) {
+							return CommonResult.failed("原材料入库批次号【" + smp.getInStorageBatchNo() + "】总出库数超出剩余库存");
+						}
+						residueStockList.put(materialInId, residueStock.subtract(outStorageCount));
+					}
+				}
+				//	校验生产场景是否存在
+				ZslProductionScene oldScene = sceneMapper.selectByPrimaryKey(sceneParam.getSceneId());
+				if(oldScene==null || param.getGoodsId().intValue()!=oldScene.getGoodsId()) {
+					return CommonResult.failed("sceneId‘"+sceneParam.getSceneId()+"’相关的场景参数违规");
+				}
+			}
+		}
 		//	新增生产批次记录
 		ZslProductionBatch batch = new ZslProductionBatch();
 		BeanUtils.copyProperties(param, batch);
 		batchMapper.insert(batch);
 		//	生产场景相关
-		List<SceneForNewBatchParam> sceneParamList = param.getSceneList();
 		if(sceneParamList!=null && sceneParamList.size()>0) {
 			List<String> sceneTimes = new ArrayList<>();
 			for(int i=0; i<sceneParamList.size(); i++){
@@ -118,8 +163,13 @@ public class ProductionBatchServiceImpl implements ProductionBatchService {
 				sceneBatchMapper.insert(sceneBatch);
 				//	原材料出库操作
 				if(sceneParam.getMaterialList()!=null && sceneParam.getMaterialList().size()>0) {
-					commonService.materialOperation(
-						sceneParam.getMaterialList(), param.getMerchantId(), sceneBatch.getSceneBatchId());
+					try {
+						commonService.materialOperation(
+							sceneParam.getMaterialList(), param.getMerchantId(), sceneBatch.getSceneBatchId());
+					} catch (Exception e) {
+						e.printStackTrace();
+						return CommonResult.failed(e.getMessage());
+					}
 				}
 				sceneTimes.add(sceneBatch.getSceneTimeScope());
 			}
@@ -146,8 +196,43 @@ public class ProductionBatchServiceImpl implements ProductionBatchService {
 		if(batch==null || !batch.getBatchNo().equals(param.getBatchNo())) {
 			return CommonResult.failed("违规操作，修改的生产批次不存在或不匹配");
 		}
-		//	生产场景相关
+		//	校验原材料出库信息
 		List<SceneForNewBatchParam> sceneParamList = param.getSceneList();
+		if(sceneParamList!=null && sceneParamList.size()>0) {
+			Map<Integer, BigDecimal> residueStockList = new HashMap<>();	//	各原材料剩余库存集合
+			for(SceneForNewBatchParam sceneParam : sceneParamList){
+				if(sceneParam.getMaterialList()!=null && sceneParam.getMaterialList().size()>0) {
+					for(SourceMaterialParam smp : sceneParam.getMaterialList()) {
+						BigDecimal outStorageCount = smp.getOutStorageCount();
+						Integer materialInId = smp.getMaterialInId();
+						if(StringUtils.isBlank(smp.getInStorageBatchNo()) || StringUtils.isBlank(smp.getOutOrderNo())
+							|| StringUtils.isBlank(smp.getUnit()) || materialInId==null
+							|| outStorageCount==null 
+							|| outStorageCount.compareTo(new BigDecimal(0))==-1 
+							|| outStorageCount.compareTo(new BigDecimal(0))==0) {
+							return CommonResult.failed("有原材料出库参数填写后未完善或违规");
+						}
+						BigDecimal residueStock = null;
+						if(residueStockList.containsKey(materialInId)) {
+							residueStock = residueStockList.get(materialInId);
+						}else {
+							MaterialWarehouse materialIn = materialInMapper.selectByPrimaryKey(materialInId);
+							residueStock = materialIn.getResidueStock();
+						}
+						if(outStorageCount.compareTo(residueStock)==1) {
+							return CommonResult.failed("原材料入库批次号【" + smp.getInStorageBatchNo() + "】总出库数超出剩余库存");
+						}
+						residueStockList.put(materialInId, residueStock.subtract(outStorageCount));
+					}
+				}
+				//	校验生产场景是否存在
+				ZslProductionScene oldScene = sceneMapper.selectByPrimaryKey(sceneParam.getSceneId());
+				if(oldScene==null || batch.getGoodsId().intValue()!=oldScene.getGoodsId()) {
+					return CommonResult.failed("sceneId‘"+sceneParam.getSceneId()+"’相关的场景参数违规");
+				}
+			}
+		}
+		//	生产场景相关
 		if(sceneParamList!=null && sceneParamList.size()>0) {
 			List<String> sceneTimes = new ArrayList<>();	//	已处理场景记录的时间范围
 			for(SceneForNewBatchParam sceneParam : sceneParamList){
@@ -201,7 +286,7 @@ public class ProductionBatchServiceImpl implements ProductionBatchService {
 				//	原材料出库操作
 				if(sceneParam.getMaterialList()!=null && sceneParam.getMaterialList().size()>0) {
 					commonService.materialOperation(
-						sceneParam.getMaterialList(), param.getMerchantId(), sceneBatch.getSceneBatchId());
+						sceneParam.getMaterialList(), batch.getMerchantId(), sceneBatch.getSceneBatchId());
 				}
 				sceneTimes.add(sceneBatch.getSceneTimeScope());
 			}
