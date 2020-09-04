@@ -22,6 +22,8 @@ public class traceSceneVo {
     private String sceneName;
     /** 场景描述 */
     private String description;
+    /** 场景视频 */
+    private String videoUrl;
     /** 场景图片列表 */
     private List<String> sceneImageList;
     /** 场景的出库原材料列表 */

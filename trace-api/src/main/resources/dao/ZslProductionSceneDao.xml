@@ -159,6 +159,7 @@
 		    <result column="employe_name" jdbcType="VARCHAR" property="employeName" />
 		    <result column="scene_name" jdbcType="VARCHAR" property="sceneName" />
 		    <result column="description" jdbcType="VARCHAR" property="description" />
+		    <result column="video_url" jdbcType="VARCHAR" property="videoUrl" />
 		    <collection property="sceneImageList" ofType="java.lang.String">
 			    <result column="image_url"/>
 		    </collection>
@@ -171,7 +172,7 @@
     <select id="traceScene" resultMap="traceSceneResult">
         SELECT
 		   pb.batch_no, gsc.tmall, gsc.jd, gsc.taobao, sb.scene_time_scope, 
-		   a.realName AS employe_name, ps.name AS scene_name, ps.description, 
+		   a.realName AS employe_name, ps.name AS scene_name, ps.description, ps.video_url, 
 		   mwo.id, m.material_name, si.image_url
 		FROM
 			zsl_production_batch pb 
